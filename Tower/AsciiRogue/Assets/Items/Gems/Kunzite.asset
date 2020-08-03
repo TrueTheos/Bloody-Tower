@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23dd99c5d79f1a242961e2f5af4cec77, type: 3}
+  m_Name: Kunzite
+  m_EditorClassIdentifier: 
+  _handSwitch: 0
+  itemLevel: 25
+  I_name: Kunzite
+  I_unInName: Kunzite
+  I_symbol: '*'
+  I_color: '#FF0065'
+  levelMin: 0
+  levelMax: 0
+  I_weight: 1
+  I_rareness: 0
+  I_itemType: 5
+  I_whereToPutIt: 0
+  _BUC: 0
+  normalIdentifState: 1
+  identified: 1
+  isEquipped: 0
+  pickupableByMonsters: 0
+  effect: +2 Dex
+  worth: 0
+  _statIncreaseType: 1
+  amount: 2

@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &217120817462417562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 828031171312803324}
+  - component: {fileID: 893889622453061310}
+  - component: {fileID: 2938880777816347186}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &828031171312803324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217120817462417562}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &893889622453061310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217120817462417562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c79ace33974bc4cb3aeeac7f83eab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 0, y: 0}
+  canMove: 1
+--- !u!114 &2938880777816347186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217120817462417562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6d33e946ee5d94286a9fab3613bac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerClassSO: {fileID: 11400000, guid: 81563ff236d9ccb49ad367e6df3989f4, type: 2}
+  startingWeapon: {fileID: 11400000, guid: b20e96e71a496544992d2cbb7fdb5b3f, type: 2}
+  name: Random Guy
+  maxHp: 0
+  currentHp: 0
+  strength: 0
+  intelligence: 0
+  dexterity: 0
+  endurance: 0
+  lvl: 1
+  experience: 0
+  experienceNeededToLvlUp: 0
+  coins: 0
+  gameManager: {fileID: 0}
+  _statType: 0
+  maxWeight: 60
+  currentWeight: 0
+  armorClass: 10
+  toHit: -2
+  dexterityToHitBonus: -3
+  damage: -1
+  skillpoints: 0
+  maximumInventorySpace: 17
+  currentItems: 0
+  viewRange: 7
+  damagedEyes: 0
+  damagedEyesCounter: 0
+  eyesTimer: 60
+  fullLevelVision: 0
+  _nick: {fileID: 0}
+  _health: {fileID: 0}
+  _strength: {fileID: 0}
+  _intelligence: {fileID: 0}
+  _dexteirty: {fileID: 0}
+  _endurance: {fileID: 0}
+  _lvl: {fileID: 0}
+  _experience: {fileID: 0}
+  _coins: {fileID: 0}
+  _strengthButton: {fileID: 0}
+  _intelligenceButton: {fileID: 0}
+  _dexterityButton: {fileID: 0}
+  _enduranceButton: {fileID: 0}
+  poisonDuration: 0
+  paralyseDuration: 0
+  hasFireResistance: 0
+  fireResistanceDuration: 0
+  hasPoisonResistance: 0
+  poisonResistanceDuration: 0
+  hasRegeneration: 0
+  regenerationDuration: 0
+  isInvisible: 0
+  effectsText: {fileID: 0}
+  isDead: 0
+  itemsInEq: []
+  Head: {fileID: 0}
+  _head: {fileID: 0}
+  Body: {fileID: 0}
+  _body: {fileID: 0}
+  LHand: {fileID: 0}
+  _Lhand: {fileID: 0}
+  RHand: {fileID: 0}
+  _Rhand: {fileID: 0}
+  Ring: {fileID: 0}
+  _ring: {fileID: 0}
+  Legs: {fileID: 0}
+  _legs: {fileID: 0}
+  Capacity: {fileID: 0}
+  Int: 0
+  Str: 0
+  Dex: 0
+  End: 0
+  usingWand: 0
+  wand_pos: {x: 0, y: 0}
+  wand_path: []
+  usedWand: {fileID: 0}
+  deadText: "<color=#8a0303><b>\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7</b><color=red>You have died</color><b>\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7</b><color=white>press Space to restart.</color><b> \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7
+    \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7 \xB7\xB7 \xB7\xB7 \xB7\xB7\xB7\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7 \xB7\xB7\xB7\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7 \xB7\xB7\xB7\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\n\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7  \xB7\xB7\xB7\xB7\xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7  \xB7 \xB7\xB7\xB7\xB7  \xB7\xB7\xB7\xB7 \xB7\n\xB7\xB7 \xB7\xB7\xB7\xB7
+    \xB7\xB7\xB7  \xB7\xB7 \xB7    \xB7\xB7\xB7  \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7  \xB7 \xB7\xB7\xB7\xB7   \xB7\xB7\xB7 \xB7\n\xB7\xB7 \xB7\xB7\xB7\xB7
+    \xB7\xB7\xB7  \xB7\xB7 \xB7    \xB7\xB7\xB7  \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7  \xB7 \xB7 \xB7\xB7   \xB7\xB7\xB7 \xB7\n\xB7  \xB7\xB7\xB7\xB7 \xB7\xB7\xB7 
+    \xB7  \xB7    \xB7\xB7\xB7  \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7 \xB7\xB7 
+    \xB7 \xB7 \xB7\xB7   \xB7 \xB7 \xB7\n\xB7  \xB7\xB7\xB7\xB7 \xB7\xB7\xB7  \xB7 
+    \xB7    \xB7\xB7\xB7  \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7 \xB7\xB7 
+    \xB7 \xB7 \xB7\xB7   \xB7   \xB7\n\xB7  \xB7\xB7\xB7\xB7 \xB7 \xB7  \xB7  \xB7   
+    \xB7\xB7\xB7  \xB7 \xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7 \xB7\xB7  \xB7 \xB7 \xB7\xB7      
+    \xB7\n\xB7  \xB7\xB7\xB7  \xB7 \xB7  \xB7  \xB7    \xB7\xB7\xB7    \xB7\xB7\xB7\xB7\xB7\xB7
+    \xB7\xB7 \xB7\xB7  \xB7 \xB7 \xB7\xB7       \xB7\n\xB7  \xB7\xB7\xB7  \xB7 \xB7    
+    \xB7    \xB7 \xB7    \xB7\xB7\xB7\xB7\xB7\xB7  \xB7 \xB7\xB7    \xB7  \xB7      
+    \xB7\n\xB7  \xB7\xB7\xB7  \xB7       \xB7    \xB7 \xB7     \xB7\xB7\xB7\xB7\xB7 
+    \xB7 \xB7\xB7    \xB7  \xB7       \xB7\n\xB7   \xB7\xB7  \xB7       \xB7    \xB7
+    \xB7      \xB7 \xB7\xB7  \xB7 \xB7\xB7    \xB7  \xB7       \xB7\n    \xB7\xB7 
+    \xB7       \xB7    \xB7 \xB7      \xB7 \xB7\xB7  \xB7  \xB7    \xB7  \xB7      
+    \xB7\n     \xB7  \xB7       \xB7    \xB7 \xB7      \xB7  \xB7  \xB7  \xB7              
+    \xB7\n     \xB7  \xB7            \xB7        \xB7  \xB7     \xB7              
+    \xB7\n     \xB7               \xB7        \xB7  \xB7     \xB7               \xB7\n    
+    \xB7               \xB7                    </b></color>\n"

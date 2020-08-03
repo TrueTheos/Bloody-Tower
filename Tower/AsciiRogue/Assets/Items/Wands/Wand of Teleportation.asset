@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99927cdd0e2083a428a3545ef8458903, type: 3}
+  m_Name: Wand of Teleportation
+  m_EditorClassIdentifier: 
+  I_name: Wand of Teleportation
+  I_unInName: Magic Wand
+  I_symbol: /
+  I_color: '#4a2201'
+  I_weight: 20
+  I_rareness: 1
+  I_itemType: 9
+  I_whereToPutIt: 0
+  normalIdentifState: 0
+  identified: 0
+  effect: <color=purple>Teleports</color> you to the random place.
+  worth: 0
+  charges: 7
+  chargesLeft: 7
+  _spellType: 2
+  _spell: 1
+  maxDistance: 6

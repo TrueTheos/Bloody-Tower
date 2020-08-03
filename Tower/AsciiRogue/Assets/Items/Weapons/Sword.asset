@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
+  m_Name: Sword
+  m_EditorClassIdentifier: 
+  _handSwitch: 0
+  itemLevel: 15
+  I_name: Sword
+  I_unInName: Sword
+  I_symbol: )
+  I_color: '#ab6626'
+  levelMin: 0
+  levelMax: 25
+  I_weight: 7
+  I_rareness: 0
+  I_itemType: 10
+  I_whereToPutIt: 3
+  _BUC: 0
+  normalIdentifState: 1
+  identified: 1
+  isEquipped: 0
+  pickupableByMonsters: 0
+  effect: <color=red>d6</color> damage on hit.
+  worth: 0
+  attacks:
+  - {x: 1, y: 6}
+  effectsOnHit: 
+  _weaponType: 0

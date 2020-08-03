@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9974914584a71444bf2a14035a7f262, type: 3}
+  m_Name: Blood For Blood
+  m_EditorClassIdentifier: 
+  _handSwitch: 0
+  I_name: Blood For Blood
+  I_unInName: Scroll
+  I_symbol: '?'
+  I_color: '#555555'
+  I_weight: 4
+  I_rareness: 0
+  I_itemType: 7
+  I_whereToPutIt: 0
+  _BUC: 0
+  normalIdentifState: 0
+  identified: 1
+  isEquipped: 0
+  pickupableByMonsters: 0
+  effect: 
+  worth: 0
+  _school: 1
+  _type: 1
+  spellLevel: 2
+  _spell: 0

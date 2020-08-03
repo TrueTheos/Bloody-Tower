@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85fc159821bc9754eb79f688cf96405b, type: 3}
+  m_Name: Ring of Fire Resistance
+  m_EditorClassIdentifier: 
+  _handSwitch: 0
+  itemLevel: 0
+  I_name: Ring of Fire Res.
+  I_unInName: Ring
+  I_symbol: =
+  I_color: '#AA0000'
+  levelMin: 0
+  levelMax: 0
+  I_weight: 2
+  I_rareness: 0
+  I_itemType: 3
+  I_whereToPutIt: 4
+  _BUC: 0
+  normalIdentifState: 0
+  identified: 0
+  isEquipped: 0
+  pickupableByMonsters: 0
+  effect: Worn give you <color=red>Fire Resistance</color>
+  worth: 0
+  _ringEffect: 0

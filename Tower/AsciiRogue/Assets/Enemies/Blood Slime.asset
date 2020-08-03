@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
+  m_Name: Blood Slime
+  m_EditorClassIdentifier: 
+  E_name: Blood Slime
+  E_symbol: S
+  E_color: {r: 0.7075472, g: 0.12348701, b: 0.12348701, a: 0}
+  E_lvlMin: 20
+  E_lvlMax: 25
+  E_currentLevel: 0
+  __modifier: 0
+  _Difficulty: 2
+  E_xpAfterKilling: 0
+  leavesCorpse: 1

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3987ff93a463e5e48a77b22ba18a8891, type: 3}
+  m_Name: MIthril armor
+  m_EditorClassIdentifier: 
+  _handSwitch: 0
+  itemLevel: 25
+  I_name: Mithril armor
+  I_unInName: Mithril armor
+  I_symbol: '['
+  I_color: '#b5b5bd'
+  levelMin: 16
+  levelMax: 25
+  I_weight: 11
+  I_rareness: 0
+  I_itemType: 0
+  I_whereToPutIt: 2
+  _BUC: 0
+  normalIdentifState: 1
+  identified: 1
+  isEquipped: 0
+  pickupableByMonsters: 0
+  effect: 'Armor Class: <color=green>3</color>
+
+    Made out of <color=#b5b5bd>mithtil</color>'
+  worth: 0
+  armorClass: 3
+  a_Material: 2

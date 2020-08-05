@@ -1597,20 +1597,24 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             // spawn the stairs
-            SpawnStairsPlaceHolder('<', m, structs);
-            SpawnStairsPlaceHolder('>', m, structs);
+            Structure r = SpawnStairsPlaceHolder('<', m, structs, null);
+            SpawnStairsPlaceHolder('>', m, structs, r);
             return m;
         }
 
-        private static void SpawnStairsPlaceHolder(char c, Map m, List<Structure> structs)
+        private static Structure SpawnStairsPlaceHolder(char c, Map m, List<Structure> structs, Structure notHere)
         {
+            int attempts = 5; // there might only be one room, avoid infinite loops
             while (true)
             {
-                Location l = getRandomRoomHelper(structs).getRandom();
+                Structure r = getRandomRoomHelper(structs);
+                if (r == notHere && attempts++ < 5)
+                    continue;
+                Location l = r.getRandom();
                 if (m.get(l.x, l.y) == '.')
                 {
                     m.set(l.x, l.y, c);
-                    return;
+                    return r;
                 }
             }
         }

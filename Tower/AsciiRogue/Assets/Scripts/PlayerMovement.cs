@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     private float sleepingDamage = 1.3f; 
     private int attackCount = 0; //if attack count u 5, we can use Weapon Art
 
+    public Vector2Int waterPoisonDuraiton;
+
     private void Start()
     {
         playerMovement = this;
@@ -113,6 +115,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if(MapManager.map[target.x, target.y].structure != null && MapManager.map[target.x, target.y].isWalkable)
         {
+            if(MapManager.map[target.x, target.y].type == "Water" && Random.Range(1,100) < DungeonGenerator.dungeonGenerator.currentFloor)
+            {
+                if(!playerStats.isPoisoned)
+                {
+                    playerStats.poisonDuration = UnityEngine.Random.Range(waterPoisonDuraiton.x, waterPoisonDuraiton.y);
+                    playerStats.Poison();
+                }
+            }
             MapManager.map[position.x, position.y].hasPlayer = false;
             MapManager.map[position.x, position.y].letter = "";
             MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);

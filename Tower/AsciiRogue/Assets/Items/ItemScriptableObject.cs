@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class ItemScriptableObject : ScriptableObject
@@ -79,4 +80,5 @@ public abstract class ItemScriptableObject : ScriptableObject
 
     public abstract void Use(MonoBehaviour foo);
     public abstract void OnPickup(MonoBehaviour foo);
+
 }

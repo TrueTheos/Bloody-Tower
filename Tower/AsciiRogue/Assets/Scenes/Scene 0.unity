@@ -8649,6 +8649,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 893889622453061310, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: waterPoisonDuraiton.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 893889622453061310, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: waterPoisonDuraiton.y
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}
       propertyPath: _nick

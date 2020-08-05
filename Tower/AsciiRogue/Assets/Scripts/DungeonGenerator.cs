@@ -1663,7 +1663,7 @@ public class DungeonGenerator : MonoBehaviour
 
         private static Structure SpawnStairsPlaceHolder(char c, Map m, List<Structure> structs, Structure notHere)
         {
-            int attempts = 5; // there might only be one room, avoid infinite loops
+            int attempts = 0; // there might only be one room, avoid infinite loops
             while (true)
             {
                 Structure r = getRandomRoomHelper(structs);

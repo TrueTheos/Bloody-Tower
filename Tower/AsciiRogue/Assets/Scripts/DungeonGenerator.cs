@@ -59,6 +59,10 @@ public class DungeonGenerator : MonoBehaviour
     public Text screen;
     [SerializeField] public int lightFactor = 1;
 
+
+    [Header("Water Colors")]
+    public List<Color> waterColors;
+
     public void Start()
     {
         dungeonGenerator = this;
@@ -444,7 +448,7 @@ public class DungeonGenerator : MonoBehaviour
         
         bool loopBreaker2 = false;
         
-        for(int i = 0; i < mapWidth * mapHeight; i++)
+        /*for(int i = 0; i < mapWidth * mapHeight; i++)
         {
             if(loopBreaker2) break;
             Vector2Int pos2 = new Vector2Int(UnityEngine.Random.Range(1, mapWidth), UnityEngine.Random.Range(1, mapHeight));
@@ -462,6 +466,11 @@ public class DungeonGenerator : MonoBehaviour
                 GetComponent<GameManager>().player = player.GetComponent<PlayerMovement>();
                 GetComponent<GameManager>().playerStats = player.GetComponent<PlayerStats>();
             }
+        }*/
+
+        if(UnityEngine.Random.Range(1,100) <= 30)
+        {
+            GenerateWaterPool();
         }
         
         floorManager.floors.Add(MapManager.map);
@@ -492,7 +501,7 @@ public class DungeonGenerator : MonoBehaviour
             manager.itemSpawner.SpawnAt(item.x, item.y);
         }
 
-        if (currentFloor != 0) MovePlayerToLowerStairs();
+        //if (currentFloor != 0) MovePlayerToLowerStairs();
 
         manager.mapName.text = "Floor " + currentFloor;
         manager.UpdateMessages($"You entered Floor {currentFloor}");
@@ -501,7 +510,62 @@ public class DungeonGenerator : MonoBehaviour
         enemyNames.Clear();
         enemySleeping.Clear();
         
-        DrawMap(true, MapManager.map);
+        //DrawMap(true, MapManager.map);
+    }
+
+    private void GenerateWaterPool()
+    {
+        List<Vector2Int> waterTilesToGrow = new List<Vector2Int>();
+
+        Vector2Int startPos = new Vector2Int(100,100);
+
+        Vector2Int vector = new Vector2Int(100,100);
+
+        bool loopBr = false;
+        for (int i = 0; i < 200; i++)
+        {
+            if(loopBr) break;
+
+            int x = UnityEngine.Random.Range(1, mapWidth);
+            int y = UnityEngine.Random.Range(1, mapHeight);
+
+            if(MapManager.map[x,y].type == "Floor")
+            {
+                startPos = new Vector2Int(x,y);
+                loopBr = true;
+            }
+        }
+
+        waterTilesToGrow.Add(startPos);
+
+        for (int i = 0; i < 10; i++)
+        {
+            int l = waterTilesToGrow.Count;
+            for (int j = 0; j < l; j++)
+            {
+                MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].baseChar = "~";
+                MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
+                MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type = "Water";
+
+                if(MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type == "Floor")
+                {
+                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y));
+                }
+                if(MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type == "Floor")
+                {
+                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y));
+                }
+                if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type == "Floor")
+                {
+                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1));
+                }
+                if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type == "Floor")
+                {
+                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1));
+                }
+                waterTilesToGrow.RemoveAt(0);
+            }
+        }
     }
 
 
@@ -913,40 +977,12 @@ public class DungeonGenerator : MonoBehaviour
 
         Chest chest = new Chest();
 
-        int itemRarirty = UnityEngine.Random.Range(1, 100);
-
-        string rarity;
-
-        if (itemRarirty <= 75)
-        {
-            rarity = "common";
-        }
-        else if (itemRarirty <= 95)
-        {
-            rarity = "rare";
-        }
-        else
-        {
-            rarity = "ver_rare";
-        }
-
         bool loopBreaker = false;
 
         MapManager.map[x, y].structure = chest;
 
-        for (int i = 0; i < manager.itemSpawner.allItems.Count; i++)
-        {
-            if (loopBreaker) return;
-
-            int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
-
-            if (manager.itemSpawner.allItems[randomItem].I_rareness.ToString() == rarity)
-            {
-                chest.itemInChest = manager.itemSpawner.allItems[randomItem];
-
-                loopBreaker = true;
-            }
-        }
+        int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
+        chest.itemInChest = manager.itemSpawner.allItems[randomItem];
     }
 
     private void CreatePillars()

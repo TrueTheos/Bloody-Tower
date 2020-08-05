@@ -96,10 +96,6 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
                         MapManager.map[__position.x, __position.y].isWalkable = true;
                         MapManager.map[__position.x, __position.y].enemy = null;
                         MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
-                        /*if(MapManager.map[__position.x, __position.y].exploredColor == "")
-                        {
-                            MapManager.map[__position.x, __position.y].exploredColor = "";
-                        }     */
                     }
 
                     __position = new Vector2Int(x, y);

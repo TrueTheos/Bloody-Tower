@@ -632,7 +632,7 @@ public class GameManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Application.LoadLevel(Application.loadedLevel);
+                Application.LoadLevel(0);
             }
         }   
         

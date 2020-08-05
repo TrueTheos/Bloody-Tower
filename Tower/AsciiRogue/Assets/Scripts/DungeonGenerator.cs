@@ -538,7 +538,7 @@ public class DungeonGenerator : MonoBehaviour
 
         waterTilesToGrow.Add(startPos);
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 10; i++)
         {
             int l = waterTilesToGrow.Count;
             for (int j = 0; j < l; j++)
@@ -547,7 +547,7 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type == "Wall")
                     {
-                        if(UnityEngine.Random.Range(1,100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight)
+                        if(UnityEngine.Random.Range(1,100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
                         {
                             MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isWalkable = true;
                             MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isOpaque = false;

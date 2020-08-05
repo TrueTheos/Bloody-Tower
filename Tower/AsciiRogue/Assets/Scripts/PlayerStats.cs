@@ -856,7 +856,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             isDead = true;
             gameManager.UpdateMessages("You are <color=#990000>dead</color>.");
             PlayerMovement.playerMovement.canMove = false;
-            GameObject.Find("Console").GetComponent<Text>().text = deadText;
+            GameObject.Find("Console").GetComponent<Text>().text = deadText;         
         }
     }
 

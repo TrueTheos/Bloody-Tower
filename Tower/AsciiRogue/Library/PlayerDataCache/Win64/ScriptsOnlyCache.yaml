@@ -16,6 +16,7 @@ ScriptsOnlyBuild:
     - Item
     - ItemSpawner
     - Key
+    - LoadingScreenAnimation
     - MouseOver
     - PlayerMovement
     - PlayerStats
@@ -68,7 +69,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Text
     - UnityEngine.UI.VerticalLayoutGroup
   sceneClasses:
-    Assets/Scenes/Scene 0.unity:
+    Assets/Scenes/LoadingScene.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -83,6 +84,63 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 49
       Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 109
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11182}
+    - Class: 114
+      Script: {instanceID: 11364}
+    - Class: 114
+      Script: {instanceID: 11412}
+    - Class: 114
+      Script: {instanceID: 11848}
+    - Class: 114
+      Script: {instanceID: 11874}
+    - Class: 114
+      Script: {instanceID: 12528}
+    - Class: 114
+      Script: {instanceID: 12542}
+    - Class: 114
+      Script: {instanceID: 12744}
+    - Class: 114
+      Script: {instanceID: 12762}
+    - Class: 114
+      Script: {instanceID: 12816}
+    - Class: 114
+      Script: {instanceID: 12988}
+    - Class: 114
+      Script: {instanceID: 13212}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/Scenes/Scene 0.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
     - Class: 74
       Script: {instanceID: 0}
     - Class: 81
@@ -96,8 +154,6 @@ ScriptsOnlyBuild:
     - Class: 95
       Script: {instanceID: 0}
     - Class: 104
-      Script: {instanceID: 0}
-    - Class: 109
       Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 11182}
@@ -129,8 +185,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 11778}
     - Class: 114
       Script: {instanceID: 11848}
-    - Class: 114
-      Script: {instanceID: 11874}
     - Class: 114
       Script: {instanceID: 11890}
     - Class: 114
@@ -166,33 +220,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12528}
     - Class: 114
-      Script: {instanceID: 12542}
-    - Class: 114
       Script: {instanceID: 12600}
     - Class: 114
       Script: {instanceID: 12744}
     - Class: 114
-      Script: {instanceID: 12788}
+      Script: {instanceID: 12790}
     - Class: 114
-      Script: {instanceID: 12814}
+      Script: {instanceID: 12816}
     - Class: 114
-      Script: {instanceID: 12952}
+      Script: {instanceID: 12954}
     - Class: 114
-      Script: {instanceID: 12966}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 12986}
+      Script: {instanceID: 13010}
     - Class: 114
-      Script: {instanceID: 13008}
+      Script: {instanceID: 13140}
     - Class: 114
-      Script: {instanceID: 13138}
+      Script: {instanceID: 13148}
     - Class: 114
-      Script: {instanceID: 13146}
+      Script: {instanceID: 13212}
     - Class: 114
-      Script: {instanceID: 13210}
+      Script: {instanceID: 13272}
     - Class: 114
-      Script: {instanceID: 13270}
-    - Class: 114
-      Script: {instanceID: 14424}
+      Script: {instanceID: 15196}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -656,6 +706,12 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
+      Hash: 4ce15e99c635d2567873d27549d1f16f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LoadingScreenAnimation
+  - hash:
+      serializedVersion: 2
       Hash: d9dc102a8977caa67ca1f6b6bb290caf
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -692,7 +748,7 @@ ScriptsOnlyBuild:
     className: MarkerTrack
   - hash:
       serializedVersion: 2
-      Hash: 5e296bcc6bce800bf4de63376833c824
+      Hash: b090e72ec182f9329f811b088bdf9fb0
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DungeonGenerator
@@ -824,5 +880,6 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   platform: 19
   scenePathNames:
+  - Assets/Scenes/LoadingScene.unity
   - Assets/Scenes/Scene 0.unity
   playerPath: C:/Users/loiuy/OneDrive/Pulpit/Hell/Going DEEP v0.0.69.exe

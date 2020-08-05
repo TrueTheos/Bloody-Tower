@@ -68,6 +68,8 @@ public class ItemSpawner : MonoBehaviour
 
     public void SpawnAt(int x, int y)
     {
+        if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null) return;
+
         int itemRarirty = UnityEngine.Random.Range(1, 100);
 
         float itemType = UnityEngine.Random.Range(1, 100);

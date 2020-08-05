@@ -149,7 +149,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             switch(enemySO._Behaviour)
             {
                 case EnemiesScriptableObject.E_behaviour.cowardly:
-                    if(__currentHp <= (maxHp / 2) && (int)Random.Range(0,2) == 1 && runCounter > 0 || (runCounter > 0 && runCounter < 5))
+                    if(__currentHp <= (maxHp / 2) && (int)Random.Range(0,2) == 1 && runCounter > 0 || (runCounter > 0 && runCounter < 5)) //RUN FROM PLAYER
                     {
                         runDirection = __position - MapManager.playerPos;
 
@@ -157,7 +157,11 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
                     
                         runCounter--;
 
-                        MoveTo(runCell.x, runCell.y);
+                        path = null;
+
+                        path = AStar.CalculatePath(__position, runCell);
+
+                        MoveTo(path[0].x, path[0].y);
                         return;
                     }
                     else runCounter = 5;

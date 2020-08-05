@@ -38,6 +38,9 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnAt(int x, int y, EnemiesScriptableObject enemySO = null, bool sleep = false)
     {        
+        try{if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null) return;}
+        catch{};
+
         __position = new Vector2Int(x, y);
 
         if(enemySO == null) enemySO = GetRandomEnemy();

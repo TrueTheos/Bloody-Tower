@@ -2,16 +2,16 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
+Tower/AsciiRogue/[Ll]ibrary/
+Tower/AsciiRogue/[Tt]emp/
+Tower/AsciiRogue/[Oo]bj/
+Tower/AsciiRogue/[Bb]uild/
+Tower/AsciiRogue/[Bb]uilds/
+Tower/AsciiRogue/[Ll]ogs/
+Tower/AsciiRogue/[Mm]emoryCaptures/
 
 # Never ignore Asset meta data
-!/[Aa]ssets/**/*.meta
+!Tower/AsciiRogue/[Aa]ssets/**/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*

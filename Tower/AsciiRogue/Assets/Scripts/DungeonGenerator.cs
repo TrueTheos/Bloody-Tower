@@ -538,32 +538,55 @@ public class DungeonGenerator : MonoBehaviour
 
         waterTilesToGrow.Add(startPos);
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 15; i++)
         {
             int l = waterTilesToGrow.Count;
             for (int j = 0; j < l; j++)
             {
-                MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].baseChar = "~";
-                MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
-                MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type = "Water";
+                try
+                {
+                    if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type == "Wall")
+                    {
+                        if(UnityEngine.Random.Range(1,100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight)
+                        {
+                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isWalkable = true;
+                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isOpaque = false;
+                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].baseChar = "~";
+                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
+                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type = "Water";
+                        }
+                    }
+                    else
+                    {
+                        
+                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].baseChar = "~";
+                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
+                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type = "Water";
+                    }
 
-                if(MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type == "Floor")
-                {
-                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y));
+                    if(MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type == "Wall")
+                    {
+                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y));
+                    }
+                    
+                    if(MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type == "Wall")
+                    {
+                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y));
+                    }
+
+                    if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type == "Wall")
+                    {
+                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1));
+                    }
+
+                    if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type == "Wall")
+                    {
+                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1));
+                    }
+
+                    waterTilesToGrow.RemoveAt(0);
                 }
-                if(MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type == "Floor")
-                {
-                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y));
-                }
-                if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type == "Floor")
-                {
-                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1));
-                }
-                if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type == "Floor")
-                {
-                    waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1));
-                }
-                waterTilesToGrow.RemoveAt(0);
+                catch{}
             }
         }
     }

@@ -76,40 +76,44 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     void MoveTo(int x, int y) 
     {
-        if (MapManager.map[x, y] != null && !MapManager.map[x, y].hasPlayer && MapManager.map[x,y].enemy == null && !rooted)
+        try
         {
-            if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].type == "Door")
+            if (MapManager.map[x, y] != null && !MapManager.map[x, y].hasPlayer && MapManager.map[x,y].enemy == null && !rooted)
             {
-                if (isBleeding)
+                if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].type == "Door")
                 {
-                    MapManager.map[__position.x, __position.y].letter = "";
-                    MapManager.map[__position.x, __position.y].isWalkable = true;
-                    MapManager.map[__position.x, __position.y].enemy = null;
-                    MapManager.map[__position.x, __position.y].exploredColor = new Color(0.54f,0.01f,0.01f);
-                    MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
-                }
-                else
-                {
-                    MapManager.map[__position.x, __position.y].letter = "";
-                    MapManager.map[__position.x, __position.y].isWalkable = true;
-                    MapManager.map[__position.x, __position.y].enemy = null;
-                    MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
-                    /*if(MapManager.map[__position.x, __position.y].exploredColor == "")
+                    if (isBleeding)
                     {
-                        MapManager.map[__position.x, __position.y].exploredColor = "";
-                    }     */
+                        MapManager.map[__position.x, __position.y].letter = "";
+                        MapManager.map[__position.x, __position.y].isWalkable = true;
+                        MapManager.map[__position.x, __position.y].enemy = null;
+                        MapManager.map[__position.x, __position.y].exploredColor = new Color(0.54f,0.01f,0.01f);
+                        MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                    }
+                    else
+                    {
+                        MapManager.map[__position.x, __position.y].letter = "";
+                        MapManager.map[__position.x, __position.y].isWalkable = true;
+                        MapManager.map[__position.x, __position.y].enemy = null;
+                        MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                        /*if(MapManager.map[__position.x, __position.y].exploredColor == "")
+                        {
+                            MapManager.map[__position.x, __position.y].exploredColor = "";
+                        }     */
+                    }
+
+                    __position = new Vector2Int(x, y);
+
+                    MapManager.map[x, y].letter = enemySO.E_symbol;
+                    MapManager.map[x, y].isWalkable = false;
+                    MapManager.map[x, y].enemy = this.gameObject;
+                    MapManager.map[x, y].timeColor = enemySO.E_color;
+
+                    return;
                 }
-
-                __position = new Vector2Int(x, y);
-
-                MapManager.map[x, y].letter = enemySO.E_symbol;
-                MapManager.map[x, y].isWalkable = false;
-                MapManager.map[x, y].enemy = this.gameObject;
-                MapManager.map[x, y].timeColor = enemySO.E_color;
-
-                return;
-            }
-        }      
+            }   
+        } 
+        catch{} 
     }
     
     public void TestToWakeUp()

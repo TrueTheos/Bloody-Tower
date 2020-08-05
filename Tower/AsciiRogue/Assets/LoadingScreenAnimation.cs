@@ -35,7 +35,7 @@ public class LoadingScreenAnimation : MonoBehaviour
     [System.Obsolete]
     IEnumerator LoadNewScene()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1.5f);
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1);
 

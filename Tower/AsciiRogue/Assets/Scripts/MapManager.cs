@@ -38,6 +38,8 @@ public class Tile
     public Structure structure;
 
     public string decoy = "";
+
+    public string specialNameOfTheCell = ""; //will be displayed if pointed, else show "type"
 }
 
 [Serializable]

@@ -79,8 +79,21 @@ public class Selector : MonoBehaviour
     {
         try
         {
-            if (MapManager.map[x, y].isExplored && !MapManager.map[x, y].enemy && !MapManager.map[x, y].item) lookingAt.text = $"<color=yellow>{MapManager.map[x, y].type}</color>";
-            else if (MapManager.map[x, y].isExplored && MapManager.map[x, y].enemy) lookingAt.text = $"<color=red>{MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().enemySO.E_name}</color>";
+            if(MapManager.map[x, y].isExplored && MapManager.map[x, y].specialNameOfTheCell != "") 
+            {
+                lookingAt.text = $"<color=red>{MapManager.map[x, y].specialNameOfTheCell}</color>"; 
+                return;
+            }
+            else if (MapManager.map[x, y].isExplored && !MapManager.map[x, y].enemy && !MapManager.map[x, y].item) 
+            {
+                lookingAt.text = $"<color=yellow>{MapManager.map[x, y].type}</color>"; 
+                return;
+            }
+            else if (MapManager.map[x, y].isExplored && MapManager.map[x, y].enemy) 
+            {
+                lookingAt.text = $"<color=red>{MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().enemySO.E_name}</color>"; 
+                return;
+            }
             else if (MapManager.map[x, y].isExplored && MapManager.map[x, y].item)
             {
                 if(MapManager.map[x,y].item.GetComponent<Item>().iso.identified)

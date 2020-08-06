@@ -334,6 +334,16 @@ public class DungeonGenerator : MonoBehaviour
                     MapManager.map[x,y].xPosition = x;
                     MapManager.map[x,y].yPosition = y;
                     MapManager.map[x,y].baseChar = "#";
+                    if(currentFloor >= 25 && UnityEngine.Random.Range(0,100) < currentFloor * 1.5f) 
+                    {
+                        MapManager.map[x,y].exploredColor = new Color(0.5283019f, 0, 0);
+                        MapManager.map[x,y].specialNameOfTheCell = "Flesh Wall";
+                    }
+                    else if(currentFloor < 25 && UnityEngine.Random.Range(0,100) > currentFloor * 1.5f)
+                    {
+                        MapManager.map[x,y].exploredColor = new Color(0.4459124f, 1f, 0f);
+                        MapManager.map[x,y].specialNameOfTheCell = "Mould Wall";
+                    }
                     MapManager.map[x,y].isWalkable = false;
                     MapManager.map[x,y].isOpaque = true;
                     MapManager.map[x,y].type = "Wall";
@@ -364,11 +374,11 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == ">"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x, y].structure = new Stairs();
-                    if (MapManager.map[x, y].structure is Stairs stairsUp)
+                    if (currentFloor != 0)
                     {
-                        if (currentFloor != 0)
+                        MapManager.map[x,y] = new Tile();
+                        MapManager.map[x, y].structure = new Stairs();
+                        if (MapManager.map[x, y].structure is Stairs stairsUp)
                         {
                             stairsUp.dungeonLevelId = currentFloor - 1;
                             stairsUp.spawnPosition = new Vector2Int(x, y);
@@ -377,6 +387,16 @@ public class DungeonGenerator : MonoBehaviour
                             MapManager.upperStairsPos = new Vector2Int(x, y);
                             floorManager.stairsDown.Add(new Vector2Int(x, y));
                         }
+                    }
+                    else
+                    {
+                        MapManager.map[x,y] = new Tile();
+                        MapManager.map[x,y].xPosition = x;
+                        MapManager.map[x,y].yPosition = y;
+                        MapManager.map[x,y].baseChar = ".";
+                        MapManager.map[x,y].isWalkable = true;
+                        MapManager.map[x,y].isOpaque = false;
+                        MapManager.map[x,y].type = "Floor";
                     }
                 }
                 else if(fixedLevel[inxedString] == "+"[0])
@@ -445,8 +465,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-        
-        bool loopBreaker2 = false;
+    
         
         /*for(int i = 0; i < mapWidth * mapHeight; i++)
         {
@@ -586,7 +605,7 @@ public class DungeonGenerator : MonoBehaviour
 
                     waterTilesToGrow.RemoveAt(0);
                 }
-                catch{}
+                catch{waterTilesToGrow.RemoveAt(0);}
             }
         }
     }
@@ -1004,8 +1023,40 @@ public class DungeonGenerator : MonoBehaviour
 
         MapManager.map[x, y].structure = chest;
 
-        int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
-        chest.itemInChest = manager.itemSpawner.allItems[randomItem];
+        int itemRarirty = UnityEngine.Random.Range(1, 100);
+
+        string rarity;
+
+        if (itemRarirty <= 2)
+        {
+            rarity = "very_rare";
+        }
+        else if (itemRarirty <= 7)
+        {
+            rarity = "rare";
+        }
+        else
+        {
+            rarity = "common";
+        }
+
+        bool loopBreaker = false;
+
+        MapManager.map[x, y].structure = chest;
+
+        for (int i = 0; i < manager.itemSpawner.allItems.Count; i++)
+        {
+            if (loopBreaker) return;
+
+            int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
+
+            if (manager.itemSpawner.allItems[randomItem].I_rareness.ToString() == rarity)
+            {
+                chest.itemInChest = manager.itemSpawner.allItems[randomItem];
+
+                loopBreaker = true;
+            }
+        }
     }
 
     private void CreatePillars()
@@ -1219,6 +1270,7 @@ public class DungeonGenerator : MonoBehaviour
         Color color;
        
         if (MapManager.map[x, y].isVisible)
+        {
             if (MapManager.map[x, y].item != null)
             {
                 R *= 2;
@@ -1240,6 +1292,7 @@ public class DungeonGenerator : MonoBehaviour
                 color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
+        }
         else
             return ColorUtility.ToHtmlStringRGBA(new Color(R / 2, G / 2, B / 2));
     }

@@ -32,6 +32,7 @@ MonoBehaviour:
   effect: <color=red>d4</color> damage on hit.
   worth: 0
   attacks:
-  - {x: 1, y: 4}
+  - {x: 1, y: 10}
   effectsOnHit: 
   _weaponType: 1
+  bloodSwordCounter: 0

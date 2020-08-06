@@ -21,7 +21,7 @@ MonoBehaviour:
   levelMin: 0
   levelMax: 0
   I_weight: 2
-  I_rareness: 0
+  I_rareness: 1
   I_itemType: 6
   I_whereToPutIt: 0
   _BUC: 0

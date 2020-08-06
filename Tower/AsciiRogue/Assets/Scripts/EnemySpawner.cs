@@ -18,8 +18,6 @@ public class EnemySpawner : MonoBehaviour
 
     private bool loopBreaker;
 
-    [HideInInspector] public string enemiesStats;
-
     public void Spawn()
     {
         foreach(var room in DungeonGenerator.dungeonGenerator.rooms)
@@ -55,7 +53,6 @@ public class EnemySpawner : MonoBehaviour
         }
         MapManager.map[__position.x, __position.y].letter = enemySO.E_symbol;
         MapManager.map[__position.x, __position.y].isWalkable = false;
-        //MapManager.map[__position.x, __position.y].exploredColor = enemySO.E_color;
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
@@ -163,8 +160,6 @@ public class EnemySpawner : MonoBehaviour
         MapManager.map[__position.x, __position.y].enemy = enemy.gameObject;
 
         spawnedEnemies.Add(enemy.gameObject);
-        
-        enemiesStats += $" / {so.enemySO.name} Floor: {FloorManager.floorManager.floors.Count - 1} Lvl: {so.lvl} Str: {so.str} Dex: {so.dex} Int: {so.intell} End: {so.end} HP: {so.__currentHp} XP: {so.xpDrop}";
     }
 
     private EnemiesScriptableObject GetRandomEnemy()

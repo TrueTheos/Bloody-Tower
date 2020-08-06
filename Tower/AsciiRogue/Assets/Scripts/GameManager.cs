@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -98,8 +99,6 @@ public class GameManager : MonoBehaviour
         //Clear "Messages" Box
         m_Messages.Clear();
         messages.text = "";
-
-        GUIUtility.systemCopyBuffer = enemySpawner.enemiesStats;
 
         FoV.Initialize();
         fv.Initialize(fv.CanLightPass, fv.SetToVisible, fv.Distance);

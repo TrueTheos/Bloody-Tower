@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: Full Restore
   m_EditorClassIdentifier: 
   _handSwitch: 0
+  itemLevel: 0
   I_name: Potion of Full Restore
   I_unInName: Mysterious Potion
   I_symbol: '!'
   I_color: '#C056C0'
+  levelMin: 0
+  levelMax: 0
   I_weight: 5
-  I_rareness: 0
+  I_rareness: 2
   I_itemType: 6
   I_whereToPutIt: 0
   _BUC: 0

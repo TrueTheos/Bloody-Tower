@@ -21,7 +21,7 @@ MonoBehaviour:
   levelMin: 15
   levelMax: 25
   I_weight: 9
-  I_rareness: 0
+  I_rareness: 1
   I_itemType: 10
   I_whereToPutIt: 3
   _BUC: 0
@@ -35,3 +35,4 @@ MonoBehaviour:
   - {x: 1, y: 9}
   effectsOnHit: 
   _weaponType: 0
+  bloodSwordCounter: 0

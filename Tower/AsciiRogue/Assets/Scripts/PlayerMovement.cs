@@ -113,33 +113,15 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(Vector2Int target)
     {
-        if(MapManager.map[target.x, target.y].structure != null && MapManager.map[target.x, target.y].isWalkable)
+        if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null && MapManager.map[target.x, target.y].item == null)
         {
-            if(MapManager.map[target.x, target.y].type == "Water" && Random.Range(1,100) < DungeonGenerator.dungeonGenerator.currentFloor)
+            if(MapManager.map[target.x, target.y].type == "Cobweb")
             {
-                if(!playerStats.isPoisoned)
+                if(Random.Range(1,100) <= 20 - (playerStats.__dexterity / 2))
                 {
-                    playerStats.poisonDuration = UnityEngine.Random.Range(waterPoisonDuraiton.x, waterPoisonDuraiton.y);
-                    playerStats.Poison();
+                    //dont move
                 }
             }
-            MapManager.map[position.x, position.y].hasPlayer = false;
-            MapManager.map[position.x, position.y].letter = "";
-            MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
-            position = target;
-            MapManager.map[position.x, position.y].hasPlayer = true;
-            MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
-            MapManager.map[position.x, position.y].letter = "@";
-            MapManager.playerPos = new Vector2Int(position.x, position.y);
-
-            MapManager.map[target.x, target.y].structure.WalkIntoTrigger();
-        }
-        else if(MapManager.map[target.x, target.y].structure != null && !MapManager.map[target.x, target.y].isWalkable)
-        {
-            MapManager.map[target.x, target.y].structure.Use();
-        }
-        else if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null && MapManager.map[target.x, target.y].item == null)
-        {
             MapManager.map[position.x, position.y].hasPlayer = false;
             MapManager.map[position.x, position.y].letter = "";
             MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
@@ -164,6 +146,31 @@ public class PlayerMovement : MonoBehaviour
 
                 }  
             }
+        }
+        else if(MapManager.map[target.x, target.y].structure != null && !MapManager.map[target.x, target.y].isWalkable)
+        {
+            MapManager.map[target.x, target.y].structure.Use();
+        }
+        else if(MapManager.map[target.x, target.y].structure != null && MapManager.map[target.x, target.y].isWalkable)
+        {
+            /*if(MapManager.map[target.x, target.y].type == "Water" && Random.Range(1,100) < DungeonGenerator.dungeonGenerator.currentFloor)
+            {
+                if(!playerStats.isPoisoned)
+                {
+                    playerStats.poisonDuration = UnityEngine.Random.Range(waterPoisonDuraiton.x, waterPoisonDuraiton.y);
+                    playerStats.Poison();
+                }
+            }*/
+            MapManager.map[position.x, position.y].hasPlayer = false;
+            MapManager.map[position.x, position.y].letter = "";
+            MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
+            position = target;
+            MapManager.map[position.x, position.y].hasPlayer = true;
+            MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
+            MapManager.map[position.x, position.y].letter = "@";
+            MapManager.playerPos = new Vector2Int(position.x, position.y);
+
+            MapManager.map[target.x, target.y].structure.WalkIntoTrigger();
         }
         else if (MapManager.map[target.x, target.y].enemy != null)
         {

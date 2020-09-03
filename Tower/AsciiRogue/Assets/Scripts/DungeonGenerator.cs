@@ -491,7 +491,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "="[0])
                 {
-                    if(UnityEngine.Random.Range(1,100) < 90)
+                    if(UnityEngine.Random.Range(1,100) < 5)
                     {
                         MapManager.map[x, y] = new Tile();
                         MapManager.map[x, y].type = "Blood Anvil";

@@ -16,9 +16,12 @@ MonoBehaviour:
   E_symbol: r
   E_color: {r: 0.4392157, g: 0.12156863, b: 0.15686275, a: 0}
   E_lvlMin: 0
-  E_lvlMax: 24
-  E_currentLevel: 0
+  E_lvlMax: 9
   __modifier: 9
   _Difficulty: 1
-  E_xpAfterKilling: 4
+  _Behaviour: 0
+  attacks: 00000000
+  E_possileDrops: []
   leavesCorpse: 1
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}

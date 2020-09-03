@@ -15,11 +15,15 @@ public class PotionSO : ItemScriptableObject
         levelVision,
         soiledBandage,
         bandage,
-        heavyBandage
+        heavyBandage,
+        healing,
+        poison,
+        blindness,
+        monsterDetection
     }
     public potionEffect PotionEffect;
 
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
         if(!identified) identified = true;
 
@@ -49,6 +53,18 @@ public class PotionSO : ItemScriptableObject
             case potionEffect.heavyBandage:
                 HeavyBandage(foo);
                 break;
+            case potionEffect.healing:
+                healing(foo);
+                break;
+            case potionEffect.poison:
+                Poison(foo);
+                break;
+            case potionEffect.blindness:
+                Blindness(foo);
+                break;
+            case potionEffect.monsterDetection:
+                ShowMonsters(foo);
+                break;
         }
 
         GameManager.manager.ApplyChangesInInventory(this);      
@@ -59,6 +75,53 @@ public class PotionSO : ItemScriptableObject
         
     }
 
+    private void ShowMonsters(MonoBehaviour foo)
+    {
+        /*if(foo is PlayerStats player)
+        {
+            foreach(Transform child in DungeonGenerator.dungeonGenerator.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform)
+            {
+                if(child.GetComponent<RoamingNPC>() != null)
+                {
+                    MapManager.map[child.gameObject.GetComponent<RoamingNPC>().__position.x, child.gameObject.GetComponent<RoamingNPC>().__position.y].decoy = $"<color=#{ColorUtility.ToHtmlStringRGB(child.gameObject.GetComponent<RoamingNPC>().enemySO.E_color)}>{child.gameObject.GetComponent<RoamingNPC>().enemySO.E_symbol}</color>";              
+                }
+            }
+        }*/
+    }
+
+    private void healing(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            switch(_BUC)
+            {
+                case BUC.blessed:
+                    player.__currentHp += 10;
+                    if (player.__currentHp > player.__maxHp)
+                    {
+                        player.__currentHp -= player.__currentHp - player.__maxHp;
+                    }
+                    player.__maxHp += 2;
+                    break;
+                case BUC.cursed:
+                    player.__maxHp -= 2;
+                    player.__currentHp += 4;
+                    if (player.__currentHp > player.__maxHp)
+                    {
+                        player.__currentHp -= player.__currentHp - player.__maxHp;
+                    }
+                    break;
+                case BUC.normal:
+                    player.__currentHp += 5;
+                    if (player.__currentHp > player.__maxHp)
+                    {
+                        player.__currentHp -= player.__currentHp - player.__maxHp;
+                    }
+                    break;
+            }
+        }
+    }
+    
     private void soiledBandage(MonoBehaviour foo)
     {
         if(foo is PlayerStats player)
@@ -154,25 +217,6 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    public void Sickness(MonoBehaviour foo)
-    {
-        if (foo is PlayerStats player)
-        {
-            switch (_BUC)
-            {
-                case BUC.blessed:
-                    player.TakeDamage(1);
-                    break;
-                case BUC.normal:
-                    player.TakeDamage(Random.Range(1, 10));
-                    break;
-                case BUC.cursed:
-                    player.TakeDamage(Random.Range(1, 20));
-                    break;
-            }           
-        }
-    }
-
     public void LevelVision(MonoBehaviour foo)
     {
         if (foo is PlayerStats player)
@@ -180,6 +224,51 @@ public class PotionSO : ItemScriptableObject
             player.FullVision();
             GameManager.manager.UpdateMessages($"You drank the potion of full floor vision.");
         }
+    }
+
+    private void Poison(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            switch(_BUC)
+            {
+                case BUC.blessed:
+                    GameManager.manager.UpdateMessages("It tastes like a <color=green>poison</color>.");
+                    break;
+                case BUC.cursed:
+                    GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
+                    if (!player.isPoisoned)
+                    {
+                        player.poisonDuration = 15;
+                        player.Poison();
+                    }
+                    break;
+                case BUC.normal:
+                    GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
+                    if (!player.isPoisoned)
+                    {
+                        player.poisonDuration = 8;
+                        player.Poison();
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void Blindness(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            player.Blindness();
+        }
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
     }
 }
 

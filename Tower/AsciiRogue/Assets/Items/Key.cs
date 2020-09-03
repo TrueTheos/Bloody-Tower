@@ -9,7 +9,15 @@ public class Key : ItemScriptableObject
     {
     }
 
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
+    {
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
     {
     }
 }

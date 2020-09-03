@@ -12,23 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e1b678555b25db41b8e4a5857838147, type: 3}
   m_Name: Full Restore
   m_EditorClassIdentifier: 
-  _handSwitch: 0
-  itemLevel: 0
   I_name: Potion of Full Restore
   I_unInName: Mysterious Potion
   I_symbol: '!'
   I_color: '#C056C0'
-  levelMin: 0
-  levelMax: 0
-  I_weight: 5
+  chanceOfSpawning1to10: 0.05
+  chanceOfSpawning11to20: 0.12
+  chanceOfSpawning21to30: 0.36
+  chanceOfSpawning31to40: 0.23
+  I_weight: 2
   I_rareness: 2
   I_itemType: 6
   I_whereToPutIt: 0
   _BUC: 0
   normalIdentifState: 0
   identified: 0
-  isEquipped: 0
   pickupableByMonsters: 0
   effect: Restores your Health
   worth: 0
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
   PotionEffect: 3

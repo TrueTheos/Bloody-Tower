@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     private float sleepingDamage = 1.3f; 
     private int attackCount = 0; //if attack count u 5, we can use Weapon Art
 
+    [HideInInspector] public Coroutine cor;
+
     public Vector2Int waterPoisonDuraiton;
 
     private void Start()
@@ -29,38 +32,70 @@ public class PlayerMovement : MonoBehaviour
     {      
         if (manager.isPlayerTurn && canMove)
         {
+            if (Input.GetKeyDown(KeyCode.Keypad8))
+            {             
+                cor = StartCoroutine(MoveT());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+            {
+                cor = StartCoroutine(MoveB());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad4))
+            {
+                cor = StartCoroutine(MoveL());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad6))
+            {
+                cor = StartCoroutine(MoveR());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad7))
+            {
+                cor = StartCoroutine(MoveTL());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad9))
+            {
+                cor = StartCoroutine(MoveTR());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad3))
+            {
+                cor = StartCoroutine(MoveBR());
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+            {
+                cor = StartCoroutine(MoveBL());
+            }
+
             if (Input.GetKeyUp(KeyCode.Keypad8))
             {
-                Move(InputToVector(0, 1));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad2))
+            if (Input.GetKeyUp(KeyCode.Keypad2))
             {
-                Move(InputToVector(0, -1));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad4))
+            if (Input.GetKeyUp(KeyCode.Keypad4))
             {
-
-                Move(InputToVector(-1, 0));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad6))
+            if (Input.GetKeyUp(KeyCode.Keypad6))
             {
-                Move(InputToVector(1, 0));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad7))
+            if (Input.GetKeyUp(KeyCode.Keypad7))
             {
-                Move(InputToVector(-1, 1));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad9))
+            if (Input.GetKeyUp(KeyCode.Keypad9))
             {
-                Move(InputToVector(1, 1));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad3))
+            if (Input.GetKeyUp(KeyCode.Keypad3))
             {
-                Move(InputToVector(1, -1));
+                StopAllCoroutines();
             }
-            else if (Input.GetKeyUp(KeyCode.Keypad1))
+            if (Input.GetKeyUp(KeyCode.Keypad1))
             {
-                Move(InputToVector(-1, -1));
+                StopAllCoroutines();
             }
 
             /*if (touchedDoor) //if touched the door
@@ -111,17 +146,114 @@ public class PlayerMovement : MonoBehaviour
         return target;
     }
 
+    IEnumerator MoveTR()
+    {
+        while(true)
+        {           
+            Move(InputToVector(1, 1));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveT()
+    {
+        while (true)
+        {
+            Move(InputToVector(0, 1));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveTL()
+    {
+        while (true)
+        {
+            Move(InputToVector(-1, 1));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveL()
+    {
+        while (true)
+        {
+            Move(InputToVector(-1, 0));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveBL()
+    {
+        while (true)
+        {
+            Move(InputToVector(-1, -1));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveB()
+    {
+        while (true)
+        {
+            Move(InputToVector(0, -1));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveBR()
+    {
+        while (true)
+        {
+            Move(InputToVector(1, -1));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
+    IEnumerator MoveR()
+    {
+        while (true)
+        {
+            Move(InputToVector(1, 0));
+            yield return new WaitForSeconds(0.16f);
+        }
+    }
+
     public void Move(Vector2Int target)
     {
+        for (int y = position.y - playerStats.__noise; y < position.y + playerStats.__noise; y++)
+        {
+            for (int x = position.x - playerStats.__noise; x < position.x + playerStats.__noise; x++)
+            {
+                try
+                {
+                    if (MapManager.map[x, y].enemy != null)
+                    {
+                        MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().TestToWakeUp();
+                    }
+                }
+                catch { }
+
+            }
+        }
+
+        if (MapManager.map[position.x, position.y].type == "Cobweb")
+        {
+            if(Random.Range(1,100) <= 20 - (playerStats.__dexterity / 2))
+            {
+                //dont move
+                manager.UpdateMessages("You are stuck in the cobweb.");
+                manager.FinishPlayersTurn();
+                return;              
+            }
+        }
+        
         if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null && MapManager.map[target.x, target.y].item == null)
         {
-            if(MapManager.map[target.x, target.y].type == "Cobweb")
+            if(MapManager.map[target.x, target.y].structure != null)
             {
-                if(Random.Range(1,100) <= 20 - (playerStats.__dexterity / 2))
-                {
-                    //dont move
-                }
+                MapManager.map[target.x, target.y].structure.WalkIntoTrigger();
             }
+
             MapManager.map[position.x, position.y].hasPlayer = false;
             MapManager.map[position.x, position.y].letter = "";
             MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
@@ -130,47 +262,10 @@ public class PlayerMovement : MonoBehaviour
             MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
             MapManager.map[position.x, position.y].letter = "@";
             MapManager.playerPos = new Vector2Int(position.x, position.y);
-
-            for(int y = position.y - 2; y < position.y + 2; y++)
-            {
-                for(int x = position.x - 2; x < position.x + 2; x++)
-                {
-                    try
-                    {
-                        if(MapManager.map[x,y].enemy != null)
-                        {
-                            MapManager.map[x,y].enemy.GetComponent<RoamingNPC>().TestToWakeUp();
-                        }
-                    }
-                    catch{}
-
-                }  
-            }
         }
         else if(MapManager.map[target.x, target.y].structure != null && !MapManager.map[target.x, target.y].isWalkable)
         {
             MapManager.map[target.x, target.y].structure.Use();
-        }
-        else if(MapManager.map[target.x, target.y].structure != null && MapManager.map[target.x, target.y].isWalkable)
-        {
-            /*if(MapManager.map[target.x, target.y].type == "Water" && Random.Range(1,100) < DungeonGenerator.dungeonGenerator.currentFloor)
-            {
-                if(!playerStats.isPoisoned)
-                {
-                    playerStats.poisonDuration = UnityEngine.Random.Range(waterPoisonDuraiton.x, waterPoisonDuraiton.y);
-                    playerStats.Poison();
-                }
-            }*/
-            MapManager.map[position.x, position.y].hasPlayer = false;
-            MapManager.map[position.x, position.y].letter = "";
-            MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
-            position = target;
-            MapManager.map[position.x, position.y].hasPlayer = true;
-            MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
-            MapManager.map[position.x, position.y].letter = "@";
-            MapManager.playerPos = new Vector2Int(position.x, position.y);
-
-            MapManager.map[target.x, target.y].structure.WalkIntoTrigger();
         }
         else if (MapManager.map[target.x, target.y].enemy != null)
         {
@@ -252,7 +347,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 manager.UpdateMessages("Your backpack can't hold any more items!");
                 MapManager.map[position.x, position.y].letter = "";
-                MapManager.map[target.x, target.y].hasPlayer = false;
+                MapManager.map[position.x, position.y].hasPlayer = false;
                 MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
                 position = target;
 
@@ -265,14 +360,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(!MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.identified)
                 {
-                    manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_unInName} is too heaby. It weights {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
+                    manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_unInName} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
                 }
                 else
                 {
-                    manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_name} is too heaby. It weights {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
+                    manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_name} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
                 }
                 MapManager.map[position.x, position.y].letter = "";
-                MapManager.map[target.x, target.y].hasPlayer = false;
+                MapManager.map[position.x, position.y].hasPlayer = false;
                 MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
                 position = target;
 
@@ -282,11 +377,6 @@ public class PlayerMovement : MonoBehaviour
                 MapManager.playerPos = new Vector2Int(position.x, position.y);
             }
         }
-        /*else if (MapManager.map[target.x, target.y].type == "Chest")
-        {
-            Debug.Log(MapManager.map[target.x, target.y].structure);
-            MapManager.map[target.x, target.y].structure.Use();
-        }*/
 
         manager.FinishPlayersTurn();
     }
@@ -390,13 +480,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 WakeUpEnemy(roamingNpcScript);
                 roamingNpcScript.TakeDamage(Mathf.FloorToInt(damage * sleepingDamage));
-                manager.UpdateMessages($"You dealt <color=red>{damage}</color> to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.enemySO.E_color)}>{roamingNpcScript.enemySO.E_name}</color>");
+                manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.enemySO.E_color)}>{roamingNpcScript.enemySO.E_name}</color>");
             }
             else
             {
                 roamingNpcScript._x = roamingNpcScript.howLongWillFololwInvisiblepLayer;
                 roamingNpcScript.TakeDamage(damage);
-                manager.UpdateMessages($"You dealt <color=red>{damage}</color> to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.enemySO.E_color)}>{roamingNpcScript.enemySO.E_name}</color>");
+                manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.enemySO.E_color)}>{roamingNpcScript.enemySO.E_name}</color>");
             }
         }
         else //WE MISSED BUT WE WAKE UP ENEMY

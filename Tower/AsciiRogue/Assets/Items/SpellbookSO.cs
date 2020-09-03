@@ -38,82 +38,52 @@ public class SpellbookSO : ItemScriptableObject
     public spell _spell;
 
     public int spellLevel;
+    public int spellDuration;
 
-    public int coolDown;
+    [Header("Learning Settings")]
+    public int duration = 5; //how many times u can try to read it
+    public int learnDuration; //how many turns does it take to learn it
 
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
-        if(spellLevel == 1 && GameManager.manager.playerStats.__intelligence >= 20)
-        {
-            if(_type == type.self)
-            {
-                UseSpell(foo);
-            }
-            else
-            {
-                if(foo is PlayerStats player)
-                {
-                    player.usedScrollOrBook = this;
-                    player.usingSpellScroll = true;
-                    player.spell_pos = MapManager.playerPos;
-                }
+        GameManager.manager.readingBook = this;
 
-                GameManager.manager.CloseEQ();
-            }
+        if(GameManager.manager.playerStats.isBlind)
+        {
+            GameManager.manager.UpdateMessages("You can't read because you are <color=green>blind</color>!");
+            return;
         }
-        else if(spellLevel == 2 && GameManager.manager.playerStats.__intelligence >= 40)
-        {
-            if(_type == type.self)
-            {
-                UseSpell(foo);
-            }
-            else
-            {
-                if(foo is PlayerStats player)
-                {
-                    player.usedScrollOrBook = this;
-                    player.usingSpellScroll = true;
-                    player.spell_pos = MapManager.playerPos;
-                }
 
-                GameManager.manager.CloseEQ();
-            }
+        if (!itemObject.learned && itemObject.durationLeft > 0)
+        {
+            GameManager.manager.UpdateMessages("You start reading the book...");
+            itemObject.durationLeft--;
+            GameManager.manager.waitingCoroutine = GameManager.manager.WaitTurn(learnDuration);
+            GameManager.manager.StartCoroutine(GameManager.manager.waitingCoroutine);
         }
-        else if(spellLevel == 3 && GameManager.manager.playerStats.__intelligence >= 90)
-        {
-            if(_type == type.self)
-            {
-                UseSpell(foo);
-            }
-            else
-            {
-                if(foo is PlayerStats player)
-                {
-                    player.usedScrollOrBook = this;
-                    player.usingSpellScroll = true;
-                    player.spell_pos = MapManager.playerPos;
-                }
 
-                GameManager.manager.CloseEQ();
-            }
+        if (itemObject.durationLeft <= 0)
+        {
+            GameManager.manager.UpdateMessages("<color=lightblue>Puff!</color> Book fades away...");
+            GameManager.manager.ApplyChangesInInventory(this);
+            return;
+        }
+
+        /*if (_type == type.self)
+        {
+            UseSpell(foo);
         }
         else
         {
-            if(foo is PlayerStats player)
-            if(spellLevel == 1)
+            if (foo is PlayerStats player)
             {
-                GameManager.manager.UpdateMessages($"You need more intelligence to read this book! You need {20 - player.__intelligence}");
+                player.usedScrollOrBook = this;
+                player.usingSpellScroll = true;
+                player.spell_pos = MapManager.playerPos;
             }
-            else if(spellLevel == 2)
-            {
-                GameManager.manager.UpdateMessages($"You need more intelligence to read this book! You need {40 - player.__intelligence}");
-            }
-            else if(spellLevel == 3)
-            {
-                GameManager.manager.UpdateMessages($"You need more intelligence to read this book! You need {90 - player.__intelligence}");
-            }
-            
-        }       
+
+            GameManager.manager.CloseEQ();
+        }*/
     }
 
     public override void OnPickup(MonoBehaviour foo)
@@ -121,9 +91,29 @@ public class SpellbookSO : ItemScriptableObject
         
     }
 
+    public void CastSpell(MonoBehaviour foo)
+    {
+        if (_type == type.self)
+        {
+            UseSpell(foo);
+            GameManager.manager.CloseEQ();
+        }
+        else
+        {
+            if (foo is PlayerStats player)
+            {
+                player.usedScrollOrBook = this;
+                player.usingSpellScroll = true;
+                player.spell_pos = MapManager.playerPos;
+            }
+
+            GameManager.manager.CloseEQ();
+        }
+    }
+
     public void UseSpell(MonoBehaviour foo)
     {
-        switch(_spell)
+        switch (_spell)
         {
             case spell.BloodForBlood:
                 BloodForBlood(foo);
@@ -169,25 +159,26 @@ public class SpellbookSO : ItemScriptableObject
                 Poisonbolt(foo);
                 break;
         }
-        if (!GameManager.manager.playerStats.itemsInEq[GameManager.manager.selectedItem].identified)
-        {
-            GameManager.manager.playerStats.itemsInEq[GameManager.manager.selectedItem].identified = true; //make item identifyied
-            GameManager.manager.UpdateInventoryText(); //update item names to identifyed names (ring -> ring of fire resistance)
-            GameManager.manager.UpdateItemStats(GameManager.manager.playerStats.itemsInEq[GameManager.manager.selectedItem], GameManager.manager.playerStats.itemInEqGO[GameManager.manager.selectedItem]); //show full statistics           
-        }
 
-        GameManager.manager.UpdateItemStats(this, GameManager.manager.playerStats.itemInEqGO[GameManager.manager.selectedItem]);
+        if(foo is PlayerStats _player)
+        {
+            if (MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy != null)
+            {
+                MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+            }
+        }
     }
 
-    public void DrainLife(MonoBehaviour foo)
+    public void DrainLife(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
             if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Random.Range(1,10) + Random.Range(1,10) + player.__intelligence / 10);
-                coolDown = 20;
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Drain Life</color>.");
+                int damage = Random.Range(1, 10) + Random.Range(1, 10) + player.__intelligence / 10;
+                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(damage);
+                item.spellbookCooldown = 20;
+                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Drain Life</color>. You drained <color=red>{damage}</color> health.");
             }
         }
     }
@@ -198,8 +189,9 @@ public class SpellbookSO : ItemScriptableObject
         {
             if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
             {
+                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn(); 
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color>.");
+                GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color>. Monster is now poisoned.");
             }
         }
     }
@@ -212,7 +204,7 @@ public class SpellbookSO : ItemScriptableObject
             {
                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rooted = true;
                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);  
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Root</color>.");
+                GameManager.manager.UpdateMessages("You read the <color=red>Book of Root</color>. Monster can't move!");
             }
         }
     }
@@ -235,8 +227,7 @@ public class SpellbookSO : ItemScriptableObject
             {               
                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
                 player.TakeDamage(5);
-                Debug.Log("Blood purge" + Mathf.FloorToInt((20 + player.__intelligence) / 5));
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood for Blood</color>.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
         }
     }
@@ -246,7 +237,6 @@ public class SpellbookSO : ItemScriptableObject
         if(foo is PlayerStats player)
         {
             player.BloodRestore();
-            Debug.Log("Blood restore"); 
             GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Restore</color>.");
         }
     }
@@ -263,9 +253,8 @@ public class SpellbookSO : ItemScriptableObject
             }   
 
             player.Bleeding();
-
-            Debug.Log("Blood pact");         
-            GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Pact</color>.");       
+     
+            GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding<color> now!");       
         }
     }
 
@@ -279,8 +268,7 @@ public class SpellbookSO : ItemScriptableObject
                 player.Bleeding();
             }           
 
-            Debug.Log("cauterize");
-            GameManager.manager.UpdateMessages("You read the <color=red>Book of Cauterize</color>.");
+            GameManager.manager.UpdateMessages("You read the <color=red>Book of Cauterize</color>. You are no longer bleeding!");
         }
     }
 
@@ -292,8 +280,9 @@ public class SpellbookSO : ItemScriptableObject
             {
                 player.poisonDuration = 0;
                 player.Poison();
+                GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color>. You are no longer poisoned!");
             } 
-            GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color>.");
+            else GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color>.");
         }
     }
 
@@ -304,7 +293,7 @@ public class SpellbookSO : ItemScriptableObject
             if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
             {
                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
-                GameManager.manager.UpdateMessages("You read the <color=green>Book of Poison Dart.</color>");
+                GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
         }
     }
@@ -329,5 +318,13 @@ public class SpellbookSO : ItemScriptableObject
                 GameManager.manager.UpdateMessages("You read the <color=red>Book of Purify</color>.");
             }
         }
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
     }
 }

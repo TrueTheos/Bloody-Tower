@@ -15,10 +15,13 @@ MonoBehaviour:
   E_name: Blood Slime
   E_symbol: S
   E_color: {r: 0.7075472, g: 0.12348701, b: 0.12348701, a: 0}
-  E_lvlMin: 20
-  E_lvlMax: 25
+  E_lvlMin: 7
+  E_lvlMax: 9
   E_currentLevel: 0
   __modifier: 0
   _Difficulty: 2
-  E_xpAfterKilling: 0
+  _Behaviour: 0
+  attacks: 00000000
   leavesCorpse: 1
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}

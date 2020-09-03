@@ -15,10 +15,14 @@ MonoBehaviour:
   E_name: Orc
   E_symbol: O
   E_color: {r: 0.31623915, g: 0.5471698, b: 0.21422213, a: 0}
-  E_lvlMin: 10
-  E_lvlMax: 24
-  E_currentLevel: 0
+  E_lvlMin: 4
+  E_lvlMax: 9
   __modifier: 0
   _Difficulty: 1
-  E_xpAfterKilling: 0
+  _Behaviour: 0
+  attacks: 00000000
+  E_possileDrops:
+  - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
   leavesCorpse: 1
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}

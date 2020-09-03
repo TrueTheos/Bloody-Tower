@@ -6,11 +6,13 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.IO;
+using System.Diagnostics.Contracts;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public FixedLevels bossRoom;
-    public FixedLevels lvlTen;
+    [Header("Fixed Levels")]
+    public List<FixedLevels> floor10BossRooms;
+    public FixedLevels lvl7;
     public ItemScriptableObject keyToCell;
 
     public string[] enemiesList;
@@ -24,7 +26,7 @@ public class DungeonGenerator : MonoBehaviour
     public List<bool> enemySleeping = new List<bool>();
 
     public static DungeonGenerator dungeonGenerator;
-    private FloorManager floorManager;
+    [HideInInspector] public FloorManager floorManager;
     private GameManager manager;
 
     public int mapWidth;
@@ -79,17 +81,19 @@ public class DungeonGenerator : MonoBehaviour
 
     public void GenerateDungeon(int floorNumber)
     {
-        if(floorNumber == 25 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        try { PlayerMovement.playerMovement.StopCoroutine(PlayerMovement.playerMovement.cor); }
+        catch { }
+
+        if(floorNumber == 10 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {            
-            GenerateFixedLevel(bossRoom.fixedLevel, 25, true);            
+            GenerateFixedLevel(floor10BossRooms[UnityEngine.Random.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
         }
-        else if(floorNumber == 10 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber == 1 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
-            GenerateFixedLevel(lvlTen.fixedLevel, 10, true);  
+            GenerateFixedLevel(lvl7.fixedLevel, 1, true, false);  
         }
         else if (floorManager.floors.Count <= floorNumber)
         {
-            //GenerateNormalDungeon(floorNumber);
             GenerateFixedLevel(MapGenerator.createSewerMap().print(), floorNumber, false);
         }
         else
@@ -268,6 +272,7 @@ public class DungeonGenerator : MonoBehaviour
     //. FLOOR
     //< > STAIRS
     //+ DOOR
+    //1 DOOR THAT REQUIRES BLOOD TO BE PAID TO OPEN THE DOOR
     //_ DOOR THAT REQUIRES KEY
     //0 ENEMY
     //- KEY
@@ -275,7 +280,7 @@ public class DungeonGenerator : MonoBehaviour
     //" MUSHROOM
     //& COBWEB
 
-    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString)
+    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
     {            
         List<Vector2Int> itemPositions = new List<Vector2Int>();
         List<Vector2Int> cobwebPositions = new List<Vector2Int>();
@@ -418,8 +423,29 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     MapManager.map[x,y] = new Tile();
                     MapManager.map[x, y].type = "Door";
+                    Door door = new Door();
+                    door.position = new Vector2Int(x, y);
+                    MapManager.map[x, y].structure = door;
                     MapManager.map[x, y].baseChar = "+";
                     MapManager.map[x, y].exploredColor = new Color(.545f, .27f, .07f);
+                    MapManager.map[x, y].isWalkable = false;
+                    MapManager.map[x, y].isOpaque = true;
+                }
+                else if(fixedLevel[inxedString] == "1"[0])
+                {
+                    MapManager.map[x, y] = new Tile();
+
+                    BloodDoor bloodDoor = new BloodDoor();
+                    bloodDoor.position = new Vector2Int(x, y);
+
+                    int multiplier = Mathf.RoundToInt(currentFloor / 5);
+                    if (multiplier < 1) multiplier = 1;
+                    bloodDoor.bloodCost = 5 * multiplier;
+                    MapManager.map[x, y].structure = bloodDoor;
+
+                    MapManager.map[x, y].type = "Door";            
+                    MapManager.map[x, y].baseChar = "+";
+                    MapManager.map[x, y].exploredColor = new Color(1, 0, 0);
                     MapManager.map[x, y].isWalkable = false;
                     MapManager.map[x, y].isOpaque = true;
                 }
@@ -465,8 +491,24 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "="[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    CreateChest(x, y);
+                    if(UnityEngine.Random.Range(1,100) < 90)
+                    {
+                        MapManager.map[x, y] = new Tile();
+                        MapManager.map[x, y].type = "Blood Anvil";
+                        MapManager.map[x, y].baseChar = "π";
+                        MapManager.map[x, y].exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f);
+                        MapManager.map[x, y].isWalkable = false;
+                        MapManager.map[x, y].isOpaque = false;
+
+                        Anvil anvil = new Anvil();
+                        MapManager.map[x, y].structure = anvil;
+                    }
+                    else
+                    {
+                        MapManager.map[x, y] = new Tile();
+                        CreateChest(x, y);
+                    }
+                    
                 }
                 else if(fixedLevel[inxedString] == "\""[0])
                 {
@@ -478,6 +520,9 @@ public class DungeonGenerator : MonoBehaviour
                     MapManager.map[x,y].isOpaque = false;
                     MapManager.map[x,y].type = "Floor";
                     MapManager.map[x,y].specialNameOfTheCell = "Mushroom";
+                    Mushroom mushroom = new Mushroom();
+                    mushroom.pos = new Vector2Int(x, y);
+                    MapManager.map[x, y].structure = mushroom;
                     MapManager.map[x,y].exploredColor = mushroomColors[UnityEngine.Random.Range(0, mushroomColors.Count)];
                 }
                 else if(fixedLevel[inxedString] == "&"[0])
@@ -503,31 +548,13 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-    
-        
-        /*for(int i = 0; i < mapWidth * mapHeight; i++)
+
+        if(generateWater)
         {
-            if(loopBreaker2) break;
-            Vector2Int pos2 = new Vector2Int(UnityEngine.Random.Range(1, mapWidth), UnityEngine.Random.Range(1, mapHeight));
-            if(MapManager.map[pos2.x, pos2.y].isWalkable)
+            if (UnityEngine.Random.Range(1, 100) <= 30)
             {
-                loopBreaker2 = true;
-
-                GameObject player = GameObject.Find("Player");
-
-                player.GetComponent<PlayerMovement>().position = pos2;
-                MapManager.map[pos2.x, pos2.y].hasPlayer = true;
-                MapManager.map[pos2.x, pos2.y].timeColor = new Color(0.5f, 1, 0);
-                MapManager.map[pos2.x, pos2.y].letter = "@";
-                MapManager.playerPos = new Vector2Int(pos2.x, pos2.y);
-                GetComponent<GameManager>().player = player.GetComponent<PlayerMovement>();
-                GetComponent<GameManager>().playerStats = player.GetComponent<PlayerStats>();
+                GenerateWaterPool();
             }
-        }*/
-
-        if(UnityEngine.Random.Range(1,100) <= 30)
-        {
-            GenerateWaterPool();
         }
 
         foreach (var pos in cobwebPositions)
@@ -607,48 +634,53 @@ public class DungeonGenerator : MonoBehaviour
             {
                 try
                 {
-                    if(UnityEngine.Random.Range(0, 100) > i * 9)
-                    if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type == "Wall")
+                    if (UnityEngine.Random.Range(0, 100) > i * 8)
                     {
-                        if(UnityEngine.Random.Range(1,100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
+                        if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type == "Wall")
                         {
-                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isWalkable = true;
-                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isOpaque = false;
-                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].baseChar = "~";
-                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
-                            MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type = "Water";
+                            if (UnityEngine.Random.Range(1, 100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
+                            {
+                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
+                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
+                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
+                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
+                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
+                            }
                         }
+                        else
+                        {
+                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
+                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
+                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
+                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
+                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
+                        }
+
+                        if (MapManager.map[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Wall" || MapManager.map[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Door")
+                        {
+                            waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y));
+                        }
+
+                        if (MapManager.map[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Wall" || MapManager.map[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Door")
+                        {
+                            waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y));
+                        }
+
+                        if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Wall" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Door")
+                        {
+                            waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1));
+                        }
+
+                        if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Wall" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Door")
+                        {
+                            waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1));
+                        }
+                        waterTilesToGrow.RemoveAt(0);
                     }
                     else
                     {
-                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].baseChar = "~";
-                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
-                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].type = "Water";
-                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isWalkable = true;
-                        MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y].isOpaque = false;
-                    }
-
-                    if(MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type == "Wall" || MapManager.map[waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y].type =="Door")
-                    {
-                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x + 1,waterTilesToGrow[0].y));
-                    }
-                    
-                    if(MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type == "Wall" || MapManager.map[waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y].type =="Door")
-                    {
-                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x - 1,waterTilesToGrow[0].y));
-                    }
-
-                    if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type == "Wall" || MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1].type =="Door")
-                    {
-                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y + 1));
-                    }
-
-                    if(MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type == "Wall" || MapManager.map[waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1].type =="Door")
-                    {
-                        waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x,waterTilesToGrow[0].y - 1));
-                    }
-
-                    waterTilesToGrow.RemoveAt(0);
+                        waterTilesToGrow.RemoveAt(0);                       
+                    }                 
                 }
                 catch{waterTilesToGrow.RemoveAt(0);}
             }
@@ -1095,9 +1127,14 @@ public class DungeonGenerator : MonoBehaviour
 
             if (manager.itemSpawner.allItems[randomItem].I_rareness.ToString() == rarity)
             {
-                chest.itemInChest = manager.itemSpawner.allItems[randomItem];
+                if (manager.itemSpawner.allItems[randomItem] is SpellbookSO book)
+                { }
+                else
+                {
+                    chest.itemInChest = manager.itemSpawner.allItems[randomItem];
 
-                loopBreaker = true;
+                    loopBreaker = true;
+                }
             }
         }
     }
@@ -1427,6 +1464,7 @@ public class DungeonGenerator : MonoBehaviour
         public int x;
         public int y;
         private Purpose purpose;
+        public List<Vector2Int> doors = new List<Vector2Int>();
 
         public enum Purpose
         {
@@ -1689,7 +1727,7 @@ public class DungeonGenerator : MonoBehaviour
             structs.Add(centralRoom);
 
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 15; i++)
             {
                 // pick a structure to attach to. 
                 Structure anchor = null; ;
@@ -1718,6 +1756,7 @@ public class DungeonGenerator : MonoBehaviour
                 Location l = candidates[Rand.range(0, candidates.Count)];
                 if (anchor.isRoom() || newStruct.isRoom())
                 {
+                    newStruct.doors.Add(new Vector2Int(l.x, l.y));
                     m.set(l.x, l.y, '+'); // at least one of them is a room. Connect them with a door
                 } else
                 {
@@ -1763,7 +1802,7 @@ public class DungeonGenerator : MonoBehaviour
             while (true)
             {
                 Structure r = getRandomRoomHelper(structs);
-                if (r == notHere && attempts++ < 5)
+                if (r == notHere && attempts++ < 100)
                     continue;
                 Location l = r.getRandom();
                 if (m.get(l.x, l.y) == '.')
@@ -1792,11 +1831,19 @@ public class DungeonGenerator : MonoBehaviour
 
             Location[] location = s.getAllLocations();
 
+            if(UnityEngine.Random.Range(0,100) < 15)
+            {
+                foreach (var door in s.doors)
+                {
+                    m.set(door.x, door.y, '1');
+                }
+            }
+
             if(UnityEngine.Random.Range(0, 100) < 50)
             {
                 foreach(var loc in location)
                 {
-                    if(UnityEngine.Random.Range(1,15) < 3)
+                    if(UnityEngine.Random.Range(1,15) < 3 && m.get(loc.x, loc.y) != '<' && m.get(loc.x, loc.y) != '>')
                     {
                         m.set(loc.x, loc.y, '"');
                     }
@@ -1806,7 +1853,12 @@ public class DungeonGenerator : MonoBehaviour
             {
                 for (int i = 0; i < UnityEngine.Random.Range(location.Length * 0.25f, location.Length * 0.75f); i++)
                 {
-                    m.set(s.getRandom().x, s.getRandom().y, '&');
+                    int x = s.getRandom().x;
+                    int y = s.getRandom().y;
+                    if(m.get(x,y) != '<' && m.get(x, y) != '>')
+                    {
+                        m.set(x, y, '&');
+                    }
                 }
             }
 
@@ -2035,7 +2087,5 @@ public class DungeonGenerator : MonoBehaviour
             return l;
         }
     }
-            
-
 }
 

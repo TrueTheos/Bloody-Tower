@@ -21,9 +21,29 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     [SerializeField] private int experience;
     [SerializeField] private int experienceNeededToLvlUp;
     [SerializeField] private int coins;
+    [SerializeField] private int blood;
+
+    private float strModifier = 1;
+    private float dexModifier = 1;
+    private float intModifier = 1;
+    private float endModifier = 1;
+
+    public int noise;
+    public int __noise
+    {
+        get
+        {
+            return noise;
+        }
+        set
+        {
+            noise = value;
+            UpdateText(statType.noise);
+        }
+    }
 
     private GameObject statsCanvas;
-    public GameManager gameManager;
+    private GameManager gameManager;
 
     [HideInInspector]
     public enum statType
@@ -36,7 +56,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         lvl,
         experience,
         coins,
-        ac
+        ac,
+        noise,
+        blood
     }
     [HideInInspector]
     public statType _statType;
@@ -65,6 +87,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         set
         {
             currentHp = value;
+
             UpdateText(statType.hp);
         }
     }
@@ -78,19 +101,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         {
             if(value > 0) //we gained strength
             {
-                if (value < 0)
-                {
-                    gameManager.UpdateMessages("You feel weak!");
-                }
-                else if (value == 1)
-                {
-                    //gameManager.UpdateMessages("You feel strong!");
-                }
-                else if (value > 1)
-                {
-                    gameManager.UpdateMessages("You feel very strong!");
-                }
-                strength = value;     
+                strength = value;             
 
                 maxWeight += 5;
 
@@ -210,8 +221,72 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         set
         {
             coins = value;
-            //coins = value;
             UpdateText(statType.coins);
+        }
+    }
+
+
+    private int strLost, dexLost;
+
+
+    public int __blood
+    {
+        get
+        {
+            return blood;
+        }
+        set
+        {
+            blood = value;
+            if (blood > 100) blood = 100;
+            if (blood < 0) blood = 0;
+
+            if (blood <= 25)
+            {
+                Blindness();
+            }
+            if (blood <= 50 && dexModifier == 1)
+            {
+                dexModifier = 0.6f;
+                dexLost = __dexterity - Mathf.RoundToInt(__dexterity * dexModifier);
+                __dexterity -= dexLost;
+            }
+            if (blood <= 75 && strModifier == 1)
+            {
+                strModifier = 0.6f;
+                strLost = __strength - Mathf.RoundToInt(__strength * strModifier);
+                __strength -= strLost;
+            }
+
+            if (blood > 75)
+            {
+                if(strModifier != 1)
+                {
+                    strModifier = 1;
+                    __strength += strLost;
+                }   
+                if(dexModifier != 1)
+                {
+                    dexModifier = 1;
+                    __dexterity += dexLost;
+                }
+                if (isBlind) UnBlind();
+            }
+            else if(blood > 50)
+            {
+                if (dexModifier != 1)
+                {
+                    dexModifier = 1;
+                    __dexterity += dexLost;
+                }
+                if (isBlind) UnBlind();
+            }
+            else if(blood > 25)
+            {
+                if (isBlind) UnBlind();
+            }
+
+            UpdateText(statType.blood);
         }
     }
 
@@ -240,10 +315,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     public int maximumInventorySpace;
     public int currentItems;
 
-    [HideInInspector] public int viewRange = 7; //how far we can see
-    [HideInInspector] public bool damagedEyes;
+    public int startingViewRange;
+    [HideInInspector] public int viewRange; //how far we can see
+    /*[HideInInspector] public bool damagedEyes;
     [HideInInspector] public int damagedEyesCounter;
-    [HideInInspector] public int eyesTimer = 60; //how long should it take to regenerate damaged eyes
+    [HideInInspector] public int eyesTimer = 60; //how long should it take to regenerate damaged eyes*/
 
     [HideInInspector] public bool fullLevelVision = false;
 
@@ -259,6 +335,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     public TextMeshProUGUI _experience;
     public TextMeshProUGUI _coins;
     public TextMeshProUGUI _ac;
+    public TextMeshProUGUI _noise;
+    public TextMeshProUGUI _blood;
 
     //buttons
     public GameObject _strengthButton;
@@ -287,6 +365,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     public bool isInvisible;
     public int invisibleDuration;
+
+    public bool isBlind;
+    private int viewRangeInBlindMode = 3;
+
+    public List<SpellbookSO> rememberedSpells = new List<SpellbookSO>();
 
 
     /** SPELLS **/
@@ -353,6 +436,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     public void Start()
     {
+        viewRange = startingViewRange;
+
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         statsCanvas = GameObject.Find("Stats");      
@@ -566,60 +651,60 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         if(usingSpellScroll)
         {
             if(PlayerMovement.playerMovement.canMove)
-            {   
+            {
+                Debug.Log(MapManager.playerPos + " " + spell_pos);
                 PlayerMovement.playerMovement.canMove = false;
                 gameManager.UpdateMessages("Choose target of your spell. <color=pink>(Numpad 8 4 6 2, Enter/Space to confirm, Escape to cancel)</color>");
             } 
 
             if (Input.GetKeyDown(KeyCode.Keypad8))
             {
-                if(MapManager.map[spell_pos.x, spell_pos.y + 1].type != "Wall")
+                if(MapManager.map[spell_pos.x, spell_pos.y + 1].type != "Wall" && MapManager.map[spell_pos.x, spell_pos.y + 1].isExplored)
                 {
                     spell_pos.y++;
                     MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }                                      
-                else spell_pos.y++;
+                }
+                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
+                //else spell_pos.y++;
 
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
             else if (Input.GetKeyDown(KeyCode.Keypad2))
             {
-                if(MapManager.map[spell_pos.x, spell_pos.y + 1].type != "Wall")
+                if (MapManager.map[spell_pos.x, spell_pos.y - 1].type != "Wall" && MapManager.map[spell_pos.x, spell_pos.y - 1].isExplored)
                 {
                     spell_pos.y--;
                     MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }  
-                else spell_pos.y--;
+                }
+                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
 
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
             else if (Input.GetKeyDown(KeyCode.Keypad4))
             {
-                if(MapManager.map[spell_pos.x, spell_pos.y + 1].type != "Wall")
+                if (MapManager.map[spell_pos.x - 1, spell_pos.y].type != "Wall" && MapManager.map[spell_pos.x - 1, spell_pos.y].isExplored)
                 {
                     spell_pos.x--;
                     MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }  
-                else spell_pos.x--;
+                }
+                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
 
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
             else if (Input.GetKeyDown(KeyCode.Keypad6))
             {
-                if(MapManager.map[spell_pos.x, spell_pos.y + 1].type != "Wall")
+                if (MapManager.map[spell_pos.x + 1, spell_pos.y].type != "Wall" && MapManager.map[spell_pos.x + 1, spell_pos.y].isExplored)
                 {
                     spell_pos.x++;
                     MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }  
-                else spell_pos.x++;
+                }
+                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
 
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             } //todo
 
             if (Input.GetButtonDown("Use"))
             {
-
-                Debug.Log(spell_pos);
                 PlayerMovement.playerMovement.canMove = true;
 
                 usingSpellScroll = false;
@@ -747,7 +832,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             gameManager.UpdateMessages($"You picked up the <color=purple>{iso.I_unInName}</color>.");
             gameManager.UpdateInventoryQueue($"<color=purple>{iso.I_unInName}</color>");
         }
-
+        GameManager.manager.ApplyChangesInInventory(null);
         UpdateCapacity();
     }
 
@@ -794,6 +879,16 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             case statType.ac:
                 _ac.text = "AC: " + $"<color=green>{armorClass}</color>";
                 break;
+            case statType.noise:
+                _noise.text = "Noise: " + $"<color=green>{__noise}</color>";
+                break;
+            case statType.blood:
+                _blood.text = "";
+                for (int i = 0; i < __blood; i++)
+                {
+                    _blood.text += "<color=#761616>|</color>";
+                }
+                break;
         }
     } //update stats in ui
 
@@ -802,7 +897,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
      */
     private int NextLevelXpReq()
     {
-        int req = Mathf.FloorToInt(__experienceNeededToLvlUp * 1.15f); // Placeholder formula
+        int req = Mathf.FloorToInt(__experienceNeededToLvlUp * 1.35f); // Placeholder formula
         return req;
     }
 
@@ -850,20 +945,93 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     public void TakeDamage(int damage)
     {
         __currentHp -= damage;
+        LossBlood(Mathf.RoundToInt(damage / 2));
 
         if(!isDead && __currentHp <= 0)
         {
-            isDead = true;
+            PlayerMovement.playerMovement.StopAllCoroutines();
             gameManager.UpdateMessages("You are <color=#990000>dead</color>.");
-            PlayerMovement.playerMovement.canMove = false;
-            GameObject.Find("Console").GetComponent<Text>().text = deadText;         
+            if (_ring != null && _ring.I_name == "Ring of Life Saving")
+            {
+                EffectCoroutine = LifeSaveEffect();
+                StartCoroutine(EffectCoroutine);
+                gameManager.UpdateMessages("<color=yellow>But wait... Your medallion begins to glow! You feel much better! The medallion crumbles to dust!</color>");
+                __currentHp = __maxHp;
+                __blood = 100;  
+                gameManager.ApplyChangesInInventory(_ring);
+                gameManager.UpdateEquipment(Ring, "<color=#ffffff>Ring: </color>");
+                _ring = null;               
+            }
+            else
+            {
+                isDead = true;
+                PlayerMovement.playerMovement.canMove = false;
+                DungeonGenerator.dungeonGenerator.screen.text = deadText;
+            }
         }
+    }
+
+    IEnumerator EffectCoroutine;
+
+    public IEnumerator LifeSaveEffect()
+    {
+        Vector2Int playerPos = MapManager.playerPos;
+
+        int x = 0;
+
+        for (int i = 1; i < 60; i++)
+        {
+            x = playerPos.x;
+            for (int i1 = playerPos.y + i; i1 >= playerPos.y; i1--)
+            {              
+                try { MapManager.map[x, i1].decoy = "<color=yellow>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, playerPos.y + (playerPos.y - i1)].decoy = "<color=yellow>*</color>"; }
+                catch { }
+
+                try {MapManager.map[x, i1].decoy = "<color=yellow>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, playerPos.y + (playerPos.y - i1)].decoy = "<color=yellow>*</color>"; }
+                catch { }
+                x++;
+            }
+
+            x = playerPos.x;
+
+            for (int i1 = playerPos.y + i; i1 >= playerPos.y; i1--)
+            {
+                try { MapManager.map[x, i1].decoy = "<color=yellow>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, playerPos.y + (playerPos.y - i1)].decoy = "<color=yellow>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, i1].decoy = "<color=yellow>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, playerPos.y + (playerPos.y - i1)].decoy = "<color=yellow>*</color>"; }
+                catch { }
+                x--;
+            }
+            yield return new WaitForSeconds(0.001f);
+            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        }    
+
+        StopCoroutine(EffectCoroutine);
+    }
+
+    public void LossBlood(int amount)
+    {
+        __blood -= amount;
     }
 
     public void Poison()
     {
         if (!isPoisoned)
         {
+            if (hasPoisonResistance) return;
             gameManager.UpdateMessages("You are <color=green>poisoned</color>!");
             isPoisoned = true;
             if(poisonDuration == 0)
@@ -955,6 +1123,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
        
         if(poisonResistanceDuration > 0)
         {
+            if (isPoisoned)
+            {
+                poisonDuration = 0;
+                Poison();
+            }
             poisonResistanceDuration--;
         }
         else
@@ -1062,6 +1235,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         {
             BloodRestoreDuration--;
             __currentHp += 2;
+            __blood += 2;
         }
         else
         {
@@ -1096,6 +1270,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         {
             bleegingDuration--;
             TakeDamage(1);
+            __blood -= 1;
         }
         else
         {
@@ -1137,6 +1312,25 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             int index = System.Array.IndexOf(effects.ToArray(), "<color=green>Anoint</color>");
             effects.RemoveAt(index);
         }
+    }
+
+    public void Blindness()
+    {
+        if (!isBlind) GameManager.manager.UpdateMessages("You are <color=red>blind</color> now!");
+        isBlind = true;
+        foreach(var tile in MapManager.map)
+        {
+            tile.isExplored = false;
+            tile.isVisible = false;
+        }
+        viewRange = viewRangeInBlindMode;
+    }
+
+    public void UnBlind()
+    {
+        GameManager.manager.UpdateMessages("You are no longer <color=red>blind</color!");
+        isBlind = false;
+        viewRange = startingViewRange;
     }
 
     private IEnumerator UpdateEffects()

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour
     public Text itemRare;
     public Text itemEffects;
     public RectTransform selector;
-    [HideInInspector] public int selectedItem;
+    public int selectedItem;
     private bool inventoryOpen = false;
 
     [Header("Decisions")]
@@ -70,7 +71,25 @@ public class GameManager : MonoBehaviour
     private bool cheatMenu = false;
     public string cheatString;
 
+    [HideInInspector] public bool isReadingBook;
+    public bool waiting;
+    public SpellbookSO readingBook;
+    public IEnumerator waitingCoroutine;
+    public bool openGrimoire;
+    private string grimoireText;
+    [HideInInspector] public Queue<string> m_grimoire;
+    public bool decidingSpell;
+
     private FOVNEW fv;
+
+    private string itemOption1;
+    private string itemOption2;
+    private string itemOption3;
+    private string itemOption4;
+    private string itemOption5;
+
+    [HideInInspector] public Item itemToAnvil;
+    [HideInInspector] public ItemScriptableObject isoAnvil;
 
     void Awake()
     {
@@ -80,6 +99,7 @@ public class GameManager : MonoBehaviour
 
         m_Messages = new Queue();
         m_Inventory = new Queue<string>();
+        m_grimoire = new Queue<string>();
 
         tasks = GetComponent<Tasks>();
 
@@ -90,7 +110,7 @@ public class GameManager : MonoBehaviour
     {
         dungeonGenerator.InitializeDungeon();
         dungeonGenerator.GenerateDungeon(0);
-        for(int i = 1; i <= 25; i++)
+        for(int i = 1; i <= 10; i++)
         {
             dungeonGenerator.GenerateDungeon(i);
         }
@@ -108,11 +128,6 @@ public class GameManager : MonoBehaviour
         foreach (var item in itemSpawner.allItems)
         {
             item.identified = item.normalIdentifState;
-            item.isEquipped = false;
-            if(item is SpellbookSO book)
-            {
-                book.coolDown = 0;
-            }
         }
 
         FirstTurn();
@@ -121,12 +136,37 @@ public class GameManager : MonoBehaviour
     [Obsolete]
     public void Update()
     {
+        if (waiting) return;
+
         if (isPlayerTurn)
         {
-            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon)
+            if(Input.GetKeyDown(KeyCode.G) && !inventoryOpen)
+            {
+                if(!openGrimoire)
+                {
+                    UpdateGrimoireText();
+                    selectedItem = 0;
+                    selector.GetComponent<Text>().enabled = true;
+                    player.canMove = false;
+                    openGrimoire = true;
+                    invBorder.SetActive(true);
+                    mapText.SetActive(false);
+                    mainUItext.enabled = false;
+                    selector.GetComponent<Text>().enabled = true;
+                    try { UpdateSpellStats(playerStats.rememberedSpells[0]); }
+                    catch { }
+                }
+                else
+                {
+                    CloseEQ();
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon && !openGrimoire)
             {
                 if (!inventoryOpen)
                 {
+                    UpdateInventoryText();
+                    selectedItem = 0;
                     selector.GetComponent<Text>().enabled = true;
                     player.canMove = false;
                     inventoryOpen = true;
@@ -139,14 +179,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    selectedItem = 0;
-                    player.canMove = true;
-                    inventoryOpen = false;
-                    invBorder.SetActive(false);
-                    mapText.SetActive(true);
-                    mainUItext.enabled = true;
-                    selector.anchoredPosition = new Vector3(-7, -234, 0);
-                    selector.GetComponent<Text>().enabled = false;
+                    CloseEQ();
                 }               
             }
             else if (Input.GetKeyDown(KeyCode.Escape) && inventoryOpen)
@@ -158,36 +191,58 @@ public class GameManager : MonoBehaviour
             {
                 if (Input.GetButtonDown("Use") && !choosingWeapon)
                 {
+                    itemOption1 = "";
+                    itemOption2 = "";
+                    itemOption3 = "";
+                    itemOption4 = "";
+                    itemOption5 = "";
+
                     decisionsCount = 1;
-                    _iso = playerStats.itemsInEq[selectedItem];
+                    try
+                    {
+                        _iso = playerStats.itemsInEq[selectedItem];
+                    }
+                    catch { return; }
                     _isoGO = playerStats.itemInEqGO[selectedItem];
                     equipState = playerStats.itemInEqGO[selectedItem].isEquipped;
 
                     GOdec.SetActive(true);
 
                     decisions.text = "1. Drop";
+                    AddAnotherOption("Drop");
+
                     if (_iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none)
                     {
                         if (equipState == true)
                         {
                             decisions.text += "\n" + "2. Unequip";
                             decisionsCount++;
+                            AddAnotherOption("UEquip");
                         }
                         else
                         {
                             decisions.text += "\n" + "2. Equip";
                             decisionsCount++;
+                            AddAnotherOption("UEquip");
                         }
                     }
                     if (_iso.I_itemType == ItemScriptableObject.itemType.Wand || _iso.I_itemType == ItemScriptableObject.itemType.Scroll || _iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _iso.I_itemType == ItemScriptableObject.itemType.Gem)
                     {
                         decisionsCount++;
                         decisions.text += "\n" +  decisionsCount + ". " + "Use";
+                        AddAnotherOption("Use");
                     }
                     if (_iso.I_itemType == ItemScriptableObject.itemType.Potion)
                     {
                         decisionsCount++;
                         decisions.text += "\n" +  decisionsCount + ". " + "Drink";
+                        AddAnotherOption("Use");
+                    }
+                    if(_iso.I_itemType == ItemScriptableObject.itemType.Armor || _iso.I_itemType == ItemScriptableObject.itemType.Weapon)
+                    {
+                        decisionsCount++;
+                        decisions.text += "\n" + decisionsCount + ". " + "Anvil";
+                        AddAnotherOption("Upgrade");
                     }
 
                     decisionMade = false;
@@ -200,416 +255,97 @@ public class GameManager : MonoBehaviour
                     choosingWeapon = false;
                     choosenWeapon = playerStats.itemInEqGO[selectedItem];
                     choosenWeapon.AddGem(gemToConnect);
-                    if(choosenWeapon.isEquipped) gemToConnect.Use(playerStats);
+                    try { if (choosenWeapon.isEquipped) gemToConnect.Use(playerStats, playerStats.itemInEqGO[selectedItem]); } catch { }
                     FinishPlayersTurn();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad2))
+                {
+                    if (selectedItem < playerStats.itemsInEq.Count - 1)
+                    {
+                        selectedItem++;
+                        selector.anchoredPosition -= new Vector2(0, 26);
+                        UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]);
+                    }
+                    else
+                    {
+                        selectedItem = 0;
+                        selector.anchoredPosition = new Vector3(-7, -234, 0);
+                        UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]);
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.Keypad8))
+                {
+                    if (selectedItem > 0)
+                    {
+                        selectedItem--;
+                        selector.anchoredPosition += new Vector2(0, 26);
+                        UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]);
+                    }
+                    else
+                    {
+                        selectedItem = playerStats.itemsInEq.Count - 1;
+                        for (int i = 0; i < selectedItem; i++)
+                        {
+                            selector.anchoredPosition -= new Vector2(0, 26);
+                        }
+                        UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]);
+                    }
+                }               
+            }
+
+            if (openGrimoire)
+            {
+                if (Input.GetButtonDown("Use") && playerStats.rememberedSpells.Count > 0)
+                {
+                    GOdec.SetActive(true);
+                    decisions.text = "1. Cast";
+                    decisionMade = false;
+                    decidingSpell = true;
+
+                    DecisionTurn();
                 }
 
                 if (Input.GetKeyDown(KeyCode.Keypad2) && selectedItem < playerStats.itemsInEq.Count - 1)
                 {
                     selectedItem++;
                     selector.anchoredPosition -= new Vector2(0, 26);
-                    UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]);
+                    UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
                 }
                 else if (Input.GetKeyDown(KeyCode.Keypad8) && selectedItem > 0)
                 {
                     selectedItem--;
                     selector.anchoredPosition += new Vector2(0, 26);
-                    UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]);
-                }               
-            }          
+                    UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                }
+            }
         }
         
+        if(decidingSpell)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                if(playerStats.rememberedSpells[selectedItem] is SpellbookSO book)
+                {
+                    book.CastSpell(playerStats);
+                }
+                decisionMade = true;
+            }
+        }
+
         if (deciding && !choosingWeapon)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1)) //drop item
             {
-                Vector2Int posToDrop = new Vector2Int(1000,1000);
-
-                if(_isoGO.cursed && _isoGO.equippedPreviously)
-                {
-                    UpdateMessages("You can't drop this item because it is <color=red>cursed</color!");
-                    decisionMade = true;
-                    FinishPlayersTurn();
-                    return;
-                }
-
-                if(MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].structure == null)
-                {                  
-                    if(CanItemBeDroppedHere(MapManager.playerPos)) posToDrop = MapManager.playerPos;
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1);
-                    else if(CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1);
-                    else UpdateMessages("There is no space around you.");
-
-                    if(posToDrop != new Vector2Int(1000,1000))
-                    {
-                        if (ColorUtility.TryParseHtmlString(_iso.I_color, out Color color))
-                        {
-                            MapManager.map[posToDrop.x, posToDrop.y].exploredColor = color;
-                        }
-                        MapManager.map[posToDrop.x, posToDrop.y].baseChar = _iso.I_symbol;
-
-                        if(_iso is WeaponsSO bloodSword && _iso.I_name == "Bloodsword") tasks.everyTurnTasks -= bloodSword.BloodswordDecreaseDamage;
-
-                        GameObject item = Instantiate(_isoGO.gameObject, transform.position, Quaternion.identity);
-                        item.GetComponent<Item>().iso = _iso;
-                        item.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
-                        MapManager.map[posToDrop.x, posToDrop.y].item = item.gameObject;
-                    }
-                }
-
-                if (_iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none && posToDrop != new Vector2Int(1000,1000)) //drop equipped item
-                {
-                    if(_isoGO.isEquipped)
-                    {
-                        switch (_iso.I_whereToPutIt)
-                        {
-                            case ItemScriptableObject.whereToPutIt.head:
-                                playerStats._head = null;
-                                playerStats.Head.text = "Helm:";
-                                if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                break;
-                            case ItemScriptableObject.whereToPutIt.body:
-                                playerStats._body = null;
-                                playerStats.Body.text = "Chest:";
-                                if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                break;
-                            case ItemScriptableObject.whereToPutIt.hand:
-                                if (_iso is Torch torch)
-                                {
-                                    torch.RemoveTorch();
-                                }
-
-                                if (_isoGO._handSwitch == Item.hand.left)
-                                {
-                                    playerStats._Lhand = null;
-                                    playerStats.LHand.text = "Left Hand:";
-                                    if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                    if(_iso is WeaponsSO weapon)
-                                    {
-                                        _isoGO.UnequipWithGems();
-                                    }
-                                }                           
-                                else if(_isoGO._handSwitch == Item.hand.right)
-                                {
-                                    playerStats._Rhand = null;
-                                    playerStats.RHand.text = "Right Hand:";
-                                    if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                    if(_iso is WeaponsSO weapon)
-                                    {
-                                        _isoGO.UnequipWithGems();
-                                    }
-                                }
-                                break;
-                            case ItemScriptableObject.whereToPutIt.legs:
-                                playerStats._legs = null;
-                                playerStats.Legs.text = "Legs:";
-                                if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                break;
-                            case ItemScriptableObject.whereToPutIt.ring:
-                                if (playerStats._ring is RingSO ring)
-                                {
-                                    ring.Dequip(playerStats);
-                                }
-                                playerStats._ring = null;
-                                playerStats.Ring.text = "Ring:";
-                                if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                break;
-                        }
-                    }                   
-                    
-                    if(_iso.identified)
-                    {
-                        UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_name}</color>.");
-                    }
-                    else
-                    {
-                        UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_unInName}</color>.");
-                    }
-                    ApplyChangesInInventory(_iso);
-                } 
-                else
-                {
-                    if(posToDrop != new Vector2Int(1000,1000))
-                    {
-                        if(_iso.identified)
-                        {
-                            UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_name}</color>.");
-                        }
-                        else
-                        {
-                            UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_unInName}</color>.");
-                        }
-                        ApplyChangesInInventory(_iso);
-                    }               
-                }
-
-                decisionMade = true;
-                FinishPlayersTurn();
+                try { SendMessage(itemOption1); } catch { }
             }
-            else if ((Input.GetKeyDown(KeyCode.Alpha2) && decisionsCount > 1)) 
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                if(_iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none)
-                {
-                    if (equipState) //deequip
-                    {
-                        if(_isoGO.cursed)
-                        {
-                            UpdateMessages("You can't unequipt this item becuase it's <color=red>cursed</color>.");
-                        }
-                        else
-                        {
-                            switch (_iso.I_whereToPutIt)
-                            {
-                                case ItemScriptableObject.whereToPutIt.head:
-                                    playerStats._head = null;
-                                    UpdateEquipment(playerStats.Head, "<color=#ffffff>Helm: </color>");
-
-                                    if (_iso is ArmorSO armor)
-                                    {
-                                        armor.Use(playerStats);
-                                    }
-                                    _isoGO.isEquipped = false;
-                                    break;
-                                case ItemScriptableObject.whereToPutIt.body:
-                                    playerStats._body = null;
-                                    UpdateEquipment(playerStats.Body, "<color=#ffffff>Chest: </color>");
-
-                                    if (_iso is ArmorSO armor1)
-                                    {
-                                        armor1.Use(playerStats);
-                                    }
-                                    _isoGO.isEquipped = false;
-                                    break;
-                                case ItemScriptableObject.whereToPutIt.hand:
-
-                                    if(_iso is Torch torch)
-                                    {
-                                        torch.RemoveTorch();
-                                    }
-
-                                    if (_isoGO._handSwitch == Item.hand.left)
-                                    {
-                                        playerStats._Lhand = null;
-                                        playerStats.LHand.text = "Left Hand:";
-                                        if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                        if(_iso is WeaponsSO weapon)
-                                        {
-                                            _isoGO.UnequipWithGems();
-                                       }
-                                    }
-                                    else if (_isoGO._handSwitch == Item.hand.right)
-                                    {   
-                                        playerStats._Rhand = null;
-                                        playerStats.RHand.text = "Right Hand:";
-                                        if (_isoGO.isEquipped) _isoGO.isEquipped = false;
-                                        if(_iso is WeaponsSO weapon)
-                                        {
-                                            _isoGO.UnequipWithGems();
-                                        }
-                                    }
-                                    break;
-                                case ItemScriptableObject.whereToPutIt.ring:
-                                    if (playerStats._ring is RingSO _ring) //deequip
-                                    {
-                                        _ring.Dequip(playerStats);
-                                    }
-
-                                    playerStats._ring = null;
-                                    UpdateEquipment(playerStats.Ring, "<color=#ffffff>Ring: </color>");
-                                    _isoGO.isEquipped = false;
-                                    break;
-                                case ItemScriptableObject.whereToPutIt.legs:
-                                    playerStats._legs = null;
-                                    UpdateEquipment(playerStats.Legs, "<color=#ffffff>Legs: </color>");
-
-                                    if (_iso is ArmorSO armor2)
-                                    {
-                                        armor2.Use(playerStats);
-                                    }
-                                    _isoGO.isEquipped = false;
-                                    break;
-                            }
-                            UpdateInventoryText();
-                        }
-                    }
-                    else //equip
-                    {
-                        if (!_iso.identified)
-                        {
-                            playerStats.itemsInEq[selectedItem].identified = true; //make item identifyied
-                            UpdateInventoryText(); //update item names to identifyed names (ring -> ring of fire resistance)
-                            UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]); //show full statistics
-                            UpdateInventoryQueue(null);
-                        }
-
-                        if(_isoGO.cursed) UpdateMessages($"You wince as your grip involuntarily tightens around your {_iso.I_name}.");
-
-                        _isoGO.equippedPreviously = true;
-
-                        switch (_iso.I_whereToPutIt)
-                        {
-                            case ItemScriptableObject.whereToPutIt.head:
-                                if(playerStats._head)
-                                {
-                                    UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
-                                }
-                                else
-                                {
-                                    playerStats._head = _iso;
-                                    UpdateEquipment(playerStats.Head, "<color=#00FFFF>Helm: </color>" + "\n" + " " + playerStats._head.I_name);
-
-                                    if (_iso is ArmorSO armor)
-                                    {
-                                        armor.Use(playerStats);
-                                    }
-                                    _isoGO.isEquipped = true;
-                                }
-                                
-                                break;
-                            case ItemScriptableObject.whereToPutIt.body:
-                                if(playerStats._body)
-                                {
-                                    UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
-                                }
-                                else
-                                {
-                                    playerStats._body = _iso;
-                                    UpdateEquipment(playerStats.Body, "<color=#00FFFF>Chest: </color>" + "\n" + " " + playerStats._body.I_name);
-
-                                    if (_iso is ArmorSO armor1)
-                                    {
-                                        armor1.Use(playerStats);
-                                    }
-                                    _isoGO.isEquipped = true;
-                                }
-                                
-                                break;
-                            case ItemScriptableObject.whereToPutIt.hand:
-                                if (_iso is Torch torch)
-                                {
-                                    torch.UseTorch();
-                                }
-
-                                if (playerStats._Lhand == null)
-                                {
-                                    playerStats._Lhand = _iso;
-                                    UpdateEquipment(playerStats.LHand, "<color=#00FFFF>Left Hand: </color>" + "\n" + " " + playerStats._Lhand.I_name);
-                                    _isoGO.isEquipped = true;
-                                    _isoGO._handSwitch = Item.hand.left;
-
-                                    if(_iso is WeaponsSO weapon)
-                                    {
-                                        _isoGO.EquipWithGems();
-                                    }
-                                }
-                                else if (playerStats._Rhand == null)
-                                {
-                                    playerStats._Rhand = _iso;
-                                    UpdateEquipment(playerStats.RHand, "<color=#00FFFF>Right Hand: </color>" + "\n" + " " + playerStats._Rhand.I_name);
-                                    _isoGO.isEquipped = true;
-                                    _isoGO._handSwitch = Item.hand.right;
-                                    if(_iso is WeaponsSO weapon)
-                                    {
-                                        _isoGO.EquipWithGems();
-                                    }
-                                }
-                                else
-                                {
-                                    UpdateMessages("You have no free hand.");
-                                }
-                                break;
-                            case ItemScriptableObject.whereToPutIt.ring:
-                                if(playerStats._ring)
-                                {
-                                    UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
-                                }
-                                else
-                                {
-                                    if (playerStats._ring is RingSO _ring) //deequip
-                                    {
-                                        _ring.Dequip(playerStats);
-                                    }
-
-                                    playerStats._ring = _iso;
-                                    UpdateEquipment(playerStats.Ring, "<color=#00FFFF>Ring: </color>" + "\n" + " " + playerStats._ring.I_name);
-
-                                    if (_iso is RingSO ring)
-                                    {
-                                        ring.Use(playerStats);
-                                    }
-                                    ApplyChangesInInventory(null);
-                                    _isoGO.isEquipped = true;
-                                }
-                                
-                                break;
-                            case ItemScriptableObject.whereToPutIt.legs:
-                                if(playerStats._legs)
-                                {
-                                    UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
-                                }
-                                else
-                                {
-                                    playerStats._legs = _iso;
-                                    UpdateEquipment(playerStats.Legs, "<color=#00FFFF>Legs: </color>" + "\n" + " " + playerStats._legs.I_name);
-
-                                    if (_iso is ArmorSO armor2)
-                                    {
-                                        armor2.Use(playerStats);
-                                    }
-                                    _isoGO.isEquipped = true;
-                                }
-                                
-                                break;
-                        }
-
-                        UpdateInventoryText();
-                    }
-
-                    decisionMade = true;
-                    FinishPlayersTurn();
-                }
-                else
-                {
-                    if(_iso is Gem gem)
-                    {
-                        gemToConnect = _iso;
-                        UpdateMessages("Choose weapon. (ESC to cancel)");
-                        choosingWeapon = true;
-                        decisionMade = true;
-                    }
-                    else
-                    {
-                        _iso.Use(playerStats);
-                        ApplyChangesInInventory(null);
-
-                        decisionMade = true;
-                        FinishPlayersTurn();
-                    }
-                }              
+                try{SendMessage(itemOption2); } catch { }
             }
-            else if ((Input.GetKeyDown(KeyCode.Alpha3) && decisionsCount > 2))
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                if(_iso is Gem gem)
-                {
-                    gemToConnect = _iso;
-                    UpdateMessages("Choose weapon.");
-                    choosingWeapon = true;
-                    decisionMade = true;
-                }
-                else
-                {
-                    _iso.Use(playerStats);
-                    ApplyChangesInInventory(null);
-
-                    decisionMade = true;
-                    FinishPlayersTurn();
-                }
+                try{SendMessage(itemOption3); } catch { }
             }
 
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.I))
@@ -619,15 +355,16 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        if (decisionMade)
+        if (decisionMade)   
         {
             deciding = false;
+            decidingSpell = false;
             GOdec.SetActive(false);            
         }
         
         if (playerStats.isDead)
         {
-            GameObject.Find("Console").GetComponent<Text>().text = playerStats.deadText;
+            dungeonGenerator.screen.text = playerStats.deadText;
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -646,7 +383,18 @@ public class GameManager : MonoBehaviour
             {
                 cheatMenu = false;
 
-                if(cheatString.Substring(0, 2) == "fv")
+                if (cheatString.Substring(0, 2) == "st")
+                {
+                    if(dungeonGenerator.currentFloor != 0)
+                    {
+                        UpdateMessages(dungeonGenerator.floorManager.stairsDown[dungeonGenerator.currentFloor - 1].x + " " + dungeonGenerator.floorManager.stairsDown[dungeonGenerator.currentFloor - 1].y);                
+                    }
+
+                    UpdateMessages(dungeonGenerator.floorManager.stairsUp[dungeonGenerator.currentFloor].x + " " + dungeonGenerator.floorManager.stairsUp[dungeonGenerator.currentFloor].y);
+
+                    dungeonGenerator.DrawMap(true, MapManager.map);
+                }
+                else if (cheatString.Substring(0, 2) == "fv")
                 {
                     playerStats.FullVision();
                 }   
@@ -666,6 +414,428 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void AddAnotherOption(string option)
+    {
+        if(itemOption1 == "")
+        {
+            itemOption1 = option;
+        }
+        else if(itemOption2 == "")
+        {
+            itemOption2 = option;
+        }
+        else if (itemOption3 == "")
+        {
+            itemOption3 = option;
+        }
+        else if (itemOption4 == "")
+        {
+            itemOption4 = option;
+        }
+        else if (itemOption5 == "")
+        {
+            itemOption5 = option;
+        }
+    }
+
+    private void Drop()
+    {
+        Vector2Int posToDrop = new Vector2Int(1000, 1000);
+
+        if (_isoGO.cursed && _isoGO.equippedPreviously)
+        {
+            UpdateMessages("You can't drop this item because it is <color=red>cursed</color>!");
+            decisionMade = true;
+            FinishPlayersTurn();
+            return;
+        }
+
+        if (_isoGO.isEquipped) _iso.onUnequip(playerStats);
+
+        if (MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].structure == null)
+        {
+            if (CanItemBeDroppedHere(MapManager.playerPos)) posToDrop = MapManager.playerPos;
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1);
+            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1);
+            else UpdateMessages("There is no space around you.");
+
+            if (posToDrop != new Vector2Int(1000, 1000))
+            {
+                if (ColorUtility.TryParseHtmlString(_iso.I_color, out Color color))
+                {
+                    MapManager.map[posToDrop.x, posToDrop.y].exploredColor = color;
+                }
+                MapManager.map[posToDrop.x, posToDrop.y].baseChar = _iso.I_symbol;
+
+                if (_iso is WeaponsSO bloodSword && _iso.I_name == "Bloodsword") tasks.everyTurnTasks -= bloodSword.BloodswordDecreaseDamage;
+
+                GameObject item = Instantiate(_isoGO.gameObject, transform.position, Quaternion.identity);
+                item.GetComponent<Item>().iso = _iso;
+                item.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                item.GetComponent<Item>().isEquipped = false;
+                MapManager.map[posToDrop.x, posToDrop.y].item = item.gameObject;
+            }
+        }
+
+        if (_iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none && posToDrop != new Vector2Int(1000, 1000)) //drop equipped item
+        {
+            if (_isoGO.isEquipped)
+            {
+                _isoGO.isEquipped = false;
+                switch (_iso.I_whereToPutIt)
+                {
+                    case ItemScriptableObject.whereToPutIt.head:
+                        playerStats._head = null;
+                        playerStats.Head.text = "Helm:";
+                        break;
+                    case ItemScriptableObject.whereToPutIt.body:
+                        playerStats._body = null;
+                        playerStats.Body.text = "Chest:";
+                        break;
+                    case ItemScriptableObject.whereToPutIt.hand:
+                        if (_iso is Torch torch)
+                        {
+                            torch.RemoveTorch();
+                        }
+
+                        if (_isoGO._handSwitch == Item.hand.left)
+                        {
+                            playerStats._Lhand = null;
+                            playerStats.LHand.text = "Left Hand:";
+                            if (_iso is WeaponsSO weapon)
+                            {
+                                _isoGO.UnequipWithGems();
+                            }
+                        }
+                        else if (_isoGO._handSwitch == Item.hand.right)
+                        {
+                            playerStats._Rhand = null;
+                            playerStats.RHand.text = "Right Hand:";
+                            if (_iso is WeaponsSO weapon)
+                            {
+                                _isoGO.UnequipWithGems();
+                            }
+                        }
+                        break;
+                    case ItemScriptableObject.whereToPutIt.legs:
+                        playerStats._legs = null;
+                        playerStats.Legs.text = "Legs:";
+                        break;
+                    case ItemScriptableObject.whereToPutIt.ring:
+                        if (playerStats._ring is RingSO ring)
+                        {
+                            ring.Dequip(playerStats);
+                        }
+                        playerStats._ring = null;
+                        playerStats.Ring.text = "Ring:";
+                        break;
+                }
+            }
+
+            _isoGO.isEquipped = false;
+
+            if (_iso.identified)
+            {
+                UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_name}</color>.");
+            }
+            else
+            {
+                UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_unInName}</color>.");
+            }
+            UpdateInventoryText();
+            ApplyChangesInInventory(_iso);
+        }
+        else
+        {
+            if (posToDrop != new Vector2Int(1000, 1000))
+            {
+                if (_iso.identified)
+                {
+                    UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_name}</color>.");
+                }
+                else
+                {
+                    UpdateMessages($"You dropped <color={_iso.I_color}>{_iso.I_unInName}</color>.");
+                }
+                UpdateInventoryText();
+                ApplyChangesInInventory(_iso);
+            }
+        }
+
+        decisionMade = true;
+        FinishPlayersTurn();
+    }
+
+    private void UEquip()
+    {
+        if (_iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none) //unequip or equip
+        {
+            if (equipState) //unqeuip
+            {
+                if (_isoGO.cursed)
+                {
+                    UpdateMessages("You can't unequipt this item becuase it's <color=red>cursed</color>.");
+                }
+                else
+                {
+                    switch (_iso.I_whereToPutIt)
+                    {
+                        case ItemScriptableObject.whereToPutIt.head:
+                            playerStats._head = null;
+                            UpdateEquipment(playerStats.Head, "<color=#ffffff>Helm: </color>");
+
+                            if (_iso is ArmorSO armor)
+                            {
+                                armor.Use(playerStats, _isoGO);
+                            }
+                            _isoGO.isEquipped = false;
+                            break;
+                        case ItemScriptableObject.whereToPutIt.body:
+                            playerStats._body = null;
+                            UpdateEquipment(playerStats.Body, "<color=#ffffff>Chest: </color>");
+
+                            if (_iso is ArmorSO armor1)
+                            {
+                                armor1.Use(playerStats, _isoGO);
+                            }
+                            _isoGO.isEquipped = false;
+                            break;
+                        case ItemScriptableObject.whereToPutIt.hand:
+
+                            if (_iso is Torch torch)
+                            {
+                                torch.RemoveTorch();
+                            }
+
+                            if (_isoGO._handSwitch == Item.hand.left)
+                            {
+                                playerStats._Lhand = null;
+                                playerStats.LHand.text = "Left Hand:";
+                                if (_isoGO.isEquipped) _isoGO.isEquipped = false;
+                                if (_iso is WeaponsSO weapon)
+                                {
+                                    _isoGO.UnequipWithGems();
+                                }
+                            }
+                            else if (_isoGO._handSwitch == Item.hand.right)
+                            {
+                                playerStats._Rhand = null;
+                                playerStats.RHand.text = "Right Hand:";
+                                if (_isoGO.isEquipped) _isoGO.isEquipped = false;
+                                if (_iso is WeaponsSO weapon)
+                                {
+                                    _isoGO.UnequipWithGems();
+                                }
+                            }
+                            break;
+                        case ItemScriptableObject.whereToPutIt.ring:
+
+                            playerStats._ring = null;
+                            UpdateEquipment(playerStats.Ring, "<color=#ffffff>Ring: </color>");
+                            _isoGO.isEquipped = false;
+                            break;
+                        case ItemScriptableObject.whereToPutIt.legs:
+                            playerStats._legs = null;
+                            UpdateEquipment(playerStats.Legs, "<color=#ffffff>Legs: </color>");
+
+                            if (_iso is ArmorSO armor2)
+                            {
+                                armor2.Use(playerStats, _isoGO);
+                            }
+                            _isoGO.isEquipped = false;
+                            break;
+                    }
+                    UpdateInventoryText();
+                    _iso.onUnequip(playerStats);
+                }
+            }
+            else //equip
+            {
+                if (!_iso.identified)
+                {
+                    playerStats.itemsInEq[selectedItem].identified = true; //make item identifyied
+                    UpdateItemStats(playerStats.itemsInEq[selectedItem], playerStats.itemInEqGO[selectedItem]); //show full statistics
+                    UpdateInventoryQueue(null);
+                }
+
+                if (_isoGO.cursed) UpdateMessages($"You wince as your grip involuntarily tightens around your {_iso.I_name}.");
+
+                _isoGO.equippedPreviously = true;
+
+                switch (_iso.I_whereToPutIt)
+                {
+                    case ItemScriptableObject.whereToPutIt.head:
+                        if (playerStats._head)
+                        {
+                            UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
+                        }
+                        else
+                        {
+                            playerStats._head = _iso;
+                            UpdateEquipment(playerStats.Head, "<color=#00FFFF>Helm: </color>" + "\n" + " " + playerStats._head.I_name);
+
+                            if (_iso is ArmorSO armor)
+                            {
+                                armor.Use(playerStats, _isoGO);
+                            }
+                            _isoGO.isEquipped = true;
+                            _iso.onEquip(playerStats);
+                        }
+
+                        break;
+                    case ItemScriptableObject.whereToPutIt.body:
+                        if (playerStats._body)
+                        {
+                            UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
+                        }
+                        else
+                        {
+                            playerStats._body = _iso;
+                            UpdateEquipment(playerStats.Body, "<color=#00FFFF>Chest: </color>" + "\n" + " " + playerStats._body.I_name);
+
+                            if (_iso is ArmorSO armor1)
+                            {
+                                armor1.Use(playerStats, _isoGO);
+                            }
+                            _isoGO.isEquipped = true;
+                            _iso.onEquip(playerStats);
+                        }
+
+                        break;
+                    case ItemScriptableObject.whereToPutIt.hand:
+                        if (_iso is Torch torch)
+                        {
+                            torch.UseTorch();
+                        }
+
+                        if (playerStats._Lhand == null)
+                        {
+                            playerStats._Lhand = _iso;
+                            UpdateEquipment(playerStats.LHand, "<color=#00FFFF>Left Hand: </color>" + "\n" + " " + playerStats._Lhand.I_name);
+                            _isoGO.isEquipped = true;
+                            _isoGO._handSwitch = Item.hand.left;
+
+                            if (_iso is WeaponsSO weapon)
+                            {
+                                _isoGO.EquipWithGems(_isoGO);
+                            }
+                        }
+                        else if (playerStats._Rhand == null)
+                        {
+                            playerStats._Rhand = _iso;
+                            UpdateEquipment(playerStats.RHand, "<color=#00FFFF>Right Hand: </color>" + "\n" + " " + playerStats._Rhand.I_name);
+                            _isoGO.isEquipped = true;
+                            _isoGO._handSwitch = Item.hand.right;
+                            if (_iso is WeaponsSO weapon)
+                            {
+                                _isoGO.EquipWithGems(_isoGO);
+                            }
+                        }
+                        else
+                        {
+                            UpdateMessages("You have no free hand.");
+                        }
+                        break;
+                    case ItemScriptableObject.whereToPutIt.ring:
+                        if (playerStats._ring)
+                        {
+                            UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
+                        }
+                        else
+                        {
+                            playerStats._ring = _iso;
+                            UpdateEquipment(playerStats.Ring, "<color=#00FFFF>Ring: </color>" + "\n" + " " + playerStats._ring.I_name);
+
+                            if (_iso is RingSO ring)
+                            {
+                                ring.Use(playerStats, _isoGO);
+                            }
+                            ApplyChangesInInventory(null);
+                            _isoGO.isEquipped = true;
+                            _iso.onEquip(playerStats);
+                        }
+
+                        break;
+                    case ItemScriptableObject.whereToPutIt.legs:
+                        if (playerStats._legs)
+                        {
+                            UpdateMessages("You are already wearing something here. (<color=red>Unequip it first</color>)");
+                        }
+                        else
+                        {
+
+                            playerStats._legs = _iso;
+                            UpdateEquipment(playerStats.Legs, "<color=#00FFFF>Legs: </color>" + "\n" + " " + playerStats._legs.I_name);
+                            _iso.onEquip(playerStats);
+
+                            if (_iso is ArmorSO armor2)
+                            {
+                                armor2.Use(playerStats, _isoGO);
+                            }
+                            _isoGO.isEquipped = true;
+                        }
+
+                        break;
+                }
+                UpdateInventoryText();
+            }
+
+            decisionMade = true;
+            FinishPlayersTurn();
+        }
+        else
+        {
+            if (_iso is Gem gem)
+            {
+                gemToConnect = _iso;
+                UpdateMessages("Choose weapon. (ESC to cancel)");
+                choosingWeapon = true;
+                decisionMade = true;
+            }
+            else
+            {
+                _iso.Use(playerStats, _isoGO);
+                ApplyChangesInInventory(null);
+
+                decisionMade = true;
+                FinishPlayersTurn();
+            }
+        }
+    }
+
+    private void Use()
+    {
+        if (_iso is Gem gem)
+        {
+            gemToConnect = _iso;
+            UpdateMessages("Choose weapon.");
+            choosingWeapon = true;
+            decisionMade = true;
+        }
+        else
+        {
+            _iso.Use(playerStats, _isoGO);
+            ApplyChangesInInventory(null);
+
+            decisionMade = true;
+            FinishPlayersTurn();
+        }
+    }
+
+    private void Upgrade()
+    {
+        isoAnvil = _iso;
+        itemToAnvil = _isoGO.GetComponent<Item>();
+        decisionMade = true;
+        FinishPlayersTurn();
     }
 
     bool CanItemBeDroppedHere(Vector2Int pos)
@@ -689,12 +859,35 @@ public class GameManager : MonoBehaviour
         }       
     }
 
+    public IEnumerator WaitTurn(int turns = 0)
+    {
+        waiting = true;
+
+        for (int i = 0; i < turns; i++)
+        {
+            FinishPlayersTurn();
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
+        playerStats.rememberedSpells.Add(readingBook);
+        UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
+        ApplyChangesInInventory(readingBook);
+        readingBook = null;
+
+        waiting = false;
+        StopCoroutine(waitingCoroutine);
+    }
+
     public void CloseEQ()
     {
         if(choosingWeapon) choosingWeapon = false;
         selectedItem = 0;
         player.canMove = true;
         inventoryOpen = false;
+
+        openGrimoire = false;
+
         invBorder.SetActive(false);
         mapText.SetActive(true);
         mainUItext.enabled = true;
@@ -704,19 +897,13 @@ public class GameManager : MonoBehaviour
 
     public void FirstTurn()
     {
-        //FoV.GetPlayerFoV(player.position);
         fv.Compute(MapManager.playerPos, playerStats.viewRange);
-
-        //enemySpawner.Spawn();
-        //itemSpawner.Spawn();
 
         isPlayerTurn = true;
 
         GetComponent<Tasks>().EventsOnStartOfTheGame();
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-
-        //enemies = new List<GameObject>(enemySpawner.spawnedEnemies);
     }
 
     public void StartPlayersTurn()
@@ -724,13 +911,13 @@ public class GameManager : MonoBehaviour
         isPlayerTurn = true;
         OnPlayerTurnStarts();
 
-        foreach(var item in playerStats.itemsInEq)
+        foreach(var item in playerStats.itemInEqGO)
         {
-            if(item is SpellbookSO book)
+            if(item.iso is SpellbookSO book)
             {
-                if(book.coolDown > 0)
+                if(item.spellbookCooldown > 0)
                 {
-                    book.coolDown--;
+                    item.spellbookCooldown--;
                 }
             }
         }
@@ -755,10 +942,7 @@ public class GameManager : MonoBehaviour
     {
         isPlayerTurn = false;
 
-
         fv.Compute(MapManager.playerPos, playerStats.viewRange);
-        //FoV.GetPlayerFoV(player.position);
-        //UpdateVisibility();
 
         dungeonGenerator.DrawMap(true, MapManager.map);
         
@@ -771,11 +955,7 @@ public class GameManager : MonoBehaviour
     {
         foreach(var enemy in enemies)
         {
-            //canMoveToTheNextEnemy = false;
             if(enemy != null) enemy.GetComponent<RoamingNPC>().LookForPlayer();
-
-
-            //yield return new WaitUntil(() => canMoveToTheNextEnemy);
         }
 
         dungeonGenerator.DrawMap(true, MapManager.map);
@@ -788,7 +968,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void UpdateEquipment(Text _text, string _name)
+    public void UpdateEquipment(Text _text, string _name)
     {
         _text.text = _name;
     }
@@ -809,12 +989,63 @@ public class GameManager : MonoBehaviour
     {
         messagesText = "";
 
+        /*List<string> list1 = new List<string>();
+
         foreach (System.Object obj in m_Messages)
+        {
+            String str = obj as String;
+            list1.Add("\n" + str);
+            //messagesText = (messagesText + "\n" + str);
+        }
+
+        list1.Reverse();
+
+        for (int i = 0; i < list1.Count; i++)
+        {
+            messagesText = (messagesText + list1[i]);
+        }*/
+
+        foreach(System.Object obj in m_Messages)
         {
             String str = obj as String;
             messagesText = (messagesText + "\n" + str);
         }
         messages.text = messagesText;
+    }
+
+    public void UpdateGrimoireQueue(string newSpell)
+    {
+        if (m_grimoire.Count >= 17)
+        {
+            m_grimoire.Dequeue();
+        }
+
+        m_grimoire.Enqueue(newSpell);
+
+
+        UpdateGrimoireText();
+    }
+
+    public void UpdateGrimoireText()
+    {
+        grimoireText = "";
+
+        int index = 0;
+
+        foreach (System.Object obj in m_grimoire)
+        {
+            String str = obj as String;
+            try
+            {
+                grimoireText = grimoireText + str + "\n";
+                index++;
+            }
+            catch
+            {
+
+            }
+        }
+        inventory.text = grimoireText;
     }
 
     public void UpdateInventoryQueue(string newItem)
@@ -825,6 +1056,7 @@ public class GameManager : MonoBehaviour
         }
 
         m_Inventory.Enqueue(newItem);
+        
 
         UpdateInventoryText();
     }
@@ -840,7 +1072,14 @@ public class GameManager : MonoBehaviour
             String str = obj as String;
             try
             {
-                inventoryText = (inventoryText + (playerStats.itemInEqGO[index].isEquipped == true ? "(E)" : "") + str + "\n");
+                if(playerStats.itemInEqGO[index].isEquipped)
+                {
+                    inventoryText = inventoryText + "(E)" + str + "\n";
+                }
+                else
+                {
+                    inventoryText = inventoryText + str + "\n";
+                }
                 index++;    
             }
             catch
@@ -853,48 +1092,96 @@ public class GameManager : MonoBehaviour
 
     public void UpdateItemStats(ItemScriptableObject iso, Item item)
     {
-            if(iso.identified) itemName.text = $"<color={iso.I_color}>{iso.I_name}</color>";
-            else itemName.text = $"<color=purple>{iso.I_unInName}</color>";
-            itemType.text = iso.I_itemType.ToString();
+        if(iso.identified) itemName.text = $"<color={iso.I_color}>{iso.I_name}</color>";
+        else itemName.text = $"<color=purple>{iso.I_unInName}</color>";
 
-            if(iso.identified) itemEffects.text = $"{iso.effect}" + "\n" + (item.cursed == true && item.equippedPreviously ? "<color=red>Cursed</color> \n" : "\n") + "Weight: " + $"<color=green>{iso.I_weight}</color>" + "\n";
-            else itemEffects.text = "???" + "\n" + "Weight: " + $"<color=green>{iso.I_weight}</color>";
+        itemType.text = iso.I_itemType.ToString();
 
-            if(item.sockets == 1)
+        if (iso.identified)
+        {
+            itemEffects.text =
+                $"{iso.effect}" +
+                "\n" +
+                (item.cursed == true && item.equippedPreviously ? "<color=red>Cursed</color> \n" : "\n");
+
+            if (item.cursed == true && item.equippedPreviously) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
+            else if (iso is PotionSO) { }
+            else
             {
-                itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"{item.socket1.I_name}");
-            }
-            else if(item.sockets == 2)
-            {
-                itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"{item.socket1.I_name}");
-                itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"{item.socket2.I_name}");
-            }
-            else if(item.sockets == 3)
-            {
-                itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"{item.socket1.I_name}");
-                itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"{item.socket2.I_name}");
-                itemEffects.text += "\n" + "Socket: " + (item.socket3 == null ? "" : $"{item.socket3.I_name}");
+                if (iso._BUC == ItemScriptableObject.BUC.cursed) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
+                else if (iso._BUC == ItemScriptableObject.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
             }
 
-            if(iso.identified) 
+            if (iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + iso.bonusToHealth + "\n";
+            if (iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + iso.bonusToStrength + "\n";
+            if (iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + iso.bonusToIntelligence + "\n";
+            if (iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + iso.bonusToDexterity + "\n";
+            if (iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + iso.bonusToEndurance + "\n";
+            if (iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + iso.bonusToNoise + "\n";
+
+            itemEffects.text += "Weight: " + $"<color=green>{iso.I_weight}</color>" + "\n";
+        }
+        else itemEffects.text = "???" + "\n" + "Weight: " + $"<color=green>{iso.I_weight}</color>";
+
+        if(item.sockets == 1)
+        {
+            itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
+        }
+        else if(item.sockets == 2)
+        {
+            itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
+            itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
+        }
+        else if(item.sockets == 3)
+        {
+            itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
+            itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
+            itemEffects.text += "\n" + "Socket: " + (item.socket3 == null ? "" : $"<color={item.socket3.I_color}>{item.socket3.I_name}</color>");
+        }
+
+        if(iso.identified) 
+        {
+            switch (iso.I_rareness)
             {
-                switch (iso.I_rareness)
-                {
-                    case ItemScriptableObject.rareness.common:
-                        itemRare.text = "<color=grey>Common</color>";
-                        break;
-                    case ItemScriptableObject.rareness.rare:
-                        itemRare.text = "<color=green>Rare</color>";
-                        break;
-                    case ItemScriptableObject.rareness.very_rare:
-                        itemRare.text = "<color=yellow>Very rare</color>";
-                        break;
-                    case ItemScriptableObject.rareness.mythical:
-                        itemRare.text = "<color=red>Mythical</color>";
-                        break;
-                }
+                case ItemScriptableObject.rareness.common:
+                    itemRare.text = "<color=grey>Common</color>";
+                    break;
+                case ItemScriptableObject.rareness.rare:
+                    itemRare.text = "<color=green>Rare</color>";
+                    break;
+                case ItemScriptableObject.rareness.very_rare:
+                    itemRare.text = "<color=yellow>Very rare</color>";
+                    break;
+                case ItemScriptableObject.rareness.mythical:
+                    itemRare.text = "<color=red>Mythical</color>";
+                    break;
             }
-            else itemRare.text = "<color=purple>???</color>";               
+        }
+        else itemRare.text = "<color=purple>???</color>";               
+    }
+
+    public void UpdateSpellStats(ItemScriptableObject iso)
+    {
+        itemName.text = $"<color={iso.I_color}>{iso.I_name}</color>";
+        itemType.text = iso.I_itemType.ToString();
+
+        itemEffects.text = iso.effect;
+
+        switch (iso.I_rareness)
+        {
+            case ItemScriptableObject.rareness.common:
+                itemRare.text = "<color=grey>Common</color>";
+                break;
+            case ItemScriptableObject.rareness.rare:
+                itemRare.text = "<color=green>Rare</color>";
+                break;
+            case ItemScriptableObject.rareness.very_rare:
+                itemRare.text = "<color=yellow>Very rare</color>";
+                break;
+            case ItemScriptableObject.rareness.mythical:
+                itemRare.text = "<color=red>Mythical</color>";
+                break;
+        }
     }
 
     public void IncreaseStat(string stat)
@@ -945,36 +1232,12 @@ public class GameManager : MonoBehaviour
 
     public void ApplyChangesInInventory(ItemScriptableObject _item)
     {
-        try
+        if(_item != null)
         {
             int index = System.Array.IndexOf(playerStats.itemsInEq.ToArray(), _item);
             playerStats.itemsInEq.RemoveAt(index);
             playerStats.itemInEqGO.RemoveAt(index);
             playerStats.currentItems--;
-        }
-        catch        
-        {
-            m_Inventory.Clear();
-
-            playerStats.currentWeight = 0;
-
-            foreach (var item in playerStats.itemsInEq)
-            {
-                if (item.identified)
-                {
-                    UpdateInventoryQueue($"<color={item.I_color}>{item.I_name}</color>");
-                }
-                else
-                {
-                    UpdateInventoryQueue($"<color=purple>{item.I_unInName}</color>");
-                }
-
-                playerStats.currentWeight += item.I_weight;
-            }
-
-            if (m_Inventory.Count == 0) inventory.text = "";
-
-            playerStats.UpdateCapacity();
         }
 
         m_Inventory.Clear();
@@ -998,5 +1261,6 @@ public class GameManager : MonoBehaviour
         if (m_Inventory.Count == 0) inventory.text = "";
 
         playerStats.UpdateCapacity();
+        UpdateInventoryText();
     }
 }

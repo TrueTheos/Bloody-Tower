@@ -17,7 +17,7 @@ public class Gem : ItemScriptableObject
 
     public int amount;
 
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
         switch(_statIncreaseType)
         {
@@ -70,5 +70,13 @@ public class Gem : ItemScriptableObject
     public override void OnPickup(MonoBehaviour foo)
     {
         
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
     }
 }

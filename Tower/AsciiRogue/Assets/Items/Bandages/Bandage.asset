@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bandage
   m_EditorClassIdentifier: 
   _handSwitch: 0
-  itemLevel: 20
+  itemLevel: 8
   I_name: Bandage
   I_unInName: Bandage
   I_symbol: '!'

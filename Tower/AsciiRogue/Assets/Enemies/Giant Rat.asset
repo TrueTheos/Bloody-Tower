@@ -20,5 +20,8 @@ MonoBehaviour:
   E_currentLevel: 0
   __modifier: 8
   _Difficulty: 3
-  E_xpAfterKilling: 0
-  leavesCorpse: 0
+  _Behaviour: 0
+  attacks: 01000000
+  leavesCorpse: 1
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}

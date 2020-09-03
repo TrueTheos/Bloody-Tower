@@ -5,21 +5,19 @@ using UnityEngine;
 
 public abstract class ItemScriptableObject : ScriptableObject
 {
-    public enum hand
-    {
-        left,
-        right
-    }
-    public hand _handSwitch;
+    public string I_name; //name that will show if item is identified
+    public string I_unInName; //name that will show if item isn't identified
 
-    public int itemLevel;
-
-    public string I_name;
-    public string I_unInName;
     public string I_symbol;
     public string I_color;
 
-    public int levelMin, levelMax;
+    [Range(0, 1f)] public float chanceOfSpawning1to10;
+    [Range(0, 1f)] public float chanceOfSpawning11to20;
+    [Range(0, 1f)] public float chanceOfSpawning21to30;
+    [Range(0, 1f)] public float chanceOfSpawning31to40;
+
+    //public int itemLevel;
+    //public int levelMin, levelMax;
 
     public int I_weight;
 
@@ -66,19 +64,29 @@ public abstract class ItemScriptableObject : ScriptableObject
         blessed,        
         cursed
     }
-    public BUC _BUC;
+    [HideInInspector] public BUC _BUC;
 
     public bool normalIdentifState;
     public bool identified;
 
-    public bool isEquipped;
     public bool pickupableByMonsters;
 
     [TextArea]
     public string effect;
     public int worth;
 
-    public abstract void Use(MonoBehaviour foo);
+    [Header("Bonus statistics")]
+    public int bonusToHealth;
+    public int bonusToStrength;
+    public int bonusToIntelligence;
+    public int bonusToDexterity;
+    public int bonusToEndurance;
+    public int bonusToNoise;
+
+    public abstract void Use(MonoBehaviour foo, Item itemObject);
     public abstract void OnPickup(MonoBehaviour foo);
+
+    public abstract void onEquip(MonoBehaviour foo);
+    public abstract void onUnequip(MonoBehaviour foo);
 
 }

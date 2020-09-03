@@ -5,25 +5,31 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Tool/Torch")]
 public class Torch : ItemScriptableObject
 {
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
         UseTorch();
     }
 
     public void RemoveTorch()
     {
-        isEquipped = false;
         DungeonGenerator.dungeonGenerator.lightFactor = 1;
     }
 
     public void UseTorch()
     {
-        isEquipped = true;
         DungeonGenerator.dungeonGenerator.lightFactor = 2;
     }
 
     public override void OnPickup(MonoBehaviour foo)
     {
         
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
     }
 }

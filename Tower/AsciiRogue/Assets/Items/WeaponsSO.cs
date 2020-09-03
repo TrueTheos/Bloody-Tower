@@ -26,7 +26,7 @@ public class WeaponsSO : ItemScriptableObject
     }
     public weaponType _weaponType;
 
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
         
     }
@@ -50,7 +50,32 @@ public class WeaponsSO : ItemScriptableObject
         else
         {
             if(attacks[0].y != 1) attacks[0] = new Vector2Int(attacks[0].x, attacks[0].y - 1);
-            Debug.Log("XDD");
+        }
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+        if (foo is PlayerStats player)
+        {
+            if (bonusToHealth != 0) { }
+            if (bonusToStrength != 0) player.__strength += bonusToStrength;
+            if (bonusToIntelligence != 0) player.__intelligence += bonusToIntelligence;
+            if (bonusToDexterity != 0) player.__dexterity += bonusToDexterity;
+            if (bonusToEndurance != 0) player.__endurance += bonusToEndurance;
+            if (bonusToNoise != 0) player.__noise += bonusToNoise;
+        }
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
+        if (foo is PlayerStats player)
+        {
+            if (bonusToHealth != 0) { }
+            if (bonusToStrength != 0) player.__strength += -bonusToStrength;
+            if (bonusToIntelligence != 0) player.__intelligence += -bonusToIntelligence;
+            if (bonusToDexterity != 0) player.__dexterity += -bonusToDexterity;
+            if (bonusToEndurance != 0) player.__endurance += -bonusToEndurance;
+            if (bonusToNoise != 0) player.__noise += -bonusToNoise;
         }
     }
 }

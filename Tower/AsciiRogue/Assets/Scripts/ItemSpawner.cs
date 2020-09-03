@@ -16,12 +16,8 @@ public class ItemSpawner : MonoBehaviour
     public List<ItemScriptableObject> bandages;
 
 
-    public List<ItemScriptableObject> scrollsLevel1;
-    public List<ItemScriptableObject> scrollsLevel2;
-    public List<ItemScriptableObject> scrollsLevel3;
-    public List<ItemScriptableObject> spellbooks1;
-    public List<ItemScriptableObject> spellbooks2;
-    public List<ItemScriptableObject> spellbooks3;
+    public List<ItemScriptableObject> scrolls;
+    public List<ItemScriptableObject> spellbooks;
 
     public List<ItemScriptableObject> tools;
     public List<ItemScriptableObject> gems;
@@ -62,153 +58,234 @@ public class ItemSpawner : MonoBehaviour
                 Vector2Int pos = positions[UnityEngine.Random.Range(0, positions.Count - 1)];
                 SpawnAt(pos.x, pos.y);
             }
-            catch{}
-        }      
+            catch { }
+        }
     }
 
-    public void SpawnAt(int x, int y)
+    public void SpawnAt(int x, int y, ItemScriptableObject _item = null)
     {
-        if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null) return;
-
-        int itemRarirty = UnityEngine.Random.Range(1, 100);
-
-        float itemType = UnityEngine.Random.Range(1, 100);
-
         ItemScriptableObject itemToSpawn = null;
 
-        string itemTypeCompariser = "";
-
-        if(itemType <= 0.1) itemTypeCompariser = "Artifact";
-        else if (itemType <= 10) itemTypeCompariser = "Weapon";//spawn weapon
-        else if (itemType <= 20) itemTypeCompariser = "Armor";//spawn armor
-        else if (itemType <= 30) itemTypeCompariser = "Scroll"; //spawn scrollOrBook
-        else if (itemType <= 44) itemTypeCompariser = "Gem";//spawn gems
-        else if (itemType <= 47) itemTypeCompariser = "Wand";//spawn wands
-        else if (itemType <= 50) itemTypeCompariser = "Ring";//spawn rings
-        else if (itemType <= 60) itemTypeCompariser = "Money";//spawn money pouch
-        else if (itemType <= 100) itemTypeCompariser = "Potion";//spawn potion
-
-        List<ItemScriptableObject> validItems = new List<ItemScriptableObject>();
-
-        scoreTable = new List<int>();
-
-        switch (itemTypeCompariser) 
+        if (_item == null)
         {
-            case "Weapon":
-                validItems = weapons.FindAll(m => ItemLevelCheck(m));
+            if (MapManager.map[x, y].type != "Floor" || MapManager.map[x, y].structure != null) return;
 
-                itemToSpawn = ItemToSpawn(validItems);
-                //itemToSpawn = weapons[UnityEngine.Random.Range(0, weapons.Count)];
-                break;
-            case "Armor":
-                validItems = armors.FindAll(n => ItemLevelCheck(n));
-                
-                itemToSpawn = ItemToSpawn(validItems);
-                break;         
-            case "Scroll":
-                itemToSpawn = SpawnScrollsSellbooks();
-                //itemToSpawn = scrolls[UnityEngine.Random.Range(0, scrolls.Count)];
-                break; 
-            case "Gem":
-                validItems = gems;
-                itemToSpawn = ItemToSpawn(validItems);
-                break;
-            case "Wand":
-                itemToSpawn = wands[UnityEngine.Random.Range(0, wands.Count)];
-                if (itemToSpawn is WandSO wand) wand.SetCharges();
-                break;
-            case "Ring":
-                itemToSpawn = rings[UnityEngine.Random.Range(0, rings.Count)];
-                break;
-            case "Money":
-                break;
-            case "Potion":
-                itemToSpawn = potions[UnityEngine.Random.Range(0, potions.Count)];
-                break;    
-            case "Artifact":
-                itemToSpawn = artfiacts[UnityEngine.Random.Range(0, artfiacts.Count)];
-                break;
-            /*case "Tool":
-                itemToSpawn = tools[UnityEngine.Random.Range(0, tools.Count)];
-                Debug.Log("Tool");
-                break;*/
+            int itemRarirty = UnityEngine.Random.Range(1, 100);
+
+            float itemType = UnityEngine.Random.Range(1, 62);        
+
+            string itemTypeCompariser = "";
+
+            if (itemType <= 0.1) itemTypeCompariser = "Artifact";
+            else if (itemType <= 10) itemTypeCompariser = "Weapon";//spawn weapon
+            else if (itemType <= 20) itemTypeCompariser = "Armor";//spawn armor
+            else if (itemType <= 36) itemTypeCompariser = "Potion";
+            else if (itemType <= 52) itemTypeCompariser = "Scroll";
+            else if (itemType <= 56) itemTypeCompariser = "Spellbook";
+            else if (itemType <= 59) itemTypeCompariser = "Ring";
+            else if (itemType <= 67) itemTypeCompariser = "Gem";
+            else if (itemType <= 74) itemTypeCompariser = "Money";
+
+            List<ItemScriptableObject> validItems = new List<ItemScriptableObject>();
+
+            scoreTable = new List<int>();
+
+            switch (itemTypeCompariser)
+            {
+                case "Weapon":
+                    validItems = weapons;
+                    itemToSpawn = ItemToSpawn(validItems);
+                    break;
+                case "Armor":
+                    validItems = armors;
+                    itemToSpawn = ItemToSpawn(validItems);
+                    break;
+                case "Scroll":
+                    validItems = scrolls;
+                    itemToSpawn = ItemToSpawn(validItems);
+                    break;
+                case "Spellbook":
+                    validItems = spellbooks;
+                    itemToSpawn = ItemToSpawn(validItems);
+                    break;
+                case "Gem":
+                    validItems = gems;
+                    itemToSpawn = ItemToSpawn(validItems);
+                    break;
+                case "Wand":
+                    itemToSpawn = wands[UnityEngine.Random.Range(0, wands.Count)];
+                    if (itemToSpawn is WandSO wand) wand.SetCharges();
+                    break;
+                case "Ring":
+                    itemToSpawn = rings[UnityEngine.Random.Range(0, rings.Count)];
+                    break;
+                case "Money":
+                    break;
+                case "Potion":
+                    validItems = potions;
+                    itemToSpawn = ItemToSpawn(validItems);
+                    break;
+                case "Artifact":
+                    itemToSpawn = artfiacts[UnityEngine.Random.Range(0, artfiacts.Count)];
+                    break;
+                    /*case "Tool":
+                        itemToSpawn = tools[UnityEngine.Random.Range(0, tools.Count)];
+                        Debug.Log("Tool");
+                        break;*/
+            }     
+
+            if (itemTypeCompariser == "Money")
+            {
+                __position = new Vector2Int(x, y);
+
+                MapManager.map[__position.x, __position.y].type = "Money Pouch";
+                MapManager.map[__position.x, __position.y].letter = "&";
+                MapManager.map[__position.x, __position.y].exploredColor = new Color(1, 1, 0);
+                MapManager.map[__position.x, __position.y].isWalkable = true;
+
+                MoneyPouch money = new MoneyPouch
+                {
+                    pos = __position
+                };
+
+                MapManager.map[__position.x, __position.y].structure = money;
+            }
+        }
+        else
+        {
+            itemToSpawn = _item;
         }
 
         try
-        {        
-        if (itemToSpawn)
         {
-            __position = new Vector2Int(x, y);
-
-            MapManager.map[__position.x, __position.y].baseChar = itemToSpawn.I_symbol;
-            if (ColorUtility.TryParseHtmlString(itemToSpawn.I_color, out Color color))
+            if (itemToSpawn)
             {
-                MapManager.map[__position.x, __position.y].exploredColor = color;
-            }               
+                __position = new Vector2Int(x, y);
 
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-
-            GameObject item = Instantiate(itemPrefab.gameObject, transform.position, Quaternion.identity);
-
-            if(itemToSpawn is SpellbookSO book) book.coolDown = 0;
-            else if(itemToSpawn is WeaponsSO weapon)
-            {
-                if(Enumerable.Range(0, 5).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+                MapManager.map[__position.x, __position.y].baseChar = itemToSpawn.I_symbol;
+                if (ColorUtility.TryParseHtmlString(itemToSpawn.I_color, out Color color))
                 {
-                    item.GetComponent<Item>().sockets = 1;
+                    MapManager.map[__position.x, __position.y].exploredColor = color;
                 }
-                else if(Enumerable.Range(6, 15).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
-                {
-                    item.GetComponent<Item>().sockets = 2;
-                }
-                else if(Enumerable.Range(16, 25).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
-                {
-                    item.GetComponent<Item>().sockets = 3;
-                }
-            } 
 
-            item.GetComponent<Item>().iso = itemToSpawn;
+                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
-            if(itemToSpawn is WeaponsSO  w || itemToSpawn is ArmorSO a)
-            {
-                if(UnityEngine.Random.Range(0,100) < 5)
+                GameObject item = Instantiate(itemPrefab.gameObject, transform.position, Quaternion.identity);
+
+                if (itemToSpawn is WeaponsSO weapon)
                 {
-                    item.GetComponent<Item>().cursed = true;
+                    if (Enumerable.Range(0, 5).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+                    {
+                        item.GetComponent<Item>().sockets = 1;
+                    }
+                    else if (Enumerable.Range(6, 15).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+                    {
+                        item.GetComponent<Item>().sockets = 2;
+                    }
+                    else if (Enumerable.Range(16, 25).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+                    {
+                        item.GetComponent<Item>().sockets = 3;
+                    }
                 }
+                else if (itemToSpawn is SpellbookSO spellbook)
+                {
+                    item.GetComponent<Item>().learningTurns = spellbook.learnDuration;
+                    item.GetComponent<Item>().durationLeft = spellbook.duration;
+                }
+
+                item.GetComponent<Item>().iso = itemToSpawn;
+
+                if (itemToSpawn is WeaponsSO w || itemToSpawn is ArmorSO a)
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 10)
+                    {
+                        item.GetComponent<Item>().cursed = true;
+                    }
+                }
+                else if(itemToSpawn is PotionSO p)
+                {
+                    int i = UnityEngine.Random.Range(1, 100);
+                    if (i <= 9)
+                    {
+                        item.GetComponent<Item>().iso._BUC = ItemScriptableObject.BUC.cursed;
+                    }
+                    else if(i <= 90)
+                    {
+                        item.GetComponent<Item>().iso._BUC = ItemScriptableObject.BUC.normal;
+                    }
+                    else
+                    {
+                        item.GetComponent<Item>().iso._BUC = ItemScriptableObject.BUC.blessed;
+                    }
+                }
+
+                item.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+
+                MapManager.map[__position.x, __position.y].item = item.gameObject;
+
+                return;
             }
-
-            item.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
-
-            MapManager.map[__position.x, __position.y].item = item.gameObject;
-
-            return;
-
-            //int index = Array.IndexOf(itemsToSpawn.ToArray(), itemToSpawn);
-
-            //itemsToSpawn.RemoveAt(index);
-        }    
         }
-        catch{}  
-
-        if(itemTypeCompariser == "Money")
-        {
-            __position = new Vector2Int(x,y);
-
-            MapManager.map[__position.x, __position.y].type = "Money Pouch";
-            MapManager.map[__position.x, __position.y].letter = "&";
-            MapManager.map[__position.x, __position.y].exploredColor = new Color(1,1,0);
-            MapManager.map[__position.x, __position.y].isWalkable = true;
-
-            MoneyPouch money = new MoneyPouch
-            {
-                pos = __position
-            };
-
-            MapManager.map[__position.x, __position.y].structure = money;
-        } 
+        catch { }
     }
 
     ItemScriptableObject ItemToSpawn(List<ItemScriptableObject> validItemsList)
+    {
+        float result = UnityEngine.Random.Range(0, 1f);
+
+        float resultMultiplier = 0;
+        foreach(var item in validItemsList)
+        {
+            if (DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+            {
+                resultMultiplier += item.chanceOfSpawning1to10;
+            }
+            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 20)
+            {
+                resultMultiplier += item.chanceOfSpawning11to20;
+            }
+            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 30)
+            {
+                resultMultiplier += item.chanceOfSpawning21to30;
+            }
+            else
+            {
+                resultMultiplier += item.chanceOfSpawning31to40;
+            }
+        }
+
+        result *= resultMultiplier;
+
+        float rolling_sum = 0;
+        foreach (var item in validItemsList)
+        {
+            if(DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+            {
+                rolling_sum += item.chanceOfSpawning1to10;
+            }
+            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+            {
+                rolling_sum += item.chanceOfSpawning11to20;
+            }
+            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 30)
+            {
+                rolling_sum += item.chanceOfSpawning21to30;
+            }
+            else
+            {
+                rolling_sum += item.chanceOfSpawning31to40;
+            }
+
+            if(rolling_sum > result)
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    /*ItemScriptableObject ItemToSpawn(List<ItemScriptableObject> validItemsList)
     {
         scoreTable = new List<int>();
         List<ItemScriptableObject> validItems = validItemsList;
@@ -216,47 +293,47 @@ public class ItemSpawner : MonoBehaviour
         int random = 0;
         bool loopBreaker = false;
 
-                for(int i = 0; i < validItems.Count; i++)
-                {
-                    scoreTable.Add(20 - Mathf.Abs(validItems[i].itemLevel - DungeonGenerator.dungeonGenerator.currentFloor));
-                }
+        for (int i = 0; i < validItems.Count; i++)
+        {
+            scoreTable.Add(20 - Mathf.Abs(validItems[i].itemLevel - DungeonGenerator.dungeonGenerator.currentFloor));
+        }
 
-                totalScore = 0;
+        totalScore = 0;
 
-                ranomItemTable = new List<Vector2Int>();
+        ranomItemTable = new List<Vector2Int>();
 
-                scoreTable = scoreTable.Where(i => i > 0).ToList();
+        scoreTable = scoreTable.Where(i => i > 0).ToList();
 
-                for(int i = 0; i < scoreTable.Count; i++)
-                {
-                        totalScore += scoreTable[i];
-                        if(i != 0)
-                        {
-                            ranomItemTable.Add(new Vector2Int(i + 1 + ranomItemTable[i - 1].y, ranomItemTable[i - 1].y + scoreTable[i]));
-                        }
-                        else
-                        {
-                            ranomItemTable.Add(new Vector2Int(1, scoreTable[i]));
-                        }
-                }
+        for (int i = 0; i < scoreTable.Count; i++)
+        {
+            totalScore += scoreTable[i];
+            if (i != 0)
+            {
+                ranomItemTable.Add(new Vector2Int(i + 1 + ranomItemTable[i - 1].y, ranomItemTable[i - 1].y + scoreTable[i]));
+            }
+            else
+            {
+                ranomItemTable.Add(new Vector2Int(1, scoreTable[i]));
+            }
+        }
 
-                random = UnityEngine.Random.Range(1, totalScore);
+        random = UnityEngine.Random.Range(1, totalScore);
 
-                loopBreaker = false;
-                foreach(var item in ranomItemTable)
-                {
-                    if(loopBreaker) break;
+        loopBreaker = false;
+        foreach (var item in ranomItemTable)
+        {
+            if (loopBreaker) break;
 
-                    if(Enumerable.Range(item.x, item.y).Contains(random))
-                    {   
-                        loopBreaker = true;
-                        return validItems[Array.IndexOf(ranomItemTable.ToArray(), item)];
-                    }
-                }
-                return null;
-    }
+            if (Enumerable.Range(item.x, item.y).Contains(random))
+            {
+                loopBreaker = true;
+                return validItems[Array.IndexOf(ranomItemTable.ToArray(), item)];
+            }
+        }
+        return null;
+    }*/
 
-    ItemScriptableObject SpawnScrollsSellbooks()
+    /*ItemScriptableObject SpawnScrolls()
     {
         string school = "";
         string item = "";
@@ -265,13 +342,13 @@ public class ItemSpawner : MonoBehaviour
 
         float random = UnityEngine.Random.value;
 
-        if(DungeonGenerator.dungeonGenerator.currentFloor <= 5)
+        if (DungeonGenerator.dungeonGenerator.currentFloor <= 5)
         {
-            if(random <= 0.1)
+            if (random <= 0.1)
             {
                 school = "Blood";
             }
-            else if(random <= 0.5)
+            else if (random <= 0.5)
             {
                 school = "chaos";
             }
@@ -282,12 +359,12 @@ public class ItemSpawner : MonoBehaviour
 
             random = UnityEngine.Random.value;
 
-            if(random <= 0.2)
+            if (random <= 0.2)
             {
                 item = "Book1";
                 level = 1;
             }
-            else if(random <= 0.4)
+            else if (random <= 0.4)
             {
                 item = "Scroll2";
                 level = 2;
@@ -298,13 +375,13 @@ public class ItemSpawner : MonoBehaviour
                 level = 1;
             }
         }
-        else if(DungeonGenerator.dungeonGenerator.currentFloor >= 6 && DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+        else if (DungeonGenerator.dungeonGenerator.currentFloor >= 6 && DungeonGenerator.dungeonGenerator.currentFloor <= 19)
         {
-            if(random <= 0.3)
+            if (random <= 0.3)
             {
                 school = "chaos";
             }
-            else if(random <= 0.6)
+            else if (random <= 0.6)
             {
                 school = "Plague";
             }
@@ -315,22 +392,22 @@ public class ItemSpawner : MonoBehaviour
 
             random = UnityEngine.Random.value;
 
-            if(random <= 0.1)
+            if (random <= 0.1)
             {
                 item = "Book2";
                 level = 2;
             }
-            else if(random <= 0.2)
+            else if (random <= 0.2)
             {
                 item = "Book1";
                 level = 1;
             }
-            else if(random <= 0.3)
+            else if (random <= 0.3)
             {
                 item = "Scroll3";
                 level = 3;
             }
-            else if(random <= 0.65)
+            else if (random <= 0.65)
             {
                 item = "Scroll2";
                 level = 2;
@@ -341,13 +418,13 @@ public class ItemSpawner : MonoBehaviour
                 level = 1;
             }
         }
-        else if(DungeonGenerator.dungeonGenerator.currentFloor >= 11 && DungeonGenerator.dungeonGenerator.currentFloor <= 15)
+        else if (DungeonGenerator.dungeonGenerator.currentFloor >= 22 && DungeonGenerator.dungeonGenerator.currentFloor <= 30)
         {
-            if(random <= 0.4)
+            if (random <= 0.4)
             {
                 school = "chaos";
             }
-            else if(random <= 0.9)
+            else if (random <= 0.9)
             {
                 school = "Blood";
             }
@@ -358,27 +435,27 @@ public class ItemSpawner : MonoBehaviour
 
             random = UnityEngine.Random.value;
 
-            if(random <= 0.05)
+            if (random <= 0.05)
             {
                 item = "Book3";
                 level = 3;
             }
-            else if(random <= 0.15)
+            else if (random <= 0.15)
             {
                 item = "Book2";
                 level = 2;
             }
-            else if(random <= 0.2)
+            else if (random <= 0.2)
             {
                 item = "Book1";
                 level = 1;
             }
-            else if(random <= 0.4)
+            else if (random <= 0.4)
             {
                 item = "Scroll3";
                 level = 3;
             }
-            else if(random <= 0.85)
+            else if (random <= 0.85)
             {
                 item = "Scroll2";
                 level = 2;
@@ -389,13 +466,13 @@ public class ItemSpawner : MonoBehaviour
                 level = 1;
             }
         }
-        else if(DungeonGenerator.dungeonGenerator.currentFloor >= 16 && DungeonGenerator.dungeonGenerator.currentFloor <= 20)
+        else if (DungeonGenerator.dungeonGenerator.currentFloor >= 31 && DungeonGenerator.dungeonGenerator.currentFloor <= 40)
         {
-            if(random <= 0.1)
+            if (random <= 0.1)
             {
                 school = "Plague";
             }
-            else if(random <= 0.4)
+            else if (random <= 0.4)
             {
                 school = "chaos";
             }
@@ -406,22 +483,22 @@ public class ItemSpawner : MonoBehaviour
 
             random = UnityEngine.Random.value;
 
-            if(random <= 0.02)
+            if (random <= 0.02)
             {
                 item = "Book1";
                 level = 1;
             }
-            else if(random <= 0.11)
+            else if (random <= 0.11)
             {
                 item = "Book2";
                 level = 2;
             }
-            else if(random <= 0.2)
+            else if (random <= 0.2)
             {
                 item = "Book3";
                 level = 3;
             }
-            else if(random <= 0.6)
+            else if (random <= 0.6)
             {
                 item = "Scroll3";
                 level = 3;
@@ -431,32 +508,33 @@ public class ItemSpawner : MonoBehaviour
                 item = "Scroll2";
                 level = 2;
             }
-        }        
+        }
 
         List<ItemScriptableObject> fittingItems = allItems.FindAll(x => ItemCheck(school, level, x));
-        if(fittingItems.Count == 0)
+        if (fittingItems.Count == 0)
         {
             return null;
         }
         return fittingItems[UnityEngine.Random.Range(0, fittingItems.Count)];
-    }
-    
-    bool ItemLevelCheck(ItemScriptableObject item)
+    }*/
+
+    /*bool ItemLevelCheck(ItemScriptableObject item)
     {
-        if(Enumerable.Range(item.levelMin, item.levelMax).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+        Debug.Log(item.I_name + " " + Enumerable.Range(item.levelMin, item.levelMax).Contains(DungeonGenerator.dungeonGenerator.currentFloor) + " " + DungeonGenerator.dungeonGenerator.currentFloor);
+        if (Enumerable.Range(item.levelMin, item.levelMax).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
         {
-            return true;            
+            return true;
         }
         else return false;
-    }
+    }*/
 
     bool ItemCheck(string school, int level, ItemScriptableObject item)
     {
-        if(item is ScrollSO scroll)
+        if (item is ScrollSO scroll)
         {
             try
             {
-                if(scroll._school == (ScrollSO.school)System.Enum.Parse(typeof(ScrollSO.school), school) && scroll.spellLevel == level)
+                if (scroll._school == (ScrollSO.school)System.Enum.Parse(typeof(ScrollSO.school), school) && scroll.spellLevel == level)
                 {
                     return true;
                 }
@@ -465,13 +543,13 @@ public class ItemSpawner : MonoBehaviour
                     return false;
                 }
             }
-            catch{return false;}
+            catch { return false; }
         }
-        else if(item is SpellbookSO spellbook)
+        else if (item is SpellbookSO spellbook)
         {
             try
             {
-                if(spellbook._school == (SpellbookSO.school)System.Enum.Parse(typeof(SpellbookSO.school), school) && spellbook.spellLevel == level)
+                if (spellbook._school == (SpellbookSO.school)System.Enum.Parse(typeof(SpellbookSO.school), school) && spellbook.spellLevel == level)
                 {
                     return true;
                 }
@@ -480,7 +558,7 @@ public class ItemSpawner : MonoBehaviour
                     return false;
                 }
             }
-            catch{return false;}
+            catch { return false; }
         }
         else return false;
     }

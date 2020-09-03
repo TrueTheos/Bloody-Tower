@@ -17,6 +17,16 @@ public class Item : MonoBehaviour
     public bool equippedPreviously = false;
 
     public bool cursed;
+    /*public enum BUC { cursed, uncursed, blessed}
+    public BUC _BUC;*/
+
+    //BOOK INFO
+    public int spellbookCooldown;
+    public bool learned = false;
+    public int learningTurns;
+    public int durationLeft;
+
+    [Range(0,9)]public int upgradeLevel;
 
     public enum hand
     {
@@ -59,19 +69,19 @@ public class Item : MonoBehaviour
         }
     }
 
-    public void EquipWithGems()
+    public void EquipWithGems(Item item)
     {
             if(socket1 != null)
             {
-                socket1.Use(GameManager.manager.playerStats);
+                socket1.Use(GameManager.manager.playerStats, item);
             }
             else if(socket2 != null)
             {
-                socket2.Use(GameManager.manager.playerStats);
+                socket2.Use(GameManager.manager.playerStats, item);
             }
             else if(socket3 != null)
             {
-                socket3.Use(GameManager.manager.playerStats);
+                socket3.Use(GameManager.manager.playerStats, item);
             }
     }
     public void UnequipWithGems()

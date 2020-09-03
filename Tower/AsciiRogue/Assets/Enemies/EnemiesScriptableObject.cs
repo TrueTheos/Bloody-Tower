@@ -16,7 +16,6 @@ public class EnemiesScriptableObject : ScriptableObject
     public Color E_color;
     public int E_lvlMin;
     public int E_lvlMax;
-    public int E_currentLevel;
 
     public enum E_modifier
     {
@@ -41,17 +40,16 @@ public class EnemiesScriptableObject : ScriptableObject
     public enum E_behaviour { normal, cowardly, sluggish, recovers,  npc}
     public E_behaviour _Behaviour;
 
-    /*public int E_str;
-    public int E_dex;
-    public int E_int;
-    public int E_end;*/
-    public int E_xpAfterKilling;
+    public enum E_Attacks
+    {
+        normal,
+        poisonBite, //for Giant rat
+        fadingBite //for Sulyvahn's Beast
+    }
+    private E_Attacks _attacks;
+    public List<E_Attacks> attacks;
 
-    
-    //public int E_armorClass;
-    //public List<Vector2Int> attacks;
-    //public List<attackEffects> attackAdditionalEffects;
-    //public ItemScriptableObject E_itemDroppedAfterBeingKilled;
+    public List<ItemScriptableObject> E_possileDrops;
 
     [Header("Settings")]
     public bool leavesCorpse;

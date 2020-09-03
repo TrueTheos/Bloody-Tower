@@ -15,10 +15,13 @@ MonoBehaviour:
   E_name: Zombie
   E_symbol: Z
   E_color: {r: 0.38679248, g: 0.0529103, b: 0.0529103, a: 0}
-  E_lvlMin: 3
-  E_lvlMax: 24
+  E_lvlMin: 2
+  E_lvlMax: 9
   E_currentLevel: 0
   __modifier: 3
   _Difficulty: 1
-  E_xpAfterKilling: 0
+  _Behaviour: 0
+  attacks: 00000000
   leavesCorpse: 1
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}

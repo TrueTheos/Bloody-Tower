@@ -24,7 +24,7 @@ public class WandSO : ItemScriptableObject
 
     public int maxDistance;
 
-    public override void Use(MonoBehaviour foo)
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
         if(foo is PlayerStats player && chargesLeft > 0)
         {
@@ -98,5 +98,13 @@ public class WandSO : ItemScriptableObject
     public void SetCharges()
     {
         chargesLeft = charges;
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
     }
 }

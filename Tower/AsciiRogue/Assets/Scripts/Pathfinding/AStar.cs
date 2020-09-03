@@ -113,8 +113,6 @@ public class AStar
     {
         List<Vector2Int> neighbours = new List<Vector2Int>();
 
-        int z = 0;
-
         for (int y = parent.y - 1; y <= parent.y + 1; y++)
         {
             for (int x = parent.x - 1; x <= parent.x + 1; x++)

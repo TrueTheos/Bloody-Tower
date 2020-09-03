@@ -15,13 +15,12 @@ MonoBehaviour:
   E_name: Skeleton
   E_symbol: z
   E_color: {r: 1, g: 1, b: 1, a: 0}
-  E_lvlMin: 3
-  E_lvlMax: 24
-  E_currentLevel: 0
+  E_lvlMin: 2
+  E_lvlMax: 9
   __modifier: 7
   _Difficulty: 2
   _Behaviour: 3
-  E_xpAfterKilling: 4
+  attacks: 00000000
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

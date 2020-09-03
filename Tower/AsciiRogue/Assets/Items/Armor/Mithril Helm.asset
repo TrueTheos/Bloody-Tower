@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3987ff93a463e5e48a77b22ba18a8891, type: 3}
   m_Name: Mithril Helm
   m_EditorClassIdentifier: 
-  _handSwitch: 0
-  itemLevel: 25
   I_name: Mithril Helm
   I_unInName: Mithril Helm
   I_symbol: '['
   I_color: '#b5b5bd'
-  levelMin: 16
-  levelMax: 25
+  chanceOfSpawning1to10: 0.01
+  chanceOfSpawning11to20: 0.2
+  chanceOfSpawning21to30: 0.36
+  chanceOfSpawning31to40: 0.6
   I_weight: 9
   I_rareness: 1
   I_itemType: 0
@@ -27,11 +27,16 @@ MonoBehaviour:
   _BUC: 0
   normalIdentifState: 1
   identified: 1
-  isEquipped: 0
   pickupableByMonsters: 0
   effect: 'Armor Class: <color=green>3</color>
 
     Made out of <color=#b5b5bd>mithtil</color>'
   worth: 0
-  armorClass: 3
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: -3
+  bonusToEndurance: 6
+  bonusToNoise: 3
+  armorClass: 4
   a_Material: 2

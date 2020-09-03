@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DiscordController : MonoBehaviour
 {
-    private Discord.Discord _discord;
+    /*private Discord.Discord _discord;
 
     private void Start()
     {
@@ -37,5 +37,5 @@ public class DiscordController : MonoBehaviour
     private void OnApplicationQuit()
     {
         _discord.Dispose();
-    }
+    }*/
 }

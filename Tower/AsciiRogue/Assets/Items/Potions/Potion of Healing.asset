@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1b678555b25db41b8e4a5857838147, type: 3}
+  m_Name: Potion of Healing
+  m_EditorClassIdentifier: 
+  I_name: Potion of Healing
+  I_unInName: Mysterious Potion
+  I_symbol: '!'
+  I_color: '#C056C0'
+  chanceOfSpawning1to10: 0.33
+  chanceOfSpawning11to20: 0.4
+  chanceOfSpawning21to30: 0.3
+  chanceOfSpawning31to40: 0.3
+  I_weight: 2
+  I_rareness: 0
+  I_itemType: 6
+  I_whereToPutIt: 0
+  _BUC: 0
+  normalIdentifState: 0
+  identified: 0
+  pickupableByMonsters: 0
+  effect: Restores some HP
+  worth: 0
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
+  PotionEffect: 8

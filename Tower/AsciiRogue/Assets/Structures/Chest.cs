@@ -59,7 +59,7 @@ public class Chest : Structure
             }
             else if (manager.playerStats.currentWeight + itemInChest.I_weight > manager.playerStats.maxWeight)
             {
-                manager.UpdateMessages($"Item in the chest weight's too much.");
+                manager.UpdateMessages($"Item in the chest weighs too much.");
             }
         }
     }

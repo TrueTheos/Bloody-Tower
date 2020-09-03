@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
   m_Name: Greatsword
   m_EditorClassIdentifier: 
-  _handSwitch: 0
-  itemLevel: 25
   I_name: Greatsword
   I_unInName: Greatsword
   I_symbol: )
   I_color: '#ab6626'
-  levelMin: 15
-  levelMax: 25
+  chanceOfSpawning1to10: 0.1
+  chanceOfSpawning11to20: 0.3
+  chanceOfSpawning21to30: 0.56
+  chanceOfSpawning31to40: 0.59
   I_weight: 9
   I_rareness: 1
   I_itemType: 10
@@ -27,10 +27,15 @@ MonoBehaviour:
   _BUC: 0
   normalIdentifState: 1
   identified: 1
-  isEquipped: 0
   pickupableByMonsters: 0
   effect: <color=red>d9</color> damage on hit.
   worth: 0
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
   attacks:
   - {x: 1, y: 9}
   effectsOnHit: 

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
+  m_Name: Gauntlet
+  m_EditorClassIdentifier: 
+  I_name: Gauntlet
+  I_unInName: Gauntlet
+  I_symbol: )
+  I_color: '#ab6626'
+  chanceOfSpawning1to10: 0.3
+  chanceOfSpawning11to20: 0.3
+  chanceOfSpawning21to30: 0.2
+  chanceOfSpawning31to40: 0.1
+  I_weight: 4
+  I_rareness: 0
+  I_itemType: 10
+  I_whereToPutIt: 3
+  _BUC: 0
+  normalIdentifState: 1
+  identified: 0
+  pickupableByMonsters: 0
+  effect: <color=red>d2</color> damage on hit.
+  worth: 0
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 1
+  bonusToNoise: 0
+  attacks:
+  - {x: 1, y: 2}
+  effectsOnHit: 
+  _weaponType: 0
+  bloodSwordCounter: 0

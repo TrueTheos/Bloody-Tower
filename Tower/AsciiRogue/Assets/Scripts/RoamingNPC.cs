@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using Random = UnityEngine.Random;
 using System;
+using System.Collections;
 
 public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 {
@@ -68,6 +69,9 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
         }
 
+        //IF ENEMY IS BOSS MAKE HIM NOT SLEEPING
+        if (sleeping && enemySO._Difficulty == EnemiesScriptableObject.E_difficulty.boss) sleeping = false;
+
         _x = 0;
 
         if(enemySO.finishedDialogue) enemySO.finishedDialogue = false;
@@ -78,6 +82,13 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
     {
         try
         {
+            if(MapManager.map[__position.x, __position.y].type == "Cobweb")
+            {
+                if(Random.Range(1,100) <= 20 - (dex / 2))
+                {
+                    return;
+                }
+            }
             if (MapManager.map[x, y] != null && !MapManager.map[x, y].hasPlayer && MapManager.map[x,y].enemy == null && !rooted)
             {
                 if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].type == "Door")
@@ -109,7 +120,9 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
                 }
             }   
         } 
-        catch{} 
+        catch{}
+
+        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
     }
     
     public void TestToWakeUp()
@@ -243,27 +256,54 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
     }
 
     public void Attack()
-    {       
+    {
+        try 
+        { 
+            GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
+            GameManager.manager.waitingCoroutine = null;
+            GameManager.manager.waiting = false;
+            GameManager.manager.readingBook = null;
+        }
+        catch { }
+
+        EnemiesScriptableObject.E_Attacks attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)];
+
+        switch(attack)
+        {
+            case EnemiesScriptableObject.E_Attacks.normal:
+                NormalAttack();
+                break;
+            case EnemiesScriptableObject.E_Attacks.poisonBite:
+                PoisonBite();
+                break;
+            case EnemiesScriptableObject.E_Attacks.fadingBite:
+                StartCoroutine(FadingBite());
+                break;
+        }
+    }
+
+    private void NormalAttack()
+    {
         totalDamage = 0;
 
         int valueRequiredToHit = 0; //value required to hit the monster
 
-        valueRequiredToHit = Random.Range(1,100) + dex - playerStats.__dexterity - playerStats.armorClass;
+        valueRequiredToHit = Random.Range(1, 100) + dex - playerStats.__dexterity - playerStats.armorClass;
         //manager.UpdateMessages($"<color=red>Value required to hit player: = d20 + {dex} - {playerStats.__dexterity} - {playerStats.armorClass} = {valueRequiredToHit}</color>");
 
-        if(valueRequiredToHit > 50)
+        if (valueRequiredToHit > 50)
         {
-            if(Random.Range(1,100) < 10 - playerStats.armorClass + dex - playerStats.__dexterity)
+            if (Random.Range(1, 100) < 10 - playerStats.armorClass + dex - playerStats.__dexterity)
             {
-                totalDamage += Mathf.FloorToInt((Random.Range(1,4) + Mathf.FloorToInt(str / 5)) * 1.5f);
+                totalDamage += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(str / 5)) * 1.5f);
             }
             else
             {
-                totalDamage += Random.Range(1,4) + Mathf.FloorToInt(str / 5);
+                totalDamage += Random.Range(1, 4) + Mathf.FloorToInt(str / 5);
             }
 
-            
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage}</color>!");
+
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage} ({playerStats.__currentHp - totalDamage}/{playerStats.__maxHp})</color>!");
             playerStats.TakeDamage(totalDamage);
         }
         else
@@ -271,33 +311,87 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.E_name}</color> missed.");
         }
 
-        /*if (Random.Range(1, 200) < 5 && !playerStats.damagedEyes)
-            {
-                playerStats.damagedEyes = true; 
-                playerStats.viewRange = 4;
-
-                foreach (var item in MapManager.map)
-                {
-                    item.isVisible = false;
-                }
-
-                manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> hit you in the eye.");
-            }
-        }*/
         canvas.GetComponent<Animator>().SetTrigger("Shake");
     }
 
+    private void PoisonBite()
+    {
+        totalDamage = 0;
+
+        int valueRequiredToHit = 0; //value required to hit the monster
+
+        valueRequiredToHit = Random.Range(1, 100) + dex - playerStats.__dexterity - playerStats.armorClass;
+        //manager.UpdateMessages($"<color=red>Value required to hit player: = d20 + {dex} - {playerStats.__dexterity} - {playerStats.armorClass} = {valueRequiredToHit}</color>");
+
+        if (valueRequiredToHit > 50)
+        {
+            if (Random.Range(1, 100) < 10 - playerStats.armorClass + dex - playerStats.__dexterity)
+            {
+                totalDamage += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(str / 5)) * 1.5f);
+            }
+            else
+            {
+                totalDamage += Random.Range(1, 4) + Mathf.FloorToInt(str / 5);
+            }
+
+            if (!playerStats.isPoisoned)
+            {
+                playerStats.poisonDuration = 3;
+                playerStats.Poison();
+            }
+            playerStats.TakeDamage(totalDamage);
+
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> used <color=green>Poison Bite</color>!");
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage}</color>!");
+        }
+        else
+        {
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.E_name}</color> missed.");
+        }
+
+        canvas.GetComponent<Animator>().SetTrigger("Shake");
+    }
+
+    private IEnumerator FadingBite()
+    {
+        manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> used <color=red>Fading Bite</color>!");
+        NormalAttack();
+        yield return new WaitForSeconds(.2f);
+
+        //run away
+        runDirection = __position - MapManager.playerPos;
+
+        Vector2Int runCell = __position + runDirection;
+
+        if(MapManager.map[runCell.x, runCell.y].type == "Wall")
+        {
+            if(Random.Range(0,100) > 78)
+            {
+                manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> used <color=lightblue>Jump</color>!");
+                runCell = new Vector2Int(MapManager.playerPos.x + (MapManager.playerPos.x - __position.x), MapManager.playerPos.y + (MapManager.playerPos.y - __position.y));
+                MoveTo(runCell.x, runCell.y);
+            }
+        }
+        else
+        {
+            runCounter--;
+
+            path = null;
+
+            path = AStar.CalculatePath(__position, runCell);
+
+            MoveTo(path[0].x, path[0].y);
+        }
+
+        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        StopCoroutine(FadingBite());
+    }
+    
     public void TakeDamage(int amount)
     {
         WakeUp();
 
         __currentHp -= amount;
-
-        string str = amount.ToString();
-
-        MapManager.map[__position.x, __position.y].decoy = $"<color=white>{str[0].ToString()}</color>";
-        try {MapManager.map[__position.x + 1, __position.y].decoy = $"<color=white>{str[1].ToString()}</color>";}
-        catch{}
 
         canvas.GetComponent<Animator>().SetTrigger("Shake");
         if (__currentHp <= 0)
@@ -314,24 +408,31 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             MapManager.map[__position.x, __position.y].enemy = null;
             MapManager.map[__position.x, __position.y].isWalkable = true;
             Corps corpse = new Corps();
-            
+
             //ITEM IN CORPSE
 
-            /*if(Random.Range(1, 100) <= 16 && enemySO.E_itemDroppedAfterBeingKilled)
+            bool droppedItem = false;
+
+            if(Random.Range(1, 100) <= 19 && enemySO.E_possileDrops != null && enemySO.E_possileDrops.Count > 0)
             {
-                corpse.itemInCorpse = enemySO.E_itemDroppedAfterBeingKilled;
-            }*/
+                corpse.itemInCorpse = enemySO.E_possileDrops[Random.Range(0, enemySO.E_possileDrops.Count)];
+                droppedItem = true;
+            }
 
             if(MapManager.map[__position.x, __position.y].structure == null)
             {
-                corpse.enemyBody = enemySO;
-
-                MapManager.map[__position.x, __position.y].structure = corpse;
-                MapManager.map[__position.x, __position.y].baseChar = enemySO.E_symbol;
-                MapManager.map[__position.x, __position.y].exploredColor = new Color(0.2784f, 0, 0);
-                MapManager.map[__position.x, __position.y].letter = "";
-
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                if (droppedItem)
+                {
+                    MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                    MapManager.map[__position.x, __position.y].letter = "";
+                    GameManager.manager.itemSpawner.SpawnAt(__position.x, __position.y, corpse.itemInCorpse);
+                }
+                else
+                { 
+                    MapManager.map[__position.x, __position.y].baseChar = enemySO.E_symbol;
+                    MapManager.map[__position.x, __position.y].exploredColor = new Color(0.2784f, 0, 0);
+                    MapManager.map[__position.x, __position.y].letter = "";
+                }
             }           
         }
         else
@@ -339,7 +440,6 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             MapManager.map[__position.x, __position.y].enemy = null;
             MapManager.map[__position.x, __position.y].letter = "";
             MapManager.map[__position.x, __position.y].isWalkable = true;
-            //MapManager.map[__position.x, __position.y].exploredColor = "";
         }     
 
         manager.UpdateMessages($"You have killed the <color={enemySO.E_color}>{enemySO.name}</color>");
@@ -363,43 +463,13 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             }
         }
 
-        /*try
-        {
-            e = manager.enemies.Where(obj => obj.GetComponent<RoamingNPC>().__position == this.__position).FirstOrDefault(); //SingleOrDefault()   
-        }
-        catch
-        {
-            e = manager.enemies.Where(obj => obj.GetComponent<RoamingNPC>().__position == this.__position).SingleOrDefault();
-        }*/
-
-        /*if(Random.Range(1, 100) < 5)
-        {
-            manager.UpdateMessages($"The dying <color={enemySO.E_color}>{enemySO.E_name}</color> gave the last cry that awakened the nearby monsters.");
-
-            for (int x = __position.x - 7; x < __position.x + 7; x++)
-            {
-                for (int y = __position.y - 7; y < __position.y + 7; y++)
-                {
-
-                    try
-                    {
-                        if (MapManager.map[x, y].enemy != null)
-                        {
-                            MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().sleeping = false;
-                            MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().moveToCorpseTimer = 10;
-                            MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().target = __position;
-                        }
-                    }
-                    catch { }
-                    
-                }
-            }
-
-        }*/
+        manager.StartPlayersTurn();
        
         manager.gameObject.GetComponent<Bestiary>().UpdateEnemyList(enemySO);
 
         manager.enemies.RemoveAt(Array.IndexOf(manager.enemies.ToArray(), e));
+
+        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
         Destroy(gameObject);
     }
@@ -444,13 +514,14 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         {
             damageOverTurn = true;
             EffectTasks += DamageOverTurn;
-            dotDuration = 10;
+            if (dotDuration != 0) { }
+            else dotDuration = 10;
             WakeUp();
         }
         else
         {
             dotDuration--;
-            TakeDamage((40 + playerStats.__intelligence) / 10);
+            TakeDamage((20 + playerStats.__intelligence) / 10);
         }
 
         if(dotDuration <= 0)

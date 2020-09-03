@@ -36,9 +36,16 @@ public class ScrollSO : ItemScriptableObject
     }
     public spell _spell;
 
-    public override void Use(MonoBehaviour foo)
+    public int spellDuration;
+
+    public override void Use(MonoBehaviour foo, Item itemObject)
     {
-        if(_type == type.self)
+        if (GameManager.manager.playerStats.isBlind)
+        {
+            GameManager.manager.UpdateMessages("You can't read because you are <color=green>blind</color>!");
+            return;
+        }
+        if (_type == type.self)
         {
             UseSpell(foo);
         }
@@ -117,26 +124,24 @@ public class ScrollSO : ItemScriptableObject
         {
             if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();
+                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
+                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();            
                 GameManager.manager.ApplyChangesInInventory(this);   
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>.");
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>. Monster is now poisoned.");
             }
         }
     }
 
     public void Root(MonoBehaviour foo)
     {
-        Debug.Log("root1");
         if(foo is PlayerStats player)
         {
-             Debug.Log("root2");
             if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
             {
-                 Debug.Log("root3");
                  MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rooted = true;
                  MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);
                  GameManager.manager.ApplyChangesInInventory(this);   
-                 GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Root</color>.");
+                 GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Root</color>. This monster can't move now.");
             }
         }
     }
@@ -162,7 +167,7 @@ public class ScrollSO : ItemScriptableObject
                 player.TakeDamage(5);
                 Debug.Log("Blood purge" + Mathf.FloorToInt((20 + player.__intelligence) / 5));
                 GameManager.manager.ApplyChangesInInventory(this);   
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood for Blood</color>.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
         }
     }
@@ -193,7 +198,7 @@ public class ScrollSO : ItemScriptableObject
 
             Debug.Log("Blood pact");   
             GameManager.manager.ApplyChangesInInventory(this);         
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>.");       
+            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding<color> now!");       
         }
     }
 
@@ -209,7 +214,7 @@ public class ScrollSO : ItemScriptableObject
 
             Debug.Log("cauterize");
             GameManager.manager.ApplyChangesInInventory(this);   
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color>.");
+            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color>. You are no longer bleeding.");
         }
     }
 
@@ -221,9 +226,11 @@ public class ScrollSO : ItemScriptableObject
             {
                 player.poisonDuration = 0;
                 player.Poison();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>. You are no longer poisoned!");
             }
+            else GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>.");
             GameManager.manager.ApplyChangesInInventory(this);   
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>.");
+            
         }
     }
 
@@ -235,7 +242,7 @@ public class ScrollSO : ItemScriptableObject
             {
                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
                 GameManager.manager.ApplyChangesInInventory(this);   
-                GameManager.manager.UpdateMessages("You read the <color=green>Scroll of Poison Dart.</color>");
+                GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
         }
     }
@@ -267,5 +274,13 @@ public class ScrollSO : ItemScriptableObject
                 GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color>.");
             }
         }
+    }
+
+    public override void onEquip(MonoBehaviour foo)
+    {
+    }
+
+    public override void onUnequip(MonoBehaviour foo)
+    {
     }
 }

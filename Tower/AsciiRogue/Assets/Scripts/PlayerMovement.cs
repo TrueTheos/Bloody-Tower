@@ -480,13 +480,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 WakeUpEnemy(roamingNpcScript);
                 roamingNpcScript.TakeDamage(Mathf.FloorToInt(damage * sleepingDamage));
-                manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.enemySO.E_color)}>{roamingNpcScript.enemySO.E_name}</color>");
+                manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
             }
             else
             {
                 roamingNpcScript._x = roamingNpcScript.howLongWillFololwInvisiblepLayer;
                 roamingNpcScript.TakeDamage(damage);
-                manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.enemySO.E_color)}>{roamingNpcScript.enemySO.E_name}</color>");
+                manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
             }
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
@@ -500,9 +500,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (roamingNpc.sleeping) //wake up enemy
         {
-            roamingNpc.sleeping = false;
-            manager.UpdateMessages($"You woke up the <color={roamingNpc.enemySO.E_color}>{roamingNpc.enemySO.E_name}</color>!");
-           
+            //roamingNpc.sleeping = false;
+            //manager.UpdateMessages($"You woke up the <color={roamingNpc.EnemyColor}>{roamingNpc.EnemyName}</color>!");
+            roamingNpc.WakeUp(); // code already exists in the the enemy
         }
 
         roamingNpc.attacked = true;

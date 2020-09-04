@@ -17,11 +17,15 @@ MonoBehaviour:
   E_color: {r: 0.38679248, g: 0.0529103, b: 0.0529103, a: 0}
   E_lvlMin: 2
   E_lvlMax: 9
-  E_currentLevel: 0
+  E_realName: 
+  E_realSymbol: 
+  E_realColor: {r: 0, g: 0, b: 0, a: 0}
   __modifier: 3
   _Difficulty: 1
   _Behaviour: 0
   attacks: 00000000
+  E_possileDrops:
+  - {fileID: 11400000, guid: 7a57aa06248fb1941bdc6a1a8eb56508, type: 2}
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

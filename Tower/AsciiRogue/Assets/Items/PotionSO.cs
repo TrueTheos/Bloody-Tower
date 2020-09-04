@@ -19,7 +19,8 @@ public class PotionSO : ItemScriptableObject
         healing,
         poison,
         blindness,
-        monsterDetection
+        monsterDetection,
+        bloodRestore
     }
     public potionEffect PotionEffect;
 
@@ -65,6 +66,9 @@ public class PotionSO : ItemScriptableObject
             case potionEffect.monsterDetection:
                 ShowMonsters(foo);
                 break;
+            case potionEffect.bloodRestore:
+                BloodRestore(foo);
+                break;
         }
 
         GameManager.manager.ApplyChangesInInventory(this);      
@@ -89,6 +93,16 @@ public class PotionSO : ItemScriptableObject
         }*/
     }
 
+    private void BloodRestore(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            int bloodRestored = Random.Range(1, 7) + Random.Range(1, 7);
+            player.__blood += bloodRestored;
+            GameManager.manager.UpdateMessages($"You restore <color=red>{bloodRestored} blood </color>.");
+        }
+    }
+    
     private void healing(MonoBehaviour foo)
     {
         if(foo is PlayerStats player)

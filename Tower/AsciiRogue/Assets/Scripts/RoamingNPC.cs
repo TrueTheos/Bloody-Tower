@@ -10,6 +10,46 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
     public EnemiesScriptableObject enemySO;
 
 
+    public string EnemyName
+    {
+        get
+        {
+            if (enemySO.E_realName == "")
+                return enemySO.E_name;
+            else            
+                if (sleeping)
+                    return enemySO.E_name;
+                else
+                    return enemySO.E_realName;            
+        }        
+    }
+    public string EnemySymbol
+    {
+        get
+        {
+            if (enemySO.E_realName == "")
+                return enemySO.E_symbol;
+            else
+                if (sleeping)
+                return enemySO.E_symbol;
+            else
+                return enemySO.E_realSymbol;
+        }
+    }
+    public Color EnemyColor
+    {
+        get
+        {
+            if (enemySO.E_realName == "")
+                return enemySO.E_color;
+            else
+                if (sleeping)
+                return enemySO.E_color;
+            else
+                return enemySO.E_realColor;
+        }
+    }
+
     //Statistics
     public int __currentHp;
     private int maxHp;
@@ -111,10 +151,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
                     __position = new Vector2Int(x, y);
 
-                    MapManager.map[x, y].letter = enemySO.E_symbol;
+                    MapManager.map[x, y].letter = EnemySymbol;
                     MapManager.map[x, y].isWalkable = false;
                     MapManager.map[x, y].enemy = this.gameObject;
-                    MapManager.map[x, y].timeColor = enemySO.E_color;
+                    MapManager.map[x, y].timeColor = EnemyColor;
 
                     return;
                 }
@@ -303,12 +343,12 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             }
 
 
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage} ({playerStats.__currentHp - totalDamage}/{playerStats.__maxHp})</color>!");
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage} ({playerStats.__currentHp - totalDamage}/{playerStats.__maxHp})</color>!");
             playerStats.TakeDamage(totalDamage);
         }
         else
         {
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.E_name}</color> missed.");
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{EnemyName}</color> missed.");
         }
 
         canvas.GetComponent<Animator>().SetTrigger("Shake");
@@ -341,12 +381,12 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             }
             playerStats.TakeDamage(totalDamage);
 
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> used <color=green>Poison Bite</color>!");
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage}</color>!");
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> used <color=green>Poison Bite</color>!");
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage}</color>!");
         }
         else
         {
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.E_name}</color> missed.");
+            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{EnemyName}</color> missed.");
         }
 
         canvas.GetComponent<Animator>().SetTrigger("Shake");
@@ -354,7 +394,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     private IEnumerator FadingBite()
     {
-        manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> used <color=red>Fading Bite</color>!");
+        manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> used <color=red>Fading Bite</color>!");
         NormalAttack();
         yield return new WaitForSeconds(.2f);
 
@@ -367,7 +407,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         {
             if(Random.Range(0,100) > 78)
             {
-                manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(enemySO.E_color)}>{enemySO.name}</color> used <color=lightblue>Jump</color>!");
+                manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> used <color=lightblue>Jump</color>!");
                 runCell = new Vector2Int(MapManager.playerPos.x + (MapManager.playerPos.x - __position.x), MapManager.playerPos.y + (MapManager.playerPos.y - __position.y));
                 MoveTo(runCell.x, runCell.y);
             }
@@ -429,7 +469,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
                 }
                 else
                 { 
-                    MapManager.map[__position.x, __position.y].baseChar = enemySO.E_symbol;
+                    MapManager.map[__position.x, __position.y].baseChar = EnemySymbol;
                     MapManager.map[__position.x, __position.y].exploredColor = new Color(0.2784f, 0, 0);
                     MapManager.map[__position.x, __position.y].letter = "";
                 }
@@ -442,7 +482,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             MapManager.map[__position.x, __position.y].isWalkable = true;
         }     
 
-        manager.UpdateMessages($"You have killed the <color={enemySO.E_color}>{enemySO.name}</color>");
+        manager.UpdateMessages($"You have killed the <color={EnemyColor}>{EnemyName}</color>");
         manager.playerStats.UpdateLevel(xpDrop);
 
         GameObject e = null;
@@ -484,7 +524,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
             //bleedLength = Random.Range(manager.bleedDuration.x, manager.bleedDuration.y);
 
-            manager.UpdateMessages($"The <color={enemySO.E_color}>{enemySO.E_name}</color> starts bleeding.");
+            manager.UpdateMessages($"The <color={EnemyColor}>{EnemyName}</color> starts bleeding.");
         }
 
         if (bleedLength <= 0)
@@ -536,7 +576,13 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         if (sleeping) //wake up enemy
         {
             sleeping = false;
-            manager.UpdateMessages($"You woke up the <color={enemySO.E_color}>{enemySO.E_name}</color>!");          
+
+            if (enemySO.E_realName != string.Empty)
+            {
+                MapManager.map[__position.x, __position.y].timeColor = EnemyColor;
+                MapManager.map[__position.x, __position.y].letter = EnemySymbol;
+            }
+            manager.UpdateMessages($"You woke up the <color={EnemyColor}>{EnemyName}</color>!");          
         }
 
         attacked = true;

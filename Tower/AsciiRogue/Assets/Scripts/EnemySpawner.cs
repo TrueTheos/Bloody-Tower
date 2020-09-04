@@ -6,10 +6,10 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public EnemiesScriptableObject[] allEnemies;
-
+    public EnemiesScriptableObject Mimic;
     [HideInInspector]public List<GameObject> spawnedEnemies = new List<GameObject>();
     public List<int> enemiesPerRoom;
-
+    
     public GameObject enemyPrefab;
 
     public Vector2Int __position { get; set; }

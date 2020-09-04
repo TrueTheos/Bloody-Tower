@@ -17,6 +17,10 @@ public class EnemiesScriptableObject : ScriptableObject
     public int E_lvlMin;
     public int E_lvlMax;
 
+    public string E_realName;
+    public string E_realSymbol;
+    public Color E_realColor;
+    
     public enum E_modifier
     {
         strong,

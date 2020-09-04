@@ -60,7 +60,7 @@ public abstract class ItemScriptableObject : ScriptableObject
 
 
     public bool normalIdentifState;
-    public bool identified;
+
 
     public bool pickupableByMonsters;
 

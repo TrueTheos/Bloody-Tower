@@ -172,6 +172,8 @@ public class ItemSpawner : MonoBehaviour
 
                 GameObject item = Instantiate(itemPrefab.gameObject, transform.position, Quaternion.identity);
 
+                item.GetComponent<Item>().identified = itemToSpawn.normalIdentifState;
+
                 if (itemToSpawn is WeaponsSO weapon)
                 {
                     if (Enumerable.Range(0, 5).Contains(DungeonGenerator.dungeonGenerator.currentFloor))

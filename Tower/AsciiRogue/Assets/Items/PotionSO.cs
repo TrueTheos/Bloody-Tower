@@ -25,7 +25,7 @@ public class PotionSO : ItemScriptableObject
 
     public override void Use(MonoBehaviour foo, Item itemObject)
     {
-        if(!identified) identified = true;
+        if(!itemObject.identified) itemObject.identified = true;
 
         switch (PotionEffect)
         {

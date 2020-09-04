@@ -85,14 +85,14 @@ public class WandSO : ItemScriptableObject
                 break;
         }
 
-        if (!GameManager.manager.playerStats.itemsInEq[GameManager.manager.selectedItem].identified)
+        if (!GameManager.manager.playerStats.itemsInEqGO[GameManager.manager.selectedItem].identified)
         {
-            GameManager.manager.playerStats.itemsInEq[GameManager.manager.selectedItem].identified = true; //make item identifyied
+            GameManager.manager.playerStats.itemsInEqGO[GameManager.manager.selectedItem].identified = true; //make item identifyied
             GameManager.manager.UpdateInventoryText(); //update item names to identifyed names (ring -> ring of fire resistance)
-            GameManager.manager.UpdateItemStats(GameManager.manager.playerStats.itemsInEq[GameManager.manager.selectedItem], GameManager.manager.playerStats.itemInEqGO[GameManager.manager.selectedItem]); //show full statistics           
+            GameManager.manager.UpdateItemStats(GameManager.manager.playerStats.itemsInEqGO[GameManager.manager.selectedItem]); //show full statistics           
         }
 
-        GameManager.manager.UpdateItemStats(this, GameManager.manager.playerStats.itemInEqGO[GameManager.manager.selectedItem]);
+        GameManager.manager.UpdateItemStats(GameManager.manager.playerStats.itemsInEqGO[GameManager.manager.selectedItem]);
     }
 
     public void SetCharges()

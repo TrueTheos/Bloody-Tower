@@ -20,6 +20,8 @@ public class Item : MonoBehaviour
     public enum BUC { normal,blessed,cursed}
     public BUC _BUC;
 
+    public bool identified;
+
     //BOOK INFO
     public int spellbookCooldown;
     public bool learned = false;

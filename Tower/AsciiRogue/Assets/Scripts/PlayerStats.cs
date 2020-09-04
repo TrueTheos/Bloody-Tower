@@ -387,25 +387,25 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     #region Body Parts & Text
     [Header("Items")]
-    public List<ItemScriptableObject> itemsInEq;
-    public List<Item> itemInEqGO;
+    // public List<ItemScriptableObject> itemsInEq; -- no longer needed as we have the regular items
+    public List<Item> itemsInEqGO;
     public Text Head;
-    public ItemScriptableObject _head;
+    public Item _head;
 
     public Text Body;
-    public ItemScriptableObject _body;
+    public Item _body;
     
     public Text LHand;
-    public ItemScriptableObject _Lhand;
+    public Item _Lhand;
 
     public Text RHand;
-    public ItemScriptableObject _Rhand;
+    public Item _Rhand;
 
     public Text Ring;
-    public ItemScriptableObject _ring;
+    public Item _ring;
     
     public Text Legs;
-    public ItemScriptableObject _legs;
+    public Item _legs;
 
     public Text Capacity;
 
@@ -491,9 +491,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         GameObject g = Instantiate(gameManager.itemSpawner.itemPrefab);
         g.GetComponent<Item>().iso = startingWeapon;
 
-        itemInEqGO.Add(g.GetComponent<Item>());
+        itemsInEqGO.Add(g.GetComponent<Item>());
 
-        itemsInEq.Add(startingWeapon);
         gameManager.UpdateInventoryQueue($"<color={startingWeapon.I_color}>{startingWeapon.I_name}</color>");
         UpdateCapacity();
     }
@@ -798,15 +797,15 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         armorClass = 0;
         armorClass += __dexterity;
 
-        if(_head != null && _head is ArmorSO armor)
+        if(_head != null && _head.iso is ArmorSO armor)
         {
             armorClass += armor.armorClass;
         }
-        if (_body != null && _body is ArmorSO armor1)
+        if (_body != null && _body.iso is ArmorSO armor1)
         {
             armorClass += armor1.armorClass;
         }
-        if (_legs != null && _legs is ArmorSO armor2)
+        if (_legs != null && _legs.iso is ArmorSO armor2)
         {
             armorClass += armor2.armorClass;
         }
@@ -816,13 +815,12 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     {
         currentItems++;
         iso.OnPickup(this);
-        itemsInEq.Add(iso);
-        itemInEqGO.Add(itemObject.GetComponent<Item>());
+        itemsInEqGO.Add(itemObject.GetComponent<Item>());
         
         try {MapManager.map[position.x, position.y].item = null;}
         catch{}
 
-        if (iso.identified == true)
+        if (itemObject.GetComponent<Item>().identified == true)
         {
             gameManager.UpdateMessages($"You picked up the <color={iso.I_color}>{iso.I_name}</color>.");
             gameManager.UpdateInventoryQueue($"<color={iso.I_color}>{iso.I_name}</color>");
@@ -840,9 +838,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     {
         int capacity = 0;
 
-        foreach (var item in itemsInEq)
+        foreach (var item in itemsInEqGO)
         {
-            capacity += item.I_weight;
+            capacity += item.iso.I_weight;
         }
 
         Capacity.text = "Capacity: " + capacity + " / " + maxWeight;
@@ -951,14 +949,14 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         {
             PlayerMovement.playerMovement.StopAllCoroutines();
             gameManager.UpdateMessages("You are <color=#990000>dead</color>.");
-            if (_ring != null && _ring.I_name == "Ring of Life Saving")
+            if (_ring != null && _ring.iso.I_name == "Ring of Life Saving")
             {
                 EffectCoroutine = LifeSaveEffect();
                 StartCoroutine(EffectCoroutine);
                 gameManager.UpdateMessages("<color=yellow>But wait... Your medallion begins to glow! You feel much better! The medallion crumbles to dust!</color>");
                 __currentHp = __maxHp;
                 __blood = 100;  
-                gameManager.ApplyChangesInInventory(_ring);
+                gameManager.ApplyChangesInInventory(_ring.iso);
                 gameManager.UpdateEquipment(Ring, "<color=#ffffff>Ring: </color>");
                 _ring = null;               
             }
@@ -1352,6 +1350,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         GameObject g = Instantiate(gameManager.itemSpawner.itemPrefab);
         g.GetComponent<Item>().iso = iso;
 
-        itemInEqGO.Add(g.GetComponent<Item>());
+        itemsInEqGO.Add(g.GetComponent<Item>());
     }
 }

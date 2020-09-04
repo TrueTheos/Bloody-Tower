@@ -21,7 +21,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -42,7 +42,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -63,7 +63,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -84,7 +84,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -105,7 +105,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -126,7 +126,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -147,7 +147,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -168,7 +168,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -189,7 +189,7 @@ public class Anvil : Structure
                 else
                 {
                     GameManager.manager.UpdateMessages($"<color={GameManager.manager.itemToAnvil.iso.I_color}>{GameManager.manager.itemToAnvil.iso.I_name}</color> broke. ;c");
-                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.isoAnvil);
+                    GameManager.manager.ApplyChangesInInventory(GameManager.manager.itemToAnvil.iso);
                 }
             }
             else
@@ -203,7 +203,7 @@ public class Anvil : Structure
         }
 
         GameManager.manager.itemToAnvil = null;
-        GameManager.manager.isoAnvil = null; 
+        //GameManager.manager.isoAnvil = null; 
     }
 
     public override void WalkIntoTrigger()

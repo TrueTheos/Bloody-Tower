@@ -17,10 +17,14 @@ MonoBehaviour:
   E_color: {r: 0.4245283, g: 0.014017452, b: 0.014017452, a: 0}
   E_lvlMin: 200
   E_lvlMax: 200
-  __modifier: 8
+  E_realName: 
+  E_realSymbol: 
+  E_realColor: {r: 0, g: 0, b: 0, a: 0}
+  __modifier: 0
   _Difficulty: 3
   _Behaviour: 0
   attacks: 02000000
+  E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

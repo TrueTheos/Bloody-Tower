@@ -20,20 +20,20 @@ public class EnemiesScriptableObject : ScriptableObject
     public string E_realName;
     public string E_realSymbol;
     public Color E_realColor;
-    
+    [System.Flags]
     public enum E_modifier
     {
-        strong,
-        nimble,
-        smart,
-        tough,
-        weak,
-        clumsy,
-        stupid,
-        frail,
-        giant,
-        small,
-        caster
+        strong = 1 << 0,
+        nimble = 1 << 1,
+        smart = 1 << 2,
+        tough = 1 << 3,
+        weak = 1 << 4,
+        clumsy = 1 << 5,
+        stupid = 1 << 6,
+        frail = 1 << 7,
+        giant = 1 << 8,
+        small = 1 << 9,
+        caster = 1 << 10
     }
     
     public E_modifier __modifier;

@@ -58,16 +58,9 @@ public abstract class ItemScriptableObject : ScriptableObject
     }
     public whereToPutIt I_whereToPutIt;
 
-    public enum BUC
-    {
-        normal,
-        blessed,        
-        cursed
-    }
-    [HideInInspector] public BUC _BUC;
 
     public bool normalIdentifState;
-    public bool identified;
+
 
     public bool pickupableByMonsters;
 

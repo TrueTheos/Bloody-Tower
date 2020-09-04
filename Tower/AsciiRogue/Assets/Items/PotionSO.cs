@@ -25,45 +25,45 @@ public class PotionSO : ItemScriptableObject
 
     public override void Use(MonoBehaviour foo, Item itemObject)
     {
-        if(!identified) identified = true;
+        if(!itemObject.identified) itemObject.identified = true;
 
         switch (PotionEffect)
         {
             case potionEffect.fireResistance:
-                FireResistance(foo);
+                FireResistance(foo,itemObject);
                 break;
             case potionEffect.regeneration:
-                Regeneration(foo);
+                Regeneration(foo, itemObject);
                 break;
             case potionEffect.poisonResistance:
-                PoisonResistance(foo);
+                PoisonResistance(foo, itemObject);
                 break;
             case potionEffect.fullRestore:
-                FullRestore(foo);
+                FullRestore(foo, itemObject);
                 break;
             case potionEffect.levelVision:
-                LevelVision(foo);
+                LevelVision(foo, itemObject);
                 break;
             case potionEffect.soiledBandage:
-                soiledBandage(foo);
+                soiledBandage(foo, itemObject);
                 break;
             case potionEffect.bandage:
-                Bandage(foo);
+                Bandage(foo, itemObject);
                 break;
             case potionEffect.heavyBandage:
-                HeavyBandage(foo);
+                HeavyBandage(foo, itemObject);
                 break;
             case potionEffect.healing:
-                healing(foo);
+                healing(foo, itemObject);
                 break;
             case potionEffect.poison:
-                Poison(foo);
+                Poison(foo, itemObject);
                 break;
             case potionEffect.blindness:
-                Blindness(foo);
+                Blindness(foo, itemObject);
                 break;
             case potionEffect.monsterDetection:
-                ShowMonsters(foo);
+                ShowMonsters(foo, itemObject);
                 break;
         }
 
@@ -75,7 +75,7 @@ public class PotionSO : ItemScriptableObject
         
     }
 
-    private void ShowMonsters(MonoBehaviour foo)
+    private void ShowMonsters(MonoBehaviour foo, Item item)
     {
         /*if(foo is PlayerStats player)
         {
@@ -89,13 +89,13 @@ public class PotionSO : ItemScriptableObject
         }*/
     }
 
-    private void healing(MonoBehaviour foo)
+    private void healing(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
-            switch(_BUC)
+            switch(item._BUC)
             {
-                case BUC.blessed:
+                case Item.BUC.blessed:
                     player.__currentHp += 10;
                     if (player.__currentHp > player.__maxHp)
                     {
@@ -103,7 +103,7 @@ public class PotionSO : ItemScriptableObject
                     }
                     player.__maxHp += 2;
                     break;
-                case BUC.cursed:
+                case Item.BUC.cursed:
                     player.__maxHp -= 2;
                     player.__currentHp += 4;
                     if (player.__currentHp > player.__maxHp)
@@ -111,7 +111,7 @@ public class PotionSO : ItemScriptableObject
                         player.__currentHp -= player.__currentHp - player.__maxHp;
                     }
                     break;
-                case BUC.normal:
+                case Item.BUC.normal:
                     player.__currentHp += 5;
                     if (player.__currentHp > player.__maxHp)
                     {
@@ -122,7 +122,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
     
-    private void soiledBandage(MonoBehaviour foo)
+    private void soiledBandage(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -143,7 +143,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    private void Bandage(MonoBehaviour foo)
+    private void Bandage(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -164,7 +164,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    private void HeavyBandage(MonoBehaviour foo)
+    private void HeavyBandage(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -185,7 +185,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    private void FireResistance(MonoBehaviour foo)
+    private void FireResistance(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -193,7 +193,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    private void Regeneration(MonoBehaviour foo)
+    private void Regeneration(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -201,7 +201,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    public void PoisonResistance(MonoBehaviour foo)
+    public void PoisonResistance(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -209,7 +209,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    public void FullRestore(MonoBehaviour foo)
+    public void FullRestore(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
@@ -217,7 +217,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    public void LevelVision(MonoBehaviour foo)
+    public void LevelVision(MonoBehaviour foo, Item item)
     {
         if (foo is PlayerStats player)
         {
@@ -226,16 +226,16 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    private void Poison(MonoBehaviour foo)
+    private void Poison(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {
-            switch(_BUC)
+            switch(item._BUC)
             {
-                case BUC.blessed:
+                case Item.BUC.blessed:
                     GameManager.manager.UpdateMessages("It tastes like a <color=green>poison</color>.");
                     break;
-                case BUC.cursed:
+                case Item.BUC.cursed:
                     GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
                     if (!player.isPoisoned)
                     {
@@ -243,7 +243,7 @@ public class PotionSO : ItemScriptableObject
                         player.Poison();
                     }
                     break;
-                case BUC.normal:
+                case Item.BUC.normal:
                     GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
                     if (!player.isPoisoned)
                     {
@@ -255,7 +255,7 @@ public class PotionSO : ItemScriptableObject
         }
     }
 
-    private void Blindness(MonoBehaviour foo)
+    private void Blindness(MonoBehaviour foo, Item item)
     {
         if(foo is PlayerStats player)
         {

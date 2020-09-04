@@ -96,7 +96,7 @@ public class Selector : MonoBehaviour
             }
             else if (MapManager.map[x, y].isExplored && MapManager.map[x, y].item)
             {
-                if(MapManager.map[x,y].item.GetComponent<Item>().iso.identified)
+                if(MapManager.map[x,y].item.GetComponent<Item>().identified)
                 {
                      lookingAt.text = $"<color=green>{MapManager.map[x, y].item.GetComponent<Item>().iso.I_name}</color>";
                 }

@@ -172,6 +172,8 @@ public class ItemSpawner : MonoBehaviour
 
                 GameObject item = Instantiate(itemPrefab.gameObject, transform.position, Quaternion.identity);
 
+                item.GetComponent<Item>().identified = itemToSpawn.normalIdentifState;
+
                 if (itemToSpawn is WeaponsSO weapon)
                 {
                     if (Enumerable.Range(0, 5).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
@@ -207,15 +209,15 @@ public class ItemSpawner : MonoBehaviour
                     int i = UnityEngine.Random.Range(1, 100);
                     if (i <= 9)
                     {
-                        item.GetComponent<Item>().iso._BUC = ItemScriptableObject.BUC.cursed;
+                        item.GetComponent<Item>()._BUC = Item.BUC.cursed;
                     }
                     else if(i <= 90)
                     {
-                        item.GetComponent<Item>().iso._BUC = ItemScriptableObject.BUC.normal;
+                        item.GetComponent<Item>()._BUC = Item.BUC.normal;
                     }
                     else
                     {
-                        item.GetComponent<Item>().iso._BUC = ItemScriptableObject.BUC.blessed;
+                        item.GetComponent<Item>()._BUC = Item.BUC.blessed;
                     }
                 }
 

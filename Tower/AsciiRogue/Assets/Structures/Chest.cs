@@ -20,7 +20,7 @@ public class Chest : Structure
 
         if (!opened)
         {
-            if (itemInChest.identified)
+            if (itemInChest.normalIdentifState)
             {
                 GameManager.manager.UpdateMessages($"You opened the chest. It contains <color={itemInChest.I_color}>{itemInChest.I_name}</color>.");
             }
@@ -37,10 +37,10 @@ public class Chest : Structure
                 manager.playerStats.currentWeight += itemInChest.I_weight;
 
                 manager.playerStats.currentItems++;
-                manager.playerStats.itemsInEq.Add(itemInChest);              
+                //manager.playerStats.itemsInEq.Add(itemInChest);              
                 manager.playerStats.AddItemFromChest(itemInChest);
 
-                if (itemInChest.identified)
+                if (itemInChest.normalIdentifState)
                 {
                     manager.UpdateMessages($"You picked up the <color={itemInChest.I_color}>{itemInChest.I_name}</color>.");
                     manager.UpdateInventoryQueue($"<color={itemInChest.I_color}>{itemInChest.I_name}</color>");

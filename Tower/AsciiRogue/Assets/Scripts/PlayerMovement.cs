@@ -284,11 +284,11 @@ public class PlayerMovement : MonoBehaviour
             if(MapManager.map[target.x, target.y].requiresKey)
             {
                 bool lb = false;
-                foreach(ItemScriptableObject item in playerStats.itemsInEq)
+                foreach(Item item in playerStats.itemsInEqGO)
                 {
                     if(lb) break;
 
-                    if(item is Key key)
+                    if(item.iso is Key key)
                     {
                         lb = true;
 
@@ -358,7 +358,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight > playerStats.maxWeight)
             {
-                if(!MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.identified)
+                if(!MapManager.map[target.x, target.y].item.GetComponent<Item>().identified)
                 {
                     manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_unInName} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
                 }
@@ -433,7 +433,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(valueRequiredToHit > 50 || r >= 80) //Do we hit?
         {
-            if(playerStats._Lhand is WeaponsSO weaponL)
+            if(playerStats._Lhand?.iso is WeaponsSO weaponL)
             {
                 for(x = 0; x < weaponL.attacks.Count; x++)
                 {
@@ -447,7 +447,7 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
-            if(playerStats._Rhand is WeaponsSO weaponR)
+            if(playerStats._Rhand?.iso is WeaponsSO weaponR)
             {
                 for(x = 0; x < weaponR.attacks.Count; x++)
                 {

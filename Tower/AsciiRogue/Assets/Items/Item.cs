@@ -17,8 +17,8 @@ public class Item : MonoBehaviour
     public bool equippedPreviously = false;
 
     public bool cursed;
-    /*public enum BUC { cursed, uncursed, blessed}
-    public BUC _BUC;*/
+    public enum BUC { normal,blessed,cursed}
+    public BUC _BUC;
 
     //BOOK INFO
     public int spellbookCooldown;

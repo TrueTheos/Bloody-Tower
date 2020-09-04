@@ -1108,8 +1108,8 @@ public class GameManager : MonoBehaviour
             else if (iso is PotionSO) { }
             else
             {
-                if (iso._BUC == ItemScriptableObject.BUC.cursed) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
-                else if (iso._BUC == ItemScriptableObject.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
+                if (item._BUC == Item.BUC.cursed) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
+                else if (item._BUC == Item.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
             }
 
             if (iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + iso.bonusToHealth + "\n";

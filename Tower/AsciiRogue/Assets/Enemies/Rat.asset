@@ -17,7 +17,10 @@ MonoBehaviour:
   E_color: {r: 0.4392157, g: 0.12156863, b: 0.15686275, a: 0}
   E_lvlMin: 0
   E_lvlMax: 9
-  __modifier: 9
+  E_realName: 
+  E_realSymbol: 
+  E_realColor: {r: 0, g: 0, b: 0, a: 0}
+  __modifier: 512
   _Difficulty: 1
   _Behaviour: 0
   attacks: 00000000

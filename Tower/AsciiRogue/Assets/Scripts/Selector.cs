@@ -91,7 +91,7 @@ public class Selector : MonoBehaviour
             }
             else if (MapManager.map[x, y].isExplored && MapManager.map[x, y].enemy) 
             {
-                lookingAt.text = $"<color=red>{MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().enemySO.E_name}</color>"; 
+                lookingAt.text = $"<color=red>{MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().EnemyName}</color>"; 
                 return;
             }
             else if (MapManager.map[x, y].isExplored && MapManager.map[x, y].item)

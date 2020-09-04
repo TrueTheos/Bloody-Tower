@@ -491,7 +491,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "="[0])
                 {
-                    if(UnityEngine.Random.Range(1,100) < 5)
+                    if (UnityEngine.Random.Range(1, 100) < 5)
                     {
                         MapManager.map[x, y] = new Tile();
                         MapManager.map[x, y].type = "Blood Anvil";
@@ -506,8 +506,9 @@ public class DungeonGenerator : MonoBehaviour
                     else
                     {
                         MapManager.map[x, y] = new Tile();
+
                         CreateChest(x, y);
-                    }
+                    }                                      
                     
                 }
                 else if(fixedLevel[inxedString] == "\""[0])
@@ -549,6 +550,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
+
         if(generateWater)
         {
             if (UnityEngine.Random.Range(1, 100) <= 30)
@@ -563,7 +565,30 @@ public class DungeonGenerator : MonoBehaviour
         }
         
         floorManager.floors.Add(MapManager.map);
-        floorManager.floorsGO.Add(floorObject);  
+        floorManager.floorsGO.Add(floorObject);
+
+        for (int x = 0; x < MapManager.map.GetLength(0); x++)
+        {
+            for (int y = 0; y < MapManager.map.GetLength(1); y++)
+            {
+                if (MapManager.map[x,y].type == "Chest")
+                {
+                    if (UnityEngine.Random.Range(0,100)<15)
+                    {
+                        MapManager.map[x, y].xPosition = x;
+                        MapManager.map[x, y].yPosition = y;
+                        MapManager.map[x, y].baseChar = ".";
+                        MapManager.map[x, y].isWalkable = true;
+                        MapManager.map[x, y].isOpaque = false;
+                        MapManager.map[x, y].type = "Floor";
+
+                        MapManager.map[x, y].structure = null;
+
+                        manager.enemySpawner.SpawnAt(x, y, manager.enemySpawner.Mimic, true);
+                    }
+                }
+            }
+        }
 
         if(spawnEnemiesFromString)
         {
@@ -1081,8 +1106,14 @@ public class DungeonGenerator : MonoBehaviour
         try
         {
             Vector2Int chestPos = corners[UnityEngine.Random.Range(0, corners.Count)];
-
-            CreateChest(chestPos.x, chestPos.y);
+            if (UnityEngine.Random.Range(0, 10) < 8) //TODO: Make this dependant on something
+            {
+                manager.enemySpawner.SpawnAt(chestPos.x, chestPos.y, manager.enemySpawner.Mimic, true);
+            }
+            else
+            {
+                CreateChest(chestPos.x, chestPos.y);
+            }
         }
         catch{ SpawnChests(); }
     }

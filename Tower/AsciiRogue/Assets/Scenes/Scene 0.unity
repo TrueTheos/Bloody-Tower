@@ -8453,6 +8453,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 88ebefc521b7c984090312f5fc281631, type: 2}
   - {fileID: 11400000, guid: cec9cdeb415112c47bf46c5c1c0b8b46, type: 2}
   - {fileID: 11400000, guid: ecba9f6a490c3d34a967b6155548e600, type: 2}
+  Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
   spawnedEnemies: []
   enemiesPerRoom: 010000000100000002000000020000000200000003000000
   enemyPrefab: {fileID: 8274568063289460321, guid: 99266b4a833436c478b0239b58339a72,

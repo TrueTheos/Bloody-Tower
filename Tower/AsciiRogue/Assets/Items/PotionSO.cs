@@ -93,25 +93,11 @@ public class PotionSO : ItemScriptableObject
         }*/
     }
 
-<<<<<<< HEAD
     private void healing(MonoBehaviour foo, Item item)
-=======
-    private void BloodRestore(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            int bloodRestored = Random.Range(1, 7) + Random.Range(1, 7);
-            player.__blood += bloodRestored;
-            GameManager.manager.UpdateMessages($"You restore <color=red>{bloodRestored} blood </color>.");
-        }
-    }
-    
-    private void healing(MonoBehaviour foo)
->>>>>>> Theos's-Branch
-    {
-        if(foo is PlayerStats player)
-        {
-            switch(item._BUC)
+            switch (item._BUC)
             {
                 case Item.BUC.blessed:
                     player.__currentHp += 10;
@@ -137,6 +123,15 @@ public class PotionSO : ItemScriptableObject
                     }
                     break;
             }
+        }
+    }
+    private void BloodRestore(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            int bloodRestored = Random.Range(1, 7) + Random.Range(1, 7);
+            player.__blood += bloodRestored;
+            GameManager.manager.UpdateMessages($"You restore <color=red>{bloodRestored} blood </color>.");
         }
     }
     

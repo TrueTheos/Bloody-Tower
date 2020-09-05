@@ -24,9 +24,7 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 10
   I_whereToPutIt: 3
-  _BUC: 0
   normalIdentifState: 1
-  identified: 1
   pickupableByMonsters: 0
   effect: <color=red>d4</color> damage on hit.
   worth: 0

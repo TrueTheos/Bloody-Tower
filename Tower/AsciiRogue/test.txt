@@ -1,0 +1,20 @@
+ #####                                  
+ #...#######                            
+ #...#aaaaa#                            
+ #...#aaaaa#           ##########       
+ #...#aaaaa#           #cccccccc#       
+ #...#aaaaa#           #cccccccc#       
+ #...#aaaaa#           #c#####cc#       
+ #####aaaaa#           #c#bbb#cc#       
+    ########           #c#bbb#cc#       
+                       #c#bbb#cc#       
+                       #c#####cc#       
+                       #cccccccc#       
+                       ##########       
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        

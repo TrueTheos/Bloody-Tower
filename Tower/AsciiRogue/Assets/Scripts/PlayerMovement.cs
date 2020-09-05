@@ -266,6 +266,7 @@ public class PlayerMovement : MonoBehaviour
         else if(MapManager.map[target.x, target.y].structure != null && !MapManager.map[target.x, target.y].isWalkable)
         {
             MapManager.map[target.x, target.y].structure.Use();
+            target = position;
         }
         else if (MapManager.map[target.x, target.y].enemy != null)
         {

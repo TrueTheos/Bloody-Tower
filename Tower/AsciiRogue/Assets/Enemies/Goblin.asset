@@ -20,11 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-<<<<<<< HEAD
-  __modifier: 0
-=======
   __modifier: 9
->>>>>>> Theos's-Branch
   _Difficulty: 0
   _Behaviour: 1
   attacks: 00000000

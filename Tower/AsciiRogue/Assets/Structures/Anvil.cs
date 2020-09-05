@@ -6,13 +6,23 @@ public class Anvil : Structure
 {
     public override void Use()
     {
-        if (GameManager.manager.itemToAnvil == null) return;
-
-        if(GameManager.manager.itemToAnvil.upgradeLevel == 0)
+        if (!GameManager.manager.anvilMenuOpened)
         {
-            if(GameManager.manager.playerStats.__blood >= 10)
+            GameManager.manager.player.StopAllCoroutines();
+            GameManager.manager.anvilMenuOpened = true;
+            GameManager.manager.OpenEQ();
+            GameManager.manager.anvil = this;
+        }
+        //GameManager.manager.isoAnvil = null; 
+    }
+
+    public void UseAnvil()
+    {
+        if (GameManager.manager.itemToAnvil.upgradeLevel == 0)
+        {
+            if (GameManager.manager.playerStats.__blood >= 10)
             {
-                if(Random.Range(0,101) > 5)
+                if (Random.Range(0, 101) > 5)
                 {
                     GameManager.manager.playerStats.LossBlood(10);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
@@ -203,7 +213,6 @@ public class Anvil : Structure
         }
 
         GameManager.manager.itemToAnvil = null;
-        //GameManager.manager.isoAnvil = null; 
     }
 
     public override void WalkIntoTrigger()

@@ -198,7 +198,7 @@ public class ScrollSO : ItemScriptableObject
 
             Debug.Log("Blood pact");   
             GameManager.manager.ApplyChangesInInventory(this);         
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding<color> now!");       
+            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding</color> now!");       
         }
     }
 

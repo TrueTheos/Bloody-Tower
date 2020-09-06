@@ -13,11 +13,15 @@ public class Anvil : Structure
             GameManager.manager.OpenEQ();
             GameManager.manager.anvil = this;
         }
-        //GameManager.manager.isoAnvil = null; 
     }
 
     public void UseAnvil()
     {
+        if(GameManager.manager.itemToAnvil.isEquipped)
+        {
+            GameManager.manager.UpdateMessages("You can't upgrade equipped item.");
+            return;
+        }
         if (GameManager.manager.itemToAnvil.upgradeLevel == 0)
         {
             if (GameManager.manager.playerStats.__blood >= 10)
@@ -27,6 +31,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(10);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -48,6 +53,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(15);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -69,6 +75,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(20);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -90,6 +97,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(25);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -111,6 +119,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(30);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -132,6 +141,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(35);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -153,6 +163,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(45);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -174,6 +185,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(55);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -195,6 +207,7 @@ public class Anvil : Structure
                     GameManager.manager.playerStats.LossBlood(65);
                     GameManager.manager.itemToAnvil.upgradeLevel++;
                     GameManager.manager.UpdateMessages("You succesfully upgraded item!");
+                    Upgrade();
                 }
                 else
                 {
@@ -213,6 +226,51 @@ public class Anvil : Structure
         }
 
         GameManager.manager.itemToAnvil = null;
+    }
+
+    private void Upgrade()
+    {
+        GameManager.manager.UpdateItemStats(GameManager.manager.itemToAnvil);
+
+        int i = Random.Range(1, 11);
+
+        if(i <= 5)
+        {
+            IncreaseRandomStat();
+        }
+        else if(i < 9)
+        {
+            IncreaseRandomStat();
+            IncreaseRandomStat();
+        }
+        else
+        {
+            IncreaseRandomStat();
+            IncreaseRandomStat();
+            IncreaseRandomStat();
+        }
+    }
+
+    private void IncreaseRandomStat()
+    {
+        int i = Random.Range(1, 5);
+
+        if(i == 1)
+        {
+            GameManager.manager.itemToAnvil.Anvil_bonusToDexterity++;
+        }
+        else if(i == 2)
+        {
+            GameManager.manager.itemToAnvil.Anvil_bonusToEndurance++;
+        }
+        else if (i == 3)
+        {
+            GameManager.manager.itemToAnvil.Anvil_bonusToIntelligence++;
+        }
+        else if (i == 4)
+        {
+            GameManager.manager.itemToAnvil.Anvil_bonusToStrength++;
+        }
     }
 
     public override void WalkIntoTrigger()

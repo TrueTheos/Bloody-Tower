@@ -468,7 +468,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (_selectedItem.isEquipped) _selectedItem.iso.onUnequip(playerStats);
+        if (_selectedItem.isEquipped)
+        {
+            _selectedItem.iso.onUnequip(playerStats);
+            _selectedItem.OnUnequip(playerStats);
+        }
 
         if (MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].structure == null)
         {
@@ -590,7 +594,7 @@ public class GameManager : MonoBehaviour
         FinishPlayersTurn();
     }
 
-    private void UEquip()
+    private void UEquip() //Unequip and Equip
     {
         if (_selectedItem.iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none) //unequip or equip
         {
@@ -671,6 +675,7 @@ public class GameManager : MonoBehaviour
                     }
                     UpdateInventoryText();
                     _selectedItem.iso.onUnequip(playerStats);
+                    _selectedItem.OnUnequip(playerStats);
                 }
             }
             else //equip
@@ -704,6 +709,7 @@ public class GameManager : MonoBehaviour
                             }
                             _selectedItem.isEquipped = true;
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
                         }
 
                         break;
@@ -723,6 +729,7 @@ public class GameManager : MonoBehaviour
                             }
                             _selectedItem.isEquipped = true;
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
                         }
 
                         break;
@@ -742,6 +749,8 @@ public class GameManager : MonoBehaviour
                             if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.EquipWithGems(_selectedItem);
+                                _selectedItem.iso.onEquip(playerStats);
+                                _selectedItem.OnEquip(playerStats);
                             }
                         }
                         else if (playerStats._Rhand == null)
@@ -753,6 +762,8 @@ public class GameManager : MonoBehaviour
                             if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.EquipWithGems(_selectedItem);
+                                _selectedItem.iso.onEquip(playerStats);
+                                _selectedItem.OnEquip(playerStats);
                             }
                         }
                         else
@@ -777,6 +788,7 @@ public class GameManager : MonoBehaviour
                             ApplyChangesInInventory(null);
                             _selectedItem.isEquipped = true;
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
                         }
 
                         break;
@@ -791,6 +803,7 @@ public class GameManager : MonoBehaviour
                             playerStats._legs = _selectedItem;
                             UpdateEquipment(playerStats.Legs, "<color=#00FFFF>Legs: </color>" + "\n" + " " + playerStats._legs.iso.I_name);
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
 
                             if (_selectedItem.iso is ArmorSO armor2)
                             {
@@ -874,7 +887,7 @@ public class GameManager : MonoBehaviour
         }       
     }
 
-    public IEnumerator WaitTurn(int turns = 0)
+    public IEnumerator WaitTurn(int turns = 0) //FOR LEARNING SPELLBOOK
     {
         waiting = true;
 
@@ -884,11 +897,58 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
-        playerStats.rememberedSpells.Add(readingBook);
-        UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
-        ApplyChangesInInventory(readingBook);
-        readingBook = null;
+        if(UnityEngine.Random.Range(1,51) > playerStats.__intelligence)
+        {
+            int randomBadEffect = UnityEngine.Random.Range(1, 3);
+
+            if (randomBadEffect == 1)
+            {
+                UpdateMessages("<color=red>As you read the book, it radiates explosive energy in your face!</color>");
+                playerStats.TakeDamage(UnityEngine.Random.Range(3, 8));
+            }
+            else if(randomBadEffect == 2)
+            {
+                UpdateMessages("<color=red>As you read the book, you feel a wrenching sensation.</color>");
+                int randomX = 0;
+                int randomY = 0;
+
+                bool loopBreaker = false;
+
+                for (int i = 0; i < 500; i++) //500 is nuber of tries
+                {
+                    if (loopBreaker) break;
+
+                    randomX = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapWidth);
+                    randomY = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapHeight);
+
+                    if (MapManager.map[randomX, randomY].isWalkable && MapManager.map[randomX, randomY].enemy == null && MapManager.map[randomX, randomY].structure == null)
+                    {
+                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
+                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
+                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].timeColor = new Color(0, 0, 0);
+                        PlayerMovement.playerMovement.position = new Vector2Int(randomX, randomY);
+                        MapManager.map[randomX, randomY].hasPlayer = true;
+                        MapManager.map[randomX, randomY].letter = "<color=green>@</color>";
+                        MapManager.map[randomX, randomY].timeColor = new Color(0.5f, 1, 0);
+                        MapManager.playerPos = new Vector2Int(randomX, randomY);
+
+                        loopBreaker = true;
+
+                        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    }
+                }
+            }
+            ApplyChangesInInventory(readingBook);
+            readingBook = null;
+        }
+        else
+        {
+            UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
+            playerStats.rememberedSpells.Add(readingBook);
+            UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
+            ApplyChangesInInventory(readingBook);
+            readingBook = null;
+        }       
 
         waiting = false;
         StopCoroutine(waitingCoroutine);
@@ -936,6 +996,8 @@ public class GameManager : MonoBehaviour
         GetComponent<Tasks>().EventsOnStartOfTheGame();
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+
+        UpdateMessages("<color=yellow>Press</color> / <color=yellow>for controls.</color>");
     }
 
     public void StartPlayersTurn()
@@ -1128,12 +1190,12 @@ public class GameManager : MonoBehaviour
                 else if (item._BUC == Item.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
             }
 
-            if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + item.iso.bonusToHealth + "\n";
-            if (item.iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + item.iso.bonusToStrength + "\n";
-            if (item.iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + item.iso.bonusToIntelligence + "\n";
-            if (item.iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + item.iso.bonusToDexterity + "\n";
-            if (item.iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + item.iso.bonusToEndurance + "\n";
-            if (item.iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + item.iso.bonusToNoise + "\n";
+            if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + (item.iso.bonusToHealth + item.Anvil_bonusToHealth) + "\n";
+            if (item.iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + (item.iso.bonusToStrength + item.Anvil_bonusToStrength) + "\n";
+            if (item.iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + (item.iso.bonusToIntelligence + item.Anvil_bonusToIntelligence) + "\n";
+            if (item.iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + (item.iso.bonusToDexterity + item.Anvil_bonusToDexterity) + "\n";
+            if (item.iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + (item.iso.bonusToEndurance + item.Anvil_bonusToEndurance) + "\n";
+            if (item.iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + (item.iso.bonusToNoise + item.Anvil_bonusToNoise) + "\n";
 
             itemEffects.text += "Weight: " + $"<color=green>{item.iso.I_weight}</color>" + "\n";
         }

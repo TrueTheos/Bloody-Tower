@@ -88,9 +88,9 @@ public class DungeonGenerator : MonoBehaviour
         {            
             GenerateFixedLevel(floor10BossRooms[UnityEngine.Random.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
         }
-        else if(floorNumber == 1 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber == 5 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
-            GenerateFixedLevel(lvl7.fixedLevel, 1, true, false);  
+            GenerateFixedLevel(lvl7.fixedLevel, 5, true, false);  
         }
         else if (floorManager.floors.Count <= floorNumber)
         {
@@ -354,7 +354,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "="[0])
                 {
-                    if (UnityEngine.Random.Range(1, 100) < 80)
+                    if (UnityEngine.Random.Range(1, 100) < 7)
                     {
                         MapManager.map[x, y] = new Tile();
                         MapManager.map[x, y].type = "Blood Anvil";
@@ -1227,7 +1227,7 @@ public class DungeonGenerator : MonoBehaviour
             structs.Add(centralRoom);
 
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 10; i++)
             {
                 // pick a structure to attach to. 
                 Structure anchor = null; ;

@@ -11,17 +11,17 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     [Header("Variables")]
     public new string name;
-    [SerializeField] private int maxHp;
-    [SerializeField] private int currentHp;
-    [SerializeField] private int strength;
-    [SerializeField] private int intelligence;
-    [SerializeField] private int dexterity;
-    [SerializeField] private int endurance;
-    [SerializeField] private int lvl;
-    [SerializeField] private int experience;
-    [SerializeField] private int experienceNeededToLvlUp;
-    [SerializeField] private int coins;
-    [SerializeField] private int blood;
+    public int maxHp;
+    public int currentHp;
+    public int strength;
+    public int intelligence;
+    public int dexterity;
+    public int endurance;
+    public int lvl;
+    public int experience;
+    public int experienceNeededToLvlUp;
+    public int coins;
+    public int blood;
 
     private float strModifier = 1;
     private float dexModifier = 1;
@@ -74,7 +74,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         set
         {
             maxHp = value;
-            //maxHp = value;
             UpdateText(statType.hp);
         }
     }
@@ -87,7 +86,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         set
         {
             currentHp = value;
-
             UpdateText(statType.hp);
         }
     }
@@ -99,7 +97,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         }
         set
         {
-            if(value > 0) //we gained strength
+            if(value > __strength) //we gained strength
             {
                 strength = value;             
 
@@ -112,6 +110,12 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             else
             {
                 strength = value;
+
+                maxWeight -= 5;
+
+                UpdateCapacity();
+
+                __maxHp--;
             }
             UpdateText(statType.strength);
         }
@@ -136,15 +140,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         }
         set
         {
-            if(value > 0) //we gained dex
-            {
-                dexterity = value;
-                UpdateArmorClass();
-            }
-            else //we losed dex
-            {
-                dexterity = value;
-            }
+            dexterity = value;
+            UpdateArmorClass();
+
             UpdateText(statType.dexterity);
         }
     }
@@ -156,7 +154,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         }
         set
         {
-            if (value > 0) //we gained end
+            if (value > endurance) //we gained end
             {
                 endurance = value;
 
@@ -169,6 +167,12 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             else //we losed end
             {
                 endurance = value;
+
+                __maxHp -= 2;
+
+                maxWeight--;
+
+                UpdateCapacity();
             }
             UpdateText(statType.endurance);
         }
@@ -422,7 +426,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     [SerializeField] public List<Vector2Int> wand_path;
     [SerializeField] public WandSO usedWand;
 
-    //SCROLLS SPELLBOOKS
+    //SCROLLS & SPELLBOOKS
     [HideInInspector] public bool usingSpellScroll;
     [HideInInspector] public Vector2Int spell_pos;
     [HideInInspector] public ItemScriptableObject usedScrollOrBook;
@@ -730,6 +734,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         {
             if(PlayerMovement.playerMovement.canMove)
             {
+                GameManager.manager.player.StopAllCoroutines();
+
                 PlayerMovement.playerMovement.canMove = false;
 
                 gameManager.UpdateMessages("<b><color=red>???</color></b>: <i>Ahh, you're no jailer are you? No, no, you're from far away...</i>");
@@ -742,7 +748,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             }
 
             if(Input.GetKeyDown(KeyCode.Alpha1))
-            {
+            {               
                 gameManager.UpdateMessages("\n <b><color=red>Grim</color></b>: <i>Very well. I am Grim, I am grateful for your help. As I promised, in return for your help...</i>");
 
                 GameObject rewardObject = Instantiate(gameManager.itemSpawner.itemPrefab);
@@ -756,7 +762,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
                 dialogue = false;
                 PlayerMovement.playerMovement.canMove = true;
                 npcDialogue.enemySO.finishedDialogue = true;
-                npcDialogue = null;
+                npcDialogue = null;              
             }
             if(Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -1326,7 +1332,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     public void UnBlind()
     {
-        GameManager.manager.UpdateMessages("You are no longer <color=red>blind</color!");
+        GameManager.manager.UpdateMessages("You are no longer <color=red>blind</color>!");
         isBlind = false;
         viewRange = startingViewRange;
     }

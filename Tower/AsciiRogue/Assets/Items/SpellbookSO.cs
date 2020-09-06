@@ -56,7 +56,7 @@ public class SpellbookSO : ItemScriptableObject
 
         if (!itemObject.learned && itemObject.durationLeft > 0)
         {
-            GameManager.manager.UpdateMessages("You start reading the book...");
+            GameManager.manager.UpdateMessages("You start to page through the ornate tome...");
             itemObject.durationLeft--;
             GameManager.manager.waitingCoroutine = GameManager.manager.WaitTurn(learnDuration);
             GameManager.manager.StartCoroutine(GameManager.manager.waitingCoroutine);

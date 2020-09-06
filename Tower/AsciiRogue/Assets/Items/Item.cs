@@ -28,6 +28,13 @@ public class Item : MonoBehaviour
     public int learningTurns;
     public int durationLeft;
 
+    [HideInInspector] public int Anvil_bonusToHealth;
+    [HideInInspector] public int Anvil_bonusToStrength;
+    [HideInInspector] public int Anvil_bonusToIntelligence;
+    [HideInInspector] public int Anvil_bonusToDexterity;
+    [HideInInspector] public int Anvil_bonusToEndurance;
+    [HideInInspector] public int Anvil_bonusToNoise;
+
     [Range(0,9)]public int upgradeLevel;
 
     public enum hand
@@ -101,4 +108,31 @@ public class Item : MonoBehaviour
                 socket3.DequipGems(GameManager.manager.playerStats);
             }
     }
+
+    public void OnEquip(MonoBehaviour foo)
+    {
+        if (foo is PlayerStats player)
+        {
+            if (Anvil_bonusToHealth != 0) { }
+            if (Anvil_bonusToStrength != 0) player.__strength += Anvil_bonusToStrength;
+            if (Anvil_bonusToIntelligence != 0) player.__intelligence += Anvil_bonusToIntelligence;
+            if (Anvil_bonusToDexterity != 0) player.__dexterity += Anvil_bonusToDexterity;
+            if (Anvil_bonusToEndurance != 0) player.__endurance += Anvil_bonusToEndurance;
+            if (Anvil_bonusToNoise != 0) player.__noise += Anvil_bonusToNoise;
+        }
+    }
+
+    public void OnUnequip(MonoBehaviour foo)
+    {      
+        if (foo is PlayerStats player)
+        {
+            if (Anvil_bonusToHealth != 0) { }
+            if (Anvil_bonusToStrength != 0) player.__strength += -Anvil_bonusToStrength;
+            if (Anvil_bonusToIntelligence != 0) player.__intelligence += -Anvil_bonusToIntelligence;
+            if (Anvil_bonusToDexterity != 0) player.__dexterity += -Anvil_bonusToDexterity;
+            if (Anvil_bonusToEndurance != 0) player.__endurance += -Anvil_bonusToEndurance;
+            if (Anvil_bonusToNoise != 0) player.__noise += -Anvil_bonusToNoise;
+        }
+    }
+
 }

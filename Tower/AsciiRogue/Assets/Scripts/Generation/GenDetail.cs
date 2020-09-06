@@ -55,7 +55,15 @@ public class GenDetail
     public string Name = "Invalid";
 
 
-
+    public GenDetail Clone()
+    {
+        GenDetail detail = new GenDetail();
+        detail.Entity = Entity;
+        detail.Type = Type;
+        detail.Char = Char;
+        detail.Name = Name;
+        return detail;
+    }
 
 
 

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GenTile 
 {
-    public int PosX;
-    public int PosY;
 
     public List<GenDetail> Details;
 
@@ -26,10 +24,44 @@ public class GenTile
     {
         return new GenTile();
     }
-
-    public static GenTile GetAt(int x, int y)
+    
+    public static GenTile Copy(GenTile tile)
     {
-        return new GenTile() { PosX = x, PosY = y };
+        GenTile newTile = new GenTile();
+        foreach (var detail in tile.Details)
+        {
+            newTile.Details.Add(detail.Clone());
+        }
+        return newTile;
+    }
+
+    public bool AnyTypes(params GenDetail.DetailType[] types)
+    {
+        foreach (GenDetail detail in Details)
+        {
+            for (int i = 0; i < types.Length; i++)
+            {
+                if (types[i]==detail.Type)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public bool NonTypes(params GenDetail.DetailType[] types)
+    {
+        foreach (GenDetail detail in Details)
+        {
+            for (int i = 0; i < types.Length; i++)
+            {
+                if (types[i] == detail.Type)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

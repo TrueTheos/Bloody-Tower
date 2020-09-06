@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GenRoom
 {
@@ -35,7 +36,20 @@ public class GenRoom
     {
         if (Data.Exists(gx - PosX, gy - PosY))
         {
-            Data[gx - PosX, gy - PosY] = tile;
+            if (tile!=null)
+            {
+                Data[gx - PosX, gy - PosY] = tile;
+            }            
+        }
+    }
+    public void SetTilesAtG(int gx,int gy, GenTile[,] tiles)
+    {
+        for (int x = 0; x < tiles.GetLength(0); x++)
+        {
+            for (int y = 0; y < tiles.GetLength(1); y++)
+            {
+                SetTileAtG(gx + x, gy + y, tiles[x, y]);
+            }
         }
     }
 
@@ -48,12 +62,18 @@ public class GenRoom
     }
 
 
+    public void MoveBy(int x, int y)
+    {
+        PosX = PosX + x;
+        PosY = PosY + y;
+    }
 
-    public RectInt Outer => new RectInt(PosX, PosY, Width, Height);
-    public RectInt Inner => new RectInt(PosX + 1, PosX + 1,Width - 2, Height - 2);
+    public GenRect Outer => new GenRect(PosX, PosX + Width - 1,PosY,PosY + Height - 1);
+    public GenRect Inner => Outer.Transform(-1,-1,-1,-1);
 
     private GenRoom()
     {
+        
     }
     
     public static GenRoom Sized(int width, int height, bool defaultFill = false)
@@ -81,7 +101,7 @@ public class GenRoom
         {
             for (int y = 0; y < Height; y++)
             {
-                GenTile t = GenTile.GetAt(x, y);
+                GenTile t = GenTile.GetEmpty();
                 t.Details.Add(new GenDetail() { Char = c, Type = GenDetail.DetailType.Floor, });
                 Data[x, y] = t;
             }
@@ -204,6 +224,14 @@ public class GenRoom
         return Edge;
     }
 
+    public bool IsNeighbour(GenRoom room)
+    {
+        return Data.ToList().Union(room.Data.ToList()).ToList().Count > 0;
+    }
 
+    public List<GenTile> GetNeighbouringTiles(GenRoom room)
+    {
+        return Data.ToList().Union(room.Data.ToList()).ToList();
+    }
 
 }

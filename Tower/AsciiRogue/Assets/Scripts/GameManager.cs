@@ -997,6 +997,8 @@ public class GameManager : MonoBehaviour
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
+        UpdateMessages("<i><b><color=purpe>You awaken in unfamiliar territory. Your head hurts and it stinks. You have no idea what has happened to you or what is going on.</color></b></i>");
+
         UpdateMessages("<color=yellow>Press</color> / <color=yellow>for controls.</color>");
     }
 

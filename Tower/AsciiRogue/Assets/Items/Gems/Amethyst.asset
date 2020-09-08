@@ -24,9 +24,7 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 5
   I_whereToPutIt: 0
-  _BUC: 0
   normalIdentifState: 1
-  identified: 1
   pickupableByMonsters: 0
   effect: +1 Int
   worth: 0

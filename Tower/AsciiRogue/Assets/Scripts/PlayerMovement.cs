@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
                 StopAllCoroutines();
             }
           
-            /*if (Input.GetButtonUp("Use"))
+            if (Input.GetButtonUp("Use"))
             {
                 if(MapManager.map[position.x, position.y].structure != null)
                 {
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
                     //manager.UpdateVisibility();
                     manager.StartPlayersTurn();
                 }
-            }*/
+            }
         }
     }
 

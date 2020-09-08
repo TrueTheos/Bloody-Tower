@@ -86,6 +86,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         set
         {
             currentHp = value;
+            if (currentHp > __maxHp) currentHp = __maxHp;
             UpdateText(statType.hp);
         }
     }
@@ -936,6 +937,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
                     "<color=#0000ff>!</color>"
                 );
 
+            __currentHp += Mathf.RoundToInt(__maxHp * 0.1f);
+
             _strengthButton.SetActive(true);
             _intelligenceButton.SetActive(true);
             _dexterityButton.SetActive(true);
@@ -1355,6 +1358,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
     {
         GameObject g = Instantiate(gameManager.itemSpawner.itemPrefab);
         g.GetComponent<Item>().iso = iso;
+        g.GetComponent<Item>().identified = iso.normalIdentifState;
 
         itemsInEqGO.Add(g.GetComponent<Item>());
     }

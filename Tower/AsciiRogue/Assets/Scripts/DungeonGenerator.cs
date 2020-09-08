@@ -533,6 +533,7 @@ public class DungeonGenerator : MonoBehaviour
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
+                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].specialNameOfTheCell = "Blood";
                             }
                         }
                         else
@@ -540,6 +541,7 @@ public class DungeonGenerator : MonoBehaviour
                             MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
                             MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
                             MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
+                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].specialNameOfTheCell = "Blood";
                             MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
                             MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
                         }

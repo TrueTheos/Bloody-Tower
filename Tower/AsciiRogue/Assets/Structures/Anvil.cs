@@ -229,9 +229,7 @@ public class Anvil : Structure
     }
 
     private void Upgrade()
-    {
-        GameManager.manager.UpdateItemStats(GameManager.manager.itemToAnvil);
-
+    {      
         int i = Random.Range(1, 11);
 
         if(i <= 5)
@@ -249,6 +247,8 @@ public class Anvil : Structure
             IncreaseRandomStat();
             IncreaseRandomStat();
         }
+
+        GameManager.manager.UpdateItemStats(GameManager.manager.itemToAnvil);
     }
 
     private void IncreaseRandomStat()

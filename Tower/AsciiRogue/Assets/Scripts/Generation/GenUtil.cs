@@ -14,6 +14,7 @@ public static class GenUtil
         Left,
         Top
     }
+
     public enum Direction8
     {
         Right,
@@ -32,6 +33,109 @@ public static class GenUtil
         Horizontal = 1<<0,
         Vertical = 1<<1
     }
+
+
+
+    public static bool IsInDirection4(GenRect rect, int gx, int gy, params Direction4[] dir)
+    {
+        Direction8[] other = new Direction8[dir.Length];
+        for (int i = 0; i < dir.Length; i++)
+        {
+            Direction8 target = Direction8.Bottom;
+            switch (dir[i])
+            {
+                case Direction4.Right:
+                    target = Direction8.Right;
+                    break;
+                case Direction4.Bottom:
+                    target = Direction8.Bottom;
+                    break;
+                case Direction4.Left:
+                    target = Direction8.Left;
+                    break;
+                case Direction4.Top:
+                    target = Direction8.Top;
+                    break;
+                default:
+                    break;
+            }
+            other[i] = target;
+        }
+        return IsInOctant(rect, gx, gy, other);
+    }
+    public static bool IsInOctant(GenRect rect, int gx, int gy, params Direction8[] dir)
+    {
+        //NOTE: does not check if in rect
+        float tx = (rect.MinX + rect.MaxX) / 2f;
+        float ty = (rect.MinY + rect.MaxY) / 2f;
+
+
+        float cx = gx - tx;
+        float cy = gx - ty;
+
+        // regular directions
+        if (dir.Contains(Direction8.Top))
+        {
+            if (cy <= 0 && Mathf.Abs(cx) <= Mathf.Abs(cy))
+            {
+                return true;
+            }
+        }
+        if (dir.Contains(Direction8.Right))
+        {
+            if (cx >= 0 && Mathf.Abs(cy) <= Mathf.Abs(cx))
+            {
+                return true;
+            }
+        }
+        if (dir.Contains(Direction8.Bottom))
+        {
+            if (cy >= 0 && Mathf.Abs(cx)<= Mathf.Abs(cy))
+            {
+                return true;
+            }
+        }
+        if (dir.Contains(Direction8.Left))
+        {
+            if (cx <= 0 && Mathf.Abs(cy) <= Mathf.Abs(cx))
+            {
+                return true;
+            }
+        }
+
+        // quadrants
+        if (dir.Contains(Direction8.TopLeft))
+        {
+            if (cy <= 0 && cx <= 0)
+            {
+                return true;
+            }
+        }
+        if (dir.Contains(Direction8.TopRight))
+        {
+            if (cy <= 0 && cx >= 0)
+            {
+                return true;
+            }
+        }
+        if (dir.Contains(Direction8.BottomRight))
+        {
+            if (cy >=0 && cx >= 0)
+            {
+                return true;
+            }
+        }
+        if (dir.Contains(Direction8.BottomLeft))
+        {
+            if (cy >=0 && cx <= 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public static Axis Turn(this Axis ax, int quaterClockwise)
     {
@@ -55,6 +159,23 @@ public static class GenUtil
 
     }
     
+    public static Direction4 Rotate(this Direction4 dir, int quaterClockwise)
+    {
+        while (quaterClockwise<0)
+        {
+            quaterClockwise += 4;
+        }
+        return (Direction4)(((int)dir + quaterClockwise) % 4);
+    }
+    public static Direction8 Rotate(this Direction8 dir, int octaClockwise)
+    {
+        while (octaClockwise < 0)
+        {
+            octaClockwise += 8;
+        }
+        return (Direction8)(((int)dir + octaClockwise) % 8);
+    }
+
 
     public static GenTile[,] Place(this GenTile[,] target, int posX, int posY, GenTile[,] data)
     {
@@ -140,7 +261,57 @@ public static class GenUtil
         }
         return result;
     }
+    public static T GetRandom<T>(this T[] target)
+    {
+        return target[Random.Range(0, target.Length)];
+    }
+    public static T GetRandom<T>(this List<T> target)
+    {
+        return target[Random.Range(0, target.Count)];
+    }
+    public static List<T> GetRandom<T>(this T[] target, int count)
+    {
+        List<T> result = new List<T>();
+        List<T> w = target.ToList();
+        for (int i = 0; i < count; i++)
+        {
+            T one = w[Random.Range(0, w.Count)];
+            w.Remove(one);
+            result.Add(one);
+            if (w.Count==0)
+            {
+                break;
+            }
+        }
+        return result;
+    }
+    public static List<T> GetRandom<T>(this List<T> target, int count)
+    {
+        return GetRandom(target.ToArray(),count);
+    }
+    public static GenTile[,] Fill(int width, int height, GenTile tile)
+    {
+        GenTile[,] result = new GenTile[width, height];
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                result[x, y] = GenTile.Copy(tile);
+            }
+        }
+        return result;
+    }
 
+    public static Vector2Int GetCenter<T>(this T[,] target)
+    {
+        float xC = (0 + target.GetLength(0)-1) / 2f;
+        float yC = (0 + target.GetLength(1)-1) / 2f;
+
+        float xA = xC + (Random.Range(0, 2) == 0 ? 0.2f :-0.2f);
+        float yA = yC + (Random.Range(0, 2) == 0 ? 0.2f : -0.2f);
+
+        return new Vector2Int(Mathf.RoundToInt(xA), Mathf.RoundToInt(yA));
+    }
 
     public static int PrintCount = 0;
     public static string Print(this GenData target,bool simple = true)
@@ -151,27 +322,24 @@ public static class GenUtil
             PrintCount++;
             GenTile[,] tile = target.TileMap;
             StringBuilder sb = new StringBuilder();
-            using (var sr = new StreamWriter("test"+PrintCount+".txt"))
+
+            for (int y = 0; y < tile.GetLength(1); y++)
             {
-                for (int y = 0; y < tile.GetLength(1); y++)
+                for (int x = 0; x < tile.GetLength(0); x++)
                 {
-                    for (int x = 0; x < tile.GetLength(0); x++)
+                    if (tile[x, y] == null)
                     {
-                        if (tile[x, y] == null)
-                        {
-                            sr.Write(' ');
-                            sb.Append(' ');
-                            continue;
-                        }
-                        int max = tile[x, y].Details.Max(d => d.Priority);
-                        GenDetail toDraw = tile[x, y].Details.Where(d => d.Priority == max).First();
-                        sr.Write(toDraw.Char);
-                        sb.Append(toDraw.Char);
+                        sb.Append(' ');
+                        continue;
                     }
-                    sr.Write('\n');
-                    sb.Append('\n');
+                    int max = tile[x, y].Details.Max(d => d.Priority);
+                    GenDetail toDraw = tile[x, y].Details.Where(d => d.Priority == max).First();
+
+                    sb.Append(toDraw.Char);
                 }
+                sb.Append('\n');
             }
+            
             return sb.ToString();
         }
         else
@@ -189,35 +357,18 @@ public static class GenUtil
         }
     }
 
-    /// <summary>
-    /// checks if Position is in the corner (floor, not wall)
-    /// </summary>
-    public static bool IsCornerG(int gx, int gy, params GenRoom[] rooms) 
-    {
-        // if it is a wall we dont need to bother as it is never a corner
-        
-
-
-        // how many sides are obstructed with walls
-        int sidesWall = 0;
-
-        foreach (var item in rooms)
-        {
-
-        }
-
-
-        return false;
-
-    }
-
-    public static bool CanBeDoor(int gx, int gy, params GenTile[][,] data)
-    {
-        return false;
-    }
-
+    
     public static GenTile GetTileAtG(int gx, int gy, params GenRoom[] rooms)
     {
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            var room = rooms[i];
+            GenTile t = room.GetAtWorldspaceG(gx, gy);
+            if (t!=null)
+            {
+                return t;
+            }
+        }
         return null;
     }
 
@@ -238,7 +389,7 @@ public static class GenUtil
     /// <returns>The complete feature</returns>
     public static GenTile[,] GetSymetry(GenTile[,] feature, ref int gx, ref int gy, GenRoom room, Axis axis)
     {
-        GenRect size = new GenRect(gx, gx, gy, gy);
+        GenRect size = new GenRect(gx, gx+feature.GetLength(0)-1, gy, gy+feature.GetLength(1)-1);
         GenRect checkRect = new GenRect(size);
 
 
@@ -290,13 +441,10 @@ public static class GenUtil
         return feature;
     }
 
-    public static GenRect GrowRect(int gx, int gy, GenRoom room, int width, int height, bool withWall = false)
-    {
+
+  
 
 
-
-        throw new System.NotImplementedException();
-    }
 
     public static bool TouchesWall(GenRect rect, GenRoom room)
     {

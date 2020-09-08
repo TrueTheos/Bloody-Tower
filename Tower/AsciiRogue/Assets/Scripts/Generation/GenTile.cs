@@ -63,5 +63,20 @@ public class GenTile
         }
         return true;
     }
-
+    public int RemoveTypes(params GenDetail.DetailType[] types)
+    {
+        int removeCount = 0;
+        foreach (var detail in Details.ToArray())
+        {
+            for(int i = 0; i < types.Length; i++)
+            {
+                if (types[i] == detail.Type)
+                {
+                    Details.Remove(detail);
+                    removeCount++;
+                }
+            }
+        }
+        return removeCount;
+    }
 }

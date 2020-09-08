@@ -71,4 +71,27 @@ public struct GenRect
         return empty;
     }
     
+    public bool IsInside(GenRect other)
+    {
+        return other.MinX < MinX && other.MinY < MinY && other.MaxX >MaxX && other.MaxY > MaxY;
+    }
+
+    public bool IsEnclosing(GenRect other)
+    {
+        return MinX < other.MinX && MinY < other.MinY && MaxX > other.MaxX && MaxY > other.MaxY;
+    }
+
+    public Vector2Int GetCenter()
+    {
+        float xC = (MinX + MaxX) / 2f;
+        float yC = (MinY + MaxY) / 2f;
+
+        int xA = Random.Range(0, 2) == 0 ? Mathf.FloorToInt(xC) : Mathf.CeilToInt(xC);
+        int yA = Random.Range(0, 2) == 0 ? Mathf.FloorToInt(yC) : Mathf.CeilToInt(yC);
+
+        return new Vector2Int(xA, yA);
+    }
+
+
+
 }

@@ -7,6 +7,7 @@ public class GenDetail
 
     public enum EntityType
     {
+        None,
         Enemy,
         Item,
         Chest,
@@ -33,6 +34,8 @@ public class GenDetail
                     return 0;
                 case DetailType.Wall:
                     return 1;
+                case DetailType.Door:
+                    return 2;
                 case DetailType.Floor:
                 default:
                     return -1;
@@ -45,6 +48,7 @@ public class GenDetail
         Decoration, // unpassable tiles
         Background, // or Floor, not sure what is better -> walkable
         Wall,
+        Door,
         Floor // default 
     }
 

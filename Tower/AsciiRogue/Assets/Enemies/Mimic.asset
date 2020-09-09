@@ -24,6 +24,7 @@ MonoBehaviour:
   _Difficulty: 1
   _Behaviour: 0
   attacks: 00000000
+  attackText: []
   E_possileDrops: []
   leavesCorpse: 0
   finishedDialogue: 0

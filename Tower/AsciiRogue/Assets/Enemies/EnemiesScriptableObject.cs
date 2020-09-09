@@ -53,6 +53,8 @@ public class EnemiesScriptableObject : ScriptableObject
     private E_Attacks _attacks;
     public List<E_Attacks> attacks;
 
+    public List<string> attackText;
+
     public List<ItemScriptableObject> E_possileDrops;
 
     [Header("Settings")]

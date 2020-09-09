@@ -24,6 +24,10 @@ MonoBehaviour:
   _Difficulty: 2
   _Behaviour: 3
   attacks: 00000000
+  attackText:
+  - claws at you with its bony fingertips.
+  - ' punches you with an uncomfortable fist.'
+  - backhands you, unhinging its wrist. It quickly snaps the wrist back into place.
   E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0

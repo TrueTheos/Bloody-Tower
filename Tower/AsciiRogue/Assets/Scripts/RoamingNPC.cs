@@ -342,8 +342,14 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
                 totalDamage += Random.Range(1, 4) + Mathf.FloorToInt(str / 5);
             }
 
-
-            manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> attacked you for <color=red>{totalDamage} ({playerStats.__currentHp - totalDamage}/{playerStats.__maxHp})</color>!");
+            if(enemySO.attackText.Count > 0)
+            {
+                manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> {enemySO.attackText[Random.Range(0, enemySO.attackText.Count)]} <color=red>{totalDamage} ({playerStats.__currentHp - totalDamage}/{playerStats.__maxHp}) damage</color>!");
+            }
+            else
+            {
+                manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> attack you. <color=red>{totalDamage} ({playerStats.__currentHp - totalDamage}/{playerStats.__maxHp}) damage</color>!");
+            }
             playerStats.TakeDamage(totalDamage);
         }
         else

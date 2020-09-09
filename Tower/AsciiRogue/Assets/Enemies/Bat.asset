@@ -24,6 +24,10 @@ MonoBehaviour:
   _Difficulty: 1
   _Behaviour: 0
   attacks: 00000000
+  attackText:
+  - screeches loudly in your ear.
+  - dips down and claws at your face.
+  - flies into you at high speeds.
   E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0

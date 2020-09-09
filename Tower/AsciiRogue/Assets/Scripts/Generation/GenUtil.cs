@@ -63,15 +63,25 @@ public static class GenUtil
         }
         return IsInOctant(rect, gx, gy, other);
     }
+
     public static bool IsInOctant(GenRect rect, int gx, int gy, params Direction8[] dir)
     {
+
+
         //NOTE: does not check if in rect
         float tx = (rect.MinX + rect.MaxX) / 2f;
         float ty = (rect.MinY + rect.MaxY) / 2f;
 
+        // to a range of -1 to 1
 
+        // relativ position
         float cx = gx - tx;
-        float cy = gx - ty;
+        float cy = gy - ty;
+
+        cx = cx / (rect.WidthT / 2);
+        cy = cy / (rect.WidthT / 2);
+
+
 
         // regular directions
         if (dir.Contains(Direction8.Top))
@@ -135,7 +145,6 @@ public static class GenUtil
 
         return false;
     }
-
 
     public static Axis Turn(this Axis ax, int quaterClockwise)
     {
@@ -275,13 +284,13 @@ public static class GenUtil
         List<T> w = target.ToList();
         for (int i = 0; i < count; i++)
         {
-            T one = w[Random.Range(0, w.Count)];
-            w.Remove(one);
-            result.Add(one);
-            if (w.Count==0)
+            if (w.Count == 0)
             {
                 break;
             }
+            T one = w[Random.Range(0, w.Count)];
+            w.Remove(one);
+            result.Add(one);            
         }
         return result;
     }
@@ -301,7 +310,17 @@ public static class GenUtil
         }
         return result;
     }
-
+    public static T[,] Fill<T>(this T[,] target,T with)
+    {
+        for (int x = 0; x < target.GetLength(0); x++)
+        {
+            for (int y = 0; y < target.GetLength(1); y++)
+            {
+                target[x, y] = with;
+            }
+        }
+        return target;
+    }
     public static Vector2Int GetCenter<T>(this T[,] target)
     {
         float xC = (0 + target.GetLength(0)-1) / 2f;
@@ -311,6 +330,24 @@ public static class GenUtil
         float yA = yC + (Random.Range(0, 2) == 0 ? 0.2f : -0.2f);
 
         return new Vector2Int(Mathf.RoundToInt(xA), Mathf.RoundToInt(yA));
+    }
+    public static T[,] Place<T>(this T[,] target, int x, int y, T[,] other)
+    {
+        for (int ox = 0; ox < other.GetLength(0); ox++)
+        {
+            for (int oy = 0; oy < other.GetLength(1); oy++)
+            {
+                if (target.IsInbounds(x+ox,y+oy))
+                {
+                    target[x + ox, y + oy] = other[ox, oy];
+                }
+                else
+                {
+                    Debug.Log("out of bounds "+ ox + " " + oy);
+                }
+            }
+        }
+        return target;
     }
 
     public static int PrintCount = 0;

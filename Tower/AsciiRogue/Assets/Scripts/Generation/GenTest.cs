@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class GenTest : MonoBehaviour
 {
     public TMPro.TMP_Text TestDrawer;
+    public TMPro.TMP_Text Overlay;
 
     public enum TestType
     {
         Grow,
         GenericTest,
         CornerCheck,
-        Temple
+        Temple,
+        IsItQuick
     }
     public TestType Type;
 
@@ -35,7 +37,18 @@ public class GenTest : MonoBehaviour
                 break;
             case TestType.Temple:
                 GeneratorTemple.Logging = TestDrawer;
+                GeneratorTemple.Overlay = Overlay;
                 StartCoroutine(GeneratorTemple.GetSimpleTemple());
+                break;
+            case TestType.IsItQuick:
+                System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+
+                watch.Start();
+                CleanerTemple.GetSimpleTemple();
+                TestDrawer.text = CleanerTemple.LastOutput;
+
+                watch.Stop();
+                Debug.Log(watch.ElapsedMilliseconds + "ms for generation");
                 break;
             default:
                 break;

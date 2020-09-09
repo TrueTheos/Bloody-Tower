@@ -34,7 +34,32 @@ public class GenData
     }
        
 
-
+    public List<GenTile> GetAllTiles(int gx, int gy)
+    {
+        List<GenTile> tiles = new List<GenTile>();
+        foreach (var room in Rooms)
+        {
+            GenTile tile = room.GetAtWorldspaceG(gx, gy);
+            if (tile!=null)
+            {
+                tiles.Add(tile);
+            }
+        }
+        return tiles;
+    }
+    public List<GenRoom> GetOccupyingRooms(int gx, int gy)
+    {
+        List<GenRoom> tiles = new List<GenRoom>();
+        foreach (var room in Rooms)
+        {
+            GenTile tile = room.GetAtWorldspaceG(gx, gy);
+            if (tile != null)
+            {
+                tiles.Add(room);
+            }
+        }
+        return tiles;
+    }
     public GenTile GetTile(int gx, int gy)
     {
         foreach (var item in Rooms)
@@ -145,19 +170,27 @@ public class GenData
     public List<GenPositionTile> GetConnectingTiles(GenRoom a, GenRoom b)
     {
         List<GenPositionTile> at = a.GetEdge().ToList();
+        List<GenPositionTile> aa = a.GetAllTiles();
         List<GenPositionTile> bt = b.GetEdge().ToList();
+        List<GenPositionTile> ba = b.GetAllTiles();
 
         List<GenPositionTile> result = new List<GenPositionTile>();
 
         foreach (var item in at)
         {
-            if (bt.Any(x=>x.Tile==item.Tile))
+            if (ba.Any(x=>x.Tile==item.Tile))
             {
                 result.Add(item);
             }
         }
-
-
+        foreach (var item in bt)
+        {
+            if (aa.Any(x=>x.Tile == item.Tile))
+            {
+                result.Add(item);
+            }
+        }
+        result = result.Distinct().ToList();
         return result;
     }
 
@@ -283,7 +316,7 @@ public class GenData
     {
         if (room == null)
         {
-            GenTile tile = GetTile(gx, gy);
+            GenTile tile = GetTile(gx, gy);            
             if (tile!=null)
             {
                 return tile.NonTypes(GenDetail.DetailType.Wall);
@@ -293,6 +326,10 @@ public class GenData
         else
         {
             GenTile tile = room.GetAtWorldspaceG(gx, gy);
+            if (!(room.Inner.MinX <= gx && room.Inner.MaxX >= gx && room.Inner.MinY <= gy && room.Inner.MaxY >= gy))
+            {
+                return false;
+            }
             if (tile != null)
             {
                 return tile.NonTypes(GenDetail.DetailType.Wall);
@@ -305,11 +342,15 @@ public class GenData
     /// <summary>
     /// checks if Position is in the corner (floor, not wall)
     /// </summary>
-    public bool IsCornerGR(int gx, int gy,GenRoom room, params GenDetail.DetailType[] checkFor)
+    public bool IsCornerGR(int gx, int gy,GenRoom room, GenDetail.DetailType[] checkFor = null, GenDetail.DetailType[] noWall = null)
     {
-        if (checkFor.Length == 0)
+        if (checkFor== null)
         {
             checkFor = new GenDetail.DetailType[] { GenDetail.DetailType.Wall };
+        }
+        if (noWall == null)
+        {
+            noWall = new GenDetail.DetailType[] { GenDetail.DetailType.Door };
         }
 
         bool vertical = false;
@@ -321,22 +362,22 @@ public class GenData
             if (tile!=null)
             {
                 GenTile check = room.GetAtWorldspaceG(gx+1, gy);
-                if (check!=null && check.AnyTypes(checkFor))
+                if (check!=null && check.AnyTypes(checkFor)&&check.NonTypes(noWall))
                 {
                     horizontal = true;
                 }
                 check = room.GetAtWorldspaceG(gx-1, gy);
-                if (check != null && check.AnyTypes(checkFor))
+                if (check != null && check.AnyTypes(checkFor) && check.NonTypes(noWall))
                 {
                     horizontal = true;
                 }
                 check = room.GetAtWorldspaceG(gx, gy+1);
-                if (check != null && check.AnyTypes(checkFor))
+                if (check != null && check.AnyTypes(checkFor) && check.NonTypes(noWall))
                 {
                     vertical = true;
                 }
                 check = room.GetAtWorldspaceG(gx, gy-1);
-                if (check != null && check.AnyTypes(checkFor))
+                if (check != null && check.AnyTypes(checkFor) && check.NonTypes(noWall))
                 {
                     vertical = true;
                 }
@@ -758,6 +799,9 @@ public class GenData
         bool vertical = false;
 
         int walls = 0;
+
+
+
 
         GenTile r = GetTile(gx + 1, gy);
         if (r == null || r.AnyTypes(checkFor)) walls++;

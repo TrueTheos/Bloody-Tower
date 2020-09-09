@@ -52,6 +52,22 @@ public class GenRoom
             }
         }
     }
+    public List<GenPositionTile> GetAllTiles()
+    {
+        List<GenPositionTile> tiles = new List<GenPositionTile>();
+
+        for (int x = 0; x < Data.GetLength(0); x++)
+        {
+            for (int y = 0; y < Data.GetLength(1); y++)
+            {
+                if (TileExistsG(PosX+x,PosY+y))
+                {
+                    tiles.Add(new GenPositionTile(Data[x, y], new Vector2Int(PosX + x, PosY + y)));
+                }
+            }
+        }
+        return tiles;
+    }
     public void PlaceDetailsAt(int gx, int gy, GenTile[,] tiles)
     {
         for (int x = 0; x < tiles.GetLength(0); x++)
@@ -182,22 +198,22 @@ public class GenRoom
         {            
             if (Data.Exists(x, y+1))
             {
-                MoveUp(new GenPositionTile(Data[x,y+1],new Vector2Int(x,y+1)));
+                MoveUp(new GenPositionTile(Data[x,y+1],new Vector2Int( PosX + x,PosY + y+1)));
             }
             if (Data.Exists(x, y-1))
             {
-                MoveUp(new GenPositionTile(Data[x, y - 1], new Vector2Int(x, y-1)));
+                MoveUp(new GenPositionTile(Data[x, y - 1], new Vector2Int(PosX+ x,PosY+ y-1)));
             }
         }
         void MoveLeftRight(int x, int y)
         {
             if (Data.Exists(x + 1, y))
             {
-                MoveUp(new GenPositionTile(Data[x + 1, y], new Vector2Int(x + 1, y)));
+                MoveUp(new GenPositionTile(Data[x + 1, y], new Vector2Int(PosX + x + 1,PosY+ y)));
             }
             if (Data.Exists(x - 1, y))
             {
-                MoveUp(new GenPositionTile(Data[x - 1, y], new Vector2Int(x - 1, y)));
+                MoveUp(new GenPositionTile(Data[x - 1, y], new Vector2Int(PosX + x - 1,PosY+ y)));
             }
         }
 
@@ -211,7 +227,7 @@ public class GenRoom
                 {
                     // found our Tile
                     GenTile t = Data[x, y];
-                    MoveUp(new GenPositionTile(t,new Vector2Int(x,y)));
+                    MoveUp(new GenPositionTile(t,new Vector2Int(PosX+ x,PosY+ y)));
                     MoveLeftRight(x, y);
                     break;
                 }
@@ -228,7 +244,7 @@ public class GenRoom
                 {
                     // found our Tile
                     GenTile t = Data[x, y];
-                    MoveUp(new GenPositionTile(t, new Vector2Int(x, y)));
+                    MoveUp(new GenPositionTile(t, new Vector2Int(PosX + x, PosY + y)));
                     MoveLeftRight(x, y);
                     break;
                 }
@@ -245,7 +261,7 @@ public class GenRoom
                 {
                     // found our Tile
                     GenTile t = Data[x, y];
-                    MoveUp(new GenPositionTile(t, new Vector2Int(x, y)));
+                    MoveUp(new GenPositionTile(t, new Vector2Int(PosX + x, PosY + y)));
                     MoveUpDown(x, y);
                     break;
                 }
@@ -262,7 +278,7 @@ public class GenRoom
                 {
                     // found our Tile
                     GenTile t = Data[x, y];
-                    MoveUp(new GenPositionTile(t, new Vector2Int(x, y)));
+                    MoveUp(new GenPositionTile(t, new Vector2Int(PosX + x, PosY + y)));
                     MoveUpDown(x, y);
                     break;
                 }

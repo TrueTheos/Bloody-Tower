@@ -92,6 +92,10 @@ public class DungeonGenerator : MonoBehaviour
         {
             GenerateFixedLevel(lvl7.fixedLevel, 5, true, false);  
         }
+        else if(floorNumber>10 && floorNumber<20 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        {
+            GenerateFixedLevel(CleanerTemple.GetSimpleTemple(), floorNumber, false, false);
+        }
         else if (floorManager.floors.Count <= floorNumber)
         {
             GenerateFixedLevel(MapGenerator.createSewerMap().print(), floorNumber, false);

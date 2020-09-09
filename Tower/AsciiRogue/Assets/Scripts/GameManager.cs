@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour
     private string itemOption5;
 
     [HideInInspector] public Item itemToAnvil;
+    [HideInInspector] public bool anvilMenuOpened;
+    [HideInInspector] public Anvil anvil;
     //[HideInInspector] public ItemScriptableObject isoAnvil;
 
     void Awake()
@@ -165,17 +167,7 @@ public class GameManager : MonoBehaviour
             {
                 if (!inventoryOpen)
                 {
-                    UpdateInventoryText();
-                    selectedItem = 0;
-                    selector.GetComponent<Text>().enabled = true;
-                    player.canMove = false;
-                    inventoryOpen = true;
-                    invBorder.SetActive(true);
-                    mapText.SetActive(false);
-                    mainUItext.enabled = false;
-                    selector.GetComponent<Text>().enabled = true;
-                    try {UpdateItemStats(playerStats.itemsInEqGO[0]);}
-                    catch{}
+                    OpenEQ();
                 }
                 else
                 {
@@ -191,64 +183,88 @@ public class GameManager : MonoBehaviour
             {
                 if (Input.GetButtonDown("Use") && !choosingWeapon)
                 {
-                    itemOption1 = "";
-                    itemOption2 = "";
-                    itemOption3 = "";
-                    itemOption4 = "";
-                    itemOption5 = "";
+                    decisions.text = "";
 
-                    decisionsCount = 1;
                     try
                     {
                         _selectedItem = playerStats.itemsInEqGO[selectedItem];
                     }
                     catch { return; }
                     _selectedItem = playerStats.itemsInEqGO[selectedItem];
-                    equipState = playerStats.itemsInEqGO[selectedItem].isEquipped;
 
-                    GOdec.SetActive(true);
-
-                    decisions.text = "1. Drop";
-                    AddAnotherOption("Drop");
-
-                    if (_selectedItem.iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none)
+                    if (anvilMenuOpened)
                     {
-                        if (equipState == true)
+                        if(_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Armor || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Weapon)
                         {
-                            decisions.text += "\n" + "2. Unequip";
-                            decisionsCount++;
-                            AddAnotherOption("UEquip");
-                        }
-                        else
+                            itemOption1 = "";
+                            itemOption2 = "";
+                            itemOption3 = "";
+                            itemOption4 = "";
+                            itemOption5 = "";
+
+                            decisionsCount = 1;
+                            equipState = playerStats.itemsInEqGO[selectedItem].isEquipped;
+
+                            GOdec.SetActive(true);
+
+                            decisions.text += "1. Anvil";
+                            AddAnotherOption("Upgrade");
+
+                            decisionMade = false;
+                            deciding = true;
+
+                            DecisionTurn();
+                        }                       
+                    }
+                    else
+                    {
+                        itemOption1 = "";
+                        itemOption2 = "";
+                        itemOption3 = "";
+                        itemOption4 = "";
+                        itemOption5 = "";
+
+                        decisionsCount = 1;
+                        equipState = playerStats.itemsInEqGO[selectedItem].isEquipped;
+
+                        GOdec.SetActive(true);
+
+                        decisions.text = "1. Drop";
+                        AddAnotherOption("Drop");
+
+                        if (_selectedItem.iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none)
                         {
-                            decisions.text += "\n" + "2. Equip";
-                            decisionsCount++;
-                            AddAnotherOption("UEquip");
+                            if (equipState == true)
+                            {
+                                decisions.text += "\n" + "2. Unequip";
+                                decisionsCount++;
+                                AddAnotherOption("UEquip");
+                            }
+                            else
+                            {
+                                decisions.text += "\n" + "2. Equip";
+                                decisionsCount++;
+                                AddAnotherOption("UEquip");
+                            }
                         }
-                    }
-                    if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Wand || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem)
-                    {
-                        decisionsCount++;
-                        decisions.text += "\n" +  decisionsCount + ". " + "Use";
-                        AddAnotherOption("Use");
-                    }
-                    if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Potion)
-                    {
-                        decisionsCount++;
-                        decisions.text += "\n" +  decisionsCount + ". " + "Drink";
-                        AddAnotherOption("Use");
-                    }
-                    if(_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Armor || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Weapon)
-                    {
-                        decisionsCount++;
-                        decisions.text += "\n" + decisionsCount + ". " + "Anvil";
-                        AddAnotherOption("Upgrade");
-                    }
+                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Wand || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem)
+                        {
+                            decisionsCount++;
+                            decisions.text += "\n" + decisionsCount + ". " + "Use";
+                            AddAnotherOption("Use");
+                        }
+                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Potion)
+                        {
+                            decisionsCount++;
+                            decisions.text += "\n" + decisionsCount + ". " + "Drink";
+                            AddAnotherOption("Use");
+                        }
 
-                    decisionMade = false;
-                    deciding = true;
+                        decisionMade = false;
+                        deciding = true;
 
-                    DecisionTurn();                    
+                        DecisionTurn();
+                    }                                     
                 }
                 else if(Input.GetButtonDown("Use") && choosingWeapon && playerStats.itemsInEqGO[selectedItem].iso is WeaponsSO) //ADD GEM TO THE SOCKET
                 {
@@ -452,7 +468,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (_selectedItem.isEquipped) _selectedItem.iso.onUnequip(playerStats);
+        if (_selectedItem.isEquipped)
+        {
+            _selectedItem.iso.onUnequip(playerStats);
+            _selectedItem.OnUnequip(playerStats);
+        }
 
         if (MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].structure == null)
         {
@@ -574,7 +594,7 @@ public class GameManager : MonoBehaviour
         FinishPlayersTurn();
     }
 
-    private void UEquip()
+    private void UEquip() //Unequip and Equip
     {
         if (_selectedItem.iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none) //unequip or equip
         {
@@ -655,6 +675,7 @@ public class GameManager : MonoBehaviour
                     }
                     UpdateInventoryText();
                     _selectedItem.iso.onUnequip(playerStats);
+                    _selectedItem.OnUnequip(playerStats);
                 }
             }
             else //equip
@@ -688,6 +709,7 @@ public class GameManager : MonoBehaviour
                             }
                             _selectedItem.isEquipped = true;
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
                         }
 
                         break;
@@ -707,6 +729,7 @@ public class GameManager : MonoBehaviour
                             }
                             _selectedItem.isEquipped = true;
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
                         }
 
                         break;
@@ -726,6 +749,8 @@ public class GameManager : MonoBehaviour
                             if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.EquipWithGems(_selectedItem);
+                                _selectedItem.iso.onEquip(playerStats);
+                                _selectedItem.OnEquip(playerStats);
                             }
                         }
                         else if (playerStats._Rhand == null)
@@ -737,6 +762,8 @@ public class GameManager : MonoBehaviour
                             if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.EquipWithGems(_selectedItem);
+                                _selectedItem.iso.onEquip(playerStats);
+                                _selectedItem.OnEquip(playerStats);
                             }
                         }
                         else
@@ -761,6 +788,7 @@ public class GameManager : MonoBehaviour
                             ApplyChangesInInventory(null);
                             _selectedItem.isEquipped = true;
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
                         }
 
                         break;
@@ -775,6 +803,7 @@ public class GameManager : MonoBehaviour
                             playerStats._legs = _selectedItem;
                             UpdateEquipment(playerStats.Legs, "<color=#00FFFF>Legs: </color>" + "\n" + " " + playerStats._legs.iso.I_name);
                             _selectedItem.iso.onEquip(playerStats);
+                            _selectedItem.OnEquip(playerStats);
 
                             if (_selectedItem.iso is ArmorSO armor2)
                             {
@@ -833,8 +862,8 @@ public class GameManager : MonoBehaviour
     private void Upgrade()
     {
         itemToAnvil = _selectedItem.GetComponent<Item>();
+        anvil.UseAnvil();
         decisionMade = true;
-        FinishPlayersTurn();
     }
 
     bool CanItemBeDroppedHere(Vector2Int pos)
@@ -858,7 +887,7 @@ public class GameManager : MonoBehaviour
         }       
     }
 
-    public IEnumerator WaitTurn(int turns = 0)
+    public IEnumerator WaitTurn(int turns = 0) //FOR LEARNING SPELLBOOK
     {
         waiting = true;
 
@@ -868,19 +897,82 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
-        playerStats.rememberedSpells.Add(readingBook);
-        UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
-        ApplyChangesInInventory(readingBook);
-        readingBook = null;
+        if(UnityEngine.Random.Range(1,51) > playerStats.__intelligence)
+        {
+            int randomBadEffect = UnityEngine.Random.Range(1, 3);
+
+            if (randomBadEffect == 1)
+            {
+                UpdateMessages("<color=red>As you read the book, it radiates explosive energy in your face!</color>");
+                playerStats.TakeDamage(UnityEngine.Random.Range(3, 8));
+            }
+            else if(randomBadEffect == 2)
+            {
+                UpdateMessages("<color=red>As you read the book, you feel a wrenching sensation.</color>");
+                int randomX = 0;
+                int randomY = 0;
+
+                bool loopBreaker = false;
+
+                for (int i = 0; i < 500; i++) //500 is nuber of tries
+                {
+                    if (loopBreaker) break;
+
+                    randomX = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapWidth);
+                    randomY = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapHeight);
+
+                    if (MapManager.map[randomX, randomY].isWalkable && MapManager.map[randomX, randomY].enemy == null && MapManager.map[randomX, randomY].structure == null)
+                    {
+                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
+                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
+                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].timeColor = new Color(0, 0, 0);
+                        PlayerMovement.playerMovement.position = new Vector2Int(randomX, randomY);
+                        MapManager.map[randomX, randomY].hasPlayer = true;
+                        MapManager.map[randomX, randomY].letter = "<color=green>@</color>";
+                        MapManager.map[randomX, randomY].timeColor = new Color(0.5f, 1, 0);
+                        MapManager.playerPos = new Vector2Int(randomX, randomY);
+
+                        loopBreaker = true;
+
+                        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    }
+                }
+            }
+            ApplyChangesInInventory(readingBook);
+            readingBook = null;
+        }
+        else
+        {
+            UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
+            playerStats.rememberedSpells.Add(readingBook);
+            UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
+            ApplyChangesInInventory(readingBook);
+            readingBook = null;
+        }       
 
         waiting = false;
         StopCoroutine(waitingCoroutine);
     }
 
+    public void OpenEQ()
+    {
+        UpdateInventoryText();
+        selectedItem = 0;
+        selector.GetComponent<Text>().enabled = true;
+        player.canMove = false;
+        inventoryOpen = true;
+        invBorder.SetActive(true);
+        mapText.SetActive(false);
+        mainUItext.enabled = false;
+        selector.GetComponent<Text>().enabled = true;
+        try { UpdateItemStats(playerStats.itemsInEqGO[0]); }
+        catch { }
+    }
+
     public void CloseEQ()
     {
-        if(choosingWeapon) choosingWeapon = false;
+        GameManager.manager.anvil = null;
+        if (choosingWeapon) choosingWeapon = false;
         selectedItem = 0;
         player.canMove = true;
         inventoryOpen = false;
@@ -892,6 +984,7 @@ public class GameManager : MonoBehaviour
         mainUItext.enabled = true;
         selector.anchoredPosition = new Vector3(-7, -234, 0);
         selector.GetComponent<Text>().enabled = false;
+        anvilMenuOpened = false;
     }
 
     public void FirstTurn()
@@ -903,6 +996,8 @@ public class GameManager : MonoBehaviour
         GetComponent<Tasks>().EventsOnStartOfTheGame();
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+
+        UpdateMessages("<color=yellow>Press</color> / <color=yellow>for controls.</color>");
     }
 
     public void StartPlayersTurn()
@@ -987,22 +1082,6 @@ public class GameManager : MonoBehaviour
     public void UpdateText()
     {
         messagesText = "";
-
-        /*List<string> list1 = new List<string>();
-
-        foreach (System.Object obj in m_Messages)
-        {
-            String str = obj as String;
-            list1.Add("\n" + str);
-            //messagesText = (messagesText + "\n" + str);
-        }
-
-        list1.Reverse();
-
-        for (int i = 0; i < list1.Count; i++)
-        {
-            messagesText = (messagesText + list1[i]);
-        }*/
 
         foreach(System.Object obj in m_Messages)
         {
@@ -1111,12 +1190,12 @@ public class GameManager : MonoBehaviour
                 else if (item._BUC == Item.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
             }
 
-            if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + item.iso.bonusToHealth + "\n";
-            if (item.iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + item.iso.bonusToStrength + "\n";
-            if (item.iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + item.iso.bonusToIntelligence + "\n";
-            if (item.iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + item.iso.bonusToDexterity + "\n";
-            if (item.iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + item.iso.bonusToEndurance + "\n";
-            if (item.iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + item.iso.bonusToNoise + "\n";
+            if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + (item.iso.bonusToHealth + item.Anvil_bonusToHealth) + "\n";
+            if (item.iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + (item.iso.bonusToStrength + item.Anvil_bonusToStrength) + "\n";
+            if (item.iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + (item.iso.bonusToIntelligence + item.Anvil_bonusToIntelligence) + "\n";
+            if (item.iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + (item.iso.bonusToDexterity + item.Anvil_bonusToDexterity) + "\n";
+            if (item.iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + (item.iso.bonusToEndurance + item.Anvil_bonusToEndurance) + "\n";
+            if (item.iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + (item.iso.bonusToNoise + item.Anvil_bonusToNoise) + "\n";
 
             itemEffects.text += "Weight: " + $"<color=green>{item.iso.I_weight}</color>" + "\n";
         }

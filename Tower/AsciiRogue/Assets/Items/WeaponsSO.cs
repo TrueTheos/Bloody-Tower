@@ -78,4 +78,12 @@ public class WeaponsSO : ItemScriptableObject
             if (bonusToNoise != 0) player.__noise += -bonusToNoise;
         }
     }
+
+    public void onHit(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            //
+        }
+    }
 }

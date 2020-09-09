@@ -62,7 +62,7 @@ public class WandSO : ItemScriptableObject
                     randomX = Random.Range(1, DungeonGenerator.dungeonGenerator.mapWidth);
                     randomY = Random.Range(1, DungeonGenerator.dungeonGenerator.mapHeight);
 
-                    if(MapManager.map[randomX, randomY].isWalkable && MapManager.map[randomX, randomY].enemy == null)
+                    if(MapManager.map[randomX, randomY].isWalkable && MapManager.map[randomX, randomY].enemy == null && MapManager.map[randomX, randomY].structure == null)
                     {
                         MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
                         MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";

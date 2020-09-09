@@ -8172,6 +8172,7 @@ GameObject:
   - component: {fileID: 1911366299}
   - component: {fileID: 1911366301}
   - component: {fileID: 1911366303}
+  - component: {fileID: 1911366304}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -8280,6 +8281,7 @@ MonoBehaviour:
   openGrimoire: 0
   decidingSpell: 0
   itemToAnvil: {fileID: 0}
+  anvilMenuOpened: 0
   gemToConnect: {fileID: 0}
 --- !u!4 &1911366295
 Transform:
@@ -8546,6 +8548,18 @@ MonoBehaviour:
   bloodSword: {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}
   bloodSwordStartingDamage: 1
   bloodSwordCooldown: 15
+--- !u!114 &1911366304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911366292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77cf1891970668c419f674b88836ce76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1912740332
 GameObject:
   m_ObjectHideFlags: 0
@@ -9101,7 +9115,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 2eb27e82d095b5544974f0068b0aef9f,
+      objectReference: {fileID: 11400000, guid: 0009b43b70bf94c428a2a982593ef047,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
 
     public static PlayerMovement playerMovement;
 
-    private bool touchedDoor;
     GameManager manager;
     private PlayerStats playerStats;
 
@@ -15,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
 
     private int damage; //damage that will be dealed to enemy;  
     private float sleepingDamage = 1.3f; 
-    private int attackCount = 0; //if attack count u 5, we can use Weapon Art
 
     [HideInInspector] public Coroutine cor;
 
@@ -97,34 +95,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 StopAllCoroutines();
             }
-
-            /*if (touchedDoor) //if touched the door
-            {
-                if (Input.GetKey(KeyCode.LeftControl))
-                {
-                    MapManager.map[position.x, position.y].type = "Floor";
-                    MapManager.map[position.x, position.y].letter = ".";
-                    MapManager.map[position.x, position.y].isWalkable = true;
-
-                    MapManager.map[position.x, position.y].hasPlayer = false;
-                    position = targetDoor;
-                    MapManager.map[position.x, position.y].hasPlayer = true;
-                    //MapManager.map[position.x, position.y].isOpaque = false;
-                    MapManager.map[position.x, position.y].letter = "<color=green>@</color>";
-                    MapManager.playerPos = new Vector2Int(position.x, position.y);
-
-                    touchedDoor = false;
-
-                    manager.FinishPlayersTurn();
-                }
-                else if(!Input.GetKeyUp(KeyCode.E))
-                {
-                    touchedDoor = false;
-
-                    manager.FinishPlayersTurn();
-                }              
-            }*/
-            else if (Input.GetButtonUp("Use"))
+          
+            if (Input.GetButtonUp("Use"))
             {
                 if(MapManager.map[position.x, position.y].structure != null)
                 {
@@ -266,6 +238,7 @@ public class PlayerMovement : MonoBehaviour
         else if(MapManager.map[target.x, target.y].structure != null && !MapManager.map[target.x, target.y].isWalkable)
         {
             MapManager.map[target.x, target.y].structure.Use();
+            target = position;
         }
         else if (MapManager.map[target.x, target.y].enemy != null)
         {
@@ -399,7 +372,16 @@ public class PlayerMovement : MonoBehaviour
             }  
         }
 
-        if(playerStats.isInvisible) 
+        if(playerStats._Lhand?.iso is WeaponsSO w)
+        {
+            w.onHit(playerStats);
+        }
+        if(playerStats._Rhand?.iso is WeaponsSO w2)
+        {
+            w2.onHit(playerStats);
+        }
+
+        if (playerStats.isInvisible) 
         {
             playerStats.invisibleDuration = 0;
             playerStats.Invisible();
@@ -415,13 +397,11 @@ public class PlayerMovement : MonoBehaviour
 
         if(roamingNpcScript.sleeping)
         {
-            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex / 4 - roamingNpcScript.AC;
-            //manager.UpdateMessages($"<color=green>Value required to hit monster: = d20({r}) + {playerStats.__dexterity} - {roamingNpcScript.dex} / 4 - {roamingNpcScript.AC} = {valueRequiredToHit}</color>");
+            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex / 4 - roamingNpcScript.AC;         
         }
         else
         {
-            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex - roamingNpcScript.AC;
-            //manager.UpdateMessages($"<color=green>Value required to hit monster: = d20({r}) + {playerStats.__dexterity} - {roamingNpcScript.dex } - {roamingNpcScript.AC} = {valueRequiredToHit}</color>");
+            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex - roamingNpcScript.AC;       
         }
 
         if(r <= 0)

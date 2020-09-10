@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Spellbook")]
-public class SpellbookSO : ItemScriptableObject
+public class SpellbookSO : ItemScriptableObject,IRestrictTargeting
 {
     public enum school
     {
@@ -104,7 +104,7 @@ public class SpellbookSO : ItemScriptableObject
             {
                 player.usedScrollOrBook = this;
                 player.usingSpellScroll = true;
-                player.spell_pos = MapManager.playerPos;
+                Targeting.IsTargeting = true;
             }
 
             GameManager.manager.CloseEQ();
@@ -162,9 +162,9 @@ public class SpellbookSO : ItemScriptableObject
 
         if(foo is PlayerStats _player)
         {
-            if (MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy != null)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
             }
         }
     }
@@ -173,10 +173,10 @@ public class SpellbookSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 int damage = Random.Range(1, 10) + Random.Range(1, 10) + player.__intelligence / 10;
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(damage);
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(damage);
                 item.spellbookCooldown = 20;
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Drain Life</color>. You drained <color=red>{damage}</color> health.");
             }
@@ -187,10 +187,10 @@ public class SpellbookSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn(); 
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn(); 
                 GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color>. Monster is now poisoned.");
             }
         }
@@ -200,10 +200,10 @@ public class SpellbookSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rooted = true;
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);  
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rooted = true;
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);  
                 GameManager.manager.UpdateMessages("You read the <color=red>Book of Root</color>. Monster can't move!");
             }
         }
@@ -223,9 +223,9 @@ public class SpellbookSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {               
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
                 player.TakeDamage(5);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
@@ -290,9 +290,9 @@ public class SpellbookSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
                 GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
         }
@@ -326,5 +326,16 @@ public class SpellbookSO : ItemScriptableObject
 
     public override void onUnequip(MonoBehaviour foo)
     {
+    }
+    public bool IsValidTarget()
+    {
+        // TODO: code is required here
+        return true;
+    }
+
+    public bool AllowTargeting()
+    {
+        // TODO: code is required here
+        return true;
     }
 }

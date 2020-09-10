@@ -423,13 +423,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     //WAND STUFF
     [SerializeField] public bool usingWand;
-    [HideInInspector] public Vector2Int wand_pos;
     [SerializeField] public List<Vector2Int> wand_path;
     [SerializeField] public WandSO usedWand;
 
     //SCROLLS & SPELLBOOKS
     [HideInInspector] public bool usingSpellScroll;
-    [HideInInspector] public Vector2Int spell_pos;
     [HideInInspector] public ItemScriptableObject usedScrollOrBook;
 
     //DIALOGUE
@@ -525,209 +523,125 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             __endurance++;
         }
 
+        Targeting.UpdateTargeting();
+
         if (usingWand)
         {
-            if(PlayerMovement.playerMovement.canMove) PlayerMovement.playerMovement.canMove = false;
-            
-            if(usedWand._spellType == WandSO.spellType.ray)
+
+            if (usedWand._spellType == WandSO.spellType.ray)
             {
-                if (Input.GetKeyDown(KeyCode.W) && CellIsAvailable(wand_pos.x, wand_pos.y + 1))
+                if (!usedWand.AllowTargeting())
                 {
-                    wand_pos.y++;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    Targeting.Revert();
                 }
-                else if (Input.GetKeyDown(KeyCode.S) && CellIsAvailable(wand_pos.x, wand_pos.y - 1))
+
+                wand_path = LineAlg.GetPointsOnLine(
+                    MapManager.playerPos.x, MapManager.playerPos.y,
+                    Targeting.Position.x, Targeting.Position.y);
+
+                foreach (var cell in wand_path)
                 {
-                    wand_pos.y--;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-                }
-                else if (Input.GetKeyDown(KeyCode.A) && CellIsAvailable(wand_pos.x - 1, wand_pos.y))
-                {
-                    wand_pos.x--;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-                }
-                else if (Input.GetKeyDown(KeyCode.D) && CellIsAvailable(wand_pos.x + 1, wand_pos.y))
-                {
-                    wand_pos.x++;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
                 }
             }
-            else if(usedWand._spellType == WandSO.spellType.point)
+            else if (usedWand._spellType == WandSO.spellType.point)
             {
-                if (Input.GetKeyDown(KeyCode.W) && CellIsAvailable(wand_pos.x, wand_pos.y + 1))
+                if (!usedWand.AllowTargeting())
                 {
-                    if(MapManager.map[wand_pos.x, wand_pos.y + 1].type != "Wall")
-                    {
-                        wand_pos.y++;
-                        wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                        foreach (var cell in wand_path)
-                        {
-                            MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                        }
-                    }                                      
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    Targeting.Revert();
                 }
-                else if (Input.GetKeyDown(KeyCode.S) && CellIsAvailable(wand_pos.x, wand_pos.y - 1))
+
+                wand_path = LineAlg.GetPointsOnLine(
+                MapManager.playerPos.x, MapManager.playerPos.y,
+                Targeting.Position.x, Targeting.Position.y);
+
+                foreach (var cell in wand_path)
                 {
-                    wand_pos.y--;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-                }
-                else if (Input.GetKeyDown(KeyCode.A) && CellIsAvailable(wand_pos.x - 1, wand_pos.y))
-                {
-                    wand_pos.x--;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-                }
-                else if (Input.GetKeyDown(KeyCode.D) && CellIsAvailable(wand_pos.x + 1, wand_pos.y))
-                {
-                    wand_pos.x++;
-                    wand_path = LineAlg.GetPointsOnLine(MapManager.playerPos.x, MapManager.playerPos.y, wand_pos.x, wand_pos.y);
-
-                    foreach (var cell in wand_path)
-                    {
-                        MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
-                    }
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    MapManager.map[cell.x, cell.y].decoy = $"<color=yellow>\u205C</color>";
                 }
             } //todo
             else
             {
-                usingWand = false;
-                usedWand.UseWandSpell();
-                usedWand = null;
-                PlayerMovement.playerMovement.canMove = true;
+                if (usedWand.IsValidTarget())
+                {
+                    usingWand = false;
+                    Targeting.IsTargeting = false;
+                    usedWand.UseWandSpell();
+                    usedWand = null;
+                    PlayerMovement.playerMovement.canMove = true;
+                }
+                else
+                {
+                    // you cannot target that guys
+                    Debug.Log("not the right target");
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                usingWand = false;
-                usedWand.UseWandSpell();                           
-                usedWand = null;
-                gameManager.ApplyChangesInInventory(null);
-                PlayerMovement.playerMovement.canMove = true;
+                if (usedWand.IsValidTarget())
+                {
+                    usingWand = false;
+                    Targeting.IsTargeting = false;
+                    usedWand.UseWandSpell();
+                    usedWand = null;
+                    gameManager.ApplyChangesInInventory(null);
+                    PlayerMovement.playerMovement.canMove = true;
+                }
+                else
+                {
+                    // you cannot target that guys
+                    Debug.Log("not the right target");
+                }
             }
+            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         }
 
-        if(usingSpellScroll)
+        if (usingSpellScroll)
         {
-            if(PlayerMovement.playerMovement.canMove)
+            if (PlayerMovement.playerMovement.canMove)
             {
-                Debug.Log(MapManager.playerPos + " " + spell_pos);
+                Debug.Log(MapManager.playerPos + " " + Targeting.Position);
                 PlayerMovement.playerMovement.canMove = false;
                 gameManager.UpdateMessages("Choose target of your spell. <color=pink>(Numpad 8 4 6 2, Enter/Space to confirm, Escape to cancel)</color>");
-            } 
-
-            if (Input.GetKeyDown(KeyCode.Keypad8))
-            {
-                if(MapManager.map[spell_pos.x, spell_pos.y + 1].type != "Wall" && MapManager.map[spell_pos.x, spell_pos.y + 1].isExplored)
-                {
-                    spell_pos.y++;
-                    MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }
-                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                //else spell_pos.y++;
-
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
-            else if (Input.GetKeyDown(KeyCode.Keypad2))
-            {
-                if (MapManager.map[spell_pos.x, spell_pos.y - 1].type != "Wall" && MapManager.map[spell_pos.x, spell_pos.y - 1].isExplored)
-                {
-                    spell_pos.y--;
-                    MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }
-                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad4))
-            {
-                if (MapManager.map[spell_pos.x - 1, spell_pos.y].type != "Wall" && MapManager.map[spell_pos.x - 1, spell_pos.y].isExplored)
-                {
-                    spell_pos.x--;
-                    MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }
-                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad6))
-            {
-                if (MapManager.map[spell_pos.x + 1, spell_pos.y].type != "Wall" && MapManager.map[spell_pos.x + 1, spell_pos.y].isExplored)
-                {
-                    spell_pos.x++;
-                    MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
-                }
-                else MapManager.map[spell_pos.x, spell_pos.y].decoy = $"<color=yellow>\u205C</color>";
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-            } //todo
+
+            MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=yellow>\u205C</color>";
+            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
             if (Input.GetButtonDown("Use"))
             {
-                PlayerMovement.playerMovement.canMove = true;
-
-                usingSpellScroll = false;
-                if(usedScrollOrBook is ScrollSO scroll)
+                if (usedScrollOrBook is IRestrictTargeting target)
                 {
-                    scroll.UseSpell(this);
-                }     
-                else if(usedScrollOrBook is SpellbookSO book)         
-                {
-                    book.UseSpell(this);
-                }         
-                usedScrollOrBook = null;
-                gameManager.ApplyChangesInInventory(null);
+                    if (target.IsValidTarget())
+                    {
+                        PlayerMovement.playerMovement.canMove = true;
+                        Targeting.IsTargeting = false;
+                        usingSpellScroll = false;
+                        if (usedScrollOrBook is ScrollSO scroll)
+                        {
+                            scroll.UseSpell(this);
+                        }
+                        else if (usedScrollOrBook is SpellbookSO book)
+                        {
+                            book.UseSpell(this);
+                        }
+                        usedScrollOrBook = null;
+                        gameManager.ApplyChangesInInventory(null);
+                    }
+                }
+                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 PlayerMovement.playerMovement.canMove = true;
+                Targeting.IsTargeting = false;
                 usingSpellScroll = false;
                 usedScrollOrBook = null;
+                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
         }
     

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Wand")]
-public class WandSO : ItemScriptableObject
+public class WandSO : ItemScriptableObject, IRestrictTargeting
 {
     public int charges;
     [SerializeField] public int chargesLeft;
@@ -29,7 +29,7 @@ public class WandSO : ItemScriptableObject
         if(foo is PlayerStats player && chargesLeft > 0)
         {
             player.usingWand = true;
-            player.wand_pos = MapManager.playerPos;
+            Targeting.IsTargeting = true;
             player.usedWand = this;          
         }
         else if(chargesLeft < 1) //no charges left
@@ -106,5 +106,16 @@ public class WandSO : ItemScriptableObject
 
     public override void onUnequip(MonoBehaviour foo)
     {
+    }
+    public bool IsValidTarget()
+    {
+        // TODO: code is required here
+        return true;
+    }
+
+    public bool AllowTargeting()
+    {
+        // TODO: code is required here
+        return true;
     }
 }

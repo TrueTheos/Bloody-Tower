@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Scroll")]
-public class ScrollSO : ItemScriptableObject
+public class ScrollSO : ItemScriptableObject,IRestrictTargeting
 {
     public enum school
     {
@@ -55,7 +55,8 @@ public class ScrollSO : ItemScriptableObject
             {
                 player.usedScrollOrBook = this;
                 player.usingSpellScroll = true;
-                player.spell_pos = MapManager.playerPos;
+
+                Targeting.IsTargeting = true;
             }
 
             GameManager.manager.CloseEQ();
@@ -122,10 +123,10 @@ public class ScrollSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();            
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();            
                 GameManager.manager.ApplyChangesInInventory(this);   
                 GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>. Monster is now poisoned.");
             }
@@ -136,10 +137,10 @@ public class ScrollSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rooted = true;
-                 MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);
+                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rooted = true;
+                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);
                  GameManager.manager.ApplyChangesInInventory(this);   
                  GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Root</color>. This monster can't move now.");
             }
@@ -161,9 +162,9 @@ public class ScrollSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {               
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
                 player.TakeDamage(5);
                 Debug.Log("Blood purge" + Mathf.FloorToInt((20 + player.__intelligence) / 5));
                 GameManager.manager.ApplyChangesInInventory(this);   
@@ -238,9 +239,9 @@ public class ScrollSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
-            if(MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy != null)
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[player.spell_pos.x, player.spell_pos.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
                 GameManager.manager.ApplyChangesInInventory(this);   
                 GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
@@ -282,5 +283,17 @@ public class ScrollSO : ItemScriptableObject
 
     public override void onUnequip(MonoBehaviour foo)
     {
+    }
+
+    public bool IsValidTarget()
+    {
+        // TODO: code is required here
+        return true;
+    }
+
+    public bool AllowTargeting()
+    {
+        // TODO: code is required here
+        return true;
     }
 }

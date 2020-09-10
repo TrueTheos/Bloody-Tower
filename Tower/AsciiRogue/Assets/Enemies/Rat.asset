@@ -24,6 +24,10 @@ MonoBehaviour:
   _Difficulty: 1
   _Behaviour: 0
   attacks: 00000000
+  attackText:
+  - bites at your ankles.
+  - jumps and scratches at your face.
+  - scurries up your leg, biting at your leg as it does.
   E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0

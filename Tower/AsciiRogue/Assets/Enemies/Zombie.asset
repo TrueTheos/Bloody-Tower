@@ -24,8 +24,11 @@ MonoBehaviour:
   _Difficulty: 1
   _Behaviour: 0
   attacks: 00000000
-  E_possileDrops:
-  - {fileID: 11400000, guid: 7a57aa06248fb1941bdc6a1a8eb56508, type: 2}
+  attackText:
+  - claws at you with bloody fingerbones underneath its decrepit flesh.
+  - bites into your shoulder.
+  - bites into your face.
+  E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

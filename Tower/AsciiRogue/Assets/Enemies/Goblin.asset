@@ -24,8 +24,11 @@ MonoBehaviour:
   _Difficulty: 0
   _Behaviour: 1
   attacks: 00000000
-  E_possileDrops:
-  - {fileID: 11400000, guid: 7a57aa06248fb1941bdc6a1a8eb56508, type: 2}
+  attackText:
+  - kicks you in the shin.
+  - ' slaps your thigh and then your face. '
+  - slaps your stomach.
+  E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

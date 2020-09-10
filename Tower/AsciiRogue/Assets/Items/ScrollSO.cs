@@ -116,6 +116,14 @@ public class ScrollSO : ItemScriptableObject
                 Poisonbolt(foo);
                 break;
         }
+
+        if (foo is PlayerStats _player)
+        {
+            if (MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy != null)
+            {
+                MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+            }
+        }
     }
 
     public void Poisonbolt(MonoBehaviour foo)

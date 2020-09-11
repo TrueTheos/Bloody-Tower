@@ -399,7 +399,16 @@ public class GameManager : MonoBehaviour
             {
                 cheatMenu = false;
 
-                if (cheatString.Substring(0, 2) == "st")
+                if(cheatString.Substring(0,2) == "tp")
+                {
+                    string[] floor = cheatString.Split(new string[] { "/" }, StringSplitOptions.None);
+                    int _floor = int.Parse(floor[1]);
+                    MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
+                    MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
+
+                    DungeonGenerator.dungeonGenerator.GenerateDungeon(_floor);
+                }
+                else if (cheatString.Substring(0, 2) == "st")
                 {
                     if(dungeonGenerator.currentFloor != 0)
                     {

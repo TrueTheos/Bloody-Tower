@@ -11,26 +11,10 @@ public class Stairs : Structure
 
     public override void Use()
     {
-        if(DungeonGenerator.dungeonGenerator.currentFloor <= dungeonLevelId)
-        {
-            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
-            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
+        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
+        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
 
-            DungeonGenerator.dungeonGenerator.GenerateDungeon(dungeonLevelId);
-
-            //DungeonGenerator.dungeonGenerator.MovePlayerToUpperStairs();
-            //DungeonGenerator.dungeonGenerator.MovePlayerToLowerStairs();
-        }
-        else
-        {
-            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
-            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
-
-            DungeonGenerator.dungeonGenerator.GenerateDungeon(dungeonLevelId);
-
-            //DungeonGenerator.dungeonGenerator.MovePlayerToLowerStairs();
-            //DungeonGenerator.dungeonGenerator.MovePlayerToUpperStairs();
-        }
+        DungeonGenerator.dungeonGenerator.GenerateDungeon(dungeonLevelId);
     }
 
     public override void WalkIntoTrigger()

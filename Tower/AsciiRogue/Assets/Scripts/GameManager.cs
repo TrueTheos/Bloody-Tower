@@ -887,71 +887,75 @@ public class GameManager : MonoBehaviour
         }       
     }
 
-    public IEnumerator WaitTurn(int turns = 0) //FOR LEARNING SPELLBOOK
+    public IEnumerator WaitTurn(int turns = 0)
     {
         waiting = true;
 
         for (int i = 0; i < turns; i++)
-        {
+        {         
+            yield return new WaitForSeconds(0.15f);
             FinishPlayersTurn();
-            yield return new WaitForSeconds(0.1f);
         }
 
-        if(UnityEngine.Random.Range(1,51) > playerStats.__intelligence)
+        if (readingBook != null)
         {
-            int randomBadEffect = UnityEngine.Random.Range(1, 3);
-
-            if (randomBadEffect == 1)
+            if (UnityEngine.Random.Range(1, 51) > playerStats.__intelligence)
             {
-                UpdateMessages("<color=red>As you read the book, it radiates explosive energy in your face!</color>");
-                playerStats.TakeDamage(UnityEngine.Random.Range(3, 8));
-            }
-            else if(randomBadEffect == 2)
-            {
-                UpdateMessages("<color=red>As you read the book, you feel a wrenching sensation.</color>");
-                int randomX = 0;
-                int randomY = 0;
+                int randomBadEffect = UnityEngine.Random.Range(1, 3);
 
-                bool loopBreaker = false;
-
-                for (int i = 0; i < 500; i++) //500 is nuber of tries
+                if (randomBadEffect == 1)
                 {
-                    if (loopBreaker) break;
+                    UpdateMessages("<color=red>As you read the book, it radiates explosive energy in your face!</color>");
+                    playerStats.TakeDamage(UnityEngine.Random.Range(3, 8));
+                }
+                else if (randomBadEffect == 2)
+                {
+                    UpdateMessages("<color=red>As you read the book, you feel a wrenching sensation.</color>");
+                    int randomX = 0;
+                    int randomY = 0;
 
-                    randomX = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapWidth);
-                    randomY = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapHeight);
+                    bool loopBreaker = false;
 
-                    if (MapManager.map[randomX, randomY].isWalkable && MapManager.map[randomX, randomY].enemy == null && MapManager.map[randomX, randomY].structure == null)
+                    for (int i = 0; i < 500; i++) //500 is nuber of tries
                     {
-                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
-                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
-                        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].timeColor = new Color(0, 0, 0);
-                        PlayerMovement.playerMovement.position = new Vector2Int(randomX, randomY);
-                        MapManager.map[randomX, randomY].hasPlayer = true;
-                        MapManager.map[randomX, randomY].letter = "<color=green>@</color>";
-                        MapManager.map[randomX, randomY].timeColor = new Color(0.5f, 1, 0);
-                        MapManager.playerPos = new Vector2Int(randomX, randomY);
+                        if (loopBreaker) break;
 
-                        loopBreaker = true;
+                        randomX = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapWidth);
+                        randomY = UnityEngine.Random.Range(1, DungeonGenerator.dungeonGenerator.mapHeight);
 
-                        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                        if (MapManager.map[randomX, randomY].isWalkable && MapManager.map[randomX, randomY].enemy == null && MapManager.map[randomX, randomY].structure == null)
+                        {
+                            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
+                            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
+                            MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].timeColor = new Color(0, 0, 0);
+                            PlayerMovement.playerMovement.position = new Vector2Int(randomX, randomY);
+                            MapManager.map[randomX, randomY].hasPlayer = true;
+                            MapManager.map[randomX, randomY].letter = "<color=green>@</color>";
+                            MapManager.map[randomX, randomY].timeColor = new Color(0.5f, 1, 0);
+                            MapManager.playerPos = new Vector2Int(randomX, randomY);
+
+                            loopBreaker = true;
+
+                            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                        }
                     }
                 }
+                ApplyChangesInInventory(readingBook);
+                readingBook = null;
             }
-            ApplyChangesInInventory(readingBook);
-            readingBook = null;
+            else
+            {
+                UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
+                playerStats.rememberedSpells.Add(readingBook);
+                UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
+                ApplyChangesInInventory(readingBook);
+                readingBook = null;
+            }
         }
-        else
-        {
-            UpdateMessages($"<color=lightblue>Puff!</color> You have succesfully read the <color={readingBook.I_color}>{readingBook.I_name}</color>. It fades away...");
-            playerStats.rememberedSpells.Add(readingBook);
-            UpdateGrimoireQueue($"<color={readingBook.I_color}>{readingBook.I_name}</color>");
-            ApplyChangesInInventory(readingBook);
-            readingBook = null;
-        }       
 
         waiting = false;
-        StopCoroutine(waitingCoroutine);
+        waitingCoroutine = null;
+        StopAllCoroutines();
     }
 
     public void OpenEQ()

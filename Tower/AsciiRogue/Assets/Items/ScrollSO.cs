@@ -117,6 +117,14 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
                 Poisonbolt(foo);
                 break;
         }
+
+        if (foo is PlayerStats _player)
+        {
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+            }
+        }
     }
 
     public void Poisonbolt(MonoBehaviour foo)

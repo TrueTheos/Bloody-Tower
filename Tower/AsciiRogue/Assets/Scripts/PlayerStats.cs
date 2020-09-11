@@ -607,8 +607,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             }
 
 
-
-
             MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=yellow>\u205C</color>";
             DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 

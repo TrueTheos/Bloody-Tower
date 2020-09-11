@@ -353,15 +353,24 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1)) //drop item
             {
-                try { SendMessage(itemOption1); } catch { }
+                if (itemOption1 !="")
+                {
+                    try { SendMessage(itemOption1); } catch { }
+                }                
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                try{SendMessage(itemOption2); } catch { }
+                if (itemOption2 != "")
+                {
+                    try { SendMessage(itemOption2); } catch { }
+                }                
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                try{SendMessage(itemOption3); } catch { }
+                if (itemOption3 != "")
+                {
+                    try { SendMessage(itemOption3); } catch { }
+                }                
             }
 
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.I))

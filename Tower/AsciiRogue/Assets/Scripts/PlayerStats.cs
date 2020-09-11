@@ -606,7 +606,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
                 gameManager.UpdateMessages("Choose target of your spell. <color=pink>(Numpad 8 4 6 2, Enter/Space to confirm, Escape to cancel)</color>");
             }
 
-
             MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=yellow>\u205C</color>";
             DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 

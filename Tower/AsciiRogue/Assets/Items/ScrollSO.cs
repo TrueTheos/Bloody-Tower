@@ -120,9 +120,9 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
 
         if (foo is PlayerStats _player)
         {
-            if (MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy != null)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                MapManager.map[_player.spell_pos.x, _player.spell_pos.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
             }
         }
     }

@@ -150,7 +150,9 @@ public class DungeonGenerator : MonoBehaviour
     //& COBWEB
 
     public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
-    {            
+    {
+        mimicPositions = new List<Vector2Int>();
+
         List<Vector2Int> itemPositions = new List<Vector2Int>();
         List<Vector2Int> cobwebPositions = new List<Vector2Int>();
 

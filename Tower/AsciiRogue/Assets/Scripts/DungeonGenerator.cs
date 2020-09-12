@@ -25,6 +25,8 @@ public class DungeonGenerator : MonoBehaviour
     public List<Vector2Int> enemyPositions = new List<Vector2Int>();
     public List<bool> enemySleeping = new List<bool>();
 
+    public List<Vector2Int> mimicPositions = new List<Vector2Int>();
+
     public static DungeonGenerator dungeonGenerator;
     [HideInInspector] public FloorManager floorManager;
     private GameManager manager;
@@ -141,7 +143,7 @@ public class DungeonGenerator : MonoBehaviour
     //+ DOOR
     //1 DOOR THAT REQUIRES BLOOD TO BE PAID TO OPEN THE DOOR
     //_ DOOR THAT REQUIRES KEY
-    //0 ENEMY
+    //0 ITEMS
     //- KEY
     //= CHEST
     //" MUSHROOM
@@ -358,7 +360,20 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "="[0])
                 {
-                    if (UnityEngine.Random.Range(1, 100) < 7)
+                    if(UnityEngine.Random.Range(0, 100) < 15)
+                    {
+                        MapManager.map[x, y] = new Tile();
+                        MapManager.map[x, y].xPosition = x;
+                        MapManager.map[x, y].yPosition = y;
+                        MapManager.map[x, y].baseChar = ".";
+                        MapManager.map[x, y].isWalkable = true;
+                        MapManager.map[x, y].isOpaque = false;
+                        MapManager.map[x, y].type = "Floor";
+
+                        MapManager.map[x, y].structure = null;
+                        mimicPositions.Add(new Vector2Int(x, y));
+                    }
+                    else if (UnityEngine.Random.Range(1, 100) < 7)
                     {
                         MapManager.map[x, y] = new Tile();
                         MapManager.map[x, y].type = "Blood Anvil";
@@ -434,27 +449,9 @@ public class DungeonGenerator : MonoBehaviour
         floorManager.floors.Add(MapManager.map);
         floorManager.floorsGO.Add(floorObject);
 
-        for (int x = 0; x < MapManager.map.GetLength(0); x++)
-        {
-            for (int y = 0; y < MapManager.map.GetLength(1); y++)
-            {
-                if (MapManager.map[x,y].type == "Chest")
-                {
-                    if (UnityEngine.Random.Range(0,100)<15)
-                    {
-                        MapManager.map[x, y].xPosition = x;
-                        MapManager.map[x, y].yPosition = y;
-                        MapManager.map[x, y].baseChar = ".";
-                        MapManager.map[x, y].isWalkable = true;
-                        MapManager.map[x, y].isOpaque = false;
-                        MapManager.map[x, y].type = "Floor";
-
-                        MapManager.map[x, y].structure = null;
-
-                        manager.enemySpawner.SpawnAt(x, y, manager.enemySpawner.Mimic, true);
-                    }
-                }
-            }
+        foreach(var mimic in mimicPositions)
+        {     
+            manager.enemySpawner.SpawnAt(mimic.x, mimic.y, manager.enemySpawner.Mimic, true);
         }
 
         if(spawnEnemiesFromString)

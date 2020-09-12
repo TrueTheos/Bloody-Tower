@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
     {
         dungeonGenerator.InitializeDungeon();
         dungeonGenerator.GenerateDungeon(0);
-        for(int i = 1; i <= 10; i++)
+        for(int i = 1; i <= 20; i++)
         {
             dungeonGenerator.GenerateDungeon(i);
         }

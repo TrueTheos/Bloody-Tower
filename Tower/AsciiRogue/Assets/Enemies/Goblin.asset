@@ -23,6 +23,7 @@ MonoBehaviour:
   __modifier: 9
   _Difficulty: 0
   _Behaviour: 1
+  _Attacks: 0
   attacks: 00000000
   attackText:
   - kicks you in the shin.

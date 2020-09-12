@@ -23,6 +23,7 @@ MonoBehaviour:
   __modifier: 512
   _Difficulty: 1
   _Behaviour: 0
+  _Attacks: 0
   attacks: 00000000
   attackText:
   - bites at your ankles.

@@ -44,14 +44,14 @@ public class EnemiesScriptableObject : ScriptableObject
     public enum E_behaviour { normal, cowardly, sluggish, recovers,  npc}
     public E_behaviour _Behaviour;
 
-    public enum E_Attacks
+    public enum E_attacks
     {
-        normal,
-        poisonBite, //for Giant rat
-        fadingBite //for Sulyvahn's Beast
+        NormalAttack,
+        PoisonBite,
+        FadingBite
     }
-    private E_Attacks _attacks;
-    public List<E_Attacks> attacks;
+    public E_attacks _Attacks;
+    public List<E_attacks> attacks;
 
     public List<string> attackText;
 

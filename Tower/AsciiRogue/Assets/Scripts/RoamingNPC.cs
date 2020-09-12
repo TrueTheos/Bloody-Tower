@@ -74,8 +74,6 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     public Vector2Int __position;
 
-    private GameObject canvas;
-
     [HideInInspector] public bool playerDetected;
     [HideInInspector] public bool sleeping;
     [HideInInspector] public bool attacked;
@@ -89,8 +87,9 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     private int totalDamage; //damage that will be dealed to player
 
-    private PlayerStats playerStats;
-    private GameManager manager;
+    [HideInInspector] public PlayerStats playerStats;
+    [HideInInspector] public GameManager manager;
+    [HideInInspector] public GameObject canvas;
 
     private List<Vector2Int> path;
 
@@ -306,20 +305,8 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }
         catch { }
 
-        EnemiesScriptableObject.E_Attacks attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)];
-
-        switch(attack)
-        {
-            case EnemiesScriptableObject.E_Attacks.normal:
-                NormalAttack();
-                break;
-            case EnemiesScriptableObject.E_Attacks.poisonBite:
-                PoisonBite();
-                break;
-            case EnemiesScriptableObject.E_Attacks.fadingBite:
-                StartCoroutine(FadingBite());
-                break;
-        }
+        string attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)].ToString();
+        SendMessage(attack);
     }
 
     private void NormalAttack()
@@ -398,7 +385,12 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         canvas.GetComponent<Animator>().SetTrigger("Shake");
     }
 
-    private IEnumerator FadingBite()
+
+    private void FadingBite()
+    {
+        StartCoroutine(_FadingBite());
+    }
+    private IEnumerator _FadingBite()
     {
         manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(EnemyColor)}>{enemySO.name}</color> used <color=red>Fading Bite</color>!");
         NormalAttack();
@@ -429,8 +421,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             MoveTo(path[0].x, path[0].y);
         }
 
+        Debug.Log("c");
+
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-        StopCoroutine(FadingBite());
+        StopCoroutine(_FadingBite());
     }
     
     public void TakeDamage(int amount)

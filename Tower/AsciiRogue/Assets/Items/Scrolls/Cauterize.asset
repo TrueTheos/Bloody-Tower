@@ -20,13 +20,11 @@ MonoBehaviour:
   chanceOfSpawning11to20: 0.1
   chanceOfSpawning21to30: 0.1
   chanceOfSpawning31to40: 0.1
-  I_weight: 2
+  I_weight: 1
   I_rareness: 0
   I_itemType: 7
   I_whereToPutIt: 0
-  _BUC: 0
   normalIdentifState: 0
-  identified: 0
   pickupableByMonsters: 0
   effect: 
   worth: 0
@@ -40,3 +38,4 @@ MonoBehaviour:
   _type: 0
   spellLevel: 1
   _spell: 3
+  spellDuration: 0

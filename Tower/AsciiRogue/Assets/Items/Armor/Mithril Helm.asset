@@ -20,13 +20,11 @@ MonoBehaviour:
   chanceOfSpawning11to20: 0.2
   chanceOfSpawning21to30: 0.36
   chanceOfSpawning31to40: 0.6
-  I_weight: 9
+  I_weight: 15
   I_rareness: 1
   I_itemType: 0
   I_whereToPutIt: 1
-  _BUC: 0
   normalIdentifState: 1
-  identified: 1
   pickupableByMonsters: 0
   effect: 'Armor Class: <color=green>3</color>
 

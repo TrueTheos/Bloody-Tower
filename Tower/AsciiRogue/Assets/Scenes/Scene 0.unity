@@ -3533,8 +3533,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -86.29999, y: -237}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -66, y: -223.54999}
+  m_SizeDelta: {x: 132.00006, y: 23.100037}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &753867700
 MonoBehaviour:
@@ -3636,7 +3636,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 60.059875, y: 0, z: 0, w: 0}
+  m_margin: {x: 0.82525635, y: 0, z: -0.35131836, w: 0}
   m_textInfo:
     textComponent: {fileID: 753867701}
     characterCount: 8
@@ -4209,8 +4209,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -166.74023, y: 163.25}
-  m_SizeDelta: {x: 141.49, y: 29.5}
+  m_AnchoredPosition: {x: -165.86, y: 166}
+  m_SizeDelta: {x: 143.24672, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &845663044
 MonoBehaviour:
@@ -4298,7 +4298,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.09613037, y: 0, z: 0.3250122, w: 0}
+  m_margin: {x: -0.09613037, y: 0, z: 0.3250122, w: 0.38555908}
   m_textInfo:
     textComponent: {fileID: 845663044}
     characterCount: 8
@@ -4665,8 +4665,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -166.74023, y: -167.25}
-  m_SizeDelta: {x: 141.48, y: 30.5}
+  m_AnchoredPosition: {x: -166.74023, y: -164.25}
+  m_SizeDelta: {x: 141.48, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &953815883
 MonoBehaviour:
@@ -4754,7 +4754,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.31988525, y: 0, z: 0.034179688, w: 0}
+  m_margin: {x: -0.31988525, y: 0, z: 0.034179688, w: -0.31567383}
   m_textInfo:
     textComponent: {fileID: 953815883}
     characterCount: 6
@@ -5960,8 +5960,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -166.6, y: -107}
-  m_SizeDelta: {x: 141.21, y: 30}
+  m_AnchoredPosition: {x: -166.6, y: -104.25}
+  m_SizeDelta: {x: 141.21, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1308505716
 MonoBehaviour:
@@ -6049,7 +6049,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0.060668945, y: 0, z: -0.22686768, w: 0}
+  m_margin: {x: 0.060668945, y: 0, z: -0.22686768, w: 0.022888184}
   m_textInfo:
     textComponent: {fileID: 1308505716}
     characterCount: 6
@@ -6692,7 +6692,6 @@ GameObject:
   - component: {fileID: 1605805453}
   - component: {fileID: 1605805456}
   - component: {fileID: 1605805455}
-  - component: {fileID: 1605805454}
   m_Layer: 5
   m_Name: Blood
   m_TagString: Untagged
@@ -6719,20 +6718,6 @@ RectTransform:
   m_AnchoredPosition: {x: -104.78441, y: -13.449997}
   m_SizeDelta: {x: 209.56888, y: 26.899994}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1605805454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1605805452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1e876608345eb429ab974df22de785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayedText: Range within which you are heard
-  tooltip: {fileID: 1134536927}
 --- !u!114 &1605805455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9334,7 +9319,6 @@ GameObject:
   - component: {fileID: 2005186644}
   - component: {fileID: 2005186647}
   - component: {fileID: 2005186646}
-  - component: {fileID: 2005186645}
   m_Layer: 5
   m_Name: BloodText
   m_TagString: Untagged
@@ -9362,20 +9346,6 @@ RectTransform:
   m_AnchoredPosition: {x: -132.7, y: -248.54999}
   m_SizeDelta: {x: 209.56888, y: 26.899994}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2005186645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2005186643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1e876608345eb429ab974df22de785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayedText: Range within which you are heard
-  tooltip: {fileID: 1134536927}
 --- !u!114 &2005186646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9688,8 +9658,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -166.6, y: -137}
-  m_SizeDelta: {x: 141.21, y: 30}
+  m_AnchoredPosition: {x: -166.6, y: -133.49}
+  m_SizeDelta: {x: 141.21, y: 22.972961}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2078186224
 MonoBehaviour:
@@ -9777,7 +9747,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0.48065186, y: 0, z: 0.17626953, w: 0}
+  m_margin: {x: 0.48065186, y: 0, z: 0.17626953, w: 0.029968262}
   m_textInfo:
     textComponent: {fileID: 2078186224}
     characterCount: 6

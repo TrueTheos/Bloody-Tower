@@ -12,21 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3987ff93a463e5e48a77b22ba18a8891, type: 3}
   m_Name: Leather Rags
   m_EditorClassIdentifier: 
-  I_name: Leather Rags
-  I_unInName: Leather Rags
+  I_name: Leather Chestplate
+  I_unInName: Leather Chestplate
   I_symbol: '['
   I_color: '#996633'
   chanceOfSpawning1to10: 0.8
   chanceOfSpawning11to20: 0.6
   chanceOfSpawning21to30: 0.3
   chanceOfSpawning31to40: 0.01
-  I_weight: 7
+  I_weight: 10
   I_rareness: 0
   I_itemType: 0
   I_whereToPutIt: 2
-  _BUC: 0
   normalIdentifState: 1
-  identified: 1
   pickupableByMonsters: 0
   effect: 'Armor Class: <color=green>1</color>
 

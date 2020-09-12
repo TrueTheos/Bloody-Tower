@@ -225,7 +225,7 @@ public class DungeonGenerator : MonoBehaviour
                     MapManager.map[x,y].xPosition = x;
                     MapManager.map[x,y].yPosition = y;
                     MapManager.map[x,y].baseChar = "#";
-                    if(currentFloor >= 11 && UnityEngine.Random.Range(0,100) < currentFloor * 1.5f) 
+                    if(currentFloor >= 11) 
                     {
                         MapManager.map[x,y].exploredColor = new Color(0.5283019f, 0, 0);
                         MapManager.map[x,y].specialNameOfTheCell = "Flesh Wall";

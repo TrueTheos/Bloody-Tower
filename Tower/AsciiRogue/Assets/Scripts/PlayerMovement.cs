@@ -19,83 +19,74 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2Int waterPoisonDuraiton;
 
+    public float MoveCooldown = 0;
+    public float MoveDelay = 0.16f;
+
+
     private void Start()
     {
         playerMovement = this;
         playerStats = GetComponent<PlayerStats>();
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        MoveCooldown = 0;
     }
 
     private void Update()
-    {      
+    {
+        // advance time
+        MoveCooldown = Mathf.Max(MoveCooldown - Time.deltaTime, 0);
+
         if (manager.isPlayerTurn && canMove)
         {
-            if (Input.GetKeyDown(KeyCode.Keypad8))
-            {             
-                cor = StartCoroutine(MoveT());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad2))
+            if (MoveCooldown==0)
             {
-                cor = StartCoroutine(MoveB());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad4))
-            {
-                cor = StartCoroutine(MoveL());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad6))
-            {
-                cor = StartCoroutine(MoveR());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad7))
-            {
-                cor = StartCoroutine(MoveTL());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad9))
-            {
-                cor = StartCoroutine(MoveTR());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad3))
-            {
-                cor = StartCoroutine(MoveBR());
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad1))
-            {
-                cor = StartCoroutine(MoveBL());
-            }
+                Vector2Int move = new Vector2Int();
 
-            if (Input.GetKeyUp(KeyCode.Keypad8))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad2))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad4))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad6))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad7))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad9))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad3))
-            {
-                StopAllCoroutines();
-            }
-            if (Input.GetKeyUp(KeyCode.Keypad1))
-            {
-                StopAllCoroutines();
-            }
+                if (Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKey(KeyCode.Keypad8))
+                {
+                    move.y = 1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKey(KeyCode.Keypad2))
+                {
+                    move.y=-1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKey(KeyCode.Keypad4))
+                {
+                    move.x = -1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad6) || Input.GetKey(KeyCode.Keypad6))
+                {
+                    move.x = 1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKey(KeyCode.Keypad7))
+                {
+                    move.x = -1;
+                    move.y = 1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKey(KeyCode.Keypad9))
+                {
+                    move.x = 1;
+                    move.y = 1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKey(KeyCode.Keypad3))
+                {
+                    move.x = 1;
+                    move.y = -1;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKey(KeyCode.Keypad1))
+                {
+                    move.x = -1;
+                    move.y = -1;
+                }
 
+                if (move.sqrMagnitude > 0)
+                {
+                    Move(InputToVector(move.x,move.y));
+                    MoveCooldown = MoveDelay;
+                }
+            }
+            
+            
             Selector.Current.SelectedTile(position.x, position.y);
 
             if (Input.GetButtonUp("Use"))

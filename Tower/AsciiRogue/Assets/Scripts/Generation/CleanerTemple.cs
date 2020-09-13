@@ -6,11 +6,11 @@ using UnityEngine;
 
 public static class CleanerTemple
 {
-    public static RangeInt TempleWidth = new RangeInt(50, 10);
-    public static RangeInt TempleHeight = new RangeInt(22, 5);
+    public static RangeInt TempleWidth = new RangeInt(56, 1);
+    public static RangeInt TempleHeight = new RangeInt(22, 1);
 
-    public static RangeInt RandomWidth = new RangeInt(5, 21);
-    public static RangeInt RandomHeight = new RangeInt(5, 21);
+    public static RangeInt RandomWidth = new RangeInt(5, 15);
+    public static RangeInt RandomHeight = new RangeInt(5, 15);
 
     public static event System.Action Done;
 
@@ -35,6 +35,9 @@ public static class CleanerTemple
 
     public static string GetSimpleTemple()
     {
+        System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+        timer.Start();
+
         GenData temple = new GenData(Random.Range(TempleWidth.start, TempleWidth.end), Random.Range(TempleHeight.start, TempleHeight.end));
 
         List<GenRoom> AutoFillRoom = new List<GenRoom>();
@@ -48,7 +51,7 @@ public static class CleanerTemple
 
         GenTile pillar = GenTile.GetEmpty();
         //pillar.Details.Add(new GenDetail() { Char = '\u01C1', Type = GenDetail.DetailType.Decoration });
-        pillar.Details.Add(new GenDetail() { Char = 'O', Type = GenDetail.DetailType.Decoration });
+        pillar.Details.Add(new GenDetail() { Char = '\u01C1', Type = GenDetail.DetailType.Decoration });
 
         GenTile[,] pillars = new GenTile[,]
         {
@@ -215,7 +218,7 @@ public static class CleanerTemple
         //GenRoom Mark = GenRoom.Sized(0, 0);
         //Mark.FillFloor('X');
         //Mark.SpacePriority = 100;
-
+        Debug.Log("Pre defined done: " + timer.ElapsedMilliseconds);
 
         // lets go ham with randomly sized rooms
         int spawnAttemptsRemaining = 1000;
@@ -251,7 +254,7 @@ public static class CleanerTemple
 
         }
 
-
+        Debug.Log("random rooms done: " + timer.ElapsedMilliseconds);
         // now fill the rooms with things
 
         var adjList = temple.GetAdjacentRoomMap();
@@ -312,7 +315,7 @@ public static class CleanerTemple
             // remove it from door spawn
             GenPositionTile entry = temple.GetDoorableTiles(secret.GetAllTiles()).GetRandom();
             secret.AddDetail(entry.PositionG.x, entry.PositionG.y,
-                new GenDetail() { Char = '*', Entity = GenDetail.EntityType.Door, Type = GenDetail.DetailType.Door });
+                new GenDetail() { Char = '+', Entity = GenDetail.EntityType.Door, Type = GenDetail.DetailType.Door });
 
             GenPositionTile myChest = secret
                 .GetAllTiles()
@@ -325,7 +328,7 @@ public static class CleanerTemple
             SecretRooms.Add(secret);
             NoAutoDoor.Add(secret);
         }
-
+        Debug.Log("secret rooms: " + timer.ElapsedMilliseconds);
 
         // go through all other rooms and determin what they are 
 
@@ -628,7 +631,7 @@ public static class CleanerTemple
                 SpawnChest(temple, room);
             }
         }
-
+        Debug.Log("autofill done: " + timer.ElapsedMilliseconds);
 
         List<GenRoom> RequireDoor = new List<GenRoom>(temple.Rooms);
 
@@ -636,15 +639,15 @@ public static class CleanerTemple
         {
             RequireDoor.Remove(doo);
         }
-        List<GenRoom> DoorIteration = new List<GenRoom>(RequireDoor);
+        
         GenRoom start = EntryHall;
 
-        Dictionary<GenRoom, List<GenRoom>> adj = temple.GetAdjacentRoomMap();
+        
 
         void RandomDoorTo(GenRoom a, GenRoom b)
         {
-            var tiles = temple.GetDoorableTiles(temple.GetConnectingTiles(a, b));
-            var location = tiles.GetRandom();
+            List<GenPositionTile> tiles = temple.GetDoorableTiles(temple.GetConnectingTiles(a, b));
+            GenPositionTile location = tiles.GetRandom();
             a.AddDetails(location.PositionG.x, location.PositionG.y, GenTile.Copy(Door));
         }
 
@@ -654,7 +657,7 @@ public static class CleanerTemple
             SpamSize.MaxX - 1,
             SpamSize.GetCenter().y,
             new GenDetail()
-            { Char = '<', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.StairsUp });
+            { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp });
         }
         else
         {
@@ -664,33 +667,64 @@ public static class CleanerTemple
                 .Where(t => temple.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
                 .ToList();
             var only = spawn.GetRandom();
-            GenDetail item = new GenDetail() { Char = '<', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.StairsUp };
+            GenDetail item = new GenDetail() { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp };
             room.AddDetail(only.PositionG.x, only.PositionG.y, item);
         }
+        Debug.Log("Stairs done: " + timer.ElapsedMilliseconds);
 
-        while (RequireDoor.Count > 0)
+        List<GenRoom> DoorIteration = new List<GenRoom>(RequireDoor);
+        Dictionary<GenRoom, List<GenRoom>> adj = temple.GetAdjacentRoomMap();
+
+        foreach (var from in adj)
         {
-            DoorIteration.Clear();
-            DoorIteration.AddRange(RequireDoor);
-            foreach (var room in DoorIteration)
+            foreach (var to in NoAutoDoor)
             {
-                if (temple.IsReachable(start, room))
-                {
-                    // reachable so we dont have to do a thing
-                    RequireDoor.Remove(room);
-                }
-                else
-                {
-                    // place random door
-                    var available = adj[room];
-                    foreach (var item in NoAutoDoor)
-                    {
-                        available.Remove(item);
-                    }
-                    RandomDoorTo(room, available.GetRandom());
-                }
+                adj[from.Key].Remove(to);
+            }
+        }
 
+        Debug.Log("change adj: " + timer.ElapsedMilliseconds);
 
+        Queue<GenRoom> Doorqueue = new Queue<GenRoom>(RequireDoor);
+
+        Dictionary<GenRoom, List<GenRoom>> mapDoored = temple.GetDooredMap();
+
+        Debug.Log("queue new: " + timer.ElapsedMilliseconds);
+
+        while (Doorqueue.Count > 0)
+        {
+            GenRoom room = Doorqueue.Dequeue();
+
+            if (adj[room].Count > 0)
+            {
+                GenRoom to= adj[room].GetRandom();
+                RandomDoorTo(room,to );
+                if (!mapDoored.ContainsKey(room))
+                {
+                    mapDoored[room] = new List<GenRoom>();
+                }
+                if (!mapDoored.ContainsKey(to))
+                {
+                    mapDoored[to] = new List<GenRoom>();
+                }
+                if (!mapDoored[room].Contains(to))
+                {
+                    mapDoored[room].Add(to);
+                    mapDoored[to].Add(room);
+                }
+                if (timer.ElapsedMilliseconds>10000)
+                {
+                    break;
+                }
+            }
+
+            if (temple.IsReachable(start, room,mapDoored))
+            {
+                // reachable so we dont have to do a thing
+            }
+            else
+            {
+                Doorqueue.Enqueue(room);
             }
         }
 
@@ -700,7 +734,7 @@ public static class CleanerTemple
         {
             RandomDoorTo(Spam, room);
         }
-
+        Debug.Log("comepletely Done: " + timer.ElapsedMilliseconds);
         Debug.Log("Done");
 
 

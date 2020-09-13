@@ -80,6 +80,19 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Queue<string> m_grimoire;
     public bool decidingSpell;
 
+
+    // Skill things
+    [Header("Skills and stuff")]
+    public bool SkillsOpen;
+    public bool SkillCasting;
+    public SkillScriptableObject LastSkill;
+    public List<SkillScriptableObject> LearnedSkills;
+    public List<SkillScriptableObject> VisibleSkills;
+    public int SelectedSkillIndex;
+    public int TopVisibleSkillIndex; // the top most skill in the window
+    public string SkillText;
+    public List<SkillScriptableObject> AutoLearnSkills;
+
     private FOVNEW fv;
 
     private string itemOption1;
@@ -133,6 +146,10 @@ public class GameManager : MonoBehaviour
         }*/
 
         FirstTurn();
+        foreach (var skill in AutoLearnSkills)
+        {
+            LearnedSkills.Add(skill);
+        }
     }
 
     [Obsolete]
@@ -142,7 +159,21 @@ public class GameManager : MonoBehaviour
 
         if (isPlayerTurn)
         {
-            if(Input.GetKeyDown(KeyCode.G) && !inventoryOpen)
+            if (Input.GetKeyDown(KeyCode.T) && !inventoryOpen && !openGrimoire)
+            {
+                if (!SkillsOpen)
+                {
+                    InitSkillWindow();
+                    UpdateSkillText();
+                    UpdateSkillStats();
+                }
+                else
+                {
+                    CloseEQ();
+                }
+            }
+
+            if(Input.GetKeyDown(KeyCode.G) && !inventoryOpen && !SkillsOpen)
             {
                 if(!openGrimoire)
                 {
@@ -163,7 +194,7 @@ public class GameManager : MonoBehaviour
                     CloseEQ();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon && !openGrimoire)
+            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon && !openGrimoire && !SkillsOpen)
             {
                 if (!inventoryOpen)
                 {
@@ -335,6 +366,93 @@ public class GameManager : MonoBehaviour
                     UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
                 }
             }
+
+            if (SkillsOpen)
+            {
+                if (!SkillCasting)
+                {
+                    if (Input.GetKeyDown(KeyCode.Keypad2))
+                    {
+                        // move down one
+                        SelectedSkillIndex++;
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad8))
+                    {
+                        SelectedSkillIndex--;
+                    }
+                    SelectedSkillIndex = Mathf.Clamp(SelectedSkillIndex, 0, VisibleSkills.Count - 1);
+                    TopVisibleSkillIndex = Mathf.Clamp(TopVisibleSkillIndex, SelectedSkillIndex - 15, SelectedSkillIndex);
+
+                    UpdateSkillText();
+                    UpdateSkillStats();
+                    if (Input.GetButtonDown("Use"))
+                    {
+                        Debug.Log("USE skill");
+                        if (VisibleSkills[SelectedSkillIndex].IsCastable(playerStats))
+                        {
+                            // we will now cast the spell
+                            if (VisibleSkills[SelectedSkillIndex].IsInstant)
+                            {
+                                // we dont have to block anything
+                                VisibleSkills[SelectedSkillIndex].Prepare(playerStats);
+                                Debug.Log("cast instant");
+                            }
+                            else
+                            {
+                                SkillCasting = true;
+                                VisibleSkills[SelectedSkillIndex].Prepare(playerStats);
+                                invBorder.SetActive(false);
+                                mapText.SetActive(true);
+                                mainUItext.enabled = true;
+                                Debug.Log("Trigger technic");
+                            }
+                            LastSkill = VisibleSkills[SelectedSkillIndex];
+
+                        }
+                    }
+                }
+                else
+                {
+                    // what to do during prep phase
+                    if (!LastSkill.AllowTargetingMove()||
+                        (
+                        Mathf.Max(
+                            Mathf.Abs(Targeting.Position.x-PlayerMovement.playerMovement.position.x),
+                            Mathf.Abs(Targeting.Position.y-PlayerMovement.playerMovement.position.y))>LastSkill.Range&&LastSkill.Range!=-1))
+                    {
+                        Debug.Log("revert targeting");
+                        Targeting.Revert();
+                    }
+
+                    if (LastSkill.IsValidTarget())
+                    {
+                        MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = "<color=yellow>*</color>";
+                    }
+                    else
+                    {
+                        MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=#6b6b6b>*</color>";
+                    }
+                    Selector.Current.SelectedTile(Targeting.Position.x, Targeting.Position.y);
+                    
+                    if (Input.GetButtonDown("Use"))
+                    {
+                        if (LastSkill.IsValidTarget())
+                        {
+                            playerStats.__blood -= LastSkill.BloodCost;
+                            LastSkill.Activate(playerStats);
+                            CloseEQ();
+                            FinishPlayersTurn();
+                            dungeonGenerator.DrawMap(true, MapManager.map);
+                        }
+                    }
+                    MapManager.NeedRepaint = true;
+                }
+                
+
+
+
+            }
+
         }
         
         if(decidingSpell)
@@ -438,6 +556,15 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (MapManager.NeedRepaint)
+        {
+            MapManager.NeedRepaint = false;
+            dungeonGenerator.DrawMap(true, MapManager.map);
         }
     }
 
@@ -984,6 +1111,8 @@ public class GameManager : MonoBehaviour
 
     public void CloseEQ()
     {
+        Targeting.IsTargeting = false;
+
         GameManager.manager.anvil = null;
         if (choosingWeapon) choosingWeapon = false;
         selectedItem = 0;
@@ -991,6 +1120,12 @@ public class GameManager : MonoBehaviour
         inventoryOpen = false;
 
         openGrimoire = false;
+
+
+        SkillsOpen = false;
+        SkillCasting = false;
+
+
 
         invBorder.SetActive(false);
         mapText.SetActive(true);
@@ -1104,6 +1239,63 @@ public class GameManager : MonoBehaviour
             messagesText = (messagesText + "\n" + str);
         }
         messages.text = messagesText;
+    }
+
+    public void InitSkillWindow()
+    {
+        SkillsOpen = true;
+        SkillCasting = false;
+
+        SelectedSkillIndex = 0;
+        TopVisibleSkillIndex = 0;
+
+        player.canMove = false;
+
+        invBorder.SetActive(true);
+        mapText.SetActive(false);
+        mainUItext.enabled = false;
+        //selector.GetComponent<Text>().enabled = true;
+    }
+
+    public void UpdateSkillText()
+    {
+        SkillText = "";
+
+        VisibleSkills.Clear();
+        foreach (var skill in LearnedSkills)
+        {
+            if (skill.IsShown(playerStats))
+            {
+                VisibleSkills.Add(skill);
+            }
+        }
+        // we cant select nothin
+
+        SelectedSkillIndex = Mathf.Clamp(SelectedSkillIndex, 0, VisibleSkills.Count - 1);
+        TopVisibleSkillIndex = Mathf.Clamp(TopVisibleSkillIndex, SelectedSkillIndex - 15, SelectedSkillIndex);
+
+        for (int i = TopVisibleSkillIndex; i < Mathf.Min(VisibleSkills.Count,TopVisibleSkillIndex + 15); i++)
+        {
+            if (i == SelectedSkillIndex)
+            {
+                SkillText += "> ";
+            }
+            else
+            {
+                SkillText += "  ";
+            }
+            if (VisibleSkills[i].IsCastable(playerStats)&&playerStats.__blood>=VisibleSkills[i].BloodCost)
+            {
+                SkillText += $"<color={VisibleSkills[i].DisplayColor}>{VisibleSkills[i].Name}</color>";
+            }
+            else
+            {
+                SkillText += "<color=#6b6b6b>" + VisibleSkills[i].Name + "</color>";
+            }
+            SkillText += "\n";
+        }
+
+        inventory.text = SkillText;
     }
 
     public void UpdateGrimoireQueue(string newSpell)
@@ -1251,6 +1443,29 @@ public class GameManager : MonoBehaviour
             }
         }
         else itemRare.text = "<color=purple>???</color>";               
+    }
+
+    public void UpdateSkillStats()
+    {
+        if (SelectedSkillIndex< VisibleSkills.Count)
+        {
+            SkillScriptableObject skill = VisibleSkills[SelectedSkillIndex];
+            itemName.text = $"<color={skill.DisplayColor}>{skill.Name}</color>";
+
+            itemRare.text = $"Costs <color=red>{skill.BloodCost}</color> Blood";
+            itemType.text = $"{skill.Range} Tile Range";
+
+            itemEffects.text = skill.Description;
+        }
+        else
+        {
+            itemName.text = $"";
+
+            itemRare.text = $"";
+            itemType.text = $"";
+
+            itemEffects.text = "";
+        }             
     }
 
     public void UpdateSpellStats(ItemScriptableObject iso)

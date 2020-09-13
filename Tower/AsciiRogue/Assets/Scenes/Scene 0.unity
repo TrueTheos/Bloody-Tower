@@ -8281,6 +8281,17 @@ MonoBehaviour:
   readingBook: {fileID: 0}
   openGrimoire: 0
   decidingSpell: 0
+  SkillsOpen: 0
+  SkillCasting: 0
+  LastSkill: {fileID: 0}
+  LearnedSkills: []
+  VisibleSkills: []
+  SelectedSkillIndex: 0
+  TopVisibleSkillIndex: 0
+  SkillText: 
+  AutoLearnSkills:
+  - {fileID: 11400000, guid: d6b35a7a58f784b44b33808000e44e7b, type: 2}
+  - {fileID: 11400000, guid: 438f7ee1237fa574985f993305e94da4, type: 2}
   itemToAnvil: {fileID: 0}
   anvilMenuOpened: 0
   gemToConnect: {fileID: 0}

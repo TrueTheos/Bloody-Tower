@@ -299,7 +299,7 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
         return true;
     }
 
-    public bool AllowTargeting()
+    public bool AllowTargetingMove()
     {
         // TODO: code is required here
         return true;

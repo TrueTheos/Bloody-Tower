@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public bool canMove = true;
 
     private int damage; //damage that will be dealed to enemy;  
-    private float sleepingDamage = 1.3f; 
+    public readonly float sleepingDamage = 1.3f; 
 
     [HideInInspector] public Coroutine cor;
 
@@ -95,7 +95,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 StopAllCoroutines();
             }
-          
+
+            Selector.Current.SelectedTile(position.x, position.y);
+
             if (Input.GetButtonUp("Use"))
             {
                 if(MapManager.map[position.x, position.y].structure != null)

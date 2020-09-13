@@ -530,7 +530,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
             if (usedWand._spellType == WandSO.spellType.ray)
             {
-                if (!usedWand.AllowTargeting())
+                if (!usedWand.AllowTargetingMove())
                 {
                     Targeting.Revert();
                 }
@@ -546,7 +546,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             }
             else if (usedWand._spellType == WandSO.spellType.point)
             {
-                if (!usedWand.AllowTargeting())
+                if (!usedWand.AllowTargetingMove())
                 {
                     Targeting.Revert();
                 }

@@ -374,7 +374,7 @@ public static class GenUtil
 
                     sb.Append(toDraw.Char);
                 }
-                sb.Append('\n');
+                //sb.Append('\n');
             }
             
             return sb.ToString();

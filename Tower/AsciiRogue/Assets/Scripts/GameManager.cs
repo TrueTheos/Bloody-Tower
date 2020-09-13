@@ -123,13 +123,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        dungeonGenerator.InitializeDungeon();
-        dungeonGenerator.GenerateDungeon(0);
-        for(int i = 1; i <= 20; i++)
-        {
-            dungeonGenerator.GenerateDungeon(i);
-        }
-        dungeonGenerator.GenerateDungeon(0);
+        StartCoroutine(GenerateThings());
 
         //Clear "Messages" Box
         m_Messages.Clear();
@@ -150,6 +144,22 @@ public class GameManager : MonoBehaviour
         {
             LearnedSkills.Add(skill);
         }
+    }
+    public IEnumerator GenerateThings()
+    {
+        dungeonGenerator.InitializeDungeon();
+        yield return new WaitForEndOfFrame();
+        dungeonGenerator.GenerateDungeon(0);
+        yield return new WaitForEndOfFrame();
+        for (int i = 1; i <= 20; i++)
+        {
+            dungeonGenerator.GenerateDungeon(i);
+            yield return new WaitForEndOfFrame();
+            dungeonGenerator.DrawMap(true, MapManager.map);
+        }
+        dungeonGenerator.GenerateDungeon(0);
+        yield return new WaitForEndOfFrame();
+        dungeonGenerator.DrawMap(true, MapManager.map);
     }
 
     [Obsolete]

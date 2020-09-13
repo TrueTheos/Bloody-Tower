@@ -244,10 +244,13 @@ public class GenData
         return result;
     }
 
-    public bool IsReachable(GenRoom origin, GenRoom destination)
+    public bool IsReachable(GenRoom origin, GenRoom destination,Dictionary<GenRoom, List<GenRoom>> map = null)
     {
         // straight ripped out of the wikipedia pseudocode for Breadth-first search
-        Dictionary<GenRoom, List<GenRoom>> map = GetDooredMap();
+        if (map==null)
+        {
+            map = GetDooredMap();
+        }         
 
         List<GenRoom> visited = new List<GenRoom>();
 

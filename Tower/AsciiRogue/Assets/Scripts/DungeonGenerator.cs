@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -420,6 +421,31 @@ public class DungeonGenerator : MonoBehaviour
                     MapManager.map[x,y].isOpaque = false;
                     MapManager.map[x,y].type = "Floor";
                     cobwebPositions.Add(new Vector2Int(x,y));
+                }
+                else if (fixedLevel[inxedString] == '\u01C1')
+                {
+                    MapManager.map[x, y] = new Tile();
+                    MapManager.map[x, y].xPosition = x;
+                    MapManager.map[x, y].yPosition = y;
+                    MapManager.map[x, y].baseChar = "\u01C1";
+                    MapManager.map[x, y].isWalkable = false;
+                    MapManager.map[x, y].isOpaque = true;
+                    MapManager.map[x, y].type = "Pillar";
+                    cobwebPositions.Add(new Vector2Int(x, y));
+                }
+                else if (fixedLevel[inxedString] == 'g')
+                {
+                    MapManager.map[x, y] = new Tile();
+                    MapManager.map[x, y].xPosition = x;
+                    MapManager.map[x, y].yPosition = y;
+                    MapManager.map[x, y].baseChar = ".";
+                    MapManager.map[x, y].isWalkable = true;
+                    MapManager.map[x, y].isOpaque = false;
+                    MapManager.map[x, y].type = "Floor";
+                    if (!spawnEnemiesFromString)
+                    {
+                        enemyPositions.Add(new Vector2Int(x, y));
+                    }
                 }
                 else
                 {

@@ -36,6 +36,8 @@ public class GenDetail
                     return 1;
                 case DetailType.Door:
                     return 2;
+                case DetailType.Stairs:
+                    return 100;
                 case DetailType.Floor:
                 default:
                     return -1;
@@ -49,6 +51,7 @@ public class GenDetail
         Background, // or Floor, not sure what is better -> walkable
         Wall,
         Door,
+        Stairs,
         Floor // default 
     }
 

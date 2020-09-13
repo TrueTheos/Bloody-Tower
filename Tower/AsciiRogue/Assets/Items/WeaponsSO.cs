@@ -22,7 +22,8 @@ public class WeaponsSO : ItemScriptableObject
         dagger,
         katana,
         mace,
-        spear
+        spear,
+        melee
     }
     public weaponType _weaponType;
 

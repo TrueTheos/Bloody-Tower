@@ -530,7 +530,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
             if (usedWand._spellType == WandSO.spellType.ray)
             {
-                if (!usedWand.AllowTargeting())
+                if (!usedWand.AllowTargetingMove())
                 {
                     Targeting.Revert();
                 }
@@ -546,7 +546,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             }
             else if (usedWand._spellType == WandSO.spellType.point)
             {
-                if (!usedWand.AllowTargeting())
+                if (!usedWand.AllowTargetingMove())
                 {
                     Targeting.Revert();
                 }
@@ -605,7 +605,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
                 PlayerMovement.playerMovement.canMove = false;
                 gameManager.UpdateMessages("Choose target of your spell. <color=pink>(Numpad 8 4 6 2, Enter/Space to confirm, Escape to cancel)</color>");
             }
-
 
             MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=yellow>\u205C</color>";
             DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);

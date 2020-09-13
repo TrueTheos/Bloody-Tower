@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Selector : MonoBehaviour
 {
+
+    public static Selector Current;
+
     public RectTransform selector;
 
     public Vector2Int currentPos;
@@ -16,6 +19,12 @@ public class Selector : MonoBehaviour
     public int height;
 
     public Text lookingAt;
+
+
+    private void Awake()
+    {
+        Current = this;
+    }
 
     void Update()
     {    
@@ -75,7 +84,7 @@ public class Selector : MonoBehaviour
         }
     }
 
-    private void SelectedTile(int x, int y)
+    public void SelectedTile(int x, int y)
     {
         try
         {

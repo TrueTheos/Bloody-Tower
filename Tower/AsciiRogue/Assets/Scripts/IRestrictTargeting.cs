@@ -13,8 +13,8 @@ public interface IRestrictTargeting
     /// <returns></returns>
     bool IsValidTarget();
     /// <summary>
-    /// if the current position of the targeting system is allowed
+    /// if targeting system should revert the last move
     /// </summary>
     /// <returns></returns>
-    bool AllowTargeting();
+    bool AllowTargetingMove();
 }

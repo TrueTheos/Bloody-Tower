@@ -8,6 +8,7 @@ public class MapManager
     public static Tile[,] map; // the 2-dimensional map with the information for all the tiles
     public static Vector2Int playerPos;
     public static Vector2Int upperStairsPos, lowerStairsPos;
+    public static bool NeedRepaint;
 }
 
 [Serializable] // Makes the class serializable so it can be saved out to a file

@@ -92,6 +92,16 @@ public struct GenRect
         return new Vector2Int(xA, yA);
     }
 
+    public GenRect Union(GenRect other)
+    {
+        GenRect rect =
+            new GenRect(
+                Mathf.Max(other.MinX, MinX),
+                Mathf.Min(other.MaxX, MaxX),
+                Mathf.Max(other.MinY, MinY),
+                Mathf.Min(other.MaxY, MaxY));
+        return rect;
+    }
 
 
 }

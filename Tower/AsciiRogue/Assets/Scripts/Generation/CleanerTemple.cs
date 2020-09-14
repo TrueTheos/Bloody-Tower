@@ -259,6 +259,7 @@ public static class CleanerTemple
 
         var adjList = temple.GetAdjacentRoomMap();
         // remove any Room that is too small and have no connections
+        Debug.Log("adjList created: " + timer.ElapsedMilliseconds);
 
         List<GenRoom> tooSmall = new List<GenRoom>();
         foreach (var room in temple.Rooms)
@@ -289,7 +290,7 @@ public static class CleanerTemple
             temple.Rooms.Remove(room);
         }
 
-
+        Debug.Log("Remove small Room Time: " + timer.ElapsedMilliseconds);
 
         List<GenRoom> PotentialSecret = new List<GenRoom>();
 
@@ -302,6 +303,7 @@ public static class CleanerTemple
         }
 
         Debug.Log("potential " + PotentialSecret.Count + "Secret rooms");
+        Debug.Log("Potential Secret Room Time: " + timer.ElapsedMilliseconds);
 
         // 1 room --> 0,1,2,3
         // 2 room --> 4,5
@@ -313,7 +315,7 @@ public static class CleanerTemple
             // we get random door
             // add a chest
             // remove it from door spawn
-            GenPositionTile entry = temple.GetDoorableTiles(secret.GetAllTiles()).GetRandom();
+            GenPositionTile entry = temple.GetDoorableTiles(secret.GetEdge().ToList()).GetRandom();
             secret.AddDetail(entry.PositionG.x, entry.PositionG.y,
                 new GenDetail() { Char = '+', Entity = GenDetail.EntityType.Door, Type = GenDetail.DetailType.Door });
 
@@ -651,26 +653,7 @@ public static class CleanerTemple
             a.AddDetails(location.PositionG.x, location.PositionG.y, GenTile.Copy(Door));
         }
 
-        if (Random.value<0.2f)
-        {
-            Spam.AddDetail(
-            SpamSize.MaxX - 1,
-            SpamSize.GetCenter().y,
-            new GenDetail()
-            { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp });
-        }
-        else
-        {
-            var room = RequireDoor.GetRandom();
-            var spawn = room
-                .GetAllTiles()
-                .Where(t => temple.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
-                .ToList();
-            var only = spawn.GetRandom();
-            GenDetail item = new GenDetail() { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp };
-            room.AddDetail(only.PositionG.x, only.PositionG.y, item);
-        }
-        Debug.Log("Stairs done: " + timer.ElapsedMilliseconds);
+        
 
         List<GenRoom> DoorIteration = new List<GenRoom>(RequireDoor);
         Dictionary<GenRoom, List<GenRoom>> adj = temple.GetAdjacentRoomMap();
@@ -728,12 +711,35 @@ public static class CleanerTemple
             }
         }
 
-
-
         foreach (var room in adj[Spam].GetRandom(2))
         {
             RandomDoorTo(Spam, room);
         }
+        Debug.Log("Doors time: " + timer.ElapsedMilliseconds);
+
+        if (Random.value < 0.2f)
+        {
+            Spam.AddDetail(
+            SpamSize.MaxX - 1,
+            SpamSize.GetCenter().y,
+            new GenDetail()
+            { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp });
+        }
+        else
+        {
+            var room = RequireDoor.GetRandom();
+            var spawn = room
+                .GetAllTiles()
+                .Where(t => temple.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
+                .ToList();
+            var only = spawn.GetRandom();
+            GenDetail item = new GenDetail() { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp };
+            room.AddDetail(only.PositionG.x, only.PositionG.y, item);
+        }
+
+        Debug.Log("Stairs done: " + timer.ElapsedMilliseconds);
+
+
         Debug.Log("comepletely Done: " + timer.ElapsedMilliseconds);
         Debug.Log("Done");
 

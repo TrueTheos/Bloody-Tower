@@ -29,7 +29,8 @@ MonoBehaviour:
   - kicks you in the shin.
   - ' slaps your thigh and then your face. '
   - slaps your stomach.
-  E_possileDrops: []
+  E_possileDrops:
+  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

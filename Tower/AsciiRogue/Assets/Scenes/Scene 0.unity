@@ -8190,6 +8190,7 @@ MonoBehaviour:
   enemyNames: []
   enemyPositions: []
   enemySleeping: 
+  mimicPositions: []
   floorManager: {fileID: 0}
   mapWidth: 56
   mapHeight: 22
@@ -8451,6 +8452,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 88ebefc521b7c984090312f5fc281631, type: 2}
   - {fileID: 11400000, guid: cec9cdeb415112c47bf46c5c1c0b8b46, type: 2}
   - {fileID: 11400000, guid: ecba9f6a490c3d34a967b6155548e600, type: 2}
+  - {fileID: 11400000, guid: edd38b8eac318de4c825ce61bbcd7de2, type: 2}
+  - {fileID: 11400000, guid: 14637aac611fd6847a0862222e0acd1c, type: 2}
+  - {fileID: 11400000, guid: 6b00f21f9afd54f44ae2d4f90052bad2, type: 2}
+  - {fileID: 11400000, guid: 25981fe313a6ccc4f8f192b4c8e22bc7, type: 2}
   Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
   spawnedEnemies: []
   enemiesPerRoom: 010000000100000002000000020000000200000003000000

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
+  m_Name: Servant
+  m_EditorClassIdentifier: 
+  E_name: Servant
+  E_symbol: c
+  E_color: {r: 1, g: 1, b: 1, a: 0}
+  E_lvlMin: 11
+  E_lvlMax: 20
+  E_realName: 
+  E_realSymbol: 
+  E_realColor: {r: 0, g: 0, b: 0, a: 0}
+  __modifier: 0
+  _Difficulty: 1
+  _Behaviour: 0
+  _Attacks: 0
+  attacks: 00000000
+  attackText: []
+  E_possileDrops: []
+  leavesCorpse: 0
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}

@@ -134,12 +134,6 @@ public class GameManager : MonoBehaviour
 
         invBorder.SetActive(false);
 
-        /*foreach (var item in itemSpawner.allItems)
-        {
-            item.identified = item.normalIdentifState;
-        }*/
-
-        FirstTurn();
         foreach (var skill in AutoLearnSkills)
         {
             LearnedSkills.Add(skill);
@@ -160,6 +154,8 @@ public class GameManager : MonoBehaviour
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
         dungeonGenerator.DrawMap(true, MapManager.map);
+
+        FirstTurn();
     }
 
     [Obsolete]

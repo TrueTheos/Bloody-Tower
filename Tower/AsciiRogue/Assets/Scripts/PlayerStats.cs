@@ -734,6 +734,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         currentItems++;
         iso.OnPickup(this);
         itemsInEqGO.Add(itemObject.GetComponent<Item>());
+
+        foreach (var skill in iso.SkillsToLearn)
+        {
+            gameManager.LearnSkill(skill);
+        }
         
         try {MapManager.map[position.x, position.y].item = null;}
         catch{}

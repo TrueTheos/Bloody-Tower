@@ -1015,6 +1015,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LearnSkill(SkillScriptableObject skill)
+    {
+        if (!LearnedSkills.Contains(skill))
+        {
+            LearnedSkills.Add(skill);
+        }
+    }
+    public void UnlearnSkill(SkillScriptableObject skill)
+    {
+        LearnedSkills.Remove(skill);
+        if (LastSkill==skill)
+        {
+            LastSkill = null;
+        }
+    }
+
     private void Upgrade()
     {
         itemToAnvil = _selectedItem.GetComponent<Item>();

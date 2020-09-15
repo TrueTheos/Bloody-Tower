@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Zealot
+  m_Name: Blood Priest
   m_EditorClassIdentifier: 
-  E_name: Zealot
+  E_name: Blood Priest
   E_symbol: z
   E_color: {r: 1, g: 0, b: 0, a: 1}
   E_lvlMin: 11
@@ -26,7 +26,8 @@ MonoBehaviour:
   _Attacks: 0
   attacks: 00000000
   attackText: []
-  E_possileDrops: []
-  leavesCorpse: 0
+  E_possileDrops:
+  - {fileID: 11400000, guid: cc0f76b0586c2be44bbaa2bedb160dcd, type: 2}
+  leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

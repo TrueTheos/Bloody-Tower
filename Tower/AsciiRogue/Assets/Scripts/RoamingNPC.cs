@@ -81,6 +81,9 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
     [HideInInspector] public bool rooted;
     [HideInInspector] public int rootDuration;
 
+    [HideInInspector] public bool isStuned;
+    [HideInInspector] public int stuneDuration;
+
     [HideInInspector] public event Action EffectTasks; //bleed, lose help because of poison etc
     private int bleedLength;
     private bool isBleeding;
@@ -115,12 +118,17 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
         if(enemySO.finishedDialogue) enemySO.finishedDialogue = false;
         maxHp = __currentHp;
+
+        Stun(2);
     }   
 
     void MoveTo(int x, int y) 
     {
         try
         {
+            Stun(0);
+            if (Stun()) return;
+
             if(MapManager.map[__position.x, __position.y].type == "Cobweb")
             {
                 if(Random.Range(1,100) <= 20 - (dex / 2))
@@ -421,8 +429,6 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             MoveTo(path[0].x, path[0].y);
         }
 
-        Debug.Log("c");
-
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         StopCoroutine(_FadingBite());
     }
@@ -543,6 +549,41 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }        
     }
 
+    public bool Stun()
+    {     
+        if (stuneDuration <= 0)
+        {
+            stuneDuration = 0;
+            isStuned = false;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void Stun(int duration = 0)
+    {
+        if (isStuned)
+        {
+            stuneDuration--;
+        }
+
+        if (duration > 0 && duration > stuneDuration)
+        {
+            stuneDuration = duration;
+            isStuned = true;
+        }
+
+        if (stuneDuration <= 0)
+        {
+            stuneDuration = 0;
+            isStuned = false;
+        }
+    }
+    
+    
     //Poison Bolt
 
     public bool damageOverTurn;

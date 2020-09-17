@@ -9,6 +9,83 @@ public class MapManager
     public static Vector2Int playerPos;
     public static Vector2Int upperStairsPos, lowerStairsPos;
     public static bool NeedRepaint;
+    /// <summary>
+    /// Searches for the closest Position towards a goal position (excluding the target)
+    /// </summary>
+    /// <param name="origin">From</param>
+    /// <param name="target">Tp</param>
+    /// <returns></returns>
+    public static bool TryFindClosestPositionTowards(Vector2Int origin, Vector2Int target, out Vector2Int endPosition)
+    {
+        List<Vector2Int> possible = GetValidNeighbours(target);
+
+        if (possible.Count==0)
+        {
+            endPosition = origin;
+            return false;
+        }
+
+        Vector2Int best = possible[0];
+        float bestDistance = Vector2Int.Distance(origin, best);
+        for (int i = 1; i < possible.Count; i++)
+        {
+            if (Vector2Int.Distance(origin,possible[i])>bestDistance)
+            {
+                bestDistance = Vector2Int.Distance(origin, possible[i]);
+                best = possible[i];
+            }
+        }
+
+        // This can be removed if we want to to allow jumping to the other side
+        if (bestDistance-0.3f>Vector2Int.Distance(origin,target))
+        {
+            endPosition = origin;
+            return false;
+        }
+        endPosition = best;
+        return true;
+    }
+    public static List<Vector2Int> GetValidNeighbours(Vector2Int position)
+    {
+        List<Vector2Int> possible = new List<Vector2Int>();
+
+        if (map[position.x+1,position.y+1].isWalkable && map[position.x + 1, position.y + 1].enemy==null)
+        {
+            possible.Add(new Vector2Int(position.x + 1, position.y + 1));
+        }
+        if (map[position.x + 1, position.y + 0].isWalkable && map[position.x + 1, position.y + 0].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x + 1, position.y + 0));
+        }
+        if (map[position.x + 1, position.y -1].isWalkable && map[position.x + 1, position.y - 1].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x + 1, position.y - 1));
+        }
+
+        if (map[position.x + 0, position.y +1].isWalkable && map[position.x + 0, position.y + 1].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x + 0, position.y + 1));
+        }
+        if (map[position.x + 0, position.y -1].isWalkable && map[position.x + 0, position.y - 1].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x + 0, position.y - 1));
+        }
+
+        if (map[position.x -1, position.y + 1].isWalkable && map[position.x - 1, position.y + 1].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x - 1, position.y + 1));
+        }
+        if (map[position.x -1, position.y + 0].isWalkable && map[position.x - 1, position.y + 0].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x - 1, position.y + 0));
+        }
+        if (map[position.x -1, position.y - 1].isWalkable && map[position.x - 1, position.y - 1].enemy == null)
+        {
+            possible.Add(new Vector2Int(position.x - 1, position.y - 1));
+        }
+        return possible;
+    }
+
 }
 
 [Serializable] // Makes the class serializable so it can be saved out to a file

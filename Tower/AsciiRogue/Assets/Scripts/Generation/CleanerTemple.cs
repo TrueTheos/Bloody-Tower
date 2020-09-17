@@ -32,7 +32,6 @@ public static class CleanerTemple
     }
 
 
-
     public static string GetSimpleTemple()
     {
         System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
@@ -259,6 +258,7 @@ public static class CleanerTemple
 
         var adjList = temple.GetAdjacentRoomMap();
         // remove any Room that is too small and have no connections
+        Debug.Log("adjList created: " + timer.ElapsedMilliseconds);
 
         List<GenRoom> tooSmall = new List<GenRoom>();
         foreach (var room in temple.Rooms)
@@ -289,7 +289,7 @@ public static class CleanerTemple
             temple.Rooms.Remove(room);
         }
 
-
+        Debug.Log("Remove small Room Time: " + timer.ElapsedMilliseconds);
 
         List<GenRoom> PotentialSecret = new List<GenRoom>();
 
@@ -302,6 +302,7 @@ public static class CleanerTemple
         }
 
         Debug.Log("potential " + PotentialSecret.Count + "Secret rooms");
+        Debug.Log("Potential Secret Room Time: " + timer.ElapsedMilliseconds);
 
         // 1 room --> 0,1,2,3
         // 2 room --> 4,5
@@ -313,7 +314,7 @@ public static class CleanerTemple
             // we get random door
             // add a chest
             // remove it from door spawn
-            GenPositionTile entry = temple.GetDoorableTiles(secret.GetAllTiles()).GetRandom();
+            GenPositionTile entry = temple.GetDoorableTiles(secret.GetEdge().ToList()).GetRandom();
             secret.AddDetail(entry.PositionG.x, entry.PositionG.y,
                 new GenDetail() { Char = '+', Entity = GenDetail.EntityType.Door, Type = GenDetail.DetailType.Door });
 
@@ -599,6 +600,13 @@ public static class CleanerTemple
                     continue;
                 }
             }
+
+            // a room with some other sort of detail
+
+
+
+
+
             // something random
             //room.FillFloor('~');
 
@@ -651,26 +659,7 @@ public static class CleanerTemple
             a.AddDetails(location.PositionG.x, location.PositionG.y, GenTile.Copy(Door));
         }
 
-        if (Random.value<0.2f)
-        {
-            Spam.AddDetail(
-            SpamSize.MaxX - 1,
-            SpamSize.GetCenter().y,
-            new GenDetail()
-            { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp });
-        }
-        else
-        {
-            var room = RequireDoor.GetRandom();
-            var spawn = room
-                .GetAllTiles()
-                .Where(t => temple.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
-                .ToList();
-            var only = spawn.GetRandom();
-            GenDetail item = new GenDetail() { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp };
-            room.AddDetail(only.PositionG.x, only.PositionG.y, item);
-        }
-        Debug.Log("Stairs done: " + timer.ElapsedMilliseconds);
+        
 
         List<GenRoom> DoorIteration = new List<GenRoom>(RequireDoor);
         Dictionary<GenRoom, List<GenRoom>> adj = temple.GetAdjacentRoomMap();
@@ -726,14 +715,41 @@ public static class CleanerTemple
             {
                 Doorqueue.Enqueue(room);
             }
+            if (timer.ElapsedMilliseconds > 3500)
+            {
+                break;
+            }
         }
-
-
 
         foreach (var room in adj[Spam].GetRandom(2))
         {
             RandomDoorTo(Spam, room);
         }
+        Debug.Log("Doors time: " + timer.ElapsedMilliseconds);
+
+        if (Random.value < 0.2f)
+        {
+            Spam.AddDetail(
+            SpamSize.MaxX - 1,
+            SpamSize.GetCenter().y,
+            new GenDetail()
+            { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp });
+        }
+        else
+        {
+            var room = RequireDoor.Where(x=>temple.IsReachable(EntryHall,x,mapDoored)).ToList().GetRandom();
+            var spawn = room
+                .GetAllTiles()
+                .Where(t => temple.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
+                .ToList();
+            var only = spawn.GetRandom();
+            GenDetail item = new GenDetail() { Char = '<', Type = GenDetail.DetailType.Stairs, Entity = GenDetail.EntityType.StairsUp };
+            room.AddDetail(only.PositionG.x, only.PositionG.y, item);
+        }
+
+        Debug.Log("Stairs done: " + timer.ElapsedMilliseconds);
+
+
         Debug.Log("comepletely Done: " + timer.ElapsedMilliseconds);
         Debug.Log("Done");
 
@@ -752,8 +768,8 @@ public static class CleanerTemple
                 .GetAllTiles()
                 .Where(t => data.IsCornerG(t.PositionG.x, t.PositionG.y, GenDetail.DetailType.Wall, GenDetail.DetailType.Decoration))
                 .ToList().GetRandom();
-            GenDetail item = new GenDetail() { Char = '=', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Chest };
-            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, item);
+            GenDetail chest = new GenDetail() { Char = '=', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Chest };
+            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, chest);
         }
         else
         {
@@ -762,8 +778,8 @@ public static class CleanerTemple
                 .Where(t => data.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
                 .ToList()
                 .GetRandom();
-            GenDetail item = new GenDetail() { Char = '=', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Chest };
-            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, item);
+            GenDetail chest = new GenDetail() { Char = '=', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Chest };
+            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, chest);
         }
     }
     public static void SpawnItem(GenData data, GenRoom room, bool corner = false)
@@ -796,8 +812,8 @@ public static class CleanerTemple
                 .GetAllTiles()
                 .Where(t => data.IsCornerG(t.PositionG.x, t.PositionG.y, GenDetail.DetailType.Wall, GenDetail.DetailType.Decoration))
                 .ToList().GetRandom();
-            GenDetail item = new GenDetail() { Char = 'g', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Enemy };
-            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, item);
+            GenDetail enemy = new GenDetail() { Char = 'g', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Enemy };
+            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, enemy);
         }
         else
         {
@@ -806,10 +822,9 @@ public static class CleanerTemple
                 .Where(t => data.IsInsideRoom(t.PositionG.x, t.PositionG.y, room))
                 .ToList()
                 .GetRandom();
-            GenDetail item = new GenDetail() { Char = 'g', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Enemy };
-            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, item);
+            GenDetail enemy = new GenDetail() { Char = 'g', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Enemy };
+            room.AddDetail(spawn.PositionG.x, spawn.PositionG.y, enemy);
         }
-
     }
 
 
@@ -842,4 +857,41 @@ public static class CleanerTemple
     {
         Overlay.text = "";
     }
+
+    static GenDetail dPillar = new GenDetail() { Char = '\u01C1', Type = GenDetail.DetailType.Decoration };
+    static GenDetail dStatue = new GenDetail() { Char = '&', Type = GenDetail.DetailType.Decoration };
+    static GenDetail dChest = new GenDetail() { Char = '=', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Chest };
+    static GenDetail dItem = new GenDetail() { Char = '0', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Item };
+    static GenDetail dEnemy = new GenDetail() { Char = 'g', Type = GenDetail.DetailType.Entity, Entity = GenDetail.EntityType.Enemy };
+
+    static GenDetail dWater = new GenDetail() { Char = '~', Type = GenDetail.DetailType.Background };
+    static GenDetail dEmpty = new GenDetail() { Char = ' ', Type = GenDetail.DetailType.Nothing };
+
+    private struct DecoPos
+    {
+        public bool CanWall;
+        public bool CanFree;
+        public bool Top;
+        public bool Bot;
+        public bool Right;
+        public bool Left;
+        
+
+
+    }
+
+
+    public static List<GenTile[,]> RoomDecorations = new List<GenTile[,]>()
+    {
+        new GenTile[,]
+        {
+            {
+                new GenTile(){Details = new List<GenDetail>(){ } },
+
+            }
+        }
+    };
+
+
+
 }

@@ -68,6 +68,9 @@ public abstract class ItemScriptableObject : ScriptableObject
     public string effect;
     public int worth;
 
+    [Header("Skill learning")]
+    public List<SkillScriptableObject> SkillsToLearn;
+
     [Header("Bonus statistics")]
     public int bonusToHealth;
     public int bonusToStrength;

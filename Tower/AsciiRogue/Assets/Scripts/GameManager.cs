@@ -133,7 +133,6 @@ public class GameManager : MonoBehaviour
         fv.Initialize(fv.CanLightPass, fv.SetToVisible, fv.Distance);
 
         invBorder.SetActive(false);
-
         foreach (var skill in AutoLearnSkills)
         {
             LearnedSkills.Add(skill);
@@ -154,7 +153,6 @@ public class GameManager : MonoBehaviour
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
         dungeonGenerator.DrawMap(true, MapManager.map);
-
         FirstTurn();
     }
 
@@ -1003,10 +1001,29 @@ public class GameManager : MonoBehaviour
         else
         {
             _selectedItem.iso.Use(playerStats, _selectedItem);
+
             ApplyChangesInInventory(null);
 
             decisionMade = true;
+
             FinishPlayersTurn();
+
+        }
+    }
+
+    public void LearnSkill(SkillScriptableObject skill)
+    {
+        if (!LearnedSkills.Contains(skill))
+        {
+            LearnedSkills.Add(skill);
+        }
+    }
+    public void UnlearnSkill(SkillScriptableObject skill)
+    {
+        LearnedSkills.Remove(skill);
+        if (LastSkill==skill)
+        {
+            LastSkill = null;
         }
     }
 
@@ -1212,7 +1229,7 @@ public class GameManager : MonoBehaviour
 
     public void EnemyTurn()
     {
-        foreach(var enemy in enemies)
+        foreach(var enemy in enemies.ToList())
         {
             if(enemy != null) enemy.GetComponent<RoamingNPC>().LookForPlayer();
         }

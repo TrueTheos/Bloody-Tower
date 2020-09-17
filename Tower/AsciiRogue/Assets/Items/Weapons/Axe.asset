@@ -35,7 +35,7 @@ MonoBehaviour:
   bonusToEndurance: 0
   bonusToNoise: 0
   attacks:
-  - {x: 1, y: 4}
+  - {x: 1, y: 7}
   effectsOnHit: 
   _weaponType: 1
   bloodSwordCounter: 0

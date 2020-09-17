@@ -23,9 +23,10 @@ MonoBehaviour:
   __modifier: 0
   _Difficulty: 1
   _Behaviour: 4
+  _Attacks: 0
   attacks: 00000000
   attackText: []
   E_possileDrops: []
-  leavesCorpse: 0
+  leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}

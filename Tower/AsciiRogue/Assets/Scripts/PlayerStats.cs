@@ -955,9 +955,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             }
             yield return new WaitForSeconds(0.001f);
             DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-        }    
+        }
 
-        StopCoroutine(EffectCoroutine);
+        yield return null;
     }
 
     public void LossBlood(int amount)

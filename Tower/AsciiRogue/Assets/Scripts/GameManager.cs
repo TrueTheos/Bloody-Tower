@@ -605,6 +605,54 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public IEnumerator DestroyTorchEffect(Vector2Int _pos)
+    {
+        Vector2Int pos = _pos;
+
+        int x = 0;
+
+        for (int i = 1; i < 60; i++)
+        {
+            x = pos.x;
+            for (int i1 = pos.y + i; i1 >= pos.y; i1--)
+            {
+                try { MapManager.map[x, i1].decoy = "<color=red>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, pos.y + (pos.y - i1)].decoy = "<color=red>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, i1].decoy = "<color=red>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, pos.y + (pos.y - i1)].decoy = "<color=red>*</color>"; }
+                catch { }
+                x++;
+            }
+
+            x = pos.x;
+
+            for (int i1 = pos.y + i; i1 >= pos.y; i1--)
+            {
+                try { MapManager.map[x, i1].decoy = "<color=red>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, pos.y + (pos.y - i1)].decoy = "<color=red>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, i1].decoy = "<color=red>*</color>"; }
+                catch { }
+
+                try { MapManager.map[x, pos.y + (pos.y - i1)].decoy = "<color=red>*</color>"; }
+                catch { }
+                x--;
+            }
+            yield return new WaitForSeconds(0.001f);
+            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        }
+
+        yield return null;
+    }
     private void Drop()
     {
         Vector2Int posToDrop = new Vector2Int(1000, 1000);

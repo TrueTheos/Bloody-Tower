@@ -7,6 +7,7 @@ public class EnemySpawner : MonoBehaviour
 {
     public EnemiesScriptableObject[] allEnemies;
     public EnemiesScriptableObject Mimic;
+    public EnemiesScriptableObject Zombie;
     [HideInInspector]public List<GameObject> spawnedEnemies = new List<GameObject>();
     public List<int> enemiesPerRoom;
     

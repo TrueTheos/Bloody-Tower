@@ -13,6 +13,7 @@ public class DungeonGenerator : MonoBehaviour
 {
     [Header("Fixed Levels")]
     public List<FixedLevels> floor10BossRooms;
+    public FixedLevels necromancerLevel;
     public FixedLevels lvl7;
     public ItemScriptableObject keyToCell;
 
@@ -95,6 +96,10 @@ public class DungeonGenerator : MonoBehaviour
         {
             GenerateFixedLevel(lvl7.fixedLevel, 5, true, false);  
         }
+        else if (floorNumber == 7 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        {
+            GenerateFixedLevel(necromancerLevel.fixedLevel, 7, true, false);
+        }
         else if(floorNumber>10 && floorNumber<20 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
             GenerateFixedLevel(CleanerTemple.GetSimpleTemple(), floorNumber, false, false);
@@ -149,6 +154,9 @@ public class DungeonGenerator : MonoBehaviour
     //= CHEST
     //" MUSHROOM
     //& COBWEB
+    //~ - Blood
+    //2 - Pillar
+    //3 - Blood Torch
 
     public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
     {
@@ -422,7 +430,7 @@ public class DungeonGenerator : MonoBehaviour
                     MapManager.map[x,y].type = "Floor";
                     cobwebPositions.Add(new Vector2Int(x,y));
                 }
-                else if (fixedLevel[inxedString] == '\u01C1')
+                else if (fixedLevel[inxedString] == '2')
                 {
                     MapManager.map[x, y] = new Tile();
                     MapManager.map[x, y].xPosition = x;
@@ -431,7 +439,6 @@ public class DungeonGenerator : MonoBehaviour
                     MapManager.map[x, y].isWalkable = false;
                     MapManager.map[x, y].isOpaque = true;
                     MapManager.map[x, y].type = "Pillar";
-                    cobwebPositions.Add(new Vector2Int(x, y));
                 }
                 else if (fixedLevel[inxedString] == 'g')
                 {
@@ -446,6 +453,32 @@ public class DungeonGenerator : MonoBehaviour
                     {
                         enemyPositions.Add(new Vector2Int(x, y));
                     }
+                }
+                else if(fixedLevel[inxedString] == '~')
+                {
+                    MapManager.map[x, y] = new Tile();
+                    MapManager.map[x, y].xPosition = x;
+                    MapManager.map[x, y].yPosition = y;
+                    MapManager.map[x, y].isWalkable = true;
+                    MapManager.map[x, y].isOpaque = false;
+                    MapManager.map[x, y].baseChar = "~";
+                    MapManager.map[x, y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
+                    MapManager.map[x, y].type = "Water";
+                    MapManager.map[x, y].specialNameOfTheCell = "Blood";
+                }
+                else if (fixedLevel[inxedString] == '3')
+                {
+                    MapManager.map[x, y] = new Tile();
+                    MapManager.map[x, y].xPosition = x;
+                    MapManager.map[x, y].yPosition = y;
+                    MapManager.map[x, y].baseChar = "\u0416";
+                    MapManager.map[x, y].isWalkable = false;
+                    MapManager.map[x, y].isOpaque = true;
+                    MapManager.map[x, y].exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f);
+                    MapManager.map[x, y].type = "Blood Torch";
+                    BloodTorch torch = new BloodTorch();
+                    torch.position = new Vector2Int(x, y);
+                    MapManager.map[x, y].structure = torch;
                 }
                 else
                 {

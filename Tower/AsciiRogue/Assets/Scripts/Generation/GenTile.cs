@@ -14,7 +14,7 @@ public class GenTile
     public GenHallway PHallway; // parent Hallway
     */
 
-    private GenTile()
+    public GenTile()
     {
         Details = new List<GenDetail>();
     }

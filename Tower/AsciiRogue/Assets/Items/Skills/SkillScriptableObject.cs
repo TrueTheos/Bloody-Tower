@@ -211,73 +211,414 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 
     private void ActivatePoisionCleanse(PlayerStats player)
     {
-        throw new NotImplementedException();
+        
     }
 
     private void ActivateBackingJavelin(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateHookSwitch(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateNutCracker(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateVampireBite(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateShadowFang(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateArcEdge(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateDashSlash(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        if (MapManager.TryFindClosestPositionTowards(PlayerMovement.playerMovement.position,npc.__position,out Vector2Int outpos))
+        {
+            // we teleport to the spot
+            PlayerMovement.playerMovement.Move(outpos);
+        }
+        else
+        {
+            return;
+        }
+
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.5f);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateSever(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
+        {
+            if (calcRoll>65)
+            {
+                // TODO: generate blood
+                player.__blood += UnityEngine.Random.Range(1, 21);
+            }
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateFlatBash(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
+        {
+            if (calcRoll>65)
+            {
+                // TODO: stun enemy
+
+            }
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.75f);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateJumpSmash(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            if (calcRoll> 65)
+            {
+                // TODO: stun the enemy
+
+            }
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,1.25f);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateSweep(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
+        {
+            if (calcRoll> 65)
+            {
+                // TODO: slow the enemy
+                
+            }
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.75f);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateDivide(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            if (calcRoll>65 && npc.__currentHp<=5)
+            {
+                DealDamageToEnemy(npc, 1000);
+                // TODO: two corpses and the blood
+
+            }
+            else
+            {
+                damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex, 1.25f);
+                DealDamageToEnemy(npc, damage);
+            }            
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
+    }
+
+    private void ActivateHeavySwing(PlayerStats player)
+    {
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll,player.__dexterity,npc.dex,npc.AC,npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,1.25f);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
 
     private void ActivateThrust(PlayerStats player)
     {
-        throw new NotImplementedException();
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+        int damage = 0;
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
+        {
+            damage = CalculateDamage(player._Lhand,player._Rhand,player.__dexterity,player.__strength,npc.AC-1,npc.dex,0.75f);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
+        }
     }
+
+
 
     public void DrawPreperation()
     {
@@ -401,31 +742,6 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 
 
 
-    private void ActivateHeavySwing(PlayerStats player)
-    {
-        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
-        var npc = enemy.GetComponent<RoamingNPC>();
-        int roll = UnityEngine.Random.Range(1, 101);
-
-        int calcRoll;
-        calcRoll = CalculateRoll(roll,player.__dexterity,npc.dex,npc.AC,npc.sleeping);
-
-        if (roll <= 20)
-        {
-            MissEnemyWakeUp(npc);
-            return;
-        }
-        int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
-        {
-            damage = CalculateDamage(player, npc, damage);
-            DealDamageToEnemy(npc, damage);
-        }
-        else //WE MISSED BUT WE WAKE UP ENEMY
-        {
-            MissEnemyWakeUp(npc);
-        }
-    }
 
 
 
@@ -468,10 +784,10 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         }
     }
 
-    private int CalculateDamage(PlayerStats player, RoamingNPC npc, float damageAmplification = 1)
+    private int CalculateDamage(Item pLhand, Item pRhand, int pDex, int pStrength, int npcAC, int npcDex, float damageAmplification = 1)
     {
         int damage = 0;
-        if (player._Lhand?.iso is WeaponsSO weaponL && CheckWeaponType(weaponL))
+        if (pLhand?.iso is WeaponsSO weaponL && CheckWeaponType(weaponL))
         {
             for (int x = 0; x < weaponL.attacks.Count; x++)
             {
@@ -485,7 +801,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                 }
             }
         }
-        if (player._Rhand?.iso is WeaponsSO weaponR && CheckWeaponType(weaponR))
+        if (pRhand?.iso is WeaponsSO weaponR && CheckWeaponType(weaponR))
         {
             for (int x = 0; x < weaponR.attacks.Count; x++)
             {
@@ -503,16 +819,16 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         damage = Mathf.FloorToInt(damage * damageAmplification); // the additional bonus damage
 
         //CRIT?
-        if (UnityEngine.Random.Range(1, 100) < 10 - npc.AC + npc.dex - player.__dexterity)
+        if (UnityEngine.Random.Range(1, 100) < 10 - npcAC + npcDex - pDex)
         {
             //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
-            damage += Mathf.FloorToInt((UnityEngine.Random.Range(1, 4) + Mathf.FloorToInt(player.__strength / 5)) * 1.5f);
+            damage += Mathf.FloorToInt((UnityEngine.Random.Range(1, 4) + Mathf.FloorToInt(pStrength / 5)) * 1.5f);
             //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
 
         }
         else
         {
-            damage += UnityEngine.Random.Range(1, 4) + Mathf.FloorToInt(player.__strength / 5);
+            damage += UnityEngine.Random.Range(1, 4) + Mathf.FloorToInt(pStrength / 5);
             //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + {playerStats.__strength} / 5)</color>");
         }
 

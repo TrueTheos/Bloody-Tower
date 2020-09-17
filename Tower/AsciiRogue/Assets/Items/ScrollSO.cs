@@ -51,15 +51,15 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
         }
         else
         {
-            if(foo is PlayerStats player)
+            GameManager.manager.CloseEQ();
+
+            if (foo is PlayerStats player)
             {
                 player.usedScrollOrBook = this;
                 player.usingSpellScroll = true;
 
                 Targeting.IsTargeting = true;
-            }
-
-            GameManager.manager.CloseEQ();
+            }            
         }
             //IF IS BLEEDING CNAT CAST BLOOD PACT;      
     }
@@ -295,7 +295,33 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
 
     public bool IsValidTarget()
     {
-        // TODO: code is required here
+        switch (_spell)
+        {
+            case spell.BloodForBlood:
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+            case spell.BloodRestore:
+                break;
+            case spell.BloodPact:
+                break;
+            case spell.Cauterize:
+                break;
+            case spell.RemovePoison:                
+                break;
+            case spell.CausticDart:
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+            case spell.Anoint:
+                break;
+            case spell.Purify:
+                break;
+            case spell.Invisiblity:
+                break;
+            case spell.Root:
+                return  MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+            case spell.Poisonbolt:
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+            default:
+                break;
+        }
         return true;
     }
 

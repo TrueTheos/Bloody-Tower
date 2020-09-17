@@ -38,6 +38,8 @@ public class GenDetail
                     return 2;
                 case DetailType.Stairs:
                     return 100;
+                case DetailType.Nothing:
+                    return -1000;
                 case DetailType.Floor:
                 default:
                     return -1;
@@ -52,6 +54,7 @@ public class GenDetail
         Wall,
         Door,
         Stairs,
+        Nothing,
         Floor // default 
     }
 

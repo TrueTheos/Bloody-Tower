@@ -1008,10 +1008,13 @@ public class GameManager : MonoBehaviour
         else
         {
             _selectedItem.iso.Use(playerStats, _selectedItem);
+
             ApplyChangesInInventory(null);
 
             decisionMade = true;
+
             FinishPlayersTurn();
+
         }
     }
 
@@ -1233,7 +1236,7 @@ public class GameManager : MonoBehaviour
 
     public void EnemyTurn()
     {
-        foreach(var enemy in enemies)
+        foreach(var enemy in enemies.ToList())
         {
             if(enemy != null) enemy.GetComponent<RoamingNPC>().LookForPlayer();
         }

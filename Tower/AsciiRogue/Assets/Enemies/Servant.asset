@@ -10,27 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Goblin
+  m_Name: Servant
   m_EditorClassIdentifier: 
-  E_name: Goblin
-  E_symbol: g
-  E_color: {r: 0.14852096, g: 0.33962262, b: 0.11694552, a: 0}
-  E_lvlMin: 0
-  E_lvlMax: 9
+  E_name: Servant
+  E_symbol: c
+  E_color: {r: 1, g: 1, b: 1, a: 0}
+  E_lvlMin: 11
+  E_lvlMax: 20
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 9
-  _Difficulty: 0
-  _Behaviour: 1
+  __modifier: 0
+  _Difficulty: 1
+  _Behaviour: 0
   _Attacks: 0
   attacks: 00000000
-  attackText:
-  - kicks you in the shin.
-  - ' slaps your thigh and then your face. '
-  - slaps your stomach.
-  E_possileDrops:
-  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  attackText: []
+  E_possileDrops: []
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

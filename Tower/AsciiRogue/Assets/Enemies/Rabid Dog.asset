@@ -23,12 +23,13 @@ MonoBehaviour:
   __modifier: 2
   _Difficulty: 1
   _Behaviour: 0
+  _Attacks: 0
   attacks: 00000000
   attackText:
   - lunges for your throat.The dog digs its canines into your leg.
   - bites into your forearm.
   - digs its canines into your leg.
   E_possileDrops: []
-  leavesCorpse: 0
+  leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

@@ -179,8 +179,9 @@ public class EnemySpawner : MonoBehaviour
         foreach (var enemy in allEnemies)
         {
             int randomEnemy = UnityEngine.Random.Range(0, allEnemies.Length - 1);
-            if (Enumerable.Range(allEnemies[randomEnemy].E_lvlMin, allEnemies[randomEnemy].E_lvlMax).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
-            {                       
+            if (Enumerable.Range(allEnemies[randomEnemy].E_lvlMin, allEnemies[randomEnemy].E_lvlMax - allEnemies[randomEnemy].E_lvlMin).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+            {
+                Debug.Log($"<color=red>{allEnemies[randomEnemy].E_name} {DungeonGenerator.dungeonGenerator.currentFloor}</color>");
                 return allEnemies[randomEnemy];
             }
         }

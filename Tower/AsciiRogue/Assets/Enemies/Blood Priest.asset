@@ -10,27 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Goblin
+  m_Name: Blood Priest
   m_EditorClassIdentifier: 
-  E_name: Goblin
-  E_symbol: g
-  E_color: {r: 0.14852096, g: 0.33962262, b: 0.11694552, a: 0}
-  E_lvlMin: 0
-  E_lvlMax: 9
+  E_name: Blood Priest
+  E_symbol: z
+  E_color: {r: 1, g: 0, b: 0, a: 1}
+  E_lvlMin: 11
+  E_lvlMax: 20
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 9
-  _Difficulty: 0
-  _Behaviour: 1
+  __modifier: 1
+  _Difficulty: 1
+  _Behaviour: 0
   _Attacks: 0
   attacks: 00000000
-  attackText:
-  - kicks you in the shin.
-  - ' slaps your thigh and then your face. '
-  - slaps your stomach.
+  attackText: []
   E_possileDrops:
-  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  - {fileID: 11400000, guid: cc0f76b0586c2be44bbaa2bedb160dcd, type: 2}
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

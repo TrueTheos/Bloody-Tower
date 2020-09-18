@@ -8362,6 +8362,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f178d7d56efd5c94682dd51f992d98c5, type: 2}
   - {fileID: 11400000, guid: f3720cd781456f346b7704570a9e5812, type: 2}
   - {fileID: 11400000, guid: b2ee8dd915bd7a44786cae91e5dc1b66, type: 2}
+  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
   armors:
   - {fileID: 11400000, guid: 55eda9861085f504d847215a975acf80, type: 2}
   - {fileID: 11400000, guid: b3f193a927150d84ea166b03654c265e, type: 2}
@@ -8465,6 +8466,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 88ebefc521b7c984090312f5fc281631, type: 2}
   - {fileID: 11400000, guid: cec9cdeb415112c47bf46c5c1c0b8b46, type: 2}
   - {fileID: 11400000, guid: ecba9f6a490c3d34a967b6155548e600, type: 2}
+  - {fileID: 11400000, guid: edd38b8eac318de4c825ce61bbcd7de2, type: 2}
+  - {fileID: 11400000, guid: 14637aac611fd6847a0862222e0acd1c, type: 2}
+  - {fileID: 11400000, guid: 6b00f21f9afd54f44ae2d4f90052bad2, type: 2}
+  - {fileID: 11400000, guid: 25981fe313a6ccc4f8f192b4c8e22bc7, type: 2}
   Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
   spawnedEnemies: []
   enemiesPerRoom: 010000000100000002000000020000000200000003000000
@@ -9138,7 +9143,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 0009b43b70bf94c428a2a982593ef047,
+      objectReference: {fileID: 11400000, guid: cc0f76b0586c2be44bbaa2bedb160dcd,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

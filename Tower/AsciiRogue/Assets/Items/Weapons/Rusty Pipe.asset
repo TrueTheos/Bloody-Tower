@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
-  m_Name: Gauntlet
+  m_Name: Rusty Pipe
   m_EditorClassIdentifier: 
-  I_name: Gauntlet
-  I_unInName: Gauntlet
+  I_name: Rusty Pipe
+  I_unInName: Rusty Pipe
   I_symbol: )
   I_color: '#ab6626'
-  chanceOfSpawning1to10: 0.3
-  chanceOfSpawning11to20: 0.3
-  chanceOfSpawning21to30: 0.2
-  chanceOfSpawning31to40: 0.1
-  I_weight: 10
+  chanceOfSpawning1to10: 0.8
+  chanceOfSpawning11to20: 0
+  chanceOfSpawning21to30: 0
+  chanceOfSpawning31to40: 0
+  I_weight: 7
   I_rareness: 0
   I_itemType: 10
   I_whereToPutIt: 3
   normalIdentifState: 1
   pickupableByMonsters: 0
-  effect: <color=red>d2</color> damage on hit.
+  effect: <color=red>d4</color> damage on hit.
   worth: 0
   bonusToHealth: 0
   bonusToStrength: 0
   bonusToIntelligence: 0
   bonusToDexterity: 0
-  bonusToEndurance: 1
+  bonusToEndurance: 0
   bonusToNoise: 0
   attacks:
   - {x: 1, y: 4}

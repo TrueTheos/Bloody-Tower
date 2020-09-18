@@ -133,13 +133,6 @@ public class GameManager : MonoBehaviour
         fv.Initialize(fv.CanLightPass, fv.SetToVisible, fv.Distance);
 
         invBorder.SetActive(false);
-
-        /*foreach (var item in itemSpawner.allItems)
-        {
-            item.identified = item.normalIdentifState;
-        }*/
-
-        
         foreach (var skill in AutoLearnSkills)
         {
             LearnedSkills.Add(skill);

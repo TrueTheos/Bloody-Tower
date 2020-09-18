@@ -8,7 +8,12 @@ public class Mushroom : Structure
 
     public override void Use() 
     {
-        if(Random.Range(0,100) > 40 + GameManager.manager.playerStats.__endurance)
+        if(GameManager.manager.playerStats.hasPoisonResistance)
+        {
+            GameManager.manager.UpdateMessages("You ate mushroom but it was poisonous. You lose <color=red>1 health</color>.");
+            GameManager.manager.playerStats.TakeDamage(1);
+        }
+        else if(Random.Range(0,100) > 40 + GameManager.manager.playerStats.__endurance)
         {
             if(Random.Range(0,3) > 1)
             {

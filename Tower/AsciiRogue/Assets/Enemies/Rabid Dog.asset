@@ -15,7 +15,7 @@ MonoBehaviour:
   E_name: Rabid Dog
   E_symbol: d
   E_color: {r: 0.5377358, g: 0, b: 0, a: 0}
-  E_lvlMin: 0
+  E_lvlMin: 2
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 

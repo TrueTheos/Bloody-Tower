@@ -15,7 +15,7 @@ MonoBehaviour:
   E_name: Goblin
   E_symbol: g
   E_color: {r: 0.14852096, g: 0.33962262, b: 0.11694552, a: 0}
-  E_lvlMin: 0
+  E_lvlMin: 1
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 

@@ -15,7 +15,7 @@ MonoBehaviour:
   E_name: Skeleton
   E_symbol: z
   E_color: {r: 1, g: 1, b: 1, a: 0}
-  E_lvlMin: 2
+  E_lvlMin: 3
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 

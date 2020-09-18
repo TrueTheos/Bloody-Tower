@@ -14,9 +14,9 @@ public class BloodTorch : Structure
             GameManager.manager.UpdateMessages($"<color=red>You destroyed torch!</color>");
             GameManager.manager.UpdateMessages($"<color=red><i>You hear a terrifying scream!</i></color>");         
             GameManager.manager.StartCoroutine(GameManager.manager.DestroyTorchEffect(position));
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 6; i++)
             {
-                GameManager.manager.enemySpawner.SpawnAt(Random.Range(-1, position.x + 1), Random.Range(-1, position.y + 1), GameManager.manager.enemySpawner.Zombie);
+                GameManager.manager.enemySpawner.SpawnAt(Random.Range(position.x - 1, position.x + 2), Random.Range(position.y - 1, position.y + 2), GameManager.manager.enemySpawner.Zombie);
             }
             MapManager.map[position.x, position.y].isWalkable = true;
             MapManager.map[position.x, position.y].isOpaque = false;

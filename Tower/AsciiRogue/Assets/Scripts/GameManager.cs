@@ -436,6 +436,8 @@ public class GameManager : MonoBehaviour
                     {
                         MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=#6b6b6b>*</color>";
                     }
+                    LastSkill.DrawPreperation();
+
                     Selector.Current.SelectedTile(Targeting.Position.x, Targeting.Position.y);
                     
                     if (Input.GetButtonDown("Use"))
@@ -444,8 +446,7 @@ public class GameManager : MonoBehaviour
                         {
                             playerStats.__blood -= LastSkill.BloodCost;
                             LastSkill.Activate(playerStats);
-                            CloseEQ();
-                            FinishPlayersTurn();
+                            CloseEQ();                            
                             dungeonGenerator.DrawMap(true, MapManager.map);
                         }
                     }

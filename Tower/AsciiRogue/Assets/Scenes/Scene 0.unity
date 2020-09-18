@@ -8277,8 +8277,21 @@ MonoBehaviour:
   TopVisibleSkillIndex: 0
   SkillText: 
   AutoLearnSkills:
-  - {fileID: 11400000, guid: d6b35a7a58f784b44b33808000e44e7b, type: 2}
+  - {fileID: 11400000, guid: 5e0b1480373e82b4093f45bf1fc134fc, type: 2}
+  - {fileID: 11400000, guid: fa0e97cd9c8adf640997347e48baf23c, type: 2}
+  - {fileID: 11400000, guid: 80bb4d186297a5846bff39ea5b0dbf2b, type: 2}
+  - {fileID: 11400000, guid: f636c226c61c67a4b95cdb3c3b96ce8f, type: 2}
+  - {fileID: 11400000, guid: f167101afbbedf944ad7e56585883390, type: 2}
   - {fileID: 11400000, guid: 438f7ee1237fa574985f993305e94da4, type: 2}
+  - {fileID: 11400000, guid: 61f816d99d0ee9c4eadfbba8ff4c5633, type: 2}
+  - {fileID: 11400000, guid: c3eb8b5406d836a448b8183481e4df3d, type: 2}
+  - {fileID: 11400000, guid: 9d6729dd515afc248abfea0da18c79da, type: 2}
+  - {fileID: 11400000, guid: 4d42268738e9ef940b629419f02a929f, type: 2}
+  - {fileID: 11400000, guid: dfe1def0d123b49478eb828309830628, type: 2}
+  - {fileID: 11400000, guid: 877a304df3ab5c0488621d64dd89fb3d, type: 2}
+  - {fileID: 11400000, guid: 0cf2c54d306d3ed44b5ee0701144e03c, type: 2}
+  - {fileID: 11400000, guid: 0233cca317bb5cb4bb80630b581e8a13, type: 2}
+  - {fileID: 11400000, guid: f4d2fe324fc514b46b633d8308e5f5ad, type: 2}
   itemToAnvil: {fileID: 0}
   anvilMenuOpened: 0
   gemToConnect: {fileID: 0}

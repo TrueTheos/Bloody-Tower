@@ -122,7 +122,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         Stun(2);
     }   
 
-    void MoveTo(int x, int y) 
+    public void MoveTo(int x, int y) 
     {
         try
         {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="Items/Skill")]
+[CreateAssetMenu(menuName ="Skill")]
 public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 {
     public string Name;
@@ -150,6 +150,8 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                 Targeting.IsTargeting = true;
                 break;
             case SkillEffect.PoisonCleanse:
+                Activate(player);
+                break;
             default:
                 break;
         }
@@ -211,7 +213,11 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 
     private void ActivatePoisionCleanse(PlayerStats player)
     {
-        
+        player.Bleeding();
+        if (player.isPoisoned)
+        {
+            player.poisonDuration = 0;
+        }
     }
 
     private void ActivateBackingJavelin(PlayerStats player)
@@ -229,9 +235,15 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             return;
         }
         int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
         {
-            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            Vector2Int backPos = new Vector2Int(
+                Targeting.Position.x - PlayerMovement.playerMovement.position.x,
+                Targeting.Position.y - PlayerMovement.playerMovement.position.y);
+
+            PlayerMovement.playerMovement.Move(PlayerMovement.playerMovement.position - backPos);
+
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.75f);
             DealDamageToEnemy(npc, damage);
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
@@ -245,7 +257,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
         var npc = enemy.GetComponent<RoamingNPC>();
         int roll = UnityEngine.Random.Range(1, 101);
-
+        
         int calcRoll;
         calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
 
@@ -255,9 +267,17 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             return;
         }
         int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
         {
-            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            Vector2Int storePos = MapManager.FindFreeSpot();
+            Vector2Int enemyPos = npc.__position;
+            Vector2Int playerPos = PlayerMovement.playerMovement.position;
+
+            npc.MoveTo(storePos.x, storePos.y);
+            PlayerMovement.playerMovement.Move(enemyPos);
+            npc.MoveTo(playerPos.x, playerPos.y);
+
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.75f);
             DealDamageToEnemy(npc, damage);
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
@@ -283,7 +303,12 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         int damage = 0;
         if (calcRoll > 60 || roll >= 80) //Do we hit?
         {
-            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            if (calcRoll>65)
+            {
+                // TODO: Stun here
+
+            }
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,1.25f);
             DealDamageToEnemy(npc, damage);
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
@@ -307,8 +332,12 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             return;
         }
         int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
         {
+            if (calcRoll > 65)
+            {
+                player.__blood += UnityEngine.Random.Range(1, 21);
+            }
             damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
             DealDamageToEnemy(npc, damage);
         }
@@ -333,9 +362,9 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             return;
         }
         int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
         {
-            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,1,1.5f);
             DealDamageToEnemy(npc, damage);
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
@@ -346,7 +375,88 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 
     private void ActivateArcEdge(PlayerStats player)
     {
-        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        Vector2Int targetPos = new Vector2Int(Targeting.Position.x, Targeting.Position.y);
+        Vector2Int playerPos = PlayerMovement.playerMovement.position;
+        Vector2Int targetDelta = targetPos - playerPos;
+
+        int maxSingle = Mathf.Abs(playerPos.x - targetPos.x) + Mathf.Abs(playerPos.y - targetPos.y);
+        int maxBoth = 2;
+
+        // hor and vert
+        Vector2Int d1 = new Vector2Int(-1, -1);
+        if (
+            !(
+            Mathf.Abs(d1.x - targetDelta.x) + Mathf.Abs(d1.y-targetDelta.y) > maxBoth ||
+            Mathf.Abs( d1.x - targetDelta.x) > maxSingle || Mathf.Abs(d1.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d1 + playerPos);
+        }
+        Vector2Int d2 = new Vector2Int(-1, 0);
+        if (
+            !(
+            Mathf.Abs(d2.x - targetDelta.x) + Mathf.Abs(d2.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d2.x - targetDelta.x) > maxSingle || Mathf.Abs(d2.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d2 + playerPos);
+        }
+        Vector2Int d3 = new Vector2Int(-1, +1);
+        if (
+            !(
+            Mathf.Abs(d3.x - targetDelta.x) + Mathf.Abs(d3.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d3.x - targetDelta.x) > maxSingle || Mathf.Abs(d3.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d3 + playerPos);
+        }
+
+        Vector2Int d4 = new Vector2Int(0, 1);
+        if (
+            !(
+            Mathf.Abs(d4.x - targetDelta.x) + Mathf.Abs(d4.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d4.x - targetDelta.x) > maxSingle || Mathf.Abs(d4.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d4 + playerPos);
+        }
+        Vector2Int d5 = new Vector2Int(0, -1);
+        if (
+            !(
+            Mathf.Abs(d5.x - targetDelta.x) + Mathf.Abs(d5.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d5.x - targetDelta.x) > maxSingle || Mathf.Abs(d5.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d5 + playerPos);
+        }
+
+        Vector2Int d6 = new Vector2Int(1, -1);
+        if (
+            !(
+            Mathf.Abs(d6.x - targetDelta.x) + Mathf.Abs(d6.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d6.x - targetDelta.x) > maxSingle || Mathf.Abs(d6.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d6 + playerPos);
+        }
+        Vector2Int d7 = new Vector2Int(1, 0);
+        if (
+            !(
+            Mathf.Abs(d7.x - targetDelta.x) + Mathf.Abs(d7.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d7.x - targetDelta.x) > maxSingle || Mathf.Abs(d7.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d7 + playerPos);
+        }
+        Vector2Int d8 = new Vector2Int(1, 1);
+        if (
+            !(
+            Mathf.Abs(d8.x - targetDelta.x) + Mathf.Abs(d8.y - targetDelta.y) > maxBoth ||
+            Mathf.Abs(d8.x - targetDelta.x) > maxSingle || Mathf.Abs(d8.y - targetDelta.y) > maxSingle))
+        {
+            AttackArcEdge(player, d8 + playerPos);
+        }
+    }
+    private void AttackArcEdge(PlayerStats player, Vector2Int target)
+    {
+        var enemy = MapManager.map[target.x, target.y].enemy;
+        if (enemy==null)
+        {
+            return;
+        }
         var npc = enemy.GetComponent<RoamingNPC>();
         int roll = UnityEngine.Random.Range(1, 101);
 
@@ -359,9 +469,9 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             return;
         }
         int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
         {
-            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex);
+            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.075f);
             DealDamageToEnemy(npc, damage);
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
@@ -369,42 +479,53 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             MissEnemyWakeUp(npc);
         }
     }
-
+    
     private void ActivateDashSlash(PlayerStats player)
     {
-        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
-        var npc = enemy.GetComponent<RoamingNPC>();
-        int roll = UnityEngine.Random.Range(1, 101);
-
-        if (MapManager.TryFindClosestPositionTowards(PlayerMovement.playerMovement.position,npc.__position,out Vector2Int outpos))
-        {
-            // we teleport to the spot
-            PlayerMovement.playerMovement.Move(outpos);
-        }
-        else
+        if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null || !MapManager.map[Targeting.Position.x, Targeting.Position.y].isWalkable)
         {
             return;
         }
 
+        List<Vector2Int> moveLine = LineAlg.GetPointsOnLine(
+            PlayerMovement.playerMovement.position.x, 
+            PlayerMovement.playerMovement.position.y, 
+            Targeting.Position.x, 
+            Targeting.Position.y);
 
-        int calcRoll;
-        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+        foreach (var pos in moveLine)
+        {
+            if (pos != Targeting.Position && pos != PlayerMovement.playerMovement.position)
+            {
+                if (MapManager.map[pos.x,pos.y].enemy != null)
+                {
+                    var enemy = MapManager.map[pos.x, pos.y].enemy;
+                    var npc = enemy.GetComponent<RoamingNPC>();
+                    int roll = UnityEngine.Random.Range(1, 101);
+                    
 
-        if (roll <= 20)
-        {
-            MissEnemyWakeUp(npc);
-            return;
+                    int calcRoll;
+                    calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping);
+
+                    if (roll <= 20)
+                    {
+                        MissEnemyWakeUp(npc);
+                        continue;
+                    }
+                    int damage = 0;
+                    if (calcRoll > 60 || roll >= 80) //Do we hit?
+                    {
+                        damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex, 0.5f);
+                        DealDamageToEnemy(npc, damage);
+                    }
+                    else //WE MISSED BUT WE WAKE UP ENEMY
+                    {
+                        MissEnemyWakeUp(npc);
+                    }
+                }
+            }
         }
-        int damage = 0;
-        if (calcRoll > 60 || roll >= 80) //Do we hit?
-        {
-            damage = CalculateDamage(player._Lhand, player._Rhand, player.__dexterity, player.__strength, npc.AC, npc.dex,0.5f);
-            DealDamageToEnemy(npc, damage);
-        }
-        else //WE MISSED BUT WE WAKE UP ENEMY
-        {
-            MissEnemyWakeUp(npc);
-        }
+        PlayerMovement.playerMovement.Move(new Vector2Int(Targeting.Position.x, Targeting.Position.y));
     }
 
     private void ActivateSever(PlayerStats player)
@@ -625,7 +746,6 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         switch (Effect)
         {
             case SkillEffect.HeavySwing:
-                // we dont have anything to draw
                 break;
             case SkillEffect.Thrust:
                 break;
@@ -640,8 +760,102 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             case SkillEffect.Sever:
                 break;
             case SkillEffect.DashSlash:
+                List<Vector2Int> moveLine = LineAlg.GetPointsOnLine(
+                     PlayerMovement.playerMovement.position.x,
+                    PlayerMovement.playerMovement.position.y,
+                    Targeting.Position.x,
+                    Targeting.Position.y);
+                foreach (var pos in moveLine)
+                {
+                    if (pos != Targeting.Position && pos != PlayerMovement.playerMovement.position)
+                    {
+                        MapManager.map[pos.x, pos.y].decoy = $"<color=red>x</color>";
+                    }
+                }
                 break;
             case SkillEffect.ArcEdge:
+                Vector2Int targetPos = new Vector2Int(Targeting.Position.x, Targeting.Position.y);
+                Vector2Int playerPos = PlayerMovement.playerMovement.position;
+                Vector2Int targetDelta = targetPos - playerPos;
+
+                int maxSingle = Mathf.Abs(playerPos.x - targetPos.x) + Mathf.Abs(playerPos.y - targetPos.y);
+                int maxBoth = 2;
+
+                // hor and vert
+                Vector2Int d1 = new Vector2Int(-1, -1);
+                if (
+                    !(
+                    Mathf.Abs(d1.x - targetDelta.x) + Mathf.Abs(d1.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d1.x - targetDelta.x) > maxSingle || Mathf.Abs(d1.y - targetDelta.y) > maxSingle))
+                {
+                    if(d1 + playerPos != targetPos)
+                        MapManager.map[d1.x + playerPos.x, d1.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+                Vector2Int d2 = new Vector2Int(-1, 0);
+                if (
+                    !(
+                    Mathf.Abs(d2.x - targetDelta.x) + Mathf.Abs(d2.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d2.x - targetDelta.x) > maxSingle || Mathf.Abs(d2.y - targetDelta.y) > maxSingle))
+                {
+                    if (d2 + playerPos != targetPos)
+                        MapManager.map[d2.x + playerPos.x, d2.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+                Vector2Int d3 = new Vector2Int(-1, +1);
+                if (
+                    !(
+                    Mathf.Abs(d3.x - targetDelta.x) + Mathf.Abs(d3.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d3.x - targetDelta.x) > maxSingle || Mathf.Abs(d3.y - targetDelta.y) > maxSingle))
+                {
+                    if (d3 + playerPos != targetPos)
+                        MapManager.map[d3.x + playerPos.x, d3.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+
+                Vector2Int d4 = new Vector2Int(0, 1);
+                if (
+                    !(
+                    Mathf.Abs(d4.x - targetDelta.x) + Mathf.Abs(d4.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d4.x - targetDelta.x) > maxSingle || Mathf.Abs(d4.y - targetDelta.y) > maxSingle))
+                {
+                    if (d4 + playerPos != targetPos)
+                        MapManager.map[d4.x + playerPos.x, d4.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+                Vector2Int d5 = new Vector2Int(0, -1);
+                if (
+                    !(
+                    Mathf.Abs(d5.x - targetDelta.x) + Mathf.Abs(d5.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d5.x - targetDelta.x) > maxSingle || Mathf.Abs(d5.y - targetDelta.y) > maxSingle))
+                {
+                    if (d5 + playerPos != targetPos)
+                        MapManager.map[d5.x + playerPos.x, d5.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+
+                Vector2Int d6 = new Vector2Int(1, -1);
+                if (
+                    !(
+                    Mathf.Abs(d6.x - targetDelta.x) + Mathf.Abs(d6.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d6.x - targetDelta.x) > maxSingle || Mathf.Abs(d6.y - targetDelta.y) > maxSingle))
+                {
+                    if (d6 + playerPos != targetPos)
+                        MapManager.map[d6.x + playerPos.x, d6.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+                Vector2Int d7 = new Vector2Int(1, 0);
+                if (
+                    !(
+                    Mathf.Abs(d7.x - targetDelta.x) + Mathf.Abs(d7.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d7.x - targetDelta.x) > maxSingle || Mathf.Abs(d7.y - targetDelta.y) > maxSingle))
+                {
+                    if (d7 + playerPos != targetPos)
+                        MapManager.map[d7.x + playerPos.x, d7.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
+                Vector2Int d8 = new Vector2Int(1, 1);
+                if (
+                    !(
+                    Mathf.Abs(d8.x - targetDelta.x) + Mathf.Abs(d8.y - targetDelta.y) > maxBoth ||
+                    Mathf.Abs(d8.x - targetDelta.x) > maxSingle || Mathf.Abs(d8.y - targetDelta.y) > maxSingle))
+                {
+                    if (d8 + playerPos != targetPos)
+                        MapManager.map[d8.x + playerPos.x, d8.y + playerPos.y].decoy = $"<color=red>x</color>";
+                }
                 break;
             case SkillEffect.ShadowFang:
                 break;
@@ -667,33 +881,33 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             case SkillEffect.HeavySwing:
                 return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.Thrust:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.Divide:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.Sweep:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.JumpSmash:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.FlatBash:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.Sever:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.DashSlash:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy == null && MapManager.map[Targeting.Position.x, Targeting.Position.y].isWalkable;
             case SkillEffect.ArcEdge:
-                break;
+                return Targeting.Position != PlayerMovement.playerMovement.position;
             case SkillEffect.ShadowFang:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.VampireBite:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null && MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().sleeping;
             case SkillEffect.NutCracker:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.HookSwitch:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.BackingJavelin:
-                break;
+                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
             case SkillEffect.PoisonCleanse:
-                break;
+                return true;
             default:
                 return true;
         }
@@ -707,33 +921,33 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             case SkillEffect.HeavySwing:
                 return true;
             case SkillEffect.Thrust:
-                break;
+                return true;
             case SkillEffect.Divide:
-                break;
+                return true;
             case SkillEffect.Sweep:
-                break;
+                return true;
             case SkillEffect.JumpSmash:
-                break;
+                return true;
             case SkillEffect.FlatBash:
-                break;
+                return true;
             case SkillEffect.Sever:
-                break;
+                return true;
             case SkillEffect.DashSlash:
-                break;
+                return true;
             case SkillEffect.ArcEdge:
-                break;
+                return true;
             case SkillEffect.ShadowFang:
-                break;
+                return true;
             case SkillEffect.VampireBite:
-                break;
+                return true;
             case SkillEffect.NutCracker:
-                break;
+                return true;
             case SkillEffect.HookSwitch:
-                break;
+                return true;
             case SkillEffect.BackingJavelin:
-                break;
+                return true;
             case SkillEffect.PoisonCleanse:
-                break;
+                return true;
             default:
                 return true;
         }
@@ -784,7 +998,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         }
     }
 
-    private int CalculateDamage(Item pLhand, Item pRhand, int pDex, int pStrength, int npcAC, int npcDex, float damageAmplification = 1)
+    private int CalculateDamage(Item pLhand, Item pRhand, int pDex, int pStrength, int npcAC, int npcDex, float damageAmplification = 1, float critChanceAmp = 1)
     {
         int damage = 0;
         if (pLhand?.iso is WeaponsSO weaponL && CheckWeaponType(weaponL))
@@ -819,7 +1033,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         damage = Mathf.FloorToInt(damage * damageAmplification); // the additional bonus damage
 
         //CRIT?
-        if (UnityEngine.Random.Range(1, 100) < 10 - npcAC + npcDex - pDex)
+        if (UnityEngine.Random.Range(1, 100) < (10 - npcAC + npcDex - pDex)*critChanceAmp)
         {
             //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
             damage += Mathf.FloorToInt((UnityEngine.Random.Range(1, 4) + Mathf.FloorToInt(pStrength / 5)) * 1.5f);

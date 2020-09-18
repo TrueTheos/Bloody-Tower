@@ -86,6 +86,21 @@ public class MapManager
         return possible;
     }
 
+    public static Vector2Int FindFreeSpot()
+    {
+        for (int x = 0; x < map.GetLength(0); x++)
+        {
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                if (map[x, y].isWalkable && map[x, y].type != "Cobweb" && map[x, y].hasPlayer == false && map[x, y].enemy == null)
+                {
+                    return new Vector2Int(x, y);
+                }
+            }
+        }
+        return new Vector2Int(0, 00);
+    }
+
 }
 
 [Serializable] // Makes the class serializable so it can be saved out to a file

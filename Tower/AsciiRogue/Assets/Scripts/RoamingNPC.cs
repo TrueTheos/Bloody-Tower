@@ -117,7 +117,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         maxHp = __currentHp;
     }   
 
-    void MoveTo(int x, int y) 
+    public void MoveTo(int x, int y) 
     {
         try
         {

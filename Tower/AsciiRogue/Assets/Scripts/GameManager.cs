@@ -452,12 +452,7 @@ public class GameManager : MonoBehaviour
                     }
                     MapManager.NeedRepaint = true;
                 }
-                
-
-
-
             }
-
         }
         
         if(decidingSpell)

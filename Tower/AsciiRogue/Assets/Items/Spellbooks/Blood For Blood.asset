@@ -26,7 +26,7 @@ MonoBehaviour:
   I_whereToPutIt: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
-  effect: 
+  effect: '<color=red>Blood cost</color>: 9'
   worth: 0
   SkillsToLearn: []
   bonusToHealth: 0

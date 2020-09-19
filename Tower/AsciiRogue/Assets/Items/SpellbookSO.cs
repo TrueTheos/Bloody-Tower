@@ -81,7 +81,6 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
         if(GameManager.manager.playerStats.__blood < spellBloodCost)
         {
             GameManager.manager.UpdateMessages("You don't have enough <color=red> to cast this spell.");
-            GameManager.manager.FinishPlayersTurn();
             return;
         }
         if (_type == type.self)
@@ -99,9 +98,8 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             }
 
             GameManager.manager.CloseEQ();
+            GameManager.manager.FinishPlayersTurn();
         }
-
-        GameManager.manager.FinishPlayersTurn();
     }
 
     public void UseSpell(MonoBehaviour foo)

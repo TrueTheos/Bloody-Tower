@@ -357,17 +357,38 @@ public class GameManager : MonoBehaviour
                     DecisionTurn();
                 }
 
-                if (Input.GetKeyDown(KeyCode.Keypad2) && selectedItem < playerStats.itemsInEqGO.Count - 1)
+                if (Input.GetKeyDown(KeyCode.Keypad2))
                 {
-                    selectedItem++;
-                    selector.anchoredPosition -= new Vector2(0, 26);
-                    UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                    if (selectedItem < playerStats.rememberedSpells.Count - 1)
+                    {
+                        selectedItem++;
+                        selector.anchoredPosition -= new Vector2(0, 26);
+                        UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                    }
+                    else
+                    {
+                        selectedItem = 0;
+                        selector.anchoredPosition = new Vector3(-7, -234, 0);
+                        UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                    }
                 }
-                else if (Input.GetKeyDown(KeyCode.Keypad8) && selectedItem > 0)
+                else if (Input.GetKeyDown(KeyCode.Keypad8))
                 {
-                    selectedItem--;
-                    selector.anchoredPosition += new Vector2(0, 26);
-                    UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                    if (selectedItem > 0)
+                    {
+                        selectedItem--;
+                        selector.anchoredPosition += new Vector2(0, 26);
+                        UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                    }
+                    else
+                    {
+                        selectedItem = playerStats.rememberedSpells.Count - 1;
+                        for (int i = 0; i < selectedItem; i++)
+                        {
+                            selector.anchoredPosition -= new Vector2(0, 26);
+                        }
+                        UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
+                    }
                 }
             }
 

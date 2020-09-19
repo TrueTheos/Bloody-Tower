@@ -970,8 +970,10 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         if (!isPoisoned)
         {
             if (hasPoisonResistance) return;
+
             gameManager.UpdateMessages("You are <color=green>poisoned</color>!");
             isPoisoned = true;
+
             if(poisonDuration == 0)
             {
                 poisonDuration = UnityEngine.Random.Range(gameManager.poisonDuration.x, gameManager.poisonDuration.y);

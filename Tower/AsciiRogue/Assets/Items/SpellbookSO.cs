@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Spellbook")]
-public class SpellbookSO : ItemScriptableObject,IRestrictTargeting
+public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
 {
     public enum school
     {
@@ -39,6 +39,7 @@ public class SpellbookSO : ItemScriptableObject,IRestrictTargeting
 
     public int spellLevel;
     public int spellDuration;
+    public int spellBloodCost;
 
     [Header("Learning Settings")]
     public int duration = 5; //how many times u can try to read it
@@ -68,22 +69,6 @@ public class SpellbookSO : ItemScriptableObject,IRestrictTargeting
             GameManager.manager.ApplyChangesInInventory(this);
             return;
         }
-
-        /*if (_type == type.self)
-        {
-            UseSpell(foo);
-        }
-        else
-        {
-            if (foo is PlayerStats player)
-            {
-                player.usedScrollOrBook = this;
-                player.usingSpellScroll = true;
-                player.spell_pos = MapManager.playerPos;
-            }
-
-            GameManager.manager.CloseEQ();
-        }*/
     }
 
     public override void OnPickup(MonoBehaviour foo)
@@ -93,6 +78,12 @@ public class SpellbookSO : ItemScriptableObject,IRestrictTargeting
 
     public void CastSpell(MonoBehaviour foo)
     {
+        if(GameManager.manager.playerStats.__blood < spellBloodCost)
+        {
+            GameManager.manager.UpdateMessages("You don't have enough <color=red> to cast this spell.");
+            GameManager.manager.FinishPlayersTurn();
+            return;
+        }
         if (_type == type.self)
         {
             UseSpell(foo);
@@ -109,6 +100,8 @@ public class SpellbookSO : ItemScriptableObject,IRestrictTargeting
 
             GameManager.manager.CloseEQ();
         }
+
+        GameManager.manager.FinishPlayersTurn();
     }
 
     public void UseSpell(MonoBehaviour foo)

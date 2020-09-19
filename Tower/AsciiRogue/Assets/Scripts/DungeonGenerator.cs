@@ -96,9 +96,9 @@ public class DungeonGenerator : MonoBehaviour
         {
             GenerateFixedLevel(lvl7.fixedLevel, 5, true, false);  
         }
-        else if (floorNumber == 7 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if (floorNumber == 13 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
-            GenerateFixedLevel(necromancerLevel.fixedLevel, 7, true, false);
+            GenerateFixedLevel(necromancerLevel.fixedLevel, 13, true, false);
         }
         else if(floorNumber>10 && floorNumber<20 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
@@ -1430,7 +1430,7 @@ public class DungeonGenerator : MonoBehaviour
             String loot = "0";
             int monsterCount = 1;
 
-            if (size > 100)
+            /*if (size > 100)
             {
                 loot = "000";
                 monsterCount = 3;
@@ -1439,7 +1439,7 @@ public class DungeonGenerator : MonoBehaviour
             {
                 loot = "00";
                 monsterCount = 2;
-            }
+            }*/
 
             // minimum room size is currently 3x3 so this is at least 9
             Location[] l = s.getRandom(loot.Length + monsterCount);

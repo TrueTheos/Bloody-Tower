@@ -8377,6 +8377,9 @@ MonoBehaviour:
   rings:
   - {fileID: 11400000, guid: 239d55690c93d1346b9acb5b183d8129, type: 2}
   - {fileID: 11400000, guid: 418f5bec7f601a04ca9337d445d9d39d, type: 2}
+  - {fileID: 11400000, guid: 31199b86eb114014b861faebbe196482, type: 2}
+  - {fileID: 11400000, guid: 38876fca64aedfd44b6442bd3ceac03d, type: 2}
+  - {fileID: 11400000, guid: 325e624ade0b9214da5e454937af1534, type: 2}
   potions:
   - {fileID: 11400000, guid: 07725c713beb57749adb8212c6fb092f, type: 2}
   - {fileID: 11400000, guid: 3e41c0de41046e447b626fad0a2c21c5, type: 2}
@@ -8409,7 +8412,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a0119aa589244240b8fe3110559068e, type: 2}
   - {fileID: 11400000, guid: 4814b1eecef2fcb4c963c24b35e822cd, type: 2}
   - {fileID: 11400000, guid: 88343a46f0580fe47810fa51829e8f91, type: 2}
-  - {fileID: 11400000, guid: 8e3d7b0fc15492d45abc781150743b2c, type: 2}
   - {fileID: 11400000, guid: 24299824f675d9d45b522d31f9a30fd2, type: 2}
   - {fileID: 11400000, guid: da2b45d7ce61f434ba475954d757f83e, type: 2}
   tools:

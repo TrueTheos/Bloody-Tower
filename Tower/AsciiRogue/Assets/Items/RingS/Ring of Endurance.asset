@@ -10,30 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85fc159821bc9754eb79f688cf96405b, type: 3}
-  m_Name: Ring of Increase Damage
+  m_Name: Ring of Endurance
   m_EditorClassIdentifier: 
-  I_name: Ring of Increase Damage
+  I_name: Ring of Endurance
   I_unInName: Ring
   I_symbol: =
   I_color: '#AA0000'
-  chanceOfSpawning1to10: 0.9
-  chanceOfSpawning11to20: 0.9
-  chanceOfSpawning21to30: 0.9
-  chanceOfSpawning31to40: 0.9
+  chanceOfSpawning1to10: 0.2375
+  chanceOfSpawning11to20: 0.2375
+  chanceOfSpawning21to30: 0.2375
+  chanceOfSpawning31to40: 0.2375
   I_weight: 1
   I_rareness: 0
   I_itemType: 3
   I_whereToPutIt: 4
-  _BUC: 0
-  normalIdentifState: 0
-  identified: 1
+  normalIdentifState: 1
   pickupableByMonsters: 0
-  effect: Worn makes you <color=red>stronger</color>.
+  effect: Worn makes you <color=red>durable</color>.
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
-  bonusToStrength: 3
+  bonusToStrength: 0
   bonusToIntelligence: 0
   bonusToDexterity: 0
-  bonusToEndurance: 0
+  bonusToEndurance: 3
   bonusToNoise: 0
   _ringEffect: 3

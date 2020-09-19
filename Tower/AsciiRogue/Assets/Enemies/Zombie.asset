@@ -20,7 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 3
+  __modifier: 33
   _Difficulty: 1
   _Behaviour: 0
   _Attacks: 0

@@ -24,12 +24,11 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 8
   I_whereToPutIt: 0
-  _BUC: 0
   normalIdentifState: 0
-  identified: 0
   pickupableByMonsters: 0
   effect: 
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
   bonusToStrength: 0
   bonusToIntelligence: 0
@@ -40,5 +39,7 @@ MonoBehaviour:
   _type: 0
   _spell: 9
   spellLevel: 2
+  spellDuration: 0
+  spellBloodCost: 10
   duration: 5
   learnDuration: 10

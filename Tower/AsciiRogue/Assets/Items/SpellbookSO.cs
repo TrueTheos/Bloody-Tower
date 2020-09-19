@@ -102,6 +102,8 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             
             GameManager.manager.FinishPlayersTurn();
         }
+
+        GameManager.manager.playerStats.LossBlood(spellBloodCost);
     }
 
     public void UseSpell(MonoBehaviour foo)

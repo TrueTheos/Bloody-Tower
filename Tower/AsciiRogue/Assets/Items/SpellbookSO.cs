@@ -90,6 +90,8 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
         }
         else
         {
+            GameManager.manager.CloseEQ();
+
             if (foo is PlayerStats player)
             {
                 player.usedScrollOrBook = this;
@@ -97,7 +99,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 Targeting.IsTargeting = true;
             }
 
-            GameManager.manager.CloseEQ();
+            
             GameManager.manager.FinishPlayersTurn();
         }
     }

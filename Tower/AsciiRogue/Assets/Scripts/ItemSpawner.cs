@@ -76,7 +76,7 @@ public class ItemSpawner : MonoBehaviour
 
             string itemTypeCompariser = "";
 
-            /*if (itemType <= 0.1) itemTypeCompariser = "Artifact";
+            if (itemType <= 0.1) itemTypeCompariser = "Artifact";
             else if (itemType <= 10) itemTypeCompariser = "Weapon";//spawn weapon
             else if (itemType <= 20) itemTypeCompariser = "Armor";//spawn armor
             else if (itemType <= 36) itemTypeCompariser = "Potion";
@@ -84,8 +84,7 @@ public class ItemSpawner : MonoBehaviour
             else if (itemType <= 56) itemTypeCompariser = "Spellbook";
             else if (itemType <= 59) itemTypeCompariser = "Ring";
             else if (itemType <= 67) itemTypeCompariser = "Gem";
-            else if (itemType <= 74) itemTypeCompariser = "Money";*/
-            itemTypeCompariser = "Spellbook";
+            else if (itemType <= 74) itemTypeCompariser = "Money";
 
             List<ItemScriptableObject> validItems = new List<ItemScriptableObject>();
 

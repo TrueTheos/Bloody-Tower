@@ -92,9 +92,9 @@ public class DungeonGenerator : MonoBehaviour
         {            
             GenerateFixedLevel(floor10BossRooms[UnityEngine.Random.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
         }
-        else if(floorNumber == 5 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber == 7 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
-            GenerateFixedLevel(lvl7.fixedLevel, 5, true, false);  
+            GenerateFixedLevel(lvl7.fixedLevel, 7, true, false);  
         }
         else if (floorNumber == 13 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {

@@ -52,7 +52,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     //Statistics
     public int __currentHp;
-    private int maxHp;
+    public int maxHp;
 
     public int str;
     public int dex;
@@ -459,7 +459,9 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
             bool droppedItem = false;
 
-            if(Random.Range(1, 100) <= 19 && enemySO.E_possileDrops != null && enemySO.E_possileDrops.Count > 0)
+
+            //CHANCE TO DROP CORPSE ITEM
+            if(Random.Range(1, 100) <= 100 && enemySO.E_possileDrops != null && enemySO.E_possileDrops.Count > 0)
             {
                 corpse.itemInCorpse = enemySO.E_possileDrops[Random.Range(0, enemySO.E_possileDrops.Count)];
                 droppedItem = true;

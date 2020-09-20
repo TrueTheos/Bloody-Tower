@@ -33,7 +33,8 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
         Purify,
         Invisiblity,
         Root,
-        Poisonbolt
+        Poisonbolt,
+        FingerOfDeath
     }
     public spell _spell;
 
@@ -153,6 +154,9 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             case spell.Poisonbolt:
                 Poisonbolt(foo);
                 break;
+            case spell.FingerOfDeath:
+                FingerOfDeath(foo);
+                break;
         }
 
         if(foo is PlayerStats _player)
@@ -160,6 +164,18 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+            }
+        }
+    }
+
+    public void FingerOfDeath(MonoBehaviour foo)
+    {
+        if(foo is PlayerStats player)
+        {
+            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().maxHp);
+                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Finger of Death</color>.");
             }
         }
     }

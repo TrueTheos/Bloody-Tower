@@ -26,7 +26,8 @@ MonoBehaviour:
   _Attacks: 0
   attacks: 00000000
   attackText: []
-  E_possileDrops: []
+  E_possileDrops:
+  - {fileID: 11400000, guid: 328ef3b1ad286a54abb353b3f3281362, type: 2}
   leavesCorpse: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

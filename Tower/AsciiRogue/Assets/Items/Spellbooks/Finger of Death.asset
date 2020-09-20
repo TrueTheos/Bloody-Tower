@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2317f94407078c94ea046f01559f36cd, type: 3}
+  m_Name: Finger of Death
+  m_EditorClassIdentifier: 
+  I_name: Finger of Death
+  I_unInName: Spellbook
+  I_symbol: $
+  I_color: '#30FF00'
+  chanceOfSpawning1to10: 0
+  chanceOfSpawning11to20: 0
+  chanceOfSpawning21to30: 0
+  chanceOfSpawning31to40: 0
+  I_weight: 8
+  I_rareness: 3
+  I_itemType: 8
+  I_whereToPutIt: 0
+  normalIdentifState: 1
+  pickupableByMonsters: 0
+  effect: '<i><color=red>Blood cost</color>: 40</i>'
+  worth: 0
+  SkillsToLearn: []
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
+  _school: 0
+  _type: 1
+  _spell: 12
+  spellLevel: 6
+  spellDuration: 0
+  spellBloodCost: 40
+  duration: 2
+  learnDuration: 40

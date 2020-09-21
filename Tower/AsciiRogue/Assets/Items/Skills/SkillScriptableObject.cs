@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Skill")]
@@ -40,7 +41,12 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         PoisonCleanse,
 
         // ranged skills
+        ShootArrow,
+        ShootPoisonArrow,
+        ShootHeavyArrow,
+        ShootPiercingArrow,
 
+        // Throwables
         
     }
 
@@ -81,6 +87,16 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                 break;
             case SkillEffect.PoisonCleanse:
                 break;
+
+                //------------
+            case SkillEffect.ShootArrow:
+                return GameManager.manager.playerStats.itemsInEqGO.Any(i => i.iso.SkillsToLearn.Contains(this));
+            case SkillEffect.ShootPoisonArrow:
+                break;
+            case SkillEffect.ShootHeavyArrow:
+                break;
+            case SkillEffect.ShootPiercingArrow:
+                break;
             default:
                 break;
         }
@@ -91,7 +107,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
     {
         switch (Effect)
         {
-            case SkillEffect.HeavySwing:                
+            case SkillEffect.HeavySwing:
             case SkillEffect.Thrust:
             case SkillEffect.Divide:
             case SkillEffect.Sweep:
@@ -105,6 +121,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             case SkillEffect.NutCracker:
             case SkillEffect.HookSwitch:
             case SkillEffect.BackingJavelin:
+            case SkillEffect.ShootArrow:
                 foreach (var item in ValidWeapons)
                 {
                     if (item == WeaponsSO.weaponType.melee)
@@ -122,6 +139,12 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                 return false;
             case SkillEffect.PoisonCleanse:
                 return player.isPoisoned;
+            case SkillEffect.ShootPoisonArrow:
+                break;
+            case SkillEffect.ShootHeavyArrow:
+                break;
+            case SkillEffect.ShootPiercingArrow:
+                break;
             default:
                 break;
         }
@@ -133,7 +156,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
     {
         switch (Effect)
         {
-            case SkillEffect.HeavySwing:                
+            case SkillEffect.HeavySwing:
             case SkillEffect.Thrust:
             case SkillEffect.Divide:
             case SkillEffect.Sweep:
@@ -146,11 +169,18 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             case SkillEffect.VampireBite:
             case SkillEffect.NutCracker:
             case SkillEffect.HookSwitch:
-            case SkillEffect.BackingJavelin:            
+            case SkillEffect.BackingJavelin:
+            case SkillEffect.ShootArrow:
                 Targeting.IsTargeting = true;
                 break;
             case SkillEffect.PoisonCleanse:
                 Activate(player);
+                break;
+            case SkillEffect.ShootPoisonArrow:
+                break;
+            case SkillEffect.ShootHeavyArrow:
+                break;
+            case SkillEffect.ShootPiercingArrow:
                 break;
             default:
                 break;
@@ -206,8 +236,84 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             case SkillEffect.PoisonCleanse:
                 ActivatePoisionCleanse(player);
                 break;
+            case SkillEffect.ShootArrow:
+                ActivateShootArrow(player);
+                break;
+            case SkillEffect.ShootPoisonArrow:
+                ActivateShootPoisonArrow(player);
+                break;
+            case SkillEffect.ShootHeavyArrow:
+                ActivateShootHeavyArrow(player);
+                break;
+            case SkillEffect.ShootPiercingArrow:
+                ActivateShootPiercingArrow(player);
+                break;
             default:
                 break;
+        }
+    }
+
+    private void ActivateShootPiercingArrow(PlayerStats player)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ActivateShootHeavyArrow(PlayerStats player)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ActivateShootPoisonArrow(PlayerStats player)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ActivateShootArrow(PlayerStats player)
+    {
+        var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
+        var npc = enemy.GetComponent<RoamingNPC>();
+        int roll = UnityEngine.Random.Range(1, 101);
+        int range = Mathf.Max(
+            Mathf.Abs(
+                PlayerMovement.playerMovement.position.x - Targeting.Position.x), 
+            Mathf.Abs( 
+                PlayerMovement.playerMovement.position.y - Targeting.Position.y));
+
+        int calcRoll;
+        calcRoll = CalculateRoll(roll, player.__dexterity, npc.dex, npc.AC, npc.sleeping,-range);
+
+        if (roll <= 20)
+        {
+            MissEnemyWakeUp(npc);
+            return;
+        }
+
+        if (calcRoll > 50 || roll >= 80) //Do we hit?
+        {
+            int bowDamage = 0;
+            if (player._Lhand!=null && player._Lhand.iso is WeaponsSO lw)
+            {
+                if (lw._weaponType == WeaponsSO.weaponType.bow)
+                {
+                    bowDamage = lw.BowDamage;
+                }
+            }
+            if (bowDamage == 0&&  player._Rhand != null && player._Rhand.iso is WeaponsSO rw)
+            {
+                if (rw._weaponType == WeaponsSO.weaponType.bow)
+                {
+                    bowDamage = rw.BowDamage;
+                }
+            }
+            // dont know where to get this from yet
+            int ammoDamage = 4;
+
+            int damage = CalculateRangedDamage(bowDamage,ammoDamage,player.__strength,player.__dexterity,npc.dex,npc.AC,npc.sleeping,range);
+            DealDamageToEnemy(npc, damage);
+        }
+        else //WE MISSED BUT WE WAKE UP ENEMY
+        {
+            MissEnemyWakeUp(npc);
         }
     }
 
@@ -961,16 +1067,16 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 
 
 
-    private static int CalculateRoll(int roll, int playerDexterity, int npcDex, int npcAC, bool enemySleepig)
+    private static int CalculateRoll(int roll, int playerDexterity, int npcDex, int npcAC, bool enemySleepig, int additionalChange = 0)
     {
         int calcRoll;
         if (enemySleepig)
         {
-            calcRoll = roll + playerDexterity - npcDex / 4 - npcAC;
+            calcRoll = roll + playerDexterity - npcDex / 4 - npcAC - additionalChange;
         }
         else
         {
-            calcRoll = roll + playerDexterity - npcDex - npcAC;
+            calcRoll = roll + playerDexterity - npcDex - npcAC - additionalChange;
         }
 
         return calcRoll;
@@ -1047,6 +1153,19 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         }
 
         return damage;
+    }
+    private int CalculateRangedDamage(int weaponDamage, int ammoDamage, int pStrength, int pDex, int npcDex, int npcAC, bool npcSleep, int range)
+    {
+        int r = UnityEngine.Random.Range(1, 101);
+
+        if (r <= 10 + Mathf.Max(0,pDex-(npcSleep?npcDex/4: npcDex)))
+        {
+            return Mathf.FloorToInt((weaponDamage + ammoDamage + pStrength / 5) - range * 1.5f)-npcAC;
+        }
+        else
+        {
+            return (weaponDamage + ammoDamage + pStrength / 5) - range - npcAC;
+        }
     }
 
     public bool CheckWeaponType(WeaponsSO weapon)

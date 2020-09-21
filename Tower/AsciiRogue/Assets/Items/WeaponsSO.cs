@@ -14,6 +14,9 @@ public class WeaponsSO : ItemScriptableObject
 
     public List<Vector2Int> attacks = new List<Vector2Int>();
     public List<additionalEffects> effectsOnHit;
+    [Tooltip("Only relevant with ranged weapons")]
+    public int MaximumProjection;
+    public int BowDamage;
     //public int toHitBonus;
     public enum weaponType
     {
@@ -23,7 +26,9 @@ public class WeaponsSO : ItemScriptableObject
         katana,
         mace,
         spear,
-        melee
+        melee,
+        bow,
+        slingshot
     }
     public weaponType _weaponType;
 

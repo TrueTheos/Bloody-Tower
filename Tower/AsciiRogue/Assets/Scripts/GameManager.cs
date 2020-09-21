@@ -471,6 +471,12 @@ public class GameManager : MonoBehaviour
                             dungeonGenerator.DrawMap(true, MapManager.map);
                         }
                     }
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        SkillCasting = false;
+                        CloseEQ();
+                        dungeonGenerator.DrawMap(true, MapManager.map);
+                    }
                     MapManager.NeedRepaint = true;
                 }
             }
@@ -1639,9 +1645,12 @@ public class GameManager : MonoBehaviour
     {
         if(_item != null)
         {
-            int index = playerStats.itemsInEqGO.Select(x=>x.iso).ToList().IndexOf(_item);
-            playerStats.itemsInEqGO.RemoveAt(index);
-            playerStats.currentItems--;
+            if (playerStats.itemsInEqGO.Select(x => x.iso).ToList().Contains(_item))
+            {
+                int index = playerStats.itemsInEqGO.Select(x => x.iso).ToList().IndexOf(_item);
+                playerStats.itemsInEqGO.RemoveAt(index);
+                playerStats.currentItems--;
+            }            
         }
 
         m_Inventory.Clear();

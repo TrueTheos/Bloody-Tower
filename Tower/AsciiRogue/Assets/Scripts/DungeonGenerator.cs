@@ -70,6 +70,10 @@ public class DungeonGenerator : MonoBehaviour
     public List<Color> waterColors;
     [Header("Mushroom Colors")]
     public List<Color> mushroomColors;
+    [Header("Mould Wall Colors")]
+    public List<Color> mouldWallColors;
+    [Header("Flesh Wall Colors")]
+    public List<Color> fleshWallColors;
 
     public void Start()
     {
@@ -230,38 +234,44 @@ public class DungeonGenerator : MonoBehaviour
 
                 if(fixedLevel[inxedString] == "#"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x,y].xPosition = x;
-                    MapManager.map[x,y].yPosition = y;
-                    MapManager.map[x,y].baseChar = "#";
-                    if(currentFloor >= 11) 
+                    MapManager.map[x, y] = new Tile
                     {
-                        MapManager.map[x,y].exploredColor = new Color(0.5283019f, 0, 0);
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = "#",
+                        isWalkable = false,
+                        isOpaque = true,
+                        type = "Wall"
+                    };
+                    if (currentFloor >= 11) 
+                    {
+                        MapManager.map[x, y].exploredColor = fleshWallColors[UnityEngine.Random.Range(0, fleshWallColors.Count)]; 
                         MapManager.map[x,y].specialNameOfTheCell = "Flesh Wall";
                     }
                     else if(currentFloor < 11 && UnityEngine.Random.Range(0,100) > currentFloor * 1.5f)
                     {
-                        MapManager.map[x,y].exploredColor = new Color(0.4459124f, 1f, 0f);
+                        MapManager.map[x,y].exploredColor = mouldWallColors[UnityEngine.Random.Range(0, mouldWallColors.Count)];
                         MapManager.map[x,y].specialNameOfTheCell = "Mould Wall";
                     }
-                    MapManager.map[x,y].isWalkable = false;
-                    MapManager.map[x,y].isOpaque = true;
-                    MapManager.map[x,y].type = "Wall";
                 }
                 else if(fixedLevel[inxedString] == "."[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x,y].xPosition = x;
-                    MapManager.map[x,y].yPosition = y;
-                    MapManager.map[x,y].baseChar = ".";
-                    MapManager.map[x,y].isWalkable = true;
-                    MapManager.map[x,y].isOpaque = false;
-                    MapManager.map[x,y].type = "Floor";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = ".",
+                        isWalkable = true,
+                        isOpaque = false,
+                        type = "Floor"
+                    };
                 }
                 else if(fixedLevel[inxedString] == "<"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x, y].structure = new Stairs();
+                    MapManager.map[x, y] = new Tile
+                    {
+                        structure = new Stairs()
+                    };
                     if (MapManager.map[x, y].structure is Stairs stairsDown)
                     {
                         stairsDown.dungeonLevelId = currentFloor + 1;
@@ -276,8 +286,10 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     if (currentFloor != 0)
                     {
-                        MapManager.map[x,y] = new Tile();
-                        MapManager.map[x, y].structure = new Stairs();
+                        MapManager.map[x, y] = new Tile
+                        {
+                            structure = new Stairs()
+                        };
                         if (MapManager.map[x, y].structure is Stairs stairsUp)
                         {
                             stairsUp.dungeonLevelId = currentFloor - 1;
@@ -290,72 +302,84 @@ public class DungeonGenerator : MonoBehaviour
                     }
                     else
                     {
-                        MapManager.map[x,y] = new Tile();
-                        MapManager.map[x,y].xPosition = x;
-                        MapManager.map[x,y].yPosition = y;
-                        MapManager.map[x,y].baseChar = ".";
-                        MapManager.map[x,y].isWalkable = true;
-                        MapManager.map[x,y].isOpaque = false;
-                        MapManager.map[x,y].type = "Floor";
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = ".",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor"
+                        };
                     }
                 }
                 else if(fixedLevel[inxedString] == "+"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x, y].type = "Door";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        type = "Door",
+                        baseChar = "+",
+                        exploredColor = new Color(.545f, .27f, .07f),
+                        isWalkable = false,
+                        isOpaque = true
+                    };
                     Door door = new Door();
                     door.position = new Vector2Int(x, y);
                     MapManager.map[x, y].structure = door;
-                    MapManager.map[x, y].baseChar = "+";
-                    MapManager.map[x, y].exploredColor = new Color(.545f, .27f, .07f);
-                    MapManager.map[x, y].isWalkable = false;
-                    MapManager.map[x, y].isOpaque = true;
                 }
                 else if(fixedLevel[inxedString] == "1"[0])
                 {
-                    MapManager.map[x, y] = new Tile();
+                    MapManager.map[x, y] = new Tile
+                    {
+                        type = "Door",
+                        baseChar = "+",
+                        exploredColor = new Color(1, 0, 0),
+                        isWalkable = false,
+                        isOpaque = true
+                    };
 
-                    BloodDoor bloodDoor = new BloodDoor();
-                    bloodDoor.position = new Vector2Int(x, y);
+                    BloodDoor bloodDoor = new BloodDoor
+                    {
+                        position = new Vector2Int(x, y)
+                    };
 
                     int multiplier = Mathf.RoundToInt(currentFloor / 5);
                     if (multiplier < 1) multiplier = 1;
                     bloodDoor.bloodCost = 5 * multiplier;
-                    MapManager.map[x, y].structure = bloodDoor;
-
-                    MapManager.map[x, y].type = "Door";            
-                    MapManager.map[x, y].baseChar = "+";
-                    MapManager.map[x, y].exploredColor = new Color(1, 0, 0);
-                    MapManager.map[x, y].isWalkable = false;
-                    MapManager.map[x, y].isOpaque = true;
+                    MapManager.map[x, y].structure = bloodDoor;               
                 }
                 else if(fixedLevel[inxedString] == "_"[0]) //DOOR THAT REQUIRES KEY
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x, y].type = "Door";
-                    MapManager.map[x, y].baseChar = "+";
-                    MapManager.map[x, y].exploredColor = new Color(.68f, .68f, .68f);
-                    MapManager.map[x,y].requiresKey = true;
-                    MapManager.map[x, y].isWalkable = false;
-                    MapManager.map[x, y].isOpaque = true;
+                    MapManager.map[x, y] = new Tile
+                    {
+                        type = "Door",
+                        baseChar = "+",
+                        exploredColor = new Color(.68f, .68f, .68f),
+                        requiresKey = true,
+                        isWalkable = false,
+                        isOpaque = true
+                    };
                 }
                 else if(fixedLevel[inxedString] == "0"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x,y].xPosition = x;
-                    MapManager.map[x,y].yPosition = y;
-                    MapManager.map[x,y].baseChar = ".";
-                    MapManager.map[x,y].isWalkable = true;
-                    MapManager.map[x,y].isOpaque = false;
-                    MapManager.map[x,y].type = "Floor";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = ".",
+                        isWalkable = true,
+                        isOpaque = false,
+                        type = "Floor"
+                    };
 
                     itemPositions.Add(new Vector2Int(x, y));
-                    //manager.itemSpawner.SpawnAt(x,y);
                 }
                 else if(fixedLevel[inxedString] == "-"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x, y].baseChar = keyToCell.I_symbol;
+                    MapManager.map[x, y] = new Tile
+                    {
+                        baseChar = keyToCell.I_symbol
+                    };
                     if (ColorUtility.TryParseHtmlString(keyToCell.I_color, out Color color))
                     {
                         MapManager.map[x, y].exploredColor = color;
@@ -373,25 +397,28 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     if(UnityEngine.Random.Range(0, 100) < 15)
                     {
-                        MapManager.map[x, y] = new Tile();
-                        MapManager.map[x, y].xPosition = x;
-                        MapManager.map[x, y].yPosition = y;
-                        MapManager.map[x, y].baseChar = ".";
-                        MapManager.map[x, y].isWalkable = true;
-                        MapManager.map[x, y].isOpaque = false;
-                        MapManager.map[x, y].type = "Floor";
-
-                        MapManager.map[x, y].structure = null;
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = ".",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor",
+                            structure = null
+                        };
                         mimicPositions.Add(new Vector2Int(x, y));
                     }
                     else if (UnityEngine.Random.Range(1, 100) < 7)
                     {
-                        MapManager.map[x, y] = new Tile();
-                        MapManager.map[x, y].type = "Blood Anvil";
-                        MapManager.map[x, y].baseChar = "π";
-                        MapManager.map[x, y].exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f);
-                        MapManager.map[x, y].isWalkable = false;
-                        MapManager.map[x, y].isOpaque = false;
+                        MapManager.map[x, y] = new Tile
+                        {
+                            type = "Blood Anvil",
+                            baseChar = "π",
+                            exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f),
+                            isWalkable = false,
+                            isOpaque = false
+                        };
 
                         Anvil anvil = new Anvil();
                         MapManager.map[x, y].structure = anvil;
@@ -406,49 +433,57 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "\""[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x,y].xPosition = x;
-                    MapManager.map[x,y].yPosition = y;
-                    MapManager.map[x,y].baseChar = "\"";
-                    MapManager.map[x,y].isWalkable = true;
-                    MapManager.map[x,y].isOpaque = false;
-                    MapManager.map[x,y].type = "Floor";
-                    MapManager.map[x,y].specialNameOfTheCell = "Mushroom";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = "\"",
+                        isWalkable = true,
+                        isOpaque = false,
+                        type = "Floor",
+                        specialNameOfTheCell = "Mushroom",
+                        exploredColor = mushroomColors[UnityEngine.Random.Range(0, mushroomColors.Count)]
+                    };
                     Mushroom mushroom = new Mushroom();
                     mushroom.pos = new Vector2Int(x, y);
                     MapManager.map[x, y].structure = mushroom;
-                    MapManager.map[x,y].exploredColor = mushroomColors[UnityEngine.Random.Range(0, mushroomColors.Count)];
                 }
                 else if(fixedLevel[inxedString] == "&"[0])
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x,y].xPosition = x;
-                    MapManager.map[x,y].yPosition = y;
-                    MapManager.map[x,y].baseChar = "&";
-                    MapManager.map[x,y].isWalkable = true;
-                    MapManager.map[x,y].isOpaque = false;
-                    MapManager.map[x,y].type = "Floor";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = "&",
+                        isWalkable = true,
+                        isOpaque = false,
+                        type = "Floor"
+                    };
                     cobwebPositions.Add(new Vector2Int(x,y));
                 }
                 else if (fixedLevel[inxedString] == '2')
                 {
-                    MapManager.map[x, y] = new Tile();
-                    MapManager.map[x, y].xPosition = x;
-                    MapManager.map[x, y].yPosition = y;
-                    MapManager.map[x, y].baseChar = "\u01C1";
-                    MapManager.map[x, y].isWalkable = false;
-                    MapManager.map[x, y].isOpaque = true;
-                    MapManager.map[x, y].type = "Pillar";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = "\u01C1",
+                        isWalkable = false,
+                        isOpaque = true,
+                        type = "Pillar"
+                    };
                 }
                 else if (fixedLevel[inxedString] == 'g')
                 {
-                    MapManager.map[x, y] = new Tile();
-                    MapManager.map[x, y].xPosition = x;
-                    MapManager.map[x, y].yPosition = y;
-                    MapManager.map[x, y].baseChar = ".";
-                    MapManager.map[x, y].isWalkable = true;
-                    MapManager.map[x, y].isOpaque = false;
-                    MapManager.map[x, y].type = "Floor";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = ".",
+                        isWalkable = true,
+                        isOpaque = false,
+                        type = "Floor"
+                    };
                     if (!spawnEnemiesFromString)
                     {
                         enemyPositions.Add(new Vector2Int(x, y));
@@ -456,39 +491,45 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == '~')
                 {
-                    MapManager.map[x, y] = new Tile();
-                    MapManager.map[x, y].xPosition = x;
-                    MapManager.map[x, y].yPosition = y;
-                    MapManager.map[x, y].isWalkable = true;
-                    MapManager.map[x, y].isOpaque = false;
-                    MapManager.map[x, y].baseChar = "~";
-                    MapManager.map[x, y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
-                    MapManager.map[x, y].type = "Water";
-                    MapManager.map[x, y].specialNameOfTheCell = "Blood";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        isWalkable = true,
+                        isOpaque = false,
+                        baseChar = "~",
+                        exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)],
+                        type = "Water",
+                        specialNameOfTheCell = "Blood"
+                    };
                 }
                 else if (fixedLevel[inxedString] == '3')
                 {
-                    MapManager.map[x, y] = new Tile();
-                    MapManager.map[x, y].xPosition = x;
-                    MapManager.map[x, y].yPosition = y;
-                    MapManager.map[x, y].baseChar = "\u0416";
-                    MapManager.map[x, y].isWalkable = false;
-                    MapManager.map[x, y].isOpaque = true;
-                    MapManager.map[x, y].exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f);
-                    MapManager.map[x, y].type = "Blood Torch";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = "\u0416",
+                        isWalkable = false,
+                        isOpaque = true,
+                        exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f),
+                        type = "Blood Torch"
+                    };
                     BloodTorch torch = new BloodTorch();
                     torch.position = new Vector2Int(x, y);
                     MapManager.map[x, y].structure = torch;
                 }
                 else
                 {
-                    MapManager.map[x,y] = new Tile();
-                    MapManager.map[x,y].xPosition = x;
-                    MapManager.map[x,y].yPosition = y;
-                    MapManager.map[x,y].baseChar = ".";
-                    MapManager.map[x,y].isWalkable = true;
-                    MapManager.map[x,y].isOpaque = false;
-                    MapManager.map[x,y].type = "Floor";
+                    MapManager.map[x, y] = new Tile
+                    {
+                        xPosition = x,
+                        yPosition = y,
+                        baseChar = ".",
+                        isWalkable = true,
+                        isOpaque = false,
+                        type = "Floor"
+                    };
                 }
             }
         }
@@ -1287,14 +1328,16 @@ public class DungeonGenerator : MonoBehaviour
 
             m.carve(centralRoom, '.');
 
-            List<Structure> structs = new List<Structure>();
-            structs.Add(centralRoom);
+            List<Structure> structs = new List<Structure>
+            {
+                centralRoom
+            };
 
 
             for (int i = 0; i < 10; i++)
             {
                 // pick a structure to attach to. 
-                Structure anchor = null; ;
+                Structure anchor = null;
 
                 // generate a new structure to attach to it
                 Structure newStruct = null;

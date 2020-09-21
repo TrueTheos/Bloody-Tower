@@ -26,7 +26,10 @@ MonoBehaviour:
   I_whereToPutIt: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
-  effect: '<color=red>Blood cost</color>: 4'
+  effect: 'Regenerate <color=blue>20</color> / 4 + 20 <color=red>health</color>
+
+    <color=red>Blood
+    cost</color>: 4'
   worth: 0
   SkillsToLearn: []
   bonusToHealth: 0

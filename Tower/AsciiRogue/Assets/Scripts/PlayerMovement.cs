@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Vector2Int position;
+    private Vector2Int target;
 
     public static PlayerMovement playerMovement;
 
@@ -100,6 +101,58 @@ public class PlayerMovement : MonoBehaviour
                     //manager.UpdateVisibility();
                     manager.StartPlayersTurn();
                 }
+                else if(MapManager.map[position.x, position.y].item != null)
+                {
+                    if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
+                    {
+                        playerStats.currentWeight += MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight;
+                        playerStats.Pickup(MapManager.map[target.x, target.y].item, MapManager.map[target.x, target.y].item.GetComponent<Item>().iso, target);
+                        MapManager.map[position.x, position.y].letter = "";
+                        MapManager.map[target.x, target.y].baseChar = ".";
+                        MapManager.map[target.x, target.y].exploredColor = new Color(1, 1, 1);
+                        MapManager.map[position.x, position.y].hasPlayer = false;
+                        MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
+                        position = target;
+                        MapManager.map[position.x, position.y].hasPlayer = true;
+                        MapManager.map[position.x, position.y].baseChar = ".";
+                        MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
+                        MapManager.map[position.x, position.y].letter = "@";
+                        MapManager.playerPos = new Vector2Int(position.x, position.y);
+                    }
+                    else if (playerStats.maximumInventorySpace < playerStats.currentItems)
+                    {
+                        manager.UpdateMessages("Your backpack can't hold any more items!");
+                        MapManager.map[position.x, position.y].letter = "";
+                        MapManager.map[position.x, position.y].hasPlayer = false;
+                        MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
+                        position = target;
+
+                        MapManager.map[position.x, position.y].hasPlayer = true;
+                        MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
+                        MapManager.map[position.x, position.y].letter = "@";
+                        MapManager.playerPos = new Vector2Int(position.x, position.y);
+                    }
+                    else if (playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight > playerStats.maxWeight)
+                    {
+                        if (!MapManager.map[target.x, target.y].item.GetComponent<Item>().identified)
+                        {
+                            manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_unInName} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
+                        }
+                        else
+                        {
+                            manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_name} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
+                        }
+                        MapManager.map[position.x, position.y].letter = "";
+                        MapManager.map[position.x, position.y].hasPlayer = false;
+                        MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
+                        position = target;
+
+                        MapManager.map[position.x, position.y].hasPlayer = true;
+                        MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
+                        MapManager.map[position.x, position.y].letter = "@";
+                        MapManager.playerPos = new Vector2Int(position.x, position.y);
+                    }
+                }
             }
         }
     }
@@ -183,8 +236,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void Move(Vector2Int target)
+    public void Move(Vector2Int _target)
     {
+        target = _target;
+
         for (int y = position.y - playerStats.__noise; y < position.y + playerStats.__noise; y++)
         {
             for (int x = position.x - playerStats.__noise; x < position.x + playerStats.__noise; x++)
@@ -211,8 +266,13 @@ public class PlayerMovement : MonoBehaviour
                 return;              
             }
         }
+
+        if(MapManager.map[target.x, target.y].item != null)
+        {
+            GameManager.manager.UpdateMessages("Press <color=yellow>'space'</color> to pick up item.");
+        }
         
-        if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null && MapManager.map[target.x, target.y].item == null)
+        if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null) // && MapManager.map[target.x, target.y].item == null
         {
             if(MapManager.map[target.x, target.y].structure != null)
             {
@@ -289,7 +349,7 @@ public class PlayerMovement : MonoBehaviour
                 MapManager.playerPos = new Vector2Int(position.x, position.y);
             }
         }
-        else if (MapManager.map[target.x, target.y].item != null)
+        /*else if (MapManager.map[target.x, target.y].item != null)
         {
             //to do: add key to pickup item
             if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
@@ -342,7 +402,7 @@ public class PlayerMovement : MonoBehaviour
                 MapManager.map[position.x, position.y].letter = "@";
                 MapManager.playerPos = new Vector2Int(position.x, position.y);
             }
-        }
+        }*/
 
         manager.FinishPlayersTurn();
     }

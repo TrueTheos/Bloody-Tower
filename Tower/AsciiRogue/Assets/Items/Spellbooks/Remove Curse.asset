@@ -26,7 +26,10 @@ MonoBehaviour:
   I_whereToPutIt: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
-  effect: '<color=red>Blood cost</color>: 3'
+  effect: 'Cure <color=green>poison</color>.
+
+    <color=red>Blood cost</color>:
+    3'
   worth: 0
   SkillsToLearn: []
   bonusToHealth: 0

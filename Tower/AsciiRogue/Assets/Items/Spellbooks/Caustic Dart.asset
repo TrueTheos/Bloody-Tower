@@ -26,7 +26,10 @@ MonoBehaviour:
   I_whereToPutIt: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
-  effect: '<color=red>Blood cost</color>: 9'
+  effect: 'Deal (<color=blue>INT</color> / 7) + 10 damage.
+
+    <color=red>Blood
+    cost</color>: 9'
   worth: 0
   SkillsToLearn: []
   bonusToHealth: 0

@@ -43,7 +43,8 @@ public abstract class ItemScriptableObject : ScriptableObject
         Spellbook,
         Wand,
         Weapon,
-        Key
+        Key,
+        Ammo,
     }
     public itemType I_itemType;
 

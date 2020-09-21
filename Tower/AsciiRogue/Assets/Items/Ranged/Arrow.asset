@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f24445fad7e94b4cbf6d534a94f871a, type: 3}
+  m_Name: Arrow
+  m_EditorClassIdentifier: 
+  I_name: regular Arrow
+  I_unInName: Arrow
+  I_symbol: "\u2660"
+  I_color: white
+  chanceOfSpawning1to10: 0.102
+  chanceOfSpawning11to20: 0.145
+  chanceOfSpawning21to30: 0.121
+  chanceOfSpawning31to40: 0.063
+  I_weight: 2
+  I_rareness: 0
+  I_itemType: 12
+  I_whereToPutIt: 0
+  normalIdentifState: 1
+  pickupableByMonsters: 0
+  effect: Can be used together with a bow for devestating effect
+  worth: 0
+  SkillsToLearn:
+  - {fileID: 11400000, guid: 9a618b6af904e034b87d5afc1a1d8044, type: 2}
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
+  Damage: 3
+  Weight: 2

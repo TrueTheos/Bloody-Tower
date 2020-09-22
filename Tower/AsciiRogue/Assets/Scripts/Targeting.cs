@@ -57,6 +57,7 @@ public static class Targeting
     {
         _isTargeting = true;
         Position = PlayerMovement.playerMovement.position;
+        LastPosition = Position;
     }
     /// <summary>
     /// Disables targeting, preserves Values
@@ -138,12 +139,12 @@ public static class Targeting
     /// <returns>if the cell is available</returns>
     private static bool CellIsAvailable(int x, int y)
     {
-        return MapManager.map[x, y].type != "Wall"
-            && MapManager.map[x, y].type != "Door"
-            && y > 0
+        return y > 0
             && y < DungeonGenerator.dungeonGenerator.mapHeight
             && x > 0
             && x < DungeonGenerator.dungeonGenerator.mapWidth
+            && MapManager.map[x, y].type != "Wall"
+            && MapManager.map[x, y].type != "Door"
             && (Vector2Int.Distance(MapManager.playerPos, new Vector2Int(x, y)) < MaxRange || MaxRange == -1);
     }
     

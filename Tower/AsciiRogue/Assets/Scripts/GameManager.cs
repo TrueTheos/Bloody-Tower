@@ -93,6 +93,10 @@ public class GameManager : MonoBehaviour
     public string SkillText;
     public List<SkillScriptableObject> AutoLearnSkills;
 
+    // Throw Item
+    public bool IsThrowingItem;
+
+
     private FOVNEW fv;
 
     private string itemOption1;
@@ -163,7 +167,7 @@ public class GameManager : MonoBehaviour
 
         if (isPlayerTurn)
         {
-            if (Input.GetKeyDown(KeyCode.T) && !inventoryOpen && !openGrimoire)
+            if (Input.GetKeyDown(KeyCode.T) && !inventoryOpen && !openGrimoire && !IsThrowingItem)
             {
                 if (!SkillsOpen)
                 {
@@ -177,7 +181,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.G) && !inventoryOpen && !SkillsOpen)
+            if(Input.GetKeyDown(KeyCode.G) && !inventoryOpen && !SkillsOpen && !IsThrowingItem)
             {
                 if(!openGrimoire)
                 {
@@ -198,7 +202,7 @@ public class GameManager : MonoBehaviour
                     CloseEQ();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon && !openGrimoire && !SkillsOpen)
+            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon && !openGrimoire && !SkillsOpen && !IsThrowingItem)
             {
                 if (!inventoryOpen)
                 {
@@ -293,6 +297,12 @@ public class GameManager : MonoBehaviour
                             decisionsCount++;
                             decisions.text += "\n" + decisionsCount + ". " + "Drink";
                             AddAnotherOption("Use");
+                        }
+                        if (!equipState && ItemThrowHelper.CanBeThrown(_selectedItem))
+                        {
+                            decisionsCount++;
+                            decisions.text += "\n" + decisionsCount + ". Throw";
+                            AddAnotherOption("ThrowItem");
                         }
 
                         decisionMade = false;
@@ -479,6 +489,49 @@ public class GameManager : MonoBehaviour
                     }
                     MapManager.NeedRepaint = true;
                 }
+            }
+
+            if (IsThrowingItem)
+            {
+                if (!ItemThrowHelper.AllowTargetingMove() ||
+                        (
+                        Mathf.Max(
+                            Mathf.Abs(Targeting.Position.x - PlayerMovement.playerMovement.position.x),
+                            Mathf.Abs(Targeting.Position.y - PlayerMovement.playerMovement.position.y)) > ItemThrowHelper.MaxRange && ItemThrowHelper.MaxRange != -1))
+                {
+                    Debug.Log("revert targeting");
+                    Targeting.Revert();
+                }
+
+                if (ItemThrowHelper.IsValidTarget())
+                {
+                    MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = "<color=yellow>*</color>";
+                }
+                else
+                {
+                    MapManager.map[Targeting.Position.x, Targeting.Position.y].decoy = $"<color=#6b6b6b>*</color>";
+                }
+                
+                Selector.Current.SelectedTile(Targeting.Position.x, Targeting.Position.y);
+
+                if (Input.GetButtonDown("Use"))
+                {
+                    if (ItemThrowHelper.IsValidTarget())
+                    {
+                        ItemThrowHelper.Activate(playerStats);
+                        CloseEQ();
+                        dungeonGenerator.DrawMap(true, MapManager.map);
+                        dungeonGenerator.DrawMap(true, MapManager.map);
+                        IsThrowingItem = false;
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    IsThrowingItem = false;
+                    CloseEQ();
+                    dungeonGenerator.DrawMap(true, MapManager.map);
+                }
+                MapManager.NeedRepaint = true;
             }
         }
         
@@ -1097,6 +1150,17 @@ public class GameManager : MonoBehaviour
             LastSkill = null;
         }
     }
+
+    public void ThrowItem()
+    {
+        CloseEQ();
+        Targeting.IsTargeting = true;
+        IsThrowingItem = true;
+        decisionMade = true;
+        ItemThrowHelper.PrepareItem(playerStats,_selectedItem);
+        UpdateMessages("Choose a target for the throw");
+    }
+
 
     private void Upgrade()
     {

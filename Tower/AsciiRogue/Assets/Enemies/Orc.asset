@@ -20,9 +20,12 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 0
-  _Difficulty: 1
+  strength: 13
+  dexterity: 10
+  intelligence: 7
+  endurance: 14
   _Behaviour: 0
+  _Attacks: 0
   attacks: 00000000
   attackText:
   - slams it's shoulder into you.
@@ -32,5 +35,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
   - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
   leavesCorpse: 1
+  isBoss: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

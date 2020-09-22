@@ -20,13 +20,16 @@ MonoBehaviour:
   E_realName: Mimic
   E_realSymbol: M
   E_realColor: {r: 0, g: 0.47058827, b: 0.007843138, a: 0}
-  __modifier: 1
-  _Difficulty: 1
+  strength: 11
+  dexterity: 11
+  intelligence: 6
+  endurance: 8
   _Behaviour: 0
   _Attacks: 0
   attacks: 00000000
   attackText: []
   E_possileDrops: []
   leavesCorpse: 1
+  isBoss: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

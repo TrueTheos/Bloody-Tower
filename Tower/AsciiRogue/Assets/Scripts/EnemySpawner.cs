@@ -76,13 +76,13 @@ public class EnemySpawner : MonoBehaviour
 
         so.sleeping = sleep;
 
-        so.lvl = DungeonGenerator.dungeonGenerator.currentFloor;
+        /*so.lvl = DungeonGenerator.dungeonGenerator.currentFloor;
         so.str = 10 + Mathf.FloorToInt(so.lvl * 0.5f);
         so.dex = 10 + Mathf.FloorToInt(so.lvl * 0.5f);
         so.intell = 10 + Mathf.FloorToInt(so.lvl * 0.3f);
-        so.end = 10 + Mathf.FloorToInt(so.lvl * 0.5f);      
+        so.end = 10 + Mathf.FloorToInt(so.lvl * 0.5f); */
 
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.strong))
+        /*if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.strong))
         {
             so.str += Mathf.FloorToInt(so.str * .75f);
         }
@@ -160,7 +160,12 @@ public class EnemySpawner : MonoBehaviour
                 so.intell += Mathf.FloorToInt(so.intell * .4f);
                 so.end += Mathf.FloorToInt(so.end * .4f);
                 break;
-        }
+        }*/
+
+        so.str = enemySO.strength;
+        so.dex = enemySO.dexterity;
+        so.intell = enemySO.intelligence;
+        so.end = enemySO.endurance;
 
         so.__currentHp = Mathf.FloorToInt(so.str + (so.end * 2) - 5);
 

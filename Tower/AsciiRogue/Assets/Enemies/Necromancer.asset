@@ -20,8 +20,10 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 0
-  _Difficulty: 2
+  strength: 20
+  dexterity: 20
+  intelligence: 20
+  endurance: 20
   _Behaviour: 0
   _Attacks: 0
   attacks: 00000000
@@ -29,5 +31,6 @@ MonoBehaviour:
   E_possileDrops:
   - {fileID: 11400000, guid: 328ef3b1ad286a54abb353b3f3281362, type: 2}
   leavesCorpse: 1
+  isBoss: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

@@ -20,8 +20,10 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 130
-  _Difficulty: 1
+  strength: 9
+  dexterity: 11
+  intelligence: 6
+  endurance: 7
   _Behaviour: 0
   _Attacks: 0
   attacks: 00000000
@@ -31,5 +33,6 @@ MonoBehaviour:
   - digs its canines into your leg.
   E_possileDrops: []
   leavesCorpse: 1
+  isBoss: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

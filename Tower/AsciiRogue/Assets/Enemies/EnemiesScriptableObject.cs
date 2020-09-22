@@ -4,13 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="Enemy", menuName = "Enemies")]
 public class EnemiesScriptableObject : ScriptableObject
 {
-    /*public enum attackEffects
-    {
-        none,
-        poison,
-    }
-    [SerializeField] public attackEffects _atackEffects;*/
-
     public string E_name;
     public string E_symbol;
     public Color E_color;
@@ -20,7 +13,13 @@ public class EnemiesScriptableObject : ScriptableObject
     public string E_realName;
     public string E_realSymbol;
     public Color E_realColor;
-    [System.Flags]
+
+    [Header("Stats")]
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+    public int endurance;
+    /*[System.Flags]
     public enum E_modifier
     {
         strong = 1 << 0,
@@ -39,7 +38,7 @@ public class EnemiesScriptableObject : ScriptableObject
     public E_modifier __modifier;
 
     public enum E_difficulty { easy, normal, hard, boss}
-    public E_difficulty _Difficulty;
+    public E_difficulty _Difficulty;*/
 
     public enum E_behaviour { normal, cowardly, sluggish, recovers,  npc}
     public E_behaviour _Behaviour;
@@ -59,6 +58,7 @@ public class EnemiesScriptableObject : ScriptableObject
 
     [Header("Settings")]
     public bool leavesCorpse;
+    public bool isBoss = false;
 
 
     //NPC

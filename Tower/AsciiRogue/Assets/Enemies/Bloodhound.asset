@@ -20,13 +20,16 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  __modifier: 2
-  _Difficulty: 1
+  strength: 15
+  dexterity: 19
+  intelligence: 15
+  endurance: 15
   _Behaviour: 0
   _Attacks: 0
   attacks: 00000000
   attackText: []
   E_possileDrops: []
   leavesCorpse: 1
+  isBoss: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

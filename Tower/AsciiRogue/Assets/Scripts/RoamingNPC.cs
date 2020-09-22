@@ -112,7 +112,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }
 
         //IF ENEMY IS BOSS MAKE HIM NOT SLEEPING
-        if (sleeping && enemySO._Difficulty == EnemiesScriptableObject.E_difficulty.boss) sleeping = false;
+        if (sleeping && enemySO.isBoss) sleeping = false;
 
         _x = 0;
 

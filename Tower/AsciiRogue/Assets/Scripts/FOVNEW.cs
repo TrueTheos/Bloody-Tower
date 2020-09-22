@@ -9,6 +9,8 @@ public class FOVNEW : MonoBehaviour
 
     private List<Vector2Int> tilesToSet = new List<Vector2Int>(); //tiles that have to be false;
 
+    public List<Vector2Int> visibleTiles = new List<Vector2Int>();
+
     public void Start()
     {
         fv = this;
@@ -30,6 +32,7 @@ public class FOVNEW : MonoBehaviour
             if(!MapManager.map[x, y].isExplored)
                 MapManager.map[x, y].isExplored = true;
             MapManager.map[x, y].isVisible = visible;
+            visibleTiles.Add(new Vector2Int(x, y));
         }
         catch { }
     }
@@ -49,6 +52,7 @@ public class FOVNEW : MonoBehaviour
     public void Compute(Vector2Int origin, int rangeLimit)
     {
         SetVisible(origin.x, origin.y, true);
+        visibleTiles.Clear();
 
         if (GameManager.manager.playerStats.fullLevelVision == false)
         {

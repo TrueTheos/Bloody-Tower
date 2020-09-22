@@ -7,6 +7,8 @@ public static class ItemThrowHelper
 
     private static ThrowInfo Info;
 
+    public static int MaxRange => Info.MaxRange;
+
     public static void PrepareItem(PlayerStats player, Item item)
     {
         LoadItem(player, item);
@@ -86,6 +88,20 @@ public static class ItemThrowHelper
                 ThrowDamageThing(player);
                 break;
         }
+        GameManager.manager.ApplyChangesInInventory(Info.CurrentItem.iso);
+    }
+
+    public static bool CanBeThrown(Item item)
+    {
+        switch (item.iso)
+        {
+            case ScrollSO scroll:
+            case SpellbookSO book:
+                return false;
+            default:
+                break;
+        }
+        return true;
     }
 
     private static void ThrowPotion(PlayerStats player,PotionSO potion)
@@ -107,11 +123,6 @@ public static class ItemThrowHelper
                 }
             }
         }
-
-
-
-
-
     }
 
     private static void ThrowDamageThing(PlayerStats player)

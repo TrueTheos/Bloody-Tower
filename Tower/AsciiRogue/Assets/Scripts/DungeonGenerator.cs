@@ -395,7 +395,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if(fixedLevel[inxedString] == "="[0])
                 {
-                    if(UnityEngine.Random.Range(0, 100) < 15)
+                    if(UnityEngine.Random.Range(0, 100) < 10)
                     {
                         MapManager.map[x, y] = new Tile
                         {

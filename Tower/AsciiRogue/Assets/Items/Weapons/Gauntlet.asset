@@ -28,6 +28,7 @@ MonoBehaviour:
   pickupableByMonsters: 0
   effect: <color=red>d2</color> damage on hit.
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
   bonusToStrength: 0
   bonusToIntelligence: 0
@@ -37,5 +38,7 @@ MonoBehaviour:
   attacks:
   - {x: 1, y: 4}
   effectsOnHit: 
-  _weaponType: 0
+  MaximumProjection: 0
+  BowDamage: 0
+  _weaponType: 6
   bloodSwordCounter: 0

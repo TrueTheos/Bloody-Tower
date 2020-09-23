@@ -6,6 +6,8 @@ using System.Linq;
 [CreateAssetMenu(menuName = "Items/Potion")]
 public class PotionSO : ItemScriptableObject
 {
+    public string potionSplashColor;
+
     public enum potionEffect
     {
         fireResistance,
@@ -131,7 +133,7 @@ public class PotionSO : ItemScriptableObject
         {
             int bloodRestored = Random.Range(1, 7) + Random.Range(1, 7);
             player.__blood += bloodRestored;
-            GameManager.manager.UpdateMessages($"You restore <color=red>{bloodRestored} blood </color>.");
+            //GameManager.manager.UpdateMessages($"You restore <color=red>{bloodRestored} blood </color>.");
         }
     }
     
@@ -235,7 +237,7 @@ public class PotionSO : ItemScriptableObject
         if (foo is PlayerStats player)
         {
             player.FullVision();
-            GameManager.manager.UpdateMessages($"You drank the potion of full floor vision.");
+            //GameManager.manager.UpdateMessages($"You drank the potion of full floor vision.");
         }
     }
 
@@ -249,7 +251,7 @@ public class PotionSO : ItemScriptableObject
                     GameManager.manager.UpdateMessages("It tastes like a <color=green>poison</color>.");
                     break;
                 case Item.BUC.cursed:
-                    GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
+                    //GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
                     if (!player.isPoisoned)
                     {
                         player.poisonDuration = 15;
@@ -257,7 +259,7 @@ public class PotionSO : ItemScriptableObject
                     }
                     break;
                 case Item.BUC.normal:
-                    GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
+                    //GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
                     if (!player.isPoisoned)
                     {
                         player.poisonDuration = 8;

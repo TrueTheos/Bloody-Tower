@@ -729,6 +729,7 @@ public class GameManager : MonoBehaviour
 
         yield return null;
     }
+
     private void Drop()
     {
         Vector2Int posToDrop = new Vector2Int(1000, 1000);
@@ -1125,6 +1126,11 @@ public class GameManager : MonoBehaviour
         else
         {
             _selectedItem.iso.Use(playerStats, _selectedItem);
+
+            if(_selectedItem.iso is PotionSO potion)
+            {
+                UpdateMessages($"You drank the <color={potion.I_color}>{potion.I_name}</color>.");
+            }
 
             ApplyChangesInInventory(null);
 

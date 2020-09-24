@@ -150,8 +150,7 @@ public class PotionSO : ItemScriptableObject
 
             if(player.isBleeding)
             {
-                player.bleegingDuration = 0;
-                player.Bleeding();
+                player.CureBleeding();
             }
 
             GameManager.manager.UpdateMessages($"You applied the soiled bandage and regained {i} health.");
@@ -171,8 +170,7 @@ public class PotionSO : ItemScriptableObject
 
             if(player.isBleeding)
             {
-                player.bleegingDuration = 0;
-                player.Bleeding();
+                player.CureBleeding();
             }
 
             GameManager.manager.UpdateMessages($"You applied the bandage and regained {i} health.");
@@ -192,8 +190,7 @@ public class PotionSO : ItemScriptableObject
 
             if(player.isBleeding)
             {
-                player.bleegingDuration = 0;
-                player.Bleeding();
+                player.CureBleeding();
             }
 
             GameManager.manager.UpdateMessages($"You applied the heavy bandage and regained {i} health.");
@@ -204,6 +201,7 @@ public class PotionSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
+            player.IncreaseFireResistanceDuration(Random.Range(GameManager.manager.poisonDuration.x, GameManager.manager.poisonDuration.y));
             player.FireResistance();
         }
     }
@@ -212,6 +210,7 @@ public class PotionSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
+            player.IncreaseRegenerationDuration(Random.Range(GameManager.manager.regenerationDuration.x, GameManager.manager.regenerationDuration.y));
             player.Regeneration();
         }
     }
@@ -220,6 +219,7 @@ public class PotionSO : ItemScriptableObject
     {
         if(foo is PlayerStats player)
         {
+            player.IncreasePoisonResistanceDuration(Random.Range(GameManager.manager.poisonResistanceDuration.x, GameManager.manager.poisonResistanceDuration.y));
             player.PoisonResistance();
         }
     }
@@ -254,7 +254,7 @@ public class PotionSO : ItemScriptableObject
                     //GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
                     if (!player.isPoisoned)
                     {
-                        player.poisonDuration = 15;
+                        player.IncreasePoisonDuration(15);
                         player.Poison();
                     }
                     break;
@@ -262,7 +262,7 @@ public class PotionSO : ItemScriptableObject
                     //GameManager.manager.UpdateMessages($"You drank the <color=green>poison</color>.");
                     if (!player.isPoisoned)
                     {
-                        player.poisonDuration = 8;
+                        player.IncreasePoisonDuration(8);
                         player.Poison();
                     }
                     break;

@@ -36,8 +36,8 @@ public class RingSO : ItemScriptableObject
     {
         if (foo is PlayerStats player)
         {
+            player.IncreaseFireResistanceDuration(int.MaxValue);
             player.FireResistance();
-            player.fireResistanceDuration = int.MaxValue;
         }
     }
 
@@ -88,10 +88,10 @@ public class RingSO : ItemScriptableObject
             switch (_ringEffect)
             {
                 case ringEffect.fireResistance:
-                    player.fireResistanceDuration = 0;
+                    player.RemoveFireResistance();
                     break;
                 case ringEffect.invisible:
-                    Invisible(foo);
+                    player.RemoveInvisibility();
                     break;
                 default:
                     break;

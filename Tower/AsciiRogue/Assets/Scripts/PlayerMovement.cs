@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else if(MapManager.map[position.x, position.y].item != null)
                 {
-                    if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
+                    if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[position.x, position.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
                     {
                         playerStats.currentWeight += MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight;
                         playerStats.Pickup(MapManager.map[target.x, target.y].item, MapManager.map[target.x, target.y].item.GetComponent<Item>().iso, target);
@@ -436,8 +436,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerStats.isInvisible) 
         {
-            playerStats.invisibleDuration = 0;
-            playerStats.Invisible();
+            playerStats.RemoveInvisibility();
         }     
 
         RoamingNPC roamingNpcScript = e.GetComponent<RoamingNPC>();

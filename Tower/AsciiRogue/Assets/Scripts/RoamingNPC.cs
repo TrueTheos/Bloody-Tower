@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 using System;
 using System.Collections;
 
-public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
+public class RoamingNPC : MonoBehaviour, ITakeDamage
 {
     public EnemiesScriptableObject enemySO;
 
@@ -84,6 +84,8 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
     [HideInInspector] public bool isStuned;
     [HideInInspector] public int stuneDuration;
 
+    [HideInInspector] public bool isInvisible;
+
     [HideInInspector] public event Action EffectTasks; //bleed, lose help because of poison etc
     private int bleedLength;
     private bool isBleeding;
@@ -158,7 +160,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
                     __position = new Vector2Int(x, y);
 
-                    MapManager.map[x, y].letter = EnemySymbol;
+                    if(!isInvisible) MapManager.map[x, y].letter = EnemySymbol;
                     MapManager.map[x, y].isWalkable = false;
                     MapManager.map[x, y].enemy = this.gameObject;
                     MapManager.map[x, y].timeColor = EnemyColor;
@@ -304,6 +306,8 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     public void Attack()
     {
+        if (isInvisible) RemoveInvisibility();
+
         try 
         { 
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
@@ -317,6 +321,9 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         SendMessage(attack);
     }
 
+    //=========================
+    //ATTACKS
+    //=========================
     private void NormalAttack()
     {
         totalDamage = 0;
@@ -377,7 +384,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
             if (!playerStats.isPoisoned)
             {
-                playerStats.poisonDuration = 3;
+                playerStats.IncreasePoisonDuration(3);
                 playerStats.Poison();
             }
             playerStats.TakeDamage(totalDamage);
@@ -432,7 +439,11 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         StopCoroutine(_FadingBite());
     }
-    
+
+    //=========================
+    //+++++++++++++++++++++++++
+    //=========================
+
     public void TakeDamage(int amount)
     {
         WakeUp();
@@ -577,9 +588,16 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }
     }
     
-    
-    //Poison Bolt
+    public void MakeInvisible()
+    {
+        isInvisible = true;
+    }
+    public void RemoveInvisibility()
+    {
+        isInvisible = false;
+    }
 
+    //Poison Bolt
     public bool damageOverTurn;
     public int dotDuration;
 

@@ -81,7 +81,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
     {
         if(GameManager.manager.playerStats.__blood < spellBloodCost)
         {
-            GameManager.manager.UpdateMessages("You don't have enough <color=red> to cast this spell.");
+            GameManager.manager.UpdateMessages("You don't have enough <color=red>blood</color> to cast this spell.");
             return;
         }
         if (_type == type.self)
@@ -182,6 +182,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             {
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Finger of Death</color>.");
                 GameManager.manager.UpdateMessages($"You feel painful energy bursting through body...");
+                player.TakeDamage(player.__maxHp);
             }
             else
             {

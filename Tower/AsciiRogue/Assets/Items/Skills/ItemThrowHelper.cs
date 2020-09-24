@@ -48,19 +48,19 @@ public static class ItemThrowHelper
                         Info.MaxRange = Mathf.Max(0, Info.MaxRange);
                         break;
                 }
-                Info.ValidTarget = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+                Info.ValidTarget = () => /*MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null &&*/ Targeting.Position != PlayerMovement.playerMovement.position;
                 Info.TargetMove = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].isVisible;
                 break;
             case PotionSO potion:
                 Info.GetDamage = () => 0;
-                Info.ValidTarget = () => true;
+                Info.ValidTarget = () => Targeting.Position != PlayerMovement.playerMovement.position;
                 Info.TargetMove = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].isVisible;
                 break;
             case ArmorSO armor:
                 // dont know what you did but hey, i dont judge
                 Info.MaxRange -= 2;
                 Info.MaxRange = Mathf.Max(0, Info.MaxRange);
-                Info.ValidTarget = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+                Info.ValidTarget = () => /*MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null &&*/ Targeting.Position != PlayerMovement.playerMovement.position;
                 Info.TargetMove = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].isVisible;
                 Info.GetDamage = () => 1;
                 break;
@@ -68,7 +68,7 @@ public static class ItemThrowHelper
                 // simple 1 damage
                 Info.MaxRange -= 0;
                 Info.MaxRange = Mathf.Max(0, Info.MaxRange);
-                Info.ValidTarget = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
+                Info.ValidTarget = () => /*MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null && */Targeting.Position != PlayerMovement.playerMovement.position;
                 Info.TargetMove = () => MapManager.map[Targeting.Position.x, Targeting.Position.y].isVisible;
                 Info.GetDamage = () => 1;
                 break;
@@ -131,6 +131,36 @@ public static class ItemThrowHelper
 
     private static void ThrowDamageThing(PlayerStats player)
     {
+
+        if (MapManager.map[Targeting.Position.x, Targeting.Position.y].item == null && MapManager.map[Targeting.Position.x, Targeting.Position.y].isWalkable && MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy == null && MapManager.map[Targeting.Position.x, Targeting.Position.y].type != "Door")
+        {
+            MapManager.map[Targeting.Position.x, Targeting.Position.y].item = Info.CurrentItem.gameObject;
+            MapManager.map[Targeting.Position.x, Targeting.Position.y].baseChar = Info.CurrentItem.iso.I_symbol;
+            if (ColorUtility.TryParseHtmlString(Info.CurrentItem.iso.I_color, out Color color))
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].exploredColor = color;
+            }
+        }
+        else
+        {
+            foreach (var p in MapUtility.GetSimpleNeighbours(Targeting.Position))
+            {
+                if (MapManager.map[p.x, p.y].item == null && MapManager.map[p.x, p.y].isWalkable && MapManager.map[p.x, p.y].enemy == null && MapManager.map[p.x, p.y].type != "Door")
+                {
+                    MapManager.map[p.x, p.y].item = Info.CurrentItem.gameObject;
+                    MapManager.map[Targeting.Position.x, Targeting.Position.y].baseChar = Info.CurrentItem.iso.I_symbol;
+                    if (ColorUtility.TryParseHtmlString(Info.CurrentItem.iso.I_color, out Color color))
+                    {
+                        MapManager.map[Targeting.Position.x, Targeting.Position.y].exploredColor = color;
+                    }
+                    break;
+                }
+            }
+        }
+        if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy == null)
+        {
+            return;
+        }
         var enemy = MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy;
         var npc = enemy.GetComponent<RoamingNPC>();
         int roll = UnityEngine.Random.Range(1, 101);
@@ -139,7 +169,6 @@ public static class ItemThrowHelper
         calcRoll = (roll + player.__dexterity - npc.dex - npc.AC) -
             Mathf.Max(Mathf.Abs(PlayerMovement.playerMovement.position.x - Targeting.Position.x),
                 Mathf.Abs(PlayerMovement.playerMovement.position.x - Targeting.Position.x));
-
 
         if (roll <= 20)
         {

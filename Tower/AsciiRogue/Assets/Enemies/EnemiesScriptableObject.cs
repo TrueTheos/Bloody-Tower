@@ -46,10 +46,12 @@ public class EnemiesScriptableObject : ScriptableObject
     public enum E_attacks
     {
         NormalAttack,
-        PoisonBite,
-        FadingBite
+        PoisonBite, //Giant Rat
+        TailWhip, //Giant Rat
+        FadingBite, //Sylvuahns Beast
+        AcidBarf //Sylvuahns Beast
     }
-    public E_attacks _Attacks;
+    private E_attacks _Attacks;
     public List<E_attacks> attacks;
 
     public List<string> attackText;

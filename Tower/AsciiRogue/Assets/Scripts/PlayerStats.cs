@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using System.Linq;
 
 public class PlayerStats : MonoBehaviour, ITakeDamage
 {
@@ -392,7 +393,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
     #region Body Parts & Text
     [Header("Items")]
-    // public List<ItemScriptableObject> itemsInEq; -- no longer needed as we have the regular items
     public List<Item> itemsInEqGO;
     public Text Head;
     public Item _head;
@@ -1220,6 +1220,16 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     //++++++++++++++++++++++++++++++++++++++++
     //=========================================
 
+    public void Stune()
+    {
+        PlayerMovement.playerMovement.canMove = false;
+        PlayerMovement.playerMovement.isStunned = true;
+    }
+
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+
     public void FullVision()
     {
         if (!fullLevelVision) fullLevelVision = true;
@@ -1238,7 +1248,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
     }
-
 
     public void BloodRestore()
     {
@@ -1271,7 +1280,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
         }
     }
 
-
     public void Anoint()
     {
         if (!HasAnoint)
@@ -1302,15 +1310,100 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
         }
     }
 
-    public void Fire()
-    {
-        
-    } //todo
 
-    public void Disintegrate()
+    public void MeltItem()
     {
+        Item randomMeltedItem = null;
 
-    } //todo
+        try
+        {
+            randomMeltedItem = itemsInEqGO[UnityEngine.Random.Range(0, itemsInEqGO.Count)];
+        }
+        catch { }
+
+        if (randomMeltedItem != null)
+        {
+            int index = 0;
+            gameManager.UpdateMessages($"Your <color={randomMeltedItem.iso.I_color}>{randomMeltedItem.iso.I_name}</color> melts!");
+            index = itemsInEqGO.IndexOf(randomMeltedItem);
+            if (itemsInEqGO[index].isEquipped)
+            {
+                Item _selectedItem = itemsInEqGO[index];
+                switch (_selectedItem.iso.I_whereToPutIt)
+                {
+                    case ItemScriptableObject.whereToPutIt.head:
+                        _head = null;
+                        GameManager.manager.UpdateEquipment(Head, "<color=#ffffff>Helm: </color>");
+
+                        if (_selectedItem.iso is ArmorSO armor)
+                        {
+                            armor.Use(this, _selectedItem);
+                        }
+                        _selectedItem.isEquipped = false;
+                        break;
+                    case ItemScriptableObject.whereToPutIt.body:
+                        _body = null;
+                        GameManager.manager.UpdateEquipment(Body, "<color=#ffffff>Chest: </color>");
+
+                        if (_selectedItem.iso is ArmorSO armor1)
+                        {
+                            armor1.Use(this, _selectedItem);
+                        }
+                        _selectedItem.isEquipped = false;
+                        break;
+                    case ItemScriptableObject.whereToPutIt.hand:
+
+                        if (_selectedItem.iso is Torch torch)
+                        {
+                            torch.RemoveTorch();
+                        }
+
+                        if (_selectedItem._handSwitch == Item.hand.left)
+                        {
+                            _Lhand = null;
+                            LHand.text = "Left Hand:";
+                            if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
+                            if (_selectedItem.iso is WeaponsSO weapon)
+                            {
+                                _selectedItem.UnequipWithGems();
+                            }
+                        }
+                        else if (_selectedItem._handSwitch == Item.hand.right)
+                        {
+                            _Rhand = null;
+                            RHand.text = "Right Hand:";
+                            if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
+                            if (_selectedItem.iso is WeaponsSO weapon)
+                            {
+                                _selectedItem.UnequipWithGems();
+                            }
+                        }
+                        break;
+                    case ItemScriptableObject.whereToPutIt.ring:
+
+                        _ring = null;
+                        GameManager.manager.UpdateEquipment(Ring, "<color=#ffffff>Ring: </color>");
+                        _selectedItem.isEquipped = false;
+                        break;
+                    case ItemScriptableObject.whereToPutIt.legs:
+                        _legs = null;
+                        GameManager.manager.UpdateEquipment(Legs, "<color=#ffffff>Legs: </color>");
+
+                        if (_selectedItem.iso is ArmorSO armor2)
+                        {
+                            armor2.Use(this, _selectedItem);
+                        }
+                        _selectedItem.isEquipped = false;
+                        break;
+                }
+                GameManager.manager.UpdateInventoryText();
+                _selectedItem.iso.onUnequip(this);
+                _selectedItem.OnUnequip(this);
+            }
+            gameManager.ApplyChangesInInventory(randomMeltedItem.iso);
+        }
+    }
+
 
     private IEnumerator UpdateEffects()
     {

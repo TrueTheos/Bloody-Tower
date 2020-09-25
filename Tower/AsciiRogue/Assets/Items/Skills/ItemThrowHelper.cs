@@ -73,6 +73,8 @@ public static class ItemThrowHelper
                 Info.GetDamage = () => 1;
                 break;
         }
+
+        if (Info.MaxRange <= 0) Info.MaxRange = 1;
     }
 
     public static void Activate(PlayerStats player)
@@ -88,6 +90,8 @@ public static class ItemThrowHelper
                 ThrowDamageThing(player);
                 break;
         }
+        if(Info.CurrentItem.identified) GameManager.manager.UpdateMessages($"You throw the <color={Info.CurrentItem.iso.I_color}>{Info.CurrentItem.iso.I_name}</color>.");
+        else GameManager.manager.UpdateMessages($"You throw the <color={Info.CurrentItem.iso.I_color}>{Info.CurrentItem.iso.I_unInName}</color>.");
         GameManager.manager.ApplyChangesInInventory(Info.CurrentItem.iso);
     }
 
@@ -115,8 +119,7 @@ public static class ItemThrowHelper
                 try
                 {
                     Tile t = MapManager.map[TargetPos.x + x, TargetPos.y + y];
-
-                    GameManager.manager.UpdateMessages($"You throw the <color={potion.I_color}>potion</color>.");
+                
                     /*if (MapManager.map[TargetPos.x + x, TargetPos.y + y].hasPlayer)
                     {
                         potion.Use(player, Info.CurrentItem);
@@ -126,7 +129,7 @@ public static class ItemThrowHelper
                 {
                 }
             }
-        }
+        }   
     }
 
     private static void ThrowDamageThing(PlayerStats player)

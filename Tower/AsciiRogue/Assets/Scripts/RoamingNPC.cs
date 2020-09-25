@@ -304,6 +304,8 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         }
     }
 
+
+    private string nextAttack = "";
     public void Attack()
     {
         if (isInvisible) RemoveInvisibility();
@@ -317,8 +319,18 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         }
         catch { }
 
-        string attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)].ToString();
-        SendMessage(attack);
+        string attack = "";
+        if (nextAttack != "")
+        {
+            attack = nextAttack;
+            SendMessage(attack);
+            nextAttack = "";
+        }
+        else
+        {
+            attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)].ToString();
+            SendMessage(attack);
+        }     
     }
 
     //=========================
@@ -438,6 +450,33 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         StopCoroutine(_FadingBite());
+    }
+
+
+    private bool attackCharged = false;
+    private void AcidBarf()
+    {
+        if(!attackCharged)
+        {
+            attackCharged = true;
+            GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>Sulyvan's Beast</color> starts coughing!");
+            nextAttack = "AcidBarf";
+        }
+        else
+        {
+            attackCharged = false;
+            GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>Sulyvan's Beast</color> barfs a puddle of <color=green>acid</color> onto the player!");
+            GameManager.manager.playerStats.MeltItem();
+            NormalAttack();
+        }
+    }
+
+    private void TailWhip()
+    {
+        GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>The Giant Rat</color> whips it's tail into the player!");
+        GameManager.manager.UpdateMessages("You are stunned!");
+        GameManager.manager.playerStats.Stune();
+        NormalAttack();
     }
 
     //=========================

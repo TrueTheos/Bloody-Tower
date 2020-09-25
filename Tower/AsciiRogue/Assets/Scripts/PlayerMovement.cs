@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public float MoveCooldown = 0;
     public float MoveDelay = 0.16f;
 
+    public bool isStunned;
 
     private void Start()
     {
@@ -154,6 +155,12 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
+        }
+        else if(isStunned)
+        {
+            isStunned = false;
+            canMove = true;
+            manager.FinishPlayersTurn();
         }
     }
 
@@ -348,61 +355,7 @@ public class PlayerMovement : MonoBehaviour
                 MapManager.map[position.x, position.y].letter = "@";
                 MapManager.playerPos = new Vector2Int(position.x, position.y);
             }
-        }
-        /*else if (MapManager.map[target.x, target.y].item != null)
-        {
-            //to do: add key to pickup item
-            if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
-            {
-                playerStats.currentWeight += MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight;
-                playerStats.Pickup(MapManager.map[target.x, target.y].item, MapManager.map[target.x, target.y].item.GetComponent<Item>().iso, target);
-                MapManager.map[position.x, position.y].letter = "";
-                MapManager.map[target.x, target.y].baseChar = ".";
-                MapManager.map[target.x, target.y].exploredColor = new Color(1,1,1);
-                MapManager.map[position.x, position.y].hasPlayer = false;
-                MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
-                position = target;
-                MapManager.map[position.x, position.y].hasPlayer = true;
-                MapManager.map[position.x, position.y].baseChar = ".";
-                //MapManager.map[position.x, position.y].exploredColor = new Color(0, 0, 0);
-                MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
-                MapManager.map[position.x, position.y].letter = "@";
-                MapManager.playerPos = new Vector2Int(position.x, position.y);
-            }
-            else if (playerStats.maximumInventorySpace < playerStats.currentItems)
-            {
-                manager.UpdateMessages("Your backpack can't hold any more items!");
-                MapManager.map[position.x, position.y].letter = "";
-                MapManager.map[position.x, position.y].hasPlayer = false;
-                MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
-                position = target;
-
-                MapManager.map[position.x, position.y].hasPlayer = true;
-                MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
-                MapManager.map[position.x, position.y].letter = "@";
-                MapManager.playerPos = new Vector2Int(position.x, position.y);
-            }
-            else if (playerStats.currentWeight + MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight > playerStats.maxWeight)
-            {
-                if(!MapManager.map[target.x, target.y].item.GetComponent<Item>().identified)
-                {
-                    manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_unInName} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
-                }
-                else
-                {
-                    manager.UpdateMessages($"The {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_name} is too heavy. It weighs {MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight}");
-                }
-                MapManager.map[position.x, position.y].letter = "";
-                MapManager.map[position.x, position.y].hasPlayer = false;
-                MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
-                position = target;
-
-                MapManager.map[position.x, position.y].hasPlayer = true;
-                MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
-                MapManager.map[position.x, position.y].letter = "@";
-                MapManager.playerPos = new Vector2Int(position.x, position.y);
-            }
-        }*/
+        }   
 
         manager.FinishPlayersTurn();
     }

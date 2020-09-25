@@ -29,6 +29,6 @@ MonoBehaviour:
   attackText: []
   E_possileDrops: []
   leavesCorpse: 1
-  isBoss: 0
+  isBoss: 1
   finishedDialogue: 0
   rewardItem: {fileID: 0}

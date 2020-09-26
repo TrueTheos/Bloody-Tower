@@ -119,7 +119,7 @@ public static class ItemThrowHelper
                 try
                 {
                     Tile t = MapManager.map[TargetPos.x + x, TargetPos.y + y];
-                
+
                     /*if (MapManager.map[TargetPos.x + x, TargetPos.y + y].hasPlayer)
                     {
                         potion.Use(player, Info.CurrentItem);

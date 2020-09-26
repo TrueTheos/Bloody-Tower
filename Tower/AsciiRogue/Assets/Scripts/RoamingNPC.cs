@@ -308,7 +308,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         }
     }
 
-    private string nextAttack = "";
+    public string nextAttack = "";
     public void Attack()
     {
         enemySO.MyAttack.Calculate(this);

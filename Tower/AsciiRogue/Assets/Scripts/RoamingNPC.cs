@@ -501,14 +501,6 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
         GameObject e = null;
 
-        /*foreach (var enemy in manager.enemies)
-        {
-            if(enemy.GetComponent<RoamingNPC>().__position == __position)
-            {
-                e = enemy;
-            }
-        }*/
-
         foreach (var enemy in manager.enemies)
         {
             if(enemy == this.gameObject)

@@ -116,7 +116,11 @@ public static class ItemThrowHelper
                 {
                     Tile t = MapManager.map[TargetPos.x + x, TargetPos.y + y];
 
-                    potion.Use(player, Info.CurrentItem);
+                    GameManager.manager.UpdateMessages($"You throw the <color={potion.I_color}>potion</color>.");
+                    /*if (MapManager.map[TargetPos.x + x, TargetPos.y + y].hasPlayer)
+                    {
+                        potion.Use(player, Info.CurrentItem);
+                    }*/
                 }
                 catch (System.Exception)
                 {

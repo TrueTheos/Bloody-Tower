@@ -8151,6 +8151,7 @@ GameObject:
   - component: {fileID: 1911366293}
   - component: {fileID: 1911366297}
   - component: {fileID: 1911366298}
+  - component: {fileID: 1911366306}
   - component: {fileID: 1911366302}
   - component: {fileID: 1911366296}
   - component: {fileID: 1911366300}
@@ -8302,6 +8303,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0cf2c54d306d3ed44b5ee0701144e03c, type: 2}
   - {fileID: 11400000, guid: 0233cca317bb5cb4bb80630b581e8a13, type: 2}
   - {fileID: 11400000, guid: f4d2fe324fc514b46b633d8308e5f5ad, type: 2}
+  IsThrowingItem: 0
   itemToAnvil: {fileID: 0}
   anvilMenuOpened: 0
   gemToConnect: {fileID: 0}
@@ -8564,6 +8566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc2e4c76bdf32241a246a9c98be796b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visibleTiles: []
 --- !u!114 &1911366303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8601,6 +8604,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70cfe923dc4dfe040ba88b7740dd043d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1911366306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911366292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49f2d21cfd766f54ab81eec873754833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1912740332
@@ -9158,7 +9173,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 0009b43b70bf94c428a2a982593ef047,
+      objectReference: {fileID: 11400000, guid: 588168077c7aa0c4a886aa59a0d08449,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

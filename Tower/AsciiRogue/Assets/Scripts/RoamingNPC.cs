@@ -65,11 +65,11 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
 
     //Variables for Cowardly enemies
-    private int runCounter = 5;
-    private Vector2Int runDirection;
+    public int runCounter = 5;
+    public Vector2Int runDirection;
 
     //Variables for Recover enemies
-    private int hpRegenCooldown = 10;
+    public int hpRegenCooldown = 10;
 
 
     public Vector2Int __position;
@@ -85,16 +85,17 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
     [HideInInspector] public int stuneDuration;
 
     [HideInInspector] public event Action EffectTasks; //bleed, lose help because of poison etc
-    private int bleedLength;
-    private bool isBleeding;
+    public void TriggerEffectTasks() => EffectTasks?.Invoke();
+    public int bleedLength;
+    public bool isBleeding;
 
-    private int totalDamage; //damage that will be dealed to player
+    public int totalDamage; //damage that will be dealed to player
 
     [HideInInspector] public PlayerStats playerStats;
     [HideInInspector] public GameManager manager;
     [HideInInspector] public GameObject canvas;
 
-    private List<Vector2Int> path;
+    public List<Vector2Int> path;
 
     public int howLongWillFololwInvisiblepLayer = 10;
     [HideInInspector] public int _x;
@@ -127,7 +128,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         try
         {
             Stun(0);
-            if (Stun()) return;
+            if (CheckStun()) return;
 
             if(MapManager.map[__position.x, __position.y].type == "Cobweb")
             {
@@ -171,18 +172,20 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
     }
-    
     public void TestToWakeUp()
     {
+        enemySO.MyTestToWakeUp.Calculate(this);
+        return;
         int dist = Mathf.Max(Mathf.Abs(MapManager.playerPos.x - __position.x), Mathf.Abs(MapManager.playerPos.y - __position.y));
         if((Random.Range(1,20) + lvl - playerStats.__dexterity - dist * 10) > 0)
         {
             WakeUp();
         }
     }
-
     public void LookForPlayer()
     {
+        enemySO.MyLookForPlayer.Calculate(this);
+        return;
         if(rootDuration > 0) rootDuration--;
         else if(rooted) rooted = false;
 
@@ -301,9 +304,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             }
         }
     }
-
     public void Attack()
     {
+        enemySO.MyAttack.Calculate(this);
+        return;
         try 
         { 
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
@@ -316,7 +320,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         string attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)].ToString();
         SendMessage(attack);
     }
-
+    
     private void NormalAttack()
     {
         totalDamage = 0;
@@ -432,9 +436,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         StopCoroutine(_FadingBite());
     }
-    
     public void TakeDamage(int amount)
     {
+        enemySO.MyTakeDamage.TakeDamage(this,amount);
+        return;
         WakeUp();
 
         __currentHp -= amount;
@@ -445,10 +450,11 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             Kill();
         }
     }
-
     //called when enemy dies
     private void Kill()
     {
+        enemySO.MyKill.Calculate(this);
+        return;
         if (enemySO.leavesCorpse)
         {
             MapManager.map[__position.x, __position.y].enemy = null;
@@ -521,9 +527,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
         Destroy(gameObject);
     }
-
     public void Bleed()
     {
+        enemySO.MyBleed.Calculate(this);
+        return;
         if (!isBleeding)
         {
             isBleeding = true;
@@ -551,7 +558,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }        
     }
 
-    public bool Stun()
+    public bool CheckStun()
     {     
         if (stuneDuration <= 0)
         {
@@ -564,9 +571,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             return true;
         }
     }
-
     public void Stun(int duration = 0)
     {
+        enemySO.MyStun.StunFor(this,duration);
+        return;
         if (isStuned)
         {
             stuneDuration--;
@@ -593,6 +601,8 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     public void DamageOverTurn()
     {
+        enemySO.MyDOT.Calculate(this);
+        return;
         if(!damageOverTurn)
         {
             damageOverTurn = true;
@@ -613,9 +623,10 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             EffectTasks -= DamageOverTurn;
         }
     }
-
     public void WakeUp()
     {
+        enemySO.MyWakeUp.Calculate(this);
+        return;
         if (sleeping) //wake up enemy
         {
             sleeping = false;

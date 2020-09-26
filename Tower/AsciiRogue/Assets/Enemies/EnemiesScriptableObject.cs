@@ -65,4 +65,14 @@ public class EnemiesScriptableObject : ScriptableObject
     [Header("NPC Settings")]
     public bool finishedDialogue;
     public ItemScriptableObject rewardItem;
+    [Header("Behaviour")]
+    public BasicDamageOverTurn MyDOT;
+    public BasicWakeUp MyWakeUp;
+    public BasicStun MyStun;
+    public BasicBleed MyBleed;
+    public BasicTakeDamage MyTakeDamage;
+    public BasicLookForPlayer MyLookForPlayer;
+    public BasicTestToWakeUp MyTestToWakeUp;
+    public BasicAttack MyAttack;
+    public BasicDie MyKill;
 }

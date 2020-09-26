@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 using System;
 using System.Collections;
 
-public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
+public class RoamingNPC : MonoBehaviour, ITakeDamage
 {
     public EnemiesScriptableObject enemySO;
 
@@ -76,6 +76,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     [HideInInspector] public bool playerDetected;
     [HideInInspector] public bool sleeping;
+    [HideInInspector] public bool sleepDecided = false; //is it is true, we don't do this  sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
     [HideInInspector] public bool attacked;
 
     [HideInInspector] public bool rooted;
@@ -83,6 +84,8 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
     [HideInInspector] public bool isStuned;
     [HideInInspector] public int stuneDuration;
+
+    [HideInInspector] public bool isInvisible;
 
     [HideInInspector] public event Action EffectTasks; //bleed, lose help because of poison etc
     public void TriggerEffectTasks() => EffectTasks?.Invoke();
@@ -107,7 +110,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         canvas = GameObject.Find("MainCanvas").gameObject;
 
-        if(!sleeping)
+        if(!sleepDecided)
         {
             sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
         }
@@ -159,7 +162,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
                     __position = new Vector2Int(x, y);
 
-                    MapManager.map[x, y].letter = EnemySymbol;
+                    if(!isInvisible) MapManager.map[x, y].letter = EnemySymbol;
                     MapManager.map[x, y].isWalkable = false;
                     MapManager.map[x, y].enemy = this.gameObject;
                     MapManager.map[x, y].timeColor = EnemyColor;
@@ -304,10 +307,13 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
             }
         }
     }
+
+    private string nextAttack = "";
     public void Attack()
     {
         enemySO.MyAttack.Calculate(this);
         return;
+        
         try 
         { 
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
@@ -317,10 +323,24 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }
         catch { }
 
-        string attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)].ToString();
-        SendMessage(attack);
+        string attack = "";
+        if (nextAttack != "")
+        {
+            attack = nextAttack;
+            SendMessage(attack);
+            nextAttack = "";
+        }
+        else
+        {
+            attack = enemySO.attacks[Random.Range(0, enemySO.attacks.Count)].ToString();
+            SendMessage(attack);
+        }     
     }
-    
+
+    //=========================
+    //ATTACKS
+    //=========================
+
     private void NormalAttack()
     {
         totalDamage = 0;
@@ -381,7 +401,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
 
             if (!playerStats.isPoisoned)
             {
-                playerStats.poisonDuration = 3;
+                playerStats.IncreasePoisonDuration(3);
                 playerStats.Poison();
             }
             playerStats.TakeDamage(totalDamage);
@@ -436,6 +456,36 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         StopCoroutine(_FadingBite());
     }
+    private bool attackCharged = false;
+    private void AcidBarf()
+    {
+        if(!attackCharged)
+        {
+            attackCharged = true;
+            GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>Sulyvan's Beast</color> starts coughing!");
+            nextAttack = "AcidBarf";
+        }
+        else
+        {
+            attackCharged = false;
+            GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>Sulyvan's Beast</color> barfs a puddle of <color=green>acid</color> onto the player!");
+            GameManager.manager.playerStats.MeltItem();
+            NormalAttack();
+        }
+    }
+
+    private void TailWhip()
+    {
+        GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>The Giant Rat</color> whips it's tail into the player!");
+        GameManager.manager.UpdateMessages("You are stunned!");
+        GameManager.manager.playerStats.Stune();
+        NormalAttack();
+    }
+
+    //=========================
+    //+++++++++++++++++++++++++
+    //=========================
+
     public void TakeDamage(int amount)
     {
         enemySO.MyTakeDamage.TakeDamage(this,amount);
@@ -585,9 +635,16 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage, IBleeding
         }
     }
     
-    
-    //Poison Bolt
+    public void MakeInvisible()
+    {
+        isInvisible = true;
+    }
+    public void RemoveInvisibility()
+    {
+        isInvisible = false;
+    }
 
+    //Poison Bolt
     public bool damageOverTurn;
     public int dotDuration;
 

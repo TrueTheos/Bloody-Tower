@@ -876,7 +876,7 @@ public class GameManager : MonoBehaviour
             {
                 if (_selectedItem.cursed)
                 {
-                    UpdateMessages("You can't unequipt this item becuase it's <color=red>cursed</color>.");
+                    UpdateMessages("You can't unequip this item becuase it's <color=red>cursed</color>.");
                 }
                 else
                 {
@@ -1208,7 +1208,7 @@ public class GameManager : MonoBehaviour
 
         if (readingBook != null)
         {
-            if (UnityEngine.Random.Range(1, 51) > playerStats.__intelligence)
+            if (UnityEngine.Random.Range(1, 36) > playerStats.__intelligence)
             {
                 int randomBadEffect = UnityEngine.Random.Range(1, 3);
 
@@ -1717,7 +1717,7 @@ public class GameManager : MonoBehaviour
         {
             if (playerStats.itemsInEqGO.Select(x => x.iso).ToList().Contains(_item))
             {
-                int index = playerStats.itemsInEqGO.Select(x => x.iso).ToList().IndexOf(_item);
+                int index = playerStats.itemsInEqGO.Select(x => x.iso).ToList().IndexOf(_item);              
                 playerStats.itemsInEqGO.RemoveAt(index);
                 playerStats.currentItems--;
             }            

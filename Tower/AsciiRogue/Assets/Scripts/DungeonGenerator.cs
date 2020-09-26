@@ -553,14 +553,14 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach(var mimic in mimicPositions)
         {     
-            manager.enemySpawner.SpawnAt(mimic.x, mimic.y, manager.enemySpawner.Mimic, true);
+            manager.enemySpawner.SpawnAt(mimic.x, mimic.y, manager.enemySpawner.Mimic, "true");
         }
 
         if(spawnEnemiesFromString)
         {
             for(int i = 0; i < enemyNames.Count; i++)
             {
-                manager.enemySpawner.SpawnAt(enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).SingleOrDefault(), enemySleeping[i]);
+                manager.enemySpawner.SpawnAt(enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).SingleOrDefault(), enemySleeping[i].ToString());
             }
         }
         else if(enemyPositions.Count > 1)
@@ -589,8 +589,6 @@ public class DungeonGenerator : MonoBehaviour
         enemyPositions.Clear();
         enemyNames.Clear();
         enemySleeping.Clear();
-        
-        //DrawMap(true, MapManager.map);
     }
 
     private void GenerateWaterPool()
@@ -728,7 +726,7 @@ public class DungeonGenerator : MonoBehaviour
             Vector2Int chestPos = corners[UnityEngine.Random.Range(0, corners.Count)];
             if (UnityEngine.Random.Range(0, 10) < 8) //TODO: Make this dependant on something
             {
-                manager.enemySpawner.SpawnAt(chestPos.x, chestPos.y, manager.enemySpawner.Mimic, true);
+                manager.enemySpawner.SpawnAt(chestPos.x, chestPos.y, manager.enemySpawner.Mimic, "true");
             }
             else
             {
@@ -984,6 +982,9 @@ public class DungeonGenerator : MonoBehaviour
 
     //-----------------------------------------------------------------------------------
 
+    public List<PrefabRoom> prefabRooms = new List<PrefabRoom>();
+    PrefabRoom prefabRoom;
+
     class Map
     {
         public static int WIDTH = 56;
@@ -1070,6 +1071,7 @@ public class DungeonGenerator : MonoBehaviour
         public int y;
         private Purpose purpose;
         public List<Vector2Int> doors = new List<Vector2Int>();
+        public bool isPrefabRoom;
 
         public enum Purpose
         {
@@ -1320,11 +1322,17 @@ public class DungeonGenerator : MonoBehaviour
             // start with basic architecture
 
             // carve a central room, then attach stuff to it
+
             int x = Map.WIDTH / 2 + Rand.range(-5, 6);
             int y = Map.HEIGHT / 2 + Rand.range(-5, 6);
-            int w = Rand.range(3, 11);
-            int h = Rand.range(3, 11);
+            /*int w = Rand.range(3, 11);
+            int h = Rand.range(3, 11);*/
+            dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
+            int w = dungeonGenerator.prefabRoom.width;
+            int h = dungeonGenerator.prefabRoom.height;
+
             Structure centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
+            centralRoom.isPrefabRoom = true;
 
             m.carve(centralRoom, '.');
 
@@ -1434,64 +1442,73 @@ public class DungeonGenerator : MonoBehaviour
 
         public static void furnishRoom(Map m, Structure s)
         {
-            int size = s.width * s.height;
-
-            Location[] location = s.getAllLocations();
-
-            if(UnityEngine.Random.Range(0,100) < 15)
+            if (!s.isPrefabRoom)
             {
-                foreach (var door in s.doors)
-                {
-                    m.set(door.x, door.y, '1');
-                }
-            }
+                int size = s.width * s.height;
 
-            if(UnityEngine.Random.Range(0, 100) < 50)
-            {
-                foreach(var loc in location)
+                Location[] location = s.getAllLocations();
+
+                if (UnityEngine.Random.Range(0, 100) < 15)
                 {
-                    if(UnityEngine.Random.Range(1,15) < 3 && m.get(loc.x, loc.y) != '<' && m.get(loc.x, loc.y) != '>')
+                    foreach (var door in s.doors)
                     {
-                        m.set(loc.x, loc.y, '"');
+                        m.set(door.x, door.y, '1');
                     }
                 }
-            }
-            if(UnityEngine.Random.Range(0, 100) > 50 + dungeonGenerator.currentFloor)
-            {
-                for (int i = 0; i < UnityEngine.Random.Range(location.Length * 0.25f, location.Length * 0.75f); i++)
+
+                if (UnityEngine.Random.Range(0, 100) < 50)
                 {
-                    int x = s.getRandom().x;
-                    int y = s.getRandom().y;
-                    if(m.get(x,y) != '<' && m.get(x, y) != '>')
+                    foreach (var loc in location)
                     {
-                        m.set(x, y, '&');
+                        if (UnityEngine.Random.Range(1, 15) < 3 && m.get(loc.x, loc.y) != '<' && m.get(loc.x, loc.y) != '>')
+                        {
+                            m.set(loc.x, loc.y, '"');
+                        }
                     }
                 }
+                if (UnityEngine.Random.Range(0, 100) > 50 + dungeonGenerator.currentFloor)
+                {
+                    for (int i = 0; i < UnityEngine.Random.Range(location.Length * 0.25f, location.Length * 0.75f); i++)
+                    {
+                        int x = s.getRandom().x;
+                        int y = s.getRandom().y;
+                        if (m.get(x, y) != '<' && m.get(x, y) != '>')
+                        {
+                            m.set(x, y, '&');
+                        }
+                    }
+                }
+
+                // loot
+                String loot = "0";
+                int monsterCount = 1;
+
+                // minimum room size is currently 3x3 so this is at least 9
+                Location[] l = s.getRandom(loot.Length + monsterCount);
+                int j = 0;
+                char[] lootArray = loot.ToCharArray();
+                for (int i = 0; i < lootArray.Length; i++)
+                    spawnLootPlaceHolder(m, l[j++], lootArray[i]);
+                for (int i = 0; i < monsterCount; i++)
+                    spawnMonsterPlaceHolder(m, l[j++]);
             }
-
-            // loot
-            String loot = "0";
-            int monsterCount = 1;
-
-            /*if (size > 100)
+            else
             {
-                loot = "000";
-                monsterCount = 3;
+                Location[] location = s.getAllLocations();
+                int i = 0;
+                foreach (var loc in location)
+                {
+                    m.set(loc.x, loc.y, dungeonGenerator.prefabRoom.room[i]);
+                    i++;
+                }
+
+                dungeonGenerator.enemyNames = dungeonGenerator.prefabRoom.enemyNames;
+                foreach (var pos in dungeonGenerator.prefabRoom.enemyPosition)
+                {
+                    dungeonGenerator.enemyPositions.Add(new Vector2Int(location[pos].x, location[pos].y));
+                }
+                dungeonGenerator.enemySleeping = dungeonGenerator.prefabRoom.enemySleeping;
             }
-            else if (size > 50)
-            {
-                loot = "00";
-                monsterCount = 2;
-            }*/
-
-            // minimum room size is currently 3x3 so this is at least 9
-            Location[] l = s.getRandom(loot.Length + monsterCount);
-            int j = 0;
-            char[] lootArray = loot.ToCharArray();
-            for (int i = 0; i < lootArray.Length; i++)
-                spawnLootPlaceHolder(m, l[j++], lootArray[i]);  
-            for (int i = 0; i < monsterCount; i++)
-                spawnMonsterPlaceHolder(m, l[j++]);
         }
 
 
@@ -1511,7 +1528,7 @@ public class DungeonGenerator : MonoBehaviour
 
         public static void spawnMonsterPlaceHolder(Map m, Location l)
         {
-            m.set(l.x, l.y, 'g');
+            m.set(l.x, l.y, '.');
             dungeonGenerator.enemyPositions.Add(new Vector2Int(l.x, l.y));
         }
 

@@ -25,8 +25,7 @@ MonoBehaviour:
   intelligence: 10
   endurance: 15
   _Behaviour: 0
-  _Attacks: 0
-  attacks: 01000000
+  attacks: 0100000002000000
   attackText: []
   E_possileDrops: []
   leavesCorpse: 1

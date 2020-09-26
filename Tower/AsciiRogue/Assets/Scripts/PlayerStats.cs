@@ -4,8 +4,9 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using System.Linq;
 
-public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance, IPoisonResistance, IRegeneration, IFullRestore, IInvisible
+public class PlayerStats : MonoBehaviour, ITakeDamage
 {
     public ItemScriptableObject startingWeapon;
 
@@ -275,7 +276,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
                     dexModifier = 1;
                     __dexterity += dexLost;
                 }
-                if (isBlind) UnBlind();
+                if (isBlind) CureBlindness();
             }
             else if(blood > 50)
             {
@@ -284,11 +285,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
                     dexModifier = 1;
                     __dexterity += dexLost;
                 }
-                if (isBlind) UnBlind();
+                if (isBlind) CureBlindness();
             }
             else if(blood > 25)
             {
-                if (isBlind) UnBlind();
+                if (isBlind) CureBlindness();
             }
 
             UpdateText(statType.blood);
@@ -392,7 +393,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
     #region Body Parts & Text
     [Header("Items")]
-    // public List<ItemScriptableObject> itemsInEq; -- no longer needed as we have the regular items
     public List<Item> itemsInEqGO;
     public Text Head;
     public Item _head;
@@ -965,6 +965,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         __blood -= amount;
     }
 
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+    public void IncreasePoisonDuration(int amount) { poisonDuration += amount; }
+
     public void Poison()
     {
         if (!isPoisoned)
@@ -973,11 +978,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
             gameManager.UpdateMessages("You are <color=green>poisoned</color>!");
             isPoisoned = true;
-
-            if(poisonDuration == 0)
-            {
-                poisonDuration = UnityEngine.Random.Range(gameManager.poisonDuration.x, gameManager.poisonDuration.y);
-            }
 
             gameManager.playerTurnTasks += Poison;
 
@@ -996,23 +996,22 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         }
         else
         {
-            isPoisoned = false;
-            gameManager.playerTurnTasks -= Poison;
-
-            int index = System.Array.IndexOf(effects.ToArray(), "<color=green>Poisoned</color>");
-            effects.RemoveAt(index);
+            CurePoison();
         }
     }
 
-    public void Fire()
+    public void CurePoison()
     {
-        
-    } //todo
+        isPoisoned = false;
+        gameManager.playerTurnTasks -= Poison;
 
-    public void Disintegrate()
-    {
-
-    } //todo
+        int index = System.Array.IndexOf(effects.ToArray(), "<color=green>Poisoned</color>");
+        effects.RemoveAt(index);
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+    public void IncreaseFireResistanceDuration(int amount) { fireResistanceDuration += amount; }
 
     public void FireResistance()
     {
@@ -1022,29 +1021,36 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
             gameManager.playerTurnTasks += FireResistance;
 
-            fireResistanceDuration = UnityEngine.Random.Range(gameManager.fireResistanceDuration.x, gameManager.fireResistanceDuration.y);
-
             gameManager.UpdateMessages("Now you are now <color=red>fire</color> resistant.");
 
             effects.Add("<color=red>Fire Res.</color>");
         }
-        
-        if(fireResistanceDuration > 0)
+
+        if (fireResistanceDuration > 0)
         {
             fireResistanceDuration--;
         }
         else
         {
-            hasFireResistance = false;
-
-            gameManager.playerTurnTasks -= FireResistance;
-
-            gameManager.UpdateMessages("You are no longer <color=red>fire</color> resistant.");
-
-            int index = System.Array.IndexOf(effects.ToArray(), "<color=red>Fire Res.</color>");
-            effects.RemoveAt(index);
+            RemoveFireResistance();
         }
     }
+
+    public void RemoveFireResistance()
+    {
+        hasFireResistance = false;
+
+        gameManager.playerTurnTasks -= FireResistance;
+
+        gameManager.UpdateMessages("You are no longer <color=red>fire</color> resistant.");
+
+        int index = System.Array.IndexOf(effects.ToArray(), "<color=red>Fire Res.</color>");
+        effects.RemoveAt(index);
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+    public void IncreasePoisonResistanceDuration(int amount) { poisonResistanceDuration += amount; }
 
     public void PoisonResistance()
     {
@@ -1054,34 +1060,39 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
             gameManager.playerTurnTasks += PoisonResistance;
 
-            poisonResistanceDuration = UnityEngine.Random.Range(gameManager.poisonResistanceDuration.x, gameManager.poisonResistanceDuration.y);
-
             gameManager.UpdateMessages("You are now <color=green>poison</color> resistant.");
 
             effects.Add("<color=green>Poison Res.</color>");
         }
-       
-        if(poisonResistanceDuration > 0)
+
+        if (poisonResistanceDuration > 0)
         {
             if (isPoisoned)
             {
-                poisonDuration = 0;
-                Poison();
+                CurePoison();
             }
-            poisonResistanceDuration--;
         }
         else
         {
-            hasPoisonResistance = false;
-
-            gameManager.playerTurnTasks -= PoisonResistance;
-
-            gameManager.UpdateMessages("You are no longer <color=gree>poison</color> resistant.");
-
-            int index = System.Array.IndexOf(effects.ToArray(), "<color=green>Poison Res.</color>");
-            effects.RemoveAt(index);
+            RemovePoisonResistance();
         }
     }
+
+    public void RemovePoisonResistance()
+    {
+        hasPoisonResistance = false;
+
+        gameManager.playerTurnTasks -= PoisonResistance;
+
+        gameManager.UpdateMessages("You are no longer <color=gree>poison</color> resistant.");
+
+        int index = System.Array.IndexOf(effects.ToArray(), "<color=green>Poison Res.</color>");
+        effects.RemoveAt(index);
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+    public void IncreaseRegenerationDuration(int amount) { regenerationDuration += amount; }
 
     public void Regeneration()
     {
@@ -1091,55 +1102,133 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
             gameManager.playerTurnTasks += Regeneration;
 
-            regenerationDuration = UnityEngine.Random.Range(gameManager.regenerationDuration.x, gameManager.regenerationDuration.y);
-
             gameManager.UpdateMessages("You have gained <color=#e69138>regeneration.</color>");
 
             effects.Add("<color=#e69138>Regen.</color>");
         }
 
-        if(regenerationDuration > 0)
+        if (regenerationDuration > 0)
         {
             regenerationDuration--;
-            if(__currentHp < __maxHp)
+            if (__currentHp < __maxHp)
             {
                 __currentHp++;
-            }          
+            }
         }
         else
         {
-            hasRegeneration = false;
-
-            gameManager.playerTurnTasks -= Regeneration;
-
-            int index = System.Array.IndexOf(effects.ToArray(), "<color=#e69138>Regen.</color>");
-            effects.RemoveAt(index);
+            RemoveRegeneration();
         }
     }
 
+    public void RemoveRegeneration()
+    {
+        hasRegeneration = false;
+
+        gameManager.playerTurnTasks -= Regeneration;
+
+        int index = System.Array.IndexOf(effects.ToArray(), "<color=#e69138>Regen.</color>");
+        effects.RemoveAt(index);
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
     public void FullRestore()
     {
         __currentHp = __maxHp;
 
         gameManager.UpdateMessages("Your health has been restored.");
     }
-
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
     public void Invisible()
     {
-        if (!isInvisible)
-        {
-            gameManager.UpdateMessages("You are now <color=lightblue>invisible</color>.");
-            isInvisible = true;
+        gameManager.UpdateMessages("You are now <color=lightblue>invisible</color>.");
+        isInvisible = true;
+    }
 
-            //gameManager.playerTurnTasks += Invisible;
+    public void RemoveInvisibility()
+    {
+        isInvisible = false;
+
+        gameManager.UpdateMessages("You are no longer <color=lightblue>invisible</color>.");
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+    public void IncreaseBleedingDuration(int amount) { bleegingDuration += amount; }
+
+    public void Bleeding()
+    {
+        if (!isBleeding)
+        {
+            isBleeding = true;
+
+            gameManager.playerTurnTasks += Bleeding;
+            //bleegingDuration = 20 - (__intelligence / 7);
+
+            gameManager.UpdateMessages("You are now <color=red>bleeding.</color>");
+
+            effects.Add("<color=red>Bleeding</color>");
+        }
+
+        if (bleegingDuration > 0)
+        {
+            bleegingDuration--;
+            TakeDamage(1);
+            __blood -= 1;
         }
         else
         {
-            isInvisible = false;
-
-            gameManager.UpdateMessages("You are no longer <color=lightblue>invisible</color>.");
+            CureBleeding();
         }
     }
+
+    public void CureBleeding()
+    {
+        isBleeding = false;
+        gameManager.playerTurnTasks -= Bleeding;
+
+        int index = System.Array.IndexOf(effects.ToArray(), "<color=red>Bleeding</color>");
+        effects.RemoveAt(index);
+
+        gameManager.UpdateMessages("You are no longer <color=re>bleeding.</color>");
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+    public void Blindness()
+    {
+        if (!isBlind) GameManager.manager.UpdateMessages("You are <color=red>blind</color> now!");
+        isBlind = true;
+        foreach (var tile in MapManager.map)
+        {
+            tile.isExplored = false;
+            tile.isVisible = false;
+        }
+        viewRange = viewRangeInBlindMode;
+    }
+
+    public void CureBlindness()
+    {
+        GameManager.manager.UpdateMessages("You are no longer <color=red>blind</color>!");
+        isBlind = false;
+        viewRange = startingViewRange;
+    }
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
+
+    public void Stune()
+    {
+        PlayerMovement.playerMovement.canMove = false;
+        PlayerMovement.playerMovement.isStunned = true;
+    }
+
+    //=========================================
+    //++++++++++++++++++++++++++++++++++++++++
+    //=========================================
 
     public void FullVision()
     {
@@ -1149,21 +1238,20 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
 
         foreach (var tile in MapManager.map)
         {
-            if(tile.type == "Wall" || tile.type == "Floor")
+            if (tile.type == "Wall" || tile.type == "Floor")
             {
                 tile.isVisible = true;
                 tile.isExplored = true;
             }
-            
+
         }
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
     }
 
-
     public void BloodRestore()
     {
-        if(!HasBloodRestore)
+        if (!HasBloodRestore)
         {
             HasBloodRestore = true;
 
@@ -1171,7 +1259,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             BloodRestoreDuration = 10 + __intelligence / 10;
         }
 
-        if(BloodRestoreDuration > 0)
+        if (BloodRestoreDuration > 0)
         {
             BloodRestoreDuration--;
             __currentHp += 2;
@@ -1180,53 +1268,21 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         else
         {
             HasBloodRestore = false;
-            gameManager.playerTurnTasks -= BloodRestore;    
+            gameManager.playerTurnTasks -= BloodRestore;
 
-            return;       
+            return;
         }
 
-        if(__currentHp >= __maxHp)
+        if (__currentHp >= __maxHp)
         {
             HasBloodRestore = false;
-            gameManager.playerTurnTasks -= BloodRestore;    
-        }
-    }
-
-    public void Bleeding()
-    {
-        if(!isBleeding)
-        {
-            isBleeding = true;
-
-            gameManager.playerTurnTasks += Bleeding;
-            bleegingDuration = 20 - (__intelligence / 7);
-
-            gameManager.UpdateMessages("You are now <color=red>bleeding.</color>");
-
-            effects.Add("<color=red>Bleeding</color>");
-        }
-
-        if(bleegingDuration > 0)
-        {
-            bleegingDuration--;
-            TakeDamage(1);
-            __blood -= 1;
-        }
-        else
-        {
-            isBleeding = false;
-            gameManager.playerTurnTasks -= Bleeding;
-
-            int index = System.Array.IndexOf(effects.ToArray(), "<color=red>Bleeding</color>");
-            effects.RemoveAt(index);
-
-            gameManager.UpdateMessages("You are no longer <color=re>bleeding.</color>");
+            gameManager.playerTurnTasks -= BloodRestore;
         }
     }
 
     public void Anoint()
     {
-        if(!HasAnoint)
+        if (!HasAnoint)
         {
             HasAnoint = true;
 
@@ -1236,10 +1292,10 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
             effects.Add("<color=green>Anoint</color>");
         }
 
-        if(AnointDuration > 0)
+        if (AnointDuration > 0)
         {
             AnointDuration--;
-            if(__currentHp + 1 <= __maxHp)
+            if (__currentHp + 1 <= __maxHp)
             {
                 __currentHp++;
             }
@@ -1254,24 +1310,100 @@ public class PlayerStats : MonoBehaviour, ITakeDamage, IPoison, IFireResistance,
         }
     }
 
-    public void Blindness()
+
+    public void MeltItem()
     {
-        if (!isBlind) GameManager.manager.UpdateMessages("You are <color=red>blind</color> now!");
-        isBlind = true;
-        foreach(var tile in MapManager.map)
+        Item randomMeltedItem = null;
+
+        try
         {
-            tile.isExplored = false;
-            tile.isVisible = false;
+            randomMeltedItem = itemsInEqGO[UnityEngine.Random.Range(0, itemsInEqGO.Count)];
         }
-        viewRange = viewRangeInBlindMode;
+        catch { }
+
+        if (randomMeltedItem != null)
+        {
+            int index = 0;
+            gameManager.UpdateMessages($"Your <color={randomMeltedItem.iso.I_color}>{randomMeltedItem.iso.I_name}</color> melts!");
+            index = itemsInEqGO.IndexOf(randomMeltedItem);
+            if (itemsInEqGO[index].isEquipped)
+            {
+                Item _selectedItem = itemsInEqGO[index];
+                switch (_selectedItem.iso.I_whereToPutIt)
+                {
+                    case ItemScriptableObject.whereToPutIt.head:
+                        _head = null;
+                        GameManager.manager.UpdateEquipment(Head, "<color=#ffffff>Helm: </color>");
+
+                        if (_selectedItem.iso is ArmorSO armor)
+                        {
+                            armor.Use(this, _selectedItem);
+                        }
+                        _selectedItem.isEquipped = false;
+                        break;
+                    case ItemScriptableObject.whereToPutIt.body:
+                        _body = null;
+                        GameManager.manager.UpdateEquipment(Body, "<color=#ffffff>Chest: </color>");
+
+                        if (_selectedItem.iso is ArmorSO armor1)
+                        {
+                            armor1.Use(this, _selectedItem);
+                        }
+                        _selectedItem.isEquipped = false;
+                        break;
+                    case ItemScriptableObject.whereToPutIt.hand:
+
+                        if (_selectedItem.iso is Torch torch)
+                        {
+                            torch.RemoveTorch();
+                        }
+
+                        if (_selectedItem._handSwitch == Item.hand.left)
+                        {
+                            _Lhand = null;
+                            LHand.text = "Left Hand:";
+                            if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
+                            if (_selectedItem.iso is WeaponsSO weapon)
+                            {
+                                _selectedItem.UnequipWithGems();
+                            }
+                        }
+                        else if (_selectedItem._handSwitch == Item.hand.right)
+                        {
+                            _Rhand = null;
+                            RHand.text = "Right Hand:";
+                            if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
+                            if (_selectedItem.iso is WeaponsSO weapon)
+                            {
+                                _selectedItem.UnequipWithGems();
+                            }
+                        }
+                        break;
+                    case ItemScriptableObject.whereToPutIt.ring:
+
+                        _ring = null;
+                        GameManager.manager.UpdateEquipment(Ring, "<color=#ffffff>Ring: </color>");
+                        _selectedItem.isEquipped = false;
+                        break;
+                    case ItemScriptableObject.whereToPutIt.legs:
+                        _legs = null;
+                        GameManager.manager.UpdateEquipment(Legs, "<color=#ffffff>Legs: </color>");
+
+                        if (_selectedItem.iso is ArmorSO armor2)
+                        {
+                            armor2.Use(this, _selectedItem);
+                        }
+                        _selectedItem.isEquipped = false;
+                        break;
+                }
+                GameManager.manager.UpdateInventoryText();
+                _selectedItem.iso.onUnequip(this);
+                _selectedItem.OnUnequip(this);
+            }
+            gameManager.ApplyChangesInInventory(randomMeltedItem.iso);
+        }
     }
 
-    public void UnBlind()
-    {
-        GameManager.manager.UpdateMessages("You are no longer <color=red>blind</color>!");
-        isBlind = false;
-        viewRange = startingViewRange;
-    }
 
     private IEnumerator UpdateEffects()
     {

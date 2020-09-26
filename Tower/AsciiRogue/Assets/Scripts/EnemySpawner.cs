@@ -35,7 +35,7 @@ public class EnemySpawner : MonoBehaviour
         }  
     }
 
-    public void SpawnAt(int x, int y, EnemiesScriptableObject enemySO = null, bool sleep = false)
+    public void SpawnAt(int x, int y, EnemiesScriptableObject enemySO = null, string sleep = "")
     {        
         try{if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null) return;}
         catch{};
@@ -74,7 +74,18 @@ public class EnemySpawner : MonoBehaviour
 
         so.enemySO = enemySO;
 
-        so.sleeping = sleep;
+        if(sleep != "")
+        {
+            so.sleepDecided = true;
+            if(sleep == "true")
+            {
+                so.sleeping = true;
+            }
+            else if(sleep == "false")
+            {
+                so.sleeping = false;
+            }
+        }
 
         /*so.lvl = DungeonGenerator.dungeonGenerator.currentFloor;
         so.str = 10 + Mathf.FloorToInt(so.lvl * 0.5f);

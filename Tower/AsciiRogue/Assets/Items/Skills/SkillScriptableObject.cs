@@ -319,10 +319,11 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
 
     private void ActivatePoisionCleanse(PlayerStats player)
     {
+        player.IncreaseBleedingDuration(20 - (player.__intelligence / 7));
         player.Bleeding();
         if (player.isPoisoned)
         {
-            player.poisonDuration = 0;
+            player.CurePoison();
         }
     }
 

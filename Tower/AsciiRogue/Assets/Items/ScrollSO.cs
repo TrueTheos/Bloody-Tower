@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Scroll")]
-public class ScrollSO : ItemScriptableObject,IRestrictTargeting
+public class ScrollSO : ItemScriptableObject
 {
     public enum school
     {
@@ -129,158 +129,264 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
 
     public void Poisonbolt(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
-                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();            
-                GameManager.manager.ApplyChangesInInventory(this);   
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();
                 GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>. Monster is now poisoned.");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
+            {
+                if (player.isPoisoned)
+                {
+                    player.poisonDuration += spellDuration;
+                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>.");
+                }
+                else
+                {
+                    player.IncreasePoisonDuration(spellDuration);
+                    player.Poison();
+                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>. You are now <color=green>poisoned</color>.");
+                }
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color> but nothing happens.");
             }
         }
     }
 
     public void Root(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
-                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rooted = true;
-                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);
-                 GameManager.manager.ApplyChangesInInventory(this);   
-                 GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Root</color>. This monster can't move now.");
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rooted = true;
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Root</color>. Monster can't move!");
             }
         }
     }
 
     public void Invisiblity(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            player.invisibleDuration = 20 + player.__intelligence;
-            player.Invisible();
-            GameManager.manager.ApplyChangesInInventory(this);   
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisibility</color>.");
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().MakeInvisible();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisiblity</color>.");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
+            {
+                player.invisibleDuration = 20 + player.__intelligence;
+                player.Invisible();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisiblity</color>.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisiblity</color> but nothing happens.");
+            }
         }
     }
 
     public void BloodForBlood(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
-            {               
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
                 player.TakeDamage(5);
-                Debug.Log("Blood purge" + Mathf.FloorToInt((20 + player.__intelligence) / 5));
-                GameManager.manager.ApplyChangesInInventory(this);   
                 GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
+            {
+                player.TakeDamage(5);
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You feel piercing pain.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color> but nothing happens.");
             }
         }
     }
 
     public void BloodRestore(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            player.BloodRestore();
-            Debug.Log("Blood restore");
-            GameManager.manager.ApplyChangesInInventory(this);   
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color>.");
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
+            {
+                player.BloodRestore();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color>.");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color> but nothing happens.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color> but nothing happens.");
+            }
         }
     }
 
     public void BloodPact(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            player.__currentHp += 27; //25 + 2 because 2 is dealed from bleeding
-            if(player.__currentHp> player.__maxHp)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.__currentHp -= (player.__currentHp - player.__maxHp);
-                    
-            }   
+                player.__currentHp += 27; //25 + 2 because 2 is dealed from bleeding
+                if (player.__currentHp > player.__maxHp)
+                {
+                    player.__currentHp -= (player.__currentHp - player.__maxHp);
 
-            player.Bleeding();
+                }
 
-            Debug.Log("Blood pact");   
-            GameManager.manager.ApplyChangesInInventory(this);         
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding</color> now!");       
+                player.IncreaseBleedingDuration(20 - (player.__intelligence / 7));
+                player.Bleeding();
+
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding<color> now!");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color> but nothing happens.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color> but nothing happens.");
+            }
         }
     }
 
     public void Cauterize(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(player.isBleeding)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.bleegingDuration = 0;
-                player.Bleeding();
-            }           
+                if (player.isBleeding)
+                {
+                    player.CureBleeding();
+                }
 
-            Debug.Log("cauterize");
-            GameManager.manager.ApplyChangesInInventory(this);   
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color>. You are no longer bleeding.");
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color>. You are no longer bleeding!");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color> but nothing happens.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color> but nothing happens.");
+            }
         }
     }
 
     public void RemovePoison(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(player.isPoisoned)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.poisonDuration = 0;
-                player.Poison();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>. You are no longer poisoned!");
+                if (player.isPoisoned)
+                {
+                    player.CurePoison();
+                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>. You are no longer poisoned!");
+                }
+                else GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color> but nothing happens.");
             }
-            else GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>.");
-            GameManager.manager.ApplyChangesInInventory(this);   
-            
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color> but nothing happens.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color> but nothing happens.");
+            }
         }
     }
 
     public void CausticDart(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
-                GameManager.manager.ApplyChangesInInventory(this);   
                 GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
+            {
+                player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
+                GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You feel piercing pain.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart</color> but nothing happens.");
             }
         }
     }
 
     public void Anoint(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            player.Anoint();
-            GameManager.manager.ApplyChangesInInventory(this);   
-            GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color>.");
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
+            {
+                player.Anoint();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color>.");
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color> but nothing happens.");
+            }
+            else
+            {
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color> but nothing happens.");
+            }
         }
     }
 
     public void Purify(MonoBehaviour foo)
     {
-        if(foo is PlayerStats player)
+        if (foo is PlayerStats player)
         {
-            if(player.isPoisoned)
+            if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.poisonDuration = 0;
-                player.Poison();
-                GameManager.manager.ApplyChangesInInventory(this);   
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color>.");
+                if (player.isPoisoned)
+                {
+                    player.CurePoison();
+                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color>.");
+                }
+                else
+                {
+                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color> but nothing happens.");
+                }
+            }
+            else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
+            {
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.ApplyChangesInInventory(this);   
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color>.");
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color> but nothing happens.");
             }
         }
     }
@@ -291,38 +397,6 @@ public class ScrollSO : ItemScriptableObject,IRestrictTargeting
 
     public override void onUnequip(MonoBehaviour foo)
     {
-    }
-
-    public bool IsValidTarget()
-    {
-        switch (_spell)
-        {
-            case spell.BloodForBlood:
-                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
-            case spell.BloodRestore:
-                break;
-            case spell.BloodPact:
-                break;
-            case spell.Cauterize:
-                break;
-            case spell.RemovePoison:                
-                break;
-            case spell.CausticDart:
-                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
-            case spell.Anoint:
-                break;
-            case spell.Purify:
-                break;
-            case spell.Invisiblity:
-                break;
-            case spell.Root:
-                return  MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
-            case spell.Poisonbolt:
-                return MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null;
-            default:
-                break;
-        }
-        return true;
     }
 
     public bool AllowTargetingMove()

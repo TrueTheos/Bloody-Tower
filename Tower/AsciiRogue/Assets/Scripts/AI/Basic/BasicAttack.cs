@@ -9,6 +9,7 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
 
     public override void Calculate(RoamingNPC t)
     {
+        if (t.isInvisible) t.RemoveInvisibility();
         try
         {
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
@@ -18,8 +19,18 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
         }
         catch { }
 
-        string attack = t.enemySO.attacks[Random.Range(0, t.enemySO.attacks.Count)].ToString();
-        t.SendMessage(attack);
+        string attack = "";
+        if (t.nextAttack != "")
+        {
+            attack = t.nextAttack;
+            t.SendMessage(attack);
+            t.nextAttack = "";
+        }
+        else
+        {
+            attack = t.enemySO.attacks[Random.Range(0, t.enemySO.attacks.Count)].ToString();
+            t.SendMessage(attack);
+        }
 
     }
 }

@@ -76,6 +76,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
 
     [HideInInspector] public bool playerDetected;
     [HideInInspector] public bool sleeping;
+    [HideInInspector] public bool sleepDecided = false; //is it is true, we don't do this  sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
     [HideInInspector] public bool attacked;
 
     [HideInInspector] public bool rooted;
@@ -108,7 +109,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         canvas = GameObject.Find("MainCanvas").gameObject;
 
-        if(!sleeping)
+        if(!sleepDecided)
         {
             sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
         }

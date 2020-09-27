@@ -394,7 +394,11 @@ public class PlayerMovement : MonoBehaviour
 
         RoamingNPC roamingNpcScript = e.GetComponent<RoamingNPC>();
 
-        damage = 0; //total damage
+        int damageLeftHand = 0;
+        int damageRightHand = 0;
+
+        ItemScriptableObject.damageType leftHandDamageType = ItemScriptableObject.damageType.normal;
+        ItemScriptableObject.damageType rightHandDamageType = ItemScriptableObject.damageType.normal;
 
         int r = Random.Range(1,100);
 
@@ -420,9 +424,11 @@ public class PlayerMovement : MonoBehaviour
         {
             if(playerStats._Lhand?.iso is WeaponsSO weaponL)
             {
+                leftHandDamageType = weaponL.I_damageType;
+
                 for(x = 0; x < weaponL.attacks.Count; x++)
                 {
-                    damage += Random.Range(1, weaponL.attacks[x].y);
+                    damageLeftHand += Random.Range(1, weaponL.attacks[x].y);
 
                     //IF WEAPON IS BLOOD SWORD WE INCREASE ITS DAMAGE
                     if(weaponL.I_name == "Bloodsword") 
@@ -434,9 +440,11 @@ public class PlayerMovement : MonoBehaviour
             }
             if(playerStats._Rhand?.iso is WeaponsSO weaponR)
             {
+                rightHandDamageType = weaponR.I_damageType;
+
                 for(x = 0; x < weaponR.attacks.Count; x++)
                 {
-                    damage += Random.Range(1, weaponR.attacks[x].y);
+                    damageRightHand += Random.Range(1, weaponR.attacks[x].y);
 
                     //IF WEAPON IS BLOOD SWORD WE INCREASE ITS DAMAGE
                     if(weaponR.I_name == "Bloodsword") 
@@ -451,26 +459,43 @@ public class PlayerMovement : MonoBehaviour
             if(Random.Range(1,100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex -  playerStats.__dexterity)
             {
                 //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
-                damage += Mathf.FloorToInt((Random.Range(1,4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
+                damageLeftHand += Mathf.FloorToInt((Random.Range(1,4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
                 //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
 
             }
             else
             {
-                damage += Random.Range(1,4) + Mathf.FloorToInt(playerStats.__strength / 5);
+                damageLeftHand += Random.Range(1,4) + Mathf.FloorToInt(playerStats.__strength / 5);
                 //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + {playerStats.__strength} / 5)</color>");
             }
 
-            if(roamingNpcScript.sleeping)
+            if (Random.Range(1, 100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex - playerStats.__dexterity)
+            {
+                //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
+                damageRightHand += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
+                //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
+
+            }
+            else
+            {
+                damageRightHand += Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5);
+                //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + {playerStats.__strength} / 5)</color>");
+            }
+
+            if (roamingNpcScript.sleeping)
             {
                 WakeUpEnemy(roamingNpcScript);
-                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damage * sleepingDamage));
+                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damageLeftHand * sleepingDamage), leftHandDamageType);
+                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damageRightHand * sleepingDamage), rightHandDamageType);
+                damage = Mathf.FloorToInt(damageLeftHand * sleepingDamage) + Mathf.FloorToInt(damageRightHand * sleepingDamage);
                 manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
             }
             else
             {
                 roamingNpcScript._x = roamingNpcScript.howLongWillFololwInvisiblepLayer;
-                roamingNpcScript.TakeDamage(damage);
+                roamingNpcScript.TakeDamage(damageLeftHand, leftHandDamageType);
+                roamingNpcScript.TakeDamage(damageRightHand, rightHandDamageType);
+                damage = damageLeftHand + damageRightHand;
                 manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
             }
         }

@@ -31,7 +31,7 @@ public class BasicBleed : BaseAIBehaviour<RoamingNPC>
 
         if (t.bleedLength > 0)
         {
-            ToTakeDamage.TakeDamage(t,1);
+            ToTakeDamage.TakeDamage(t,1, ItemScriptableObject.damageType.normal);
             t.bleedLength--;
         }
     }

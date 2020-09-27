@@ -1094,13 +1094,13 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         if (npc.sleeping)
         {
             PlayerMovement.playerMovement.WakeUpEnemy(npc);
-            npc.TakeDamage(Mathf.FloorToInt(damage * PlayerMovement.playerMovement.sleepingDamage));
+            npc.TakeDamage(Mathf.FloorToInt(damage * PlayerMovement.playerMovement.sleepingDamage), ItemScriptableObject.damageType.normal);
             GameManager.manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(npc.EnemyColor)}>{npc.EnemyName}</color>");
         }
         else
         {
             npc._x = npc.howLongWillFololwInvisiblepLayer;
-            npc.TakeDamage(damage);
+            npc.TakeDamage(damage, ItemScriptableObject.damageType.normal);
             GameManager.manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(npc.EnemyColor)}>{npc.EnemyName}</color>");
         }
     }

@@ -62,6 +62,9 @@ public class EnemiesScriptableObject : ScriptableObject
     public bool leavesCorpse;
     public bool isBoss = false;
 
+    [Header("Weakness")]
+    public bool W_light;
+    public bool W_magic;
 
     //NPC
     [Header("NPC Settings")]

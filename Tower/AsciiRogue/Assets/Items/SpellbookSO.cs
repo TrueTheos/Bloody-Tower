@@ -175,7 +175,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().maxHp);
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().maxHp, ItemScriptableObject.damageType.magic);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Finger of Death</color>.");
             }
             else if(MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
@@ -199,7 +199,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 int damage = Random.Range(1, 10) + Random.Range(1, 10) + player.__intelligence / 10;
-                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(damage);
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(damage, ItemScriptableObject.damageType.magic);
                 player.__currentHp += damage;
                 item.spellbookCooldown = 20;
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Drain Life</color>. You drained <color=red>{damage}</color> health.");
@@ -292,7 +292,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5));
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5), damageType.magic);
                 player.TakeDamage(5);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
@@ -416,7 +416,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             if(MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
+                MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.magic);
                 GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)

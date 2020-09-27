@@ -30,5 +30,16 @@ MonoBehaviour:
   E_possileDrops: []
   leavesCorpse: 1
   isBoss: 1
+  W_light: 0
+  W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}
+  MyDOT: {fileID: 11400000, guid: 06f43bddfc6899942aff3c5265e74a9a, type: 2}
+  MyWakeUp: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}
+  MyStun: {fileID: 11400000, guid: 274c60eeb499b9a42a79e8c106fa1085, type: 2}
+  MyBleed: {fileID: 11400000, guid: c310436b651e72a449b535d4a163d651, type: 2}
+  MyTakeDamage: {fileID: 11400000, guid: b9a21c18c94a9ec4fbf5ef595221e69e, type: 2}
+  MyLookForPlayer: {fileID: 11400000, guid: eaf58d1e5baab394f82decb8f9a95a73, type: 2}
+  MyTestToWakeUp: {fileID: 11400000, guid: a95113c0a2875f1408092fc4ce02ee86, type: 2}
+  MyAttack: {fileID: 11400000, guid: 20886447b1b2c35418e180fef3527cd7, type: 2}
+  MyKill: {fileID: 11400000, guid: a27ad001d4de1624fbcd7d2884358fbf, type: 2}

@@ -9,7 +9,7 @@ public class BasicTakeDamage : BaseAIBehaviour<RoamingNPC>
     public BasicDie ToDie;
 
 
-    public virtual void TakeDamage(RoamingNPC npc, int amount)
+    public virtual void TakeDamage(RoamingNPC npc, int amount, ItemScriptableObject.damageType dmgType)
     {
         ToWakeUp.Calculate(npc);
 
@@ -21,11 +21,4 @@ public class BasicTakeDamage : BaseAIBehaviour<RoamingNPC>
             ToDie.Calculate(npc);
         }
     }
-
-
-
-
-
-
-
 }

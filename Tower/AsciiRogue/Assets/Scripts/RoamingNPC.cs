@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 using System;
 using System.Collections;
 
-public class RoamingNPC : MonoBehaviour, ITakeDamage
+public class RoamingNPC : MonoBehaviour
 {
     public EnemiesScriptableObject enemySO;
 
@@ -122,8 +122,6 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
 
         if(enemySO.finishedDialogue) enemySO.finishedDialogue = false;
         maxHp = __currentHp;
-
-        Stun(2);
     }   
 
     public void MoveTo(int x, int y) 
@@ -486,11 +484,11 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
     //+++++++++++++++++++++++++
     //=========================
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, ItemScriptableObject.damageType dmgType)
     {
-        enemySO.MyTakeDamage.TakeDamage(this,amount);
+        enemySO.MyTakeDamage.TakeDamage(this,amount, dmgType);
         return;
-        WakeUp();
+        /*WakeUp();
 
         __currentHp -= amount;
 
@@ -498,7 +496,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         if (__currentHp <= 0)
         {
             Kill();
-        }
+        }*/
     }
     //called when enemy dies
     private void Kill()
@@ -573,7 +571,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
     {
         enemySO.MyBleed.Calculate(this);
         return;
-        if (!isBleeding)
+        /*if (!isBleeding)
         {
             isBleeding = true;
 
@@ -597,7 +595,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         {
             TakeDamage(1);
             bleedLength--;
-        }        
+        } */       
     }
 
     public bool CheckStun()
@@ -617,7 +615,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
     {
         enemySO.MyStun.StunFor(this,duration);
         return;
-        if (isStuned)
+        /*if (isStuned)
         {
             stuneDuration--;
         }
@@ -632,7 +630,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         {
             stuneDuration = 0;
             isStuned = false;
-        }
+        }*/
     }
     
     public void MakeInvisible()
@@ -652,7 +650,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
     {
         enemySO.MyDOT.Calculate(this);
         return;
-        if(!damageOverTurn)
+        /*if(!damageOverTurn)
         {
             damageOverTurn = true;
             EffectTasks += DamageOverTurn;
@@ -670,7 +668,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         {
             damageOverTurn = false;
             EffectTasks -= DamageOverTurn;
-        }
+        }*/
     }
     public void WakeUp()
     {

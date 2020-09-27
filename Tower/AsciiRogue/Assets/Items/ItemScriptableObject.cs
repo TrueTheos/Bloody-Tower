@@ -16,9 +16,6 @@ public abstract class ItemScriptableObject : ScriptableObject
     [Range(0, 1f)] public float chanceOfSpawning21to30;
     [Range(0, 1f)] public float chanceOfSpawning31to40;
 
-    //public int itemLevel;
-    //public int levelMin, levelMax;
-
     public int I_weight;
 
     public enum rareness
@@ -59,6 +56,13 @@ public abstract class ItemScriptableObject : ScriptableObject
     }
     public whereToPutIt I_whereToPutIt;
 
+    public enum damageType
+    {
+        normal,
+        light,
+        magic
+    }
+    public damageType I_damageType;
 
     public bool normalIdentifState;
 

@@ -22,7 +22,7 @@ public class BasicDamageOverTurn : BaseAIBehaviour<RoamingNPC>
         else
         {
             t.dotDuration--;
-            ToTakeDamage.TakeDamage(t,(20 + t.playerStats.__intelligence)/ 10);
+            ToTakeDamage.TakeDamage(t,(20 + t.playerStats.__intelligence)/ 10, ItemScriptableObject.damageType.normal);
         }
 
         if (t.dotDuration <= 0)

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
+  m_Name: Sun Sword
+  m_EditorClassIdentifier: 
+  I_name: Sun Sword
+  I_unInName: Sun Sword
+  I_symbol: )
+  I_color: '#FFE100'
+  chanceOfSpawning1to10: 0
+  chanceOfSpawning11to20: 0
+  chanceOfSpawning21to30: 0
+  chanceOfSpawning31to40: 0
+  I_weight: 19
+  I_rareness: 2
+  I_itemType: 10
+  I_whereToPutIt: 3
+  I_damageType: 1
+  lightFactor: 1
+  normalIdentifState: 1
+  pickupableByMonsters: 0
+  effect: <color=red>2d5</color> <color=yellow>light</color> damage on hit.
+  worth: 0
+  SkillsToLearn: []
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
+  attacks:
+  - {x: 1, y: 5}
+  - {x: 1, y: 5}
+  effectsOnHit: 
+  MaximumProjection: 0
+  BowDamage: 0
+  _weaponType: 0
+  bloodSwordCounter: 0

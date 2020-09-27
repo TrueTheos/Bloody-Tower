@@ -70,7 +70,7 @@ public class DungeonGenerator : MonoBehaviour
     private GameObject floorObject = null;
 
     public Text screen;
-    [SerializeField] public int lightFactor = 1;
+    public float lightFactor = 1f;
 
 
     [Header("Water Colors")]
@@ -986,7 +986,7 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    string CalculateFade(Color rgb_value, int x, int y, Vector2Int playerPos, int refadeFactor = 1)
+    string CalculateFade(Color rgb_value, int x, int y, Vector2Int playerPos, float refadeFactor = 1)
     {
         int dst = (int)(Mathf.Abs(x - playerPos.x) + Mathf.Abs(y - playerPos.y)) + 1;
         float R = rgb_value.r / dst;
@@ -1376,7 +1376,7 @@ public class DungeonGenerator : MonoBehaviour
             if (dungeonGenerator.prefabRooms.Count > 0)
             {
                 dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
-                w = dungeonGenerator.prefabRoom.height;
+                w =  dungeonGenerator.prefabRoom.height;
                 h = dungeonGenerator.prefabRoom.width;
                 centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
                 centralRoom.isPrefabRoom = true;

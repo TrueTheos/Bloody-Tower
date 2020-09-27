@@ -87,98 +87,12 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        /*so.lvl = DungeonGenerator.dungeonGenerator.currentFloor;
-        so.str = 10 + Mathf.FloorToInt(so.lvl * 0.5f);
-        so.dex = 10 + Mathf.FloorToInt(so.lvl * 0.5f);
-        so.intell = 10 + Mathf.FloorToInt(so.lvl * 0.3f);
-        so.end = 10 + Mathf.FloorToInt(so.lvl * 0.5f); */
-
-        /*if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.strong))
-        {
-            so.str += Mathf.FloorToInt(so.str * .75f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.nimble))
-        {
-            so.dex += Mathf.FloorToInt(so.dex * .75f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.smart))
-        {
-            so.intell += Mathf.FloorToInt(so.intell * .75f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.tough))
-        {
-            so.end += Mathf.FloorToInt(so.end * .75f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.weak))
-        {
-            so.str -= Mathf.FloorToInt(so.str * .5f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.clumsy))
-        {
-            so.dex -= Mathf.FloorToInt(so.dex * .5f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.stupid))
-        {
-            so.intell -= Mathf.FloorToInt(so.intell * .5f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.frail))
-        {
-            so.end -= Mathf.FloorToInt(so.end * .5f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.giant))
-        {
-            so.str += Mathf.FloorToInt(so.str * .4f);
-            so.dex += Mathf.FloorToInt(so.dex * .4f);
-            so.intell += Mathf.FloorToInt(so.intell * .4f);
-            so.end += Mathf.FloorToInt(so.end * .4f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.small))
-        {
-            so.str -= Mathf.FloorToInt(so.str * .2f);
-            so.dex -= Mathf.FloorToInt(so.dex * .2f);
-            so.intell -= Mathf.FloorToInt(so.intell * .2f);
-            so.end -= Mathf.FloorToInt(so.end * .2f);
-        }
-        if (so.enemySO.__modifier.HasFlag(EnemiesScriptableObject.E_modifier.caster))
-        {
-            so.str -= Mathf.FloorToInt(so.str * .1f);
-            so.dex -= Mathf.FloorToInt(so.dex * .1f);
-            so.intell += Mathf.FloorToInt(so.intell * .5f);
-            so.end -= Mathf.FloorToInt(so.end * .1f);
-        }
-
-
-
-        switch (so.enemySO._Difficulty)
-        {
-            case EnemiesScriptableObject.E_difficulty.easy:
-                so.str -= Mathf.FloorToInt(so.str * .2f);
-                so.dex -= Mathf.FloorToInt(so.dex * .2f);
-                so.intell -= Mathf.FloorToInt(so.intell * .2f);
-                so.end -= Mathf.FloorToInt(so.end * .2f);
-                break;
-            case EnemiesScriptableObject.E_difficulty.normal:
-                break;
-            case EnemiesScriptableObject.E_difficulty.hard:
-                so.str += Mathf.FloorToInt(so.str * .2f);
-                so.dex += Mathf.FloorToInt(so.dex * .2f);
-                so.intell += Mathf.FloorToInt(so.intell * .2f);
-                so.end += Mathf.FloorToInt(so.end * .2f);
-                break;
-            case EnemiesScriptableObject.E_difficulty.boss:
-                so.str += Mathf.FloorToInt(so.str * .4f);
-                so.dex += Mathf.FloorToInt(so.dex * .4f);
-                so.intell += Mathf.FloorToInt(so.intell * .4f);
-                so.end += Mathf.FloorToInt(so.end * .4f);
-                break;
-        }*/
-
         so.str = enemySO.strength;
         so.dex = enemySO.dexterity;
         so.intell = enemySO.intelligence;
         so.end = enemySO.endurance;
 
-        so.__currentHp = Mathf.FloorToInt(so.str + (so.end * 2) - 5);
+        so.__currentHp = Mathf.FloorToInt(so.str + (so.end * 3) - 5);
 
         so.xpDrop = Mathf.RoundToInt((so.str + so.dex + so.intell + so.end) / 3);
 

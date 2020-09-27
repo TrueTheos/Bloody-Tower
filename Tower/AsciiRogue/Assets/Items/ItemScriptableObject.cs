@@ -64,6 +64,8 @@ public abstract class ItemScriptableObject : ScriptableObject
     }
     public damageType I_damageType;
 
+    public int lightFactor = 0;
+
     public bool normalIdentifState;
 
 

@@ -8236,6 +8236,8 @@ MonoBehaviour:
   - {r: 0.5943396, g: 0, b: 0, a: 0}
   - {r: 0.454, g: 0, b: 0, a: 0}
   _prefabRooms:
+  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
+  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
   - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
   - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
 --- !u!114 &1911366294
@@ -8490,7 +8492,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: edd38b8eac318de4c825ce61bbcd7de2, type: 2}
   - {fileID: 11400000, guid: 05ec720678af13a4090775f43e38c7e8, type: 2}
   - {fileID: 11400000, guid: 14637aac611fd6847a0862222e0acd1c, type: 2}
-  - {fileID: 11400000, guid: f1671cd9c91249b4daff1b250b39036a, type: 2}
   - {fileID: 11400000, guid: ecba9f6a490c3d34a967b6155548e600, type: 2}
   - {fileID: 11400000, guid: 69c56262bb138aa408c90f29212dc3af, type: 2}
   Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
@@ -9130,6 +9131,11 @@ PrefabInstance:
         type: 3}
       propertyPath: waterPoisonDuraiton.y
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 893889622453061310, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

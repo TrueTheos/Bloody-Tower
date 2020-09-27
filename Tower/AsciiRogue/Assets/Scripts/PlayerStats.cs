@@ -1352,12 +1352,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
                         _selectedItem.isEquipped = false;
                         break;
                     case ItemScriptableObject.whereToPutIt.hand:
-
-                        if (_selectedItem.iso is Torch torch)
-                        {
-                            torch.RemoveTorch();
-                        }
-
                         if (_selectedItem._handSwitch == Item.hand.left)
                         {
                             _Lhand = null;

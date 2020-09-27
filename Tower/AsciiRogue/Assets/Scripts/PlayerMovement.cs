@@ -378,11 +378,11 @@ public class PlayerMovement : MonoBehaviour
             }  
         }
 
-        if(playerStats._Lhand?.iso is WeaponsSO w)
+        if (playerStats._Lhand?.iso is WeaponsSO w)
         {
             w.onHit(playerStats);
         }
-        if(playerStats._Rhand?.iso is WeaponsSO w2)
+        if (playerStats._Rhand?.iso is WeaponsSO w2)
         {
             w2.onHit(playerStats);
         }

@@ -795,11 +795,6 @@ public class GameManager : MonoBehaviour
                         playerStats.Body.text = "Chest:";
                         break;
                     case ItemScriptableObject.whereToPutIt.hand:
-                        if (_selectedItem.iso is Torch torch)
-                        {
-                            torch.RemoveTorch();
-                        }
-
                         if (_selectedItem._handSwitch == Item.hand.left)
                         {
                             playerStats._Lhand = null;
@@ -903,12 +898,6 @@ public class GameManager : MonoBehaviour
                             _selectedItem.isEquipped = false;
                             break;
                         case ItemScriptableObject.whereToPutIt.hand:
-
-                            if (_selectedItem.iso is Torch torch)
-                            {
-                                torch.RemoveTorch();
-                            }
-
                             if (_selectedItem._handSwitch == Item.hand.left)
                             {
                                 playerStats._Lhand = null;
@@ -1008,11 +997,6 @@ public class GameManager : MonoBehaviour
 
                         break;
                     case ItemScriptableObject.whereToPutIt.hand:
-                        if (_selectedItem.iso is Torch torch)
-                        {
-                            torch.UseTorch();
-                        }
-
                         if (playerStats._Lhand == null)
                         {
                             playerStats._Lhand = _selectedItem;

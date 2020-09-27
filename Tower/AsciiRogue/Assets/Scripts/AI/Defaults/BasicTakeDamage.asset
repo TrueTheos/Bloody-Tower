@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b43378396a6b7949945b6dd9a345c94, type: 3}
   m_Name: BasicTakeDamage
   m_EditorClassIdentifier: 
-  ToWakeUp: {fileID: 0}
-  ToDie: {fileID: 0}
+  ToWakeUp: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}
+  ToDie: {fileID: 11400000, guid: a27ad001d4de1624fbcd7d2884358fbf, type: 2}

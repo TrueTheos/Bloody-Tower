@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ca2406b280843458d64507c601ecb3, type: 3}
   m_Name: BasicTestWakeUp
   m_EditorClassIdentifier: 
-  ToWakeup: {fileID: 0}
+  ToWakeup: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc3c93df4e5a434caea087ae356e5ae, type: 3}
   m_Name: BasicDOT
   m_EditorClassIdentifier: 
-  ToWakeUp: {fileID: 0}
-  ToTakeDamage: {fileID: 0}
+  ToWakeUp: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}
+  ToTakeDamage: {fileID: 11400000, guid: b9a21c18c94a9ec4fbf5ef595221e69e, type: 2}

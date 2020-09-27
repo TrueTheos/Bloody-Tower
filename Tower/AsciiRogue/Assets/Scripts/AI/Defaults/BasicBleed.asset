@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99559a2a926b42e41966de355bd42774, type: 3}
   m_Name: BasicBleed
   m_EditorClassIdentifier: 
-  ToTakeDamage: {fileID: 0}
+  ToTakeDamage: {fileID: 11400000, guid: b9a21c18c94a9ec4fbf5ef595221e69e, type: 2}

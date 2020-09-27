@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e5720af74f8b94782231013850da60, type: 3}
   m_Name: BasicLookForPlayer
   m_EditorClassIdentifier: 
-  ToAttack: {fileID: 0}
+  ToAttack: {fileID: 11400000, guid: 20886447b1b2c35418e180fef3527cd7, type: 2}

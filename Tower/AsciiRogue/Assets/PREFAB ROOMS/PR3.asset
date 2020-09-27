@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a7051858aabc4b4492cdf166d654afb, type: 3}
-  m_Name: TestPrefabRoom
+  m_Name: PR3
   m_EditorClassIdentifier: 
-  room: ..........#######..#######..#######..#######..#######..#######..#######..........
-  width: 9
-  height: 9
+  room: ......###..#=#..#7#..#+#......
+  height: 6
+  width: 5
   enemyNames:
-  - Rat
-  enemyPosition: 00000000
-  enemySleeping: 01
+  - {fileID: 11400000, guid: 369f12f334ff63140aca69f36295b052, type: 2}
+  enemySleeping: 00
+  itemsToSpawn: []

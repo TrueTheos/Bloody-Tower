@@ -6,8 +6,12 @@ using UnityEngine;
 public class PrefabRoom : ScriptableObject
 {
     public string room;
-    public int width, height;
-    public List<string> enemyNames = new List<string>();
-    public List<int> enemyPosition = new List<int>();
+    public int height, width;
+
+    [Header("Enemies")]
+    public List<EnemiesScriptableObject> enemyNames = new List<EnemiesScriptableObject>();
     public List<bool> enemySleeping = new List<bool>();
+
+    [Header("Items")]
+    public List<ItemScriptableObject> itemsToSpawn = new List<ItemScriptableObject>();
 }

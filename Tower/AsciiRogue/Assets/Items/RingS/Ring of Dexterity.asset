@@ -24,7 +24,7 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 3
   I_whereToPutIt: 4
-  normalIdentifState: 1
+  normalIdentifState: 0
   pickupableByMonsters: 0
   effect: Worn makes you <color=red>dexterous</color>.
   worth: 0

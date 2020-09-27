@@ -115,7 +115,7 @@ public class RoamingNPC : MonoBehaviour, ITakeDamage
         }
 
         //IF ENEMY IS BOSS MAKE HIM NOT SLEEPING
-        if (sleeping && enemySO.isBoss) sleeping = false;
+        if (enemySO.isBoss) sleeping = false;
 
         _x = 0;
 

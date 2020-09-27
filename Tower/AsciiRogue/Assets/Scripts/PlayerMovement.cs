@@ -278,8 +278,18 @@ public class PlayerMovement : MonoBehaviour
         {
             GameManager.manager.UpdateMessages("Press <color=yellow>'space'</color> to pick up item.");
         }
-        
-        if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null) // && MapManager.map[target.x, target.y].item == null
+
+        if (MapManager.map[target.x, target.y].enemy != null)
+        {
+            if (MapManager.map[target.x, target.y].enemy.GetComponent<RoamingNPC>().enemySO._Behaviour == EnemiesScriptableObject.E_behaviour.npc && !MapManager.map[target.x, target.y].enemy.GetComponent<RoamingNPC>().enemySO.finishedDialogue)
+            {
+                playerStats.dialogue = true;
+                playerStats.npcDialogue = MapManager.map[target.x, target.y].enemy.GetComponent<RoamingNPC>();
+                return;
+            }
+            else Attack(MapManager.map[target.x, target.y].enemy, target.x, target.y);
+        }
+        else if (MapManager.map[target.x, target.y].isWalkable && MapManager.map[target.x, target.y].enemy == null) // && MapManager.map[target.x, target.y].item == null
         {
             if(MapManager.map[target.x, target.y].structure != null)
             {
@@ -299,16 +309,6 @@ public class PlayerMovement : MonoBehaviour
         {
             MapManager.map[target.x, target.y].structure.Use();
             target = position;
-        }
-        else if (MapManager.map[target.x, target.y].enemy != null)
-        {
-            if(MapManager.map[target.x, target.y].enemy.GetComponent<RoamingNPC>().enemySO._Behaviour == EnemiesScriptableObject.E_behaviour.npc && !MapManager.map[target.x, target.y].enemy.GetComponent<RoamingNPC>().enemySO.finishedDialogue)
-            {
-                playerStats.dialogue = true;
-                playerStats.npcDialogue = MapManager.map[target.x, target.y].enemy.GetComponent<RoamingNPC>();
-                return;
-            }
-            else Attack(MapManager.map[target.x, target.y].enemy, target.x, target.y);
         }
         else if (MapManager.map[target.x, target.y].type == "Door") //if in the direction we want to go is door
         {

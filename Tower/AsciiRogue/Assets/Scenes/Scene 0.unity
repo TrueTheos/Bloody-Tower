@@ -8192,6 +8192,9 @@ MonoBehaviour:
   enemyNames: []
   enemyPositions: []
   enemySleeping: 
+  Prefab_enemyNames: []
+  Prefab_enemyPositions: []
+  Prefab_enemySleeping: 
   mimicPositions: []
   floorManager: {fileID: 0}
   mapWidth: 56
@@ -8232,8 +8235,9 @@ MonoBehaviour:
   - {r: 0.5377358, g: 0.1699448, b: 0.1699448, a: 0}
   - {r: 0.5943396, g: 0, b: 0, a: 0}
   - {r: 0.454, g: 0, b: 0, a: 0}
-  prefabRooms:
-  - {fileID: 11400000, guid: ad3ea322758b8604eb6f0c0215bfc063, type: 2}
+  _prefabRooms:
+  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
+  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0

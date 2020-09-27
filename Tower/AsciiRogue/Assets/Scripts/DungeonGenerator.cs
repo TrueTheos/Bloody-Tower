@@ -27,6 +27,13 @@ public class DungeonGenerator : MonoBehaviour
     public List<Vector2Int> enemyPositions = new List<Vector2Int>();
     public List<bool> enemySleeping = new List<bool>();
 
+    private List<ItemScriptableObject> Prefab_itemsToSpawn = new List<ItemScriptableObject>();
+    private List<Vector2Int> Prefab_itemsPositions = new List<Vector2Int>();
+
+    public List<EnemiesScriptableObject> Prefab_enemyNames = new List<EnemiesScriptableObject>();
+    public List<Vector2Int> Prefab_enemyPositions = new List<Vector2Int>();
+    public List<bool> Prefab_enemySleeping = new List<bool>();
+
     public List<Vector2Int> mimicPositions = new List<Vector2Int>();
 
     public static DungeonGenerator dungeonGenerator;
@@ -80,6 +87,7 @@ public class DungeonGenerator : MonoBehaviour
         dungeonGenerator = this;
         floorManager = GetComponent<FloorManager>();
         manager = GetComponent<GameManager>();
+        prefabRooms = new List<PrefabRoom>(_prefabRooms);
     }
 
     public void InitializeDungeon()
@@ -161,6 +169,8 @@ public class DungeonGenerator : MonoBehaviour
     //~ - Blood
     //2 - Pillar
     //3 - Blood Torch
+    //7 - Prefab Monster
+    //9 - Prefab room item
 
     public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
     {
@@ -232,76 +242,30 @@ public class DungeonGenerator : MonoBehaviour
 
                 if(forBreaker) break;
 
-                if(fixedLevel[inxedString] == "#"[0])
+                switch(fixedLevel[inxedString].ToString())
                 {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = "#",
-                        isWalkable = false,
-                        isOpaque = true,
-                        type = "Wall"
-                    };
-                    if (currentFloor >= 11) 
-                    {
-                        MapManager.map[x, y].exploredColor = fleshWallColors[UnityEngine.Random.Range(0, fleshWallColors.Count)]; 
-                        MapManager.map[x,y].specialNameOfTheCell = "Flesh Wall";
-                    }
-                    else if(currentFloor < 11 && UnityEngine.Random.Range(0,100) > currentFloor * 1.5f)
-                    {
-                        MapManager.map[x,y].exploredColor = mouldWallColors[UnityEngine.Random.Range(0, mouldWallColors.Count)];
-                        MapManager.map[x,y].specialNameOfTheCell = "Mould Wall";
-                    }
-                }
-                else if(fixedLevel[inxedString] == "."[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = ".",
-                        isWalkable = true,
-                        isOpaque = false,
-                        type = "Floor"
-                    };
-                }
-                else if(fixedLevel[inxedString] == "<"[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        structure = new Stairs()
-                    };
-                    if (MapManager.map[x, y].structure is Stairs stairsDown)
-                    {
-                        stairsDown.dungeonLevelId = currentFloor + 1;
-                        stairsDown.spawnPosition = new Vector2Int(x, y);
-                        MapManager.map[x, y].baseChar = "<";
-                        MapManager.map[x, y].isOpaque = false;
-                        MapManager.lowerStairsPos = new Vector2Int(x, y);
-                        floorManager.stairsUp.Add(new Vector2Int(x, y));
-                    }
-                }
-                else if(fixedLevel[inxedString] == ">"[0])
-                {
-                    if (currentFloor != 0)
-                    {
+                    case "#":
                         MapManager.map[x, y] = new Tile
                         {
-                            structure = new Stairs()
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = "#",
+                            isWalkable = false,
+                            isOpaque = true,
+                            type = "Wall"
                         };
-                        if (MapManager.map[x, y].structure is Stairs stairsUp)
+                        if (currentFloor >= 11)
                         {
-                            stairsUp.dungeonLevelId = currentFloor - 1;
-                            stairsUp.spawnPosition = new Vector2Int(x, y);
-                            MapManager.map[x, y].baseChar = ">";
-                            MapManager.map[x, y].isOpaque = false;
-                            MapManager.upperStairsPos = new Vector2Int(x, y);
-                            floorManager.stairsDown.Add(new Vector2Int(x, y));
+                            MapManager.map[x, y].exploredColor = fleshWallColors[UnityEngine.Random.Range(0, fleshWallColors.Count)];
+                            MapManager.map[x, y].specialNameOfTheCell = "Flesh Wall";
                         }
-                    }
-                    else
-                    {
+                        else if (currentFloor < 11 && UnityEngine.Random.Range(0, 100) > currentFloor * 1.5f)
+                        {
+                            MapManager.map[x, y].exploredColor = mouldWallColors[UnityEngine.Random.Range(0, mouldWallColors.Count)];
+                            MapManager.map[x, y].specialNameOfTheCell = "Mould Wall";
+                        }
+                        break;
+                    case ".":
                         MapManager.map[x, y] = new Tile
                         {
                             xPosition = x,
@@ -311,92 +275,99 @@ public class DungeonGenerator : MonoBehaviour
                             isOpaque = false,
                             type = "Floor"
                         };
-                    }
-                }
-                else if(fixedLevel[inxedString] == "+"[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        type = "Door",
-                        baseChar = "+",
-                        exploredColor = new Color(.545f, .27f, .07f),
-                        isWalkable = false,
-                        isOpaque = true
-                    };
-                    Door door = new Door();
-                    door.position = new Vector2Int(x, y);
-                    MapManager.map[x, y].structure = door;
-                }
-                else if(fixedLevel[inxedString] == "1"[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        type = "Door",
-                        baseChar = "+",
-                        exploredColor = new Color(1, 0, 0),
-                        isWalkable = false,
-                        isOpaque = true
-                    };
+                        break;
+                    case "<":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            structure = new Stairs()
+                        };
+                        if (MapManager.map[x, y].structure is Stairs stairsDown)
+                        {
+                            stairsDown.dungeonLevelId = currentFloor + 1;
+                            stairsDown.spawnPosition = new Vector2Int(x, y);
+                            MapManager.map[x, y].baseChar = "<";
+                            MapManager.map[x, y].isOpaque = false;
+                            MapManager.map[x, y].isWalkable = true;
+                            MapManager.lowerStairsPos = new Vector2Int(x, y);
+                            floorManager.stairsUp.Add(new Vector2Int(x, y));
+                        }
+                        break;
+                    case ">":
+                        if (currentFloor != 0)
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                structure = new Stairs()
+                            };
+                            if (MapManager.map[x, y].structure is Stairs stairsUp)
+                            {
+                                stairsUp.dungeonLevelId = currentFloor - 1;
+                                stairsUp.spawnPosition = new Vector2Int(x, y);
+                                MapManager.map[x, y].baseChar = ">";
+                                MapManager.map[x, y].isOpaque = false;
+                                MapManager.map[x, y].isWalkable = true;
+                                MapManager.upperStairsPos = new Vector2Int(x, y);
+                                floorManager.stairsDown.Add(new Vector2Int(x, y));
+                            }
+                        }
+                        else
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                xPosition = x,
+                                yPosition = y,
+                                baseChar = ".",
+                                isWalkable = true,
+                                isOpaque = false,
+                                type = "Floor"
+                            };
+                        }
+                        break;
+                    case "+":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            type = "Door",
+                            baseChar = "+",
+                            exploredColor = new Color(.545f, .27f, .07f),
+                            isWalkable = false,
+                            isOpaque = true
+                        };
+                        Door door = new Door();
+                        door.position = new Vector2Int(x, y);
+                        MapManager.map[x, y].structure = door;
+                        break;
+                    case "1":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            type = "Door",
+                            baseChar = "+",
+                            exploredColor = new Color(1, 0, 0),
+                            isWalkable = false,
+                            isOpaque = true
+                        };
 
-                    BloodDoor bloodDoor = new BloodDoor
-                    {
-                        position = new Vector2Int(x, y)
-                    };
+                        BloodDoor bloodDoor = new BloodDoor
+                        {
+                            position = new Vector2Int(x, y)
+                        };
 
-                    int multiplier = Mathf.RoundToInt(currentFloor / 5);
-                    if (multiplier < 1) multiplier = 1;
-                    bloodDoor.bloodCost = 5 * multiplier;
-                    MapManager.map[x, y].structure = bloodDoor;               
-                }
-                else if(fixedLevel[inxedString] == "_"[0]) //DOOR THAT REQUIRES KEY
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        type = "Door",
-                        baseChar = "+",
-                        exploredColor = new Color(.68f, .68f, .68f),
-                        requiresKey = true,
-                        isWalkable = false,
-                        isOpaque = true
-                    };
-                }
-                else if(fixedLevel[inxedString] == "0"[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = ".",
-                        isWalkable = true,
-                        isOpaque = false,
-                        type = "Floor"
-                    };
-
-                    itemPositions.Add(new Vector2Int(x, y));
-                }
-                else if(fixedLevel[inxedString] == "-"[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        baseChar = keyToCell.I_symbol
-                    };
-                    if (ColorUtility.TryParseHtmlString(keyToCell.I_color, out Color color))
-                    {
-                        MapManager.map[x, y].exploredColor = color;
-                    }               
-
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-
-                    GameObject item = Instantiate(manager.itemSpawner.itemPrefab.gameObject, transform.position, Quaternion.identity);
-
-                    item.GetComponent<Item>().iso = keyToCell;
-
-                    MapManager.map[x, y].item = item.gameObject;
-                }
-                else if(fixedLevel[inxedString] == "="[0])
-                {
-                    if(UnityEngine.Random.Range(0, 100) < 10)
-                    {
+                        int multiplier = Mathf.RoundToInt(currentFloor / 5);
+                        if (multiplier < 1) multiplier = 1;
+                        bloodDoor.bloodCost = 5 * multiplier;
+                        MapManager.map[x, y].structure = bloodDoor;
+                        break;
+                    case "_":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            type = "Door",
+                            baseChar = "+",
+                            exploredColor = new Color(.68f, .68f, .68f),
+                            requiresKey = true,
+                            isWalkable = false,
+                            isOpaque = true
+                        };
+                        break;
+                    case "0":
                         MapManager.map[x, y] = new Tile
                         {
                             xPosition = x,
@@ -404,132 +375,182 @@ public class DungeonGenerator : MonoBehaviour
                             baseChar = ".",
                             isWalkable = true,
                             isOpaque = false,
-                            type = "Floor",
-                            structure = null
+                            type = "Floor"
                         };
-                        mimicPositions.Add(new Vector2Int(x, y));
-                    }
-                    else if (UnityEngine.Random.Range(1, 100) < 7)
-                    {
+
+                        itemPositions.Add(new Vector2Int(x, y));
+                        break;
+                    case "-":
                         MapManager.map[x, y] = new Tile
                         {
-                            type = "Blood Anvil",
-                            baseChar = "π",
-                            exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f),
-                            isWalkable = false,
-                            isOpaque = false
+                            baseChar = keyToCell.I_symbol
                         };
+                        if (ColorUtility.TryParseHtmlString(keyToCell.I_color, out Color color))
+                        {
+                            MapManager.map[x, y].exploredColor = color;
+                        }
 
-                        Anvil anvil = new Anvil();
-                        MapManager.map[x, y].structure = anvil;
-                    }
-                    else
-                    {
-                        MapManager.map[x, y] = new Tile();
+                        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
-                        CreateChest(x, y);
-                    }                                      
-                    
-                }
-                else if(fixedLevel[inxedString] == "\""[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = "\"",
-                        isWalkable = true,
-                        isOpaque = false,
-                        type = "Floor",
-                        specialNameOfTheCell = "Mushroom",
-                        exploredColor = mushroomColors[UnityEngine.Random.Range(0, mushroomColors.Count)]
-                    };
-                    Mushroom mushroom = new Mushroom();
-                    mushroom.pos = new Vector2Int(x, y);
-                    MapManager.map[x, y].structure = mushroom;
-                }
-                else if(fixedLevel[inxedString] == "&"[0])
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = "&",
-                        isWalkable = true,
-                        isOpaque = false,
-                        type = "Floor"
-                    };
-                    cobwebPositions.Add(new Vector2Int(x,y));
-                }
-                else if (fixedLevel[inxedString] == '2')
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = "\u01C1",
-                        isWalkable = false,
-                        isOpaque = true,
-                        type = "Pillar"
-                    };
-                }
-                else if (fixedLevel[inxedString] == 'g')
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = ".",
-                        isWalkable = true,
-                        isOpaque = false,
-                        type = "Floor"
-                    };
-                    if (!spawnEnemiesFromString)
-                    {
-                        enemyPositions.Add(new Vector2Int(x, y));
-                    }
-                }
-                else if(fixedLevel[inxedString] == '~')
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        isWalkable = true,
-                        isOpaque = false,
-                        baseChar = "~",
-                        exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)],
-                        type = "Water",
-                        specialNameOfTheCell = "Blood"
-                    };
-                }
-                else if (fixedLevel[inxedString] == '3')
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = "\u0416",
-                        isWalkable = false,
-                        isOpaque = true,
-                        exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f),
-                        type = "Blood Torch"
-                    };
-                    BloodTorch torch = new BloodTorch();
-                    torch.position = new Vector2Int(x, y);
-                    MapManager.map[x, y].structure = torch;
-                }
-                else
-                {
-                    MapManager.map[x, y] = new Tile
-                    {
-                        xPosition = x,
-                        yPosition = y,
-                        baseChar = ".",
-                        isWalkable = true,
-                        isOpaque = false,
-                        type = "Floor"
-                    };
+                        GameObject item = Instantiate(manager.itemSpawner.itemPrefab.gameObject, transform.position, Quaternion.identity);
+
+                        item.GetComponent<Item>().iso = keyToCell;
+
+                        MapManager.map[x, y].item = item.gameObject;
+                        break;
+                    case "=":
+                        if (UnityEngine.Random.Range(0, 100) < 10)
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                xPosition = x,
+                                yPosition = y,
+                                baseChar = ".",
+                                isWalkable = true,
+                                isOpaque = false,
+                                type = "Floor",
+                                structure = null
+                            };
+                            mimicPositions.Add(new Vector2Int(x, y));
+                        }
+                        else if (UnityEngine.Random.Range(1, 100) < 7)
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                type = "Blood Anvil",
+                                baseChar = "π",
+                                exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f),
+                                isWalkable = false,
+                                isOpaque = false
+                            };
+
+                            Anvil anvil = new Anvil();
+                            MapManager.map[x, y].structure = anvil;
+                        }
+                        else
+                        {
+                            MapManager.map[x, y] = new Tile();
+
+                            CreateChest(x, y);
+                        }
+                        break;
+                    case "\"":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = "\"",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor",
+                            specialNameOfTheCell = "Mushroom",
+                            exploredColor = mushroomColors[UnityEngine.Random.Range(0, mushroomColors.Count)]
+                        };
+                        Mushroom mushroom = new Mushroom();
+                        mushroom.pos = new Vector2Int(x, y);
+                        MapManager.map[x, y].structure = mushroom;
+                        break;
+                    case "&":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = "&",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor"
+                        };
+                        cobwebPositions.Add(new Vector2Int(x, y));
+                        break;
+                    case "2":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = "\u01C1",
+                            isWalkable = false,
+                            isOpaque = true,
+                            type = "Pillar"
+                        };
+                        break;
+                    case "7":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = ".",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor"
+                        };
+                        Prefab_enemyPositions.Add(new Vector2Int(x, y));
+                        break;
+                    case "9":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = ".",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor"
+                        };
+                        Prefab_itemsPositions.Add(new Vector2Int(x, y));
+                        break;
+                    case "g":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = ".",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor"
+                        };
+                        if (!spawnEnemiesFromString)
+                        {
+                            enemyPositions.Add(new Vector2Int(x, y));
+                        }
+                        break;
+                    case "~":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            isWalkable = true,
+                            isOpaque = false,
+                            baseChar = "~",
+                            exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)],
+                            type = "Water",
+                            specialNameOfTheCell = "Blood"
+                        };
+                        break;
+                    case "3":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = "\u0416",
+                            isWalkable = false,
+                            isOpaque = true,
+                            exploredColor = new Color(0.7075472f, 0.123487f, 0.123487f),
+                            type = "Blood Torch"
+                        };
+                        BloodTorch torch = new BloodTorch();
+                        torch.position = new Vector2Int(x, y);
+                        MapManager.map[x, y].structure = torch;
+                        break;
+                    default:
+                        MapManager.map[x, y] = new Tile
+                        {
+                            xPosition = x,
+                            yPosition = y,
+                            baseChar = ".",
+                            isWalkable = true,
+                            isOpaque = false,
+                            type = "Floor"
+                        };
+                        break;
                 }
             }
         }
@@ -563,7 +584,7 @@ public class DungeonGenerator : MonoBehaviour
                 manager.enemySpawner.SpawnAt(enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).SingleOrDefault(), enemySleeping[i].ToString());
             }
         }
-        else if(enemyPositions.Count > 1)
+        else if(enemyPositions.Count > 0)
         {
             for (int i = 0; i < enemyPositions.Count; i++)
             {
@@ -576,9 +597,23 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
+        int l = 0;
+        foreach (var enemy in Prefab_enemyPositions)
+        {
+            manager.enemySpawner.SpawnAt(enemy.x, enemy.y, Prefab_enemyNames[l], Prefab_enemySleeping[l].ToString());
+            l++;
+        }
+
         foreach (var item in itemPositions)
         {
             manager.itemSpawner.SpawnAt(item.x, item.y);
+        }
+
+        int k = 0;
+        foreach (var Prefab_item in Prefab_itemsPositions)
+        {
+            manager.itemSpawner.SpawnAt(Prefab_item.x, Prefab_item.y, Prefab_itemsToSpawn[k]);
+            k++;
         }
 
         //if (currentFloor != 0) MovePlayerToLowerStairs();
@@ -586,9 +621,16 @@ public class DungeonGenerator : MonoBehaviour
         manager.mapName.text = "Floor " + currentFloor;
         manager.UpdateMessages($"You entered Floor {currentFloor}");
 
-        enemyPositions.Clear();
-        enemyNames.Clear();
-        enemySleeping.Clear();
+        enemyNames = new List<string>();
+        enemyPositions = new List<Vector2Int>();
+        enemySleeping = new List<bool>();
+
+        Prefab_enemyNames = new List<EnemiesScriptableObject>();
+        Prefab_enemyPositions = new List<Vector2Int>();
+        Prefab_enemySleeping = new List<bool>();
+
+        Prefab_itemsPositions = new List<Vector2Int>();
+        Prefab_itemsToSpawn = new List<ItemScriptableObject>();
     }
 
     private void GenerateWaterPool()
@@ -627,7 +669,8 @@ public class DungeonGenerator : MonoBehaviour
                     {
                         if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type == "Wall")
                         {
-                            if (UnityEngine.Random.Range(1, 100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
+                            waterTilesToGrow.RemoveAt(0);
+                            /*if (UnityEngine.Random.Range(1, 100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
                             {
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
@@ -635,7 +678,7 @@ public class DungeonGenerator : MonoBehaviour
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
                                 MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].specialNameOfTheCell = "Blood";
-                            }
+                            }*/
                         }
                         else
                         {
@@ -982,7 +1025,8 @@ public class DungeonGenerator : MonoBehaviour
 
     //-----------------------------------------------------------------------------------
 
-    public List<PrefabRoom> prefabRooms = new List<PrefabRoom>();
+    public List<PrefabRoom> _prefabRooms = new List<PrefabRoom>();
+    private List<PrefabRoom> prefabRooms = new List<PrefabRoom>();
     PrefabRoom prefabRoom;
 
     class Map
@@ -1322,17 +1366,29 @@ public class DungeonGenerator : MonoBehaviour
             // start with basic architecture
 
             // carve a central room, then attach stuff to it
+            Structure centralRoom;
 
             int x = Map.WIDTH / 2 + Rand.range(-5, 6);
             int y = Map.HEIGHT / 2 + Rand.range(-5, 6);
-            /*int w = Rand.range(3, 11);
-            int h = Rand.range(3, 11);*/
-            dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
-            int w = dungeonGenerator.prefabRoom.width;
-            int h = dungeonGenerator.prefabRoom.height;
 
-            Structure centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
-            centralRoom.isPrefabRoom = true;
+            int w = 0;
+            int h = 0;
+            if (dungeonGenerator.prefabRooms.Count > 0)
+            {
+                dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
+                w = dungeonGenerator.prefabRoom.height;
+                h = dungeonGenerator.prefabRoom.width;
+                centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
+                centralRoom.isPrefabRoom = true;
+                dungeonGenerator.prefabRooms.RemoveAt(dungeonGenerator.prefabRooms.IndexOf(dungeonGenerator.prefabRoom));
+            }
+            else
+            {
+                w = Rand.range(3, 11);
+                h = Rand.range(3, 11);
+                centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
+            }
+     
 
             m.carve(centralRoom, '.');
 
@@ -1496,18 +1552,30 @@ public class DungeonGenerator : MonoBehaviour
             {
                 Location[] location = s.getAllLocations();
                 int i = 0;
+                int itemsSpawned = 0;
+                int enemiesSpawned = 0;
                 foreach (var loc in location)
                 {
-                    m.set(loc.x, loc.y, dungeonGenerator.prefabRoom.room[i]);
+                    if (dungeonGenerator.prefabRoom.room[i] == '9')
+                    {
+                        m.set(loc.x, loc.y, '9');
+                        dungeonGenerator.Prefab_itemsToSpawn.Add(dungeonGenerator.prefabRoom.itemsToSpawn[itemsSpawned]);
+                        itemsSpawned++;
+                    }
+                    else if(dungeonGenerator.prefabRoom.room[i] == '7')
+                    {
+                        m.set(loc.x, loc.y, '7');
+                        dungeonGenerator.Prefab_enemyNames.Add(dungeonGenerator.prefabRoom.enemyNames[enemiesSpawned]);
+                        dungeonGenerator.Prefab_enemySleeping.Add(dungeonGenerator.prefabRoom.enemySleeping[enemiesSpawned]);
+                        enemiesSpawned++;
+                    }
+                    else
+                    {
+                        m.set(loc.x, loc.y, dungeonGenerator.prefabRoom.room[i]);
+                    }
                     i++;
                 }
-
-                dungeonGenerator.enemyNames = dungeonGenerator.prefabRoom.enemyNames;
-                foreach (var pos in dungeonGenerator.prefabRoom.enemyPosition)
-                {
-                    dungeonGenerator.enemyPositions.Add(new Vector2Int(location[pos].x, location[pos].y));
-                }
-                dungeonGenerator.enemySleeping = dungeonGenerator.prefabRoom.enemySleeping;
+             
             }
         }
 

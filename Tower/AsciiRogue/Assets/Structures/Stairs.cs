@@ -19,6 +19,6 @@ public class Stairs : Structure
 
     public override void WalkIntoTrigger()
     {
-        
+        GameManager.manager.UpdateMessages("Press <color=yellow>'space'</color> to walk stairs.");
     }
 }

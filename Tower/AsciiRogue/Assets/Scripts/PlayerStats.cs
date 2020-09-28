@@ -1220,7 +1220,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     //++++++++++++++++++++++++++++++++++++++++
     //=========================================
 
-    public void Stune()
+    public void Stun()
     {
         PlayerMovement.playerMovement.canMove = false;
         PlayerMovement.playerMovement.isStunned = true;

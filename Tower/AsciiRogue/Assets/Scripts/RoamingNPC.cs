@@ -306,6 +306,10 @@ public class RoamingNPC : MonoBehaviour
         }
     }
 
+    public void DoTurn()
+    {
+        enemySO.MyTurnAI.Calculate(this);
+    }
     public string nextAttack = "";
     public void Attack()
     {
@@ -454,7 +458,7 @@ public class RoamingNPC : MonoBehaviour
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
         StopCoroutine(_FadingBite());
     }
-    private bool attackCharged = false;
+    public bool attackCharged = false;
     private void AcidBarf()
     {
         if(!attackCharged)
@@ -476,7 +480,7 @@ public class RoamingNPC : MonoBehaviour
     {
         GameManager.manager.UpdateMessages($"<color={enemySO.E_color}>The Giant Rat</color> whips it's tail into the player!");
         GameManager.manager.UpdateMessages("You are stunned!");
-        GameManager.manager.playerStats.Stune();
+        GameManager.manager.playerStats.Stun();
         NormalAttack();
     }
 

@@ -1356,7 +1356,7 @@ public class GameManager : MonoBehaviour
     {
         foreach(var enemy in enemies.ToList())
         {
-            if(enemy != null) enemy.GetComponent<RoamingNPC>().LookForPlayer();
+            if(enemy != null) enemy.GetComponent<RoamingNPC>().DoTurn();
         }
 
         dungeonGenerator.DrawMap(true, MapManager.map);

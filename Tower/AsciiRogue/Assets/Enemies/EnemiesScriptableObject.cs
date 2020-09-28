@@ -71,6 +71,8 @@ public class EnemiesScriptableObject : ScriptableObject
     public bool finishedDialogue;
     public ItemScriptableObject rewardItem;
     [Header("Behaviour")]
+    public BasicTurnBehaviour MyTurnAI;
+
     public BasicDamageOverTurn MyDOT;
     public BasicWakeUp MyWakeUp;
     public BasicStun MyStun;

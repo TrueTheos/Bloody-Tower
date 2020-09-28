@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI/Attack/Basic")]
 public class BasicAttack : BaseAIBehaviour<RoamingNPC>
 {
-
+    public List<BasicAttack> ToAttack;
 
     public override void Calculate(RoamingNPC t)
     {
@@ -19,17 +19,17 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
         }
         catch { }
 
-        string attack = "";
-        if (t.nextAttack != "")
+        BasicAttack attack = null;
+        if (t.nextAttack != null)
         {
             attack = t.nextAttack;
-            t.SendMessage(attack);
-            t.nextAttack = "";
+            attack.Calculate(t);
+            t.nextAttack = null;
         }
         else
         {
-            attack = t.enemySO.attacks[Random.Range(0, t.enemySO.attacks.Count)].ToString();
-            t.SendMessage(attack);
+            attack = ToAttack[Random.Range(0, ToAttack.Count)];
+            attack.Calculate(t);
         }
 
     }

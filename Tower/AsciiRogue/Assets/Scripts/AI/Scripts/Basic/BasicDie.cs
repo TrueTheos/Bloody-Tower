@@ -74,9 +74,10 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
 
         t.manager.gameObject.GetComponent<Bestiary>().UpdateEnemyList(t.enemySO);
 
-        t.manager.enemies.RemoveAt(t.manager.enemies.IndexOf(e));
+        t.manager.enemies.Remove(t.gameObject);
 
         DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+
 
         Destroy(t.gameObject);
 

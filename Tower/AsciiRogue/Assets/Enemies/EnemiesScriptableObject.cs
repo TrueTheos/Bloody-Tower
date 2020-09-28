@@ -71,13 +71,13 @@ public class EnemiesScriptableObject : ScriptableObject
     public bool finishedDialogue;
     public ItemScriptableObject rewardItem;
     [Header("Behaviour")]
+    public BasicTurnBehaviour MyTurnAI;
+
     public BasicDamageOverTurn MyDOT;
     public BasicWakeUp MyWakeUp;
     public BasicStun MyStun;
     public BasicBleed MyBleed;
     public BasicTakeDamage MyTakeDamage;
-    public BasicLookForPlayer MyLookForPlayer;
     public BasicTestToWakeUp MyTestToWakeUp;
-    public BasicAttack MyAttack;
     public BasicDie MyKill;
 }

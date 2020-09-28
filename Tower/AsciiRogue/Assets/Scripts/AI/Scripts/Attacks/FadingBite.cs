@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="AI/Attack/Fading Bite")]
 public class FadingBite : BasicAttack
 {
-    public BasicAttack ToAttack;
 
 
     public override void Calculate(RoamingNPC t)
@@ -15,7 +14,7 @@ public class FadingBite : BasicAttack
     private IEnumerator _FadingBite(RoamingNPC t)
     {
         t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> used <color=red>Fading Bite</color>!");
-        ToAttack.Calculate(t);
+        ToAttack[Random.Range(0,ToAttack.Count)].Calculate(t);
         yield return new WaitForSeconds(.2f);
 
         //run away

@@ -15,6 +15,7 @@ public class EnemiesScriptableObject : ScriptableObject
     public Color E_realColor;
 
     [Header("Stats")]
+    public int maxHealth;
     public int strength;
     public int dexterity;
     public int intelligence;

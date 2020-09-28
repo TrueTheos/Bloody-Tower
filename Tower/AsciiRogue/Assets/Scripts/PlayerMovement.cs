@@ -458,10 +458,12 @@ public class PlayerMovement : MonoBehaviour
             //CRIT?
             if(Random.Range(1,100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex -  playerStats.__dexterity)
             {
-                //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
-                damageLeftHand += Mathf.FloorToInt((Random.Range(1,4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
-                //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
-
+                if (playerStats._Lhand?.iso is WeaponsSO wep)
+                {
+                    //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
+                    damageLeftHand += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
+                    //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
+                }
             }
             else
             {
@@ -471,10 +473,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (Random.Range(1, 100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex - playerStats.__dexterity)
             {
-                //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
-                damageRightHand += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
-                //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
-
+                if ((playerStats._Lhand?.iso is WeaponsSO wep2))
+                {
+                    //manager.UpdateMessages($"<color=green>We crit, chance = 5 + {roamingNpcScript.dex} - {playerStats.__dexterity}</color>");
+                    damageRightHand += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
+                    //manager.UpdateMessages($"<color=green>You attacked for {damage} (d4 + ({playerStats.__strength} / 5) * 1.5)</color>");
+                }
             }
             else
             {

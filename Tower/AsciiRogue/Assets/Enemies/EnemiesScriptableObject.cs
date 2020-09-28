@@ -78,8 +78,6 @@ public class EnemiesScriptableObject : ScriptableObject
     public BasicStun MyStun;
     public BasicBleed MyBleed;
     public BasicTakeDamage MyTakeDamage;
-    public BasicLookForPlayer MyLookForPlayer;
     public BasicTestToWakeUp MyTestToWakeUp;
-    public BasicAttack MyAttack;
     public BasicDie MyKill;
 }

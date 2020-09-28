@@ -9,8 +9,14 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
     public List<BasicAttack> Attacks;
 
 
-    public BasicAttack GetAttack()
+    public BasicAttack GetAttack(RoamingNPC t)
     {
+        if (t.nextAttack != null)
+        {
+            BasicAttack att = t.nextAttack;
+            t.nextAttack = null;
+            return att;
+        }
         if (Attacks.Count >0)
         {
             return Attacks[Random.Range(0, Attacks.Count)];
@@ -78,42 +84,42 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
             {
                 if (new Vector2Int(t.__position.x - 1, t.__position.y) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x + 1, t.__position.y) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x, t.__position.y - 1) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x, t.__position.y + 1) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x - 1, t.__position.y - 1) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x + 1, t.__position.y - 1) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x - 1, t.__position.y + 1) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
                 else if (new Vector2Int(t.__position.x + 1, t.__position.y + 1) == MapManager.playerPos)
                 {
-                    GetAttack().Calculate(t);
+                    GetAttack(t).Calculate(t);
                     return;
                 }
 

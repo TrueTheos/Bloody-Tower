@@ -13,7 +13,7 @@ public class AcidBarf : BasicAttack
         {
             t.attackCharged = true;
             GameManager.manager.UpdateMessages($"<color={t.enemySO.E_color}>Sulyvan's Beast</color> starts coughing!");
-            t.nextAttack = "AcidBarf";
+            t.nextAttack = this;
         }
         else
         {

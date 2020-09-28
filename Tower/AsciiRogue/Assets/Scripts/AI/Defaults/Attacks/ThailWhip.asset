@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 137820c7ce62a8343857c7525440f0f0, type: 3}
   m_Name: ThailWhip
   m_EditorClassIdentifier: 
-  ToAttack: {fileID: 11400000, guid: 48b9241cad8c233458cd3609a4ce9fb7, type: 2}
+  ToAttack:
+  - {fileID: 11400000, guid: 48b9241cad8c233458cd3609a4ce9fb7, type: 2}

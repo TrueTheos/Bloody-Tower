@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abf046c1e4a10246aa0310902e83141, type: 3}
   m_Name: BasicTurn
   m_EditorClassIdentifier: 
-  Attacks: []
+  Attacks:
+  - {fileID: 11400000, guid: 48b9241cad8c233458cd3609a4ce9fb7, type: 2}

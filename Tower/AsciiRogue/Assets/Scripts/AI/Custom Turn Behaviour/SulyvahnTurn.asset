@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abf046c1e4a10246aa0310902e83141, type: 3}
   m_Name: SulyvahnTurn
   m_EditorClassIdentifier: 
-  Attacks: []
+  Attacks:
+  - {fileID: 11400000, guid: c671207bb64125245a8dc1e028221e57, type: 2}
+  - {fileID: 11400000, guid: d1731b67cd7220e4fa5bf14d61e9ef7d, type: 2}

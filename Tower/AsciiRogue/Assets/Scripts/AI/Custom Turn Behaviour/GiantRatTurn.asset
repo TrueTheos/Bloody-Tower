@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abf046c1e4a10246aa0310902e83141, type: 3}
   m_Name: GiantRatTurn
   m_EditorClassIdentifier: 
-  Attacks: []
+  Attacks:
+  - {fileID: 11400000, guid: 13ce890f4221489479d04e6fc76aecc6, type: 2}
+  - {fileID: 11400000, guid: e28570afd65c9b840905d1529b575310, type: 2}

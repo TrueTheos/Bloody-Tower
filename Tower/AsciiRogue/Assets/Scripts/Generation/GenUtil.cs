@@ -349,6 +349,15 @@ public static class GenUtil
         }
         return target;
     }
+    public static char[,] AsPlaceable(this string target)
+    {
+        char[,] res = new char[target.Length, 1];
+        for (int i = 0; i < target.Length; i++)
+        {
+            res[i, 0] = target[i];
+        }
+        return res;
+    }
 
     public static int PrintCount = 0;
     public static string Print(this GenData target,bool simple = true)

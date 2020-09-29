@@ -209,41 +209,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'asdf
-
-    sadfa
-
-    sfsa
-
-    f
-
-    asdfasdfg
-
-    d
-
-    fg
-
-    dsfg
-
-    sd
-
-    fg
-
-    sdfg
-
-    sdf
-
-    g
-
-    sdfg
-
-    sdf
-
-    g
-
-    sdfg
-
-'
+  m_Text: Menu Text
 --- !u!222 &589807535
 CanvasRenderer:
   m_ObjectHideFlags: 0

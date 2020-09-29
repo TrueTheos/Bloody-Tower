@@ -33,6 +33,9 @@ public class MainMenuManager : MonoBehaviour
 
     public bool Selected = false;
 
+    public static Dictionary<string, IOptionType> Settings;
+    public static Dictionary<string, IOptionType> NewGameSettings;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +78,8 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
+        NewGameSettings = NewGame.Options;
+        Settings = options.Options;
         SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
     }
 

@@ -203,6 +203,31 @@ public static class GenUtil
         }
         return target;
     }
+    public static string ConvertToString(this char[,] target)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int y = 0; y < target.GetLength(1); y++)
+        {
+            for (int x = 0; x < target.GetLength(0); x++)
+            {
+                sb.Append(target[x, y]);
+            }
+            sb.AppendLine();
+        }
+        return sb.ToString();
+    }
+    public static char[,] FillEmpty(this char[,] target)
+    {
+        for (int x = 0; x < target.GetLength(0); x++)
+        {
+            for (int y = 0; y < target.GetLength(1); y++)
+            {
+                target[x, y] = ' ';
+            }
+        }
+        return target;
+    }
+
 
     public static bool IsInbounds<T>(this T[,] target, int posX, int posY)
     {
@@ -343,7 +368,7 @@ public static class GenUtil
                 }
                 else
                 {
-                    Debug.Log("out of bounds "+ ox + " " + oy);
+                    //Debug.Log("out of bounds "+ ox + " " + oy);
                 }
             }
         }

@@ -21,3 +21,8 @@ public interface IOptionType
 
     int GetCurrentIndex();
 }
+public interface IPrintable
+{
+    string GetAsText();
+    char[,] GetPixels();
+}

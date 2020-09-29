@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class OptionInfo 
+public class OptionInfo : IPrintable
 {
 
     public Dictionary<string, IOptionType> Options = new Dictionary<string, IOptionType>();
@@ -66,7 +66,7 @@ public class OptionInfo
 
     }
 
-    public char[,] GetOptionText()
+    public char[,] GetPixels()
     {
         char[,] res = new char[MaxWidth, MaxHeight];
         for (int x = 0; x < MaxWidth; x++)
@@ -91,9 +91,9 @@ public class OptionInfo
             IOptionType value = Options[entry];
 
 
-            var left = GetBorder(LeftWidth, 3, currIndex == CurrentPos).Place(1, 1, entry.AsPlaceable());
+            char[,] left = GetBorder(LeftWidth, 3, currIndex == CurrentPos).Place(1, 1, entry.AsPlaceable());
 
-            var right = GetBorder(rightWidth, 3, currIndex == CurrentPos && Focus).Place(1, 1, value.GetCurrent().AsPlaceable());
+            char[,] right = GetBorder(rightWidth, 3, currIndex == CurrentPos && Focus).Place(1, 1, value.GetCurrent().AsPlaceable());
 
             res.Place(0, startPos, left);
             res.Place(leftWidth, startPos, right);
@@ -105,7 +105,7 @@ public class OptionInfo
 
     public string GetAsText()
     {
-        char[,] chars = GetOptionText();
+        char[,] chars = GetPixels();
 
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < chars.GetLength(1); y++)
@@ -136,10 +136,8 @@ public class OptionInfo
         TopIndex =0;
     }
 
-
-
-
-    public char[,] GetBorder(int width, int height, bool highlight = false)
+       
+    public static char[,] GetBorder(int width, int height, bool highlight = false)
     {
         char[,] res = new char[width, height];
         for (int x = 0; x < width; x++)

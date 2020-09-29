@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
@@ -49,6 +50,7 @@ public class MainMenuManager : MonoBehaviour
             new KeyValuePair<string, IOptionType>("Test Option 8", new TextOption(new List<string>() { "A", "Longer A", "B", "C" }))
             );
         NewGame = new OptionInfo(35, 20, 20, 1,
+            new KeyValuePair<string, IOptionType>("Start Game", new ButtonOption(StartGame)),
             new KeyValuePair<string, IOptionType>("Difficulty", new TextOption(new List<string>() { "Baby", "Normal", "Blood Tower", "Impossible" })),
             new KeyValuePair<string, IOptionType>("Start Item", new TextOption(new List<string>() { "Torch", "Random Ring", "Dagger" })),
             new KeyValuePair<string, IOptionType>("Base Skill", new TextOption(new List<string>() { "Slash", "Jump", "Heal Poison"}))
@@ -70,6 +72,12 @@ public class MainMenuManager : MonoBehaviour
 
         text = GetComponent<Text>();
     }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -102,8 +110,16 @@ public class MainMenuManager : MonoBehaviour
             {
                 if (CurrentMenu is OptionInfo info)
                 {
-                    Selected = !Selected;
-                    info.Focus = Selected;
+                    if (info.GetCurrentOption() is ButtonOption btn)
+                    {
+                        // we do something
+                        btn?.Trigger();
+                    }
+                    else
+                    {
+                        Selected = !Selected;
+                        info.Focus = Selected;
+                    }                    
                 }                
             }
             

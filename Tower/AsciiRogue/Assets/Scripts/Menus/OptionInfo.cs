@@ -90,13 +90,20 @@ public class OptionInfo : IPrintable
             string entry = Indexer[currIndex];
             IOptionType value = Options[entry];
 
+            if (value is ButtonOption button)
+            {
+                char[,] t = GetBorder(MaxWidth, 3, currIndex == CurrentPos).Place(1, 1, entry.AsPlaceable());
+                res.Place(0, startPos, t);
+            }
+            else
+            {
+                char[,] left = GetBorder(LeftWidth, 3, currIndex == CurrentPos).Place(1, 1, entry.AsPlaceable());
 
-            char[,] left = GetBorder(LeftWidth, 3, currIndex == CurrentPos).Place(1, 1, entry.AsPlaceable());
+                char[,] right = GetBorder(rightWidth, 3, currIndex == CurrentPos && Focus).Place(1, 1, value.GetCurrent().AsPlaceable());
 
-            char[,] right = GetBorder(rightWidth, 3, currIndex == CurrentPos && Focus).Place(1, 1, value.GetCurrent().AsPlaceable());
-
-            res.Place(0, startPos, left);
-            res.Place(leftWidth, startPos, right);
+                res.Place(0, startPos, left);
+                res.Place(leftWidth, startPos, right);
+            }            
         }
         return res;
     }

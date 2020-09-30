@@ -12,7 +12,7 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
         {
             MapManager.map[t.__position.x, t.__position.y].enemy = null;
             MapManager.map[t.__position.x, t.__position.y].isWalkable = true;
-            Corps corpse = new Corps();
+            Corps corpse = new Corps();     
 
             //ITEM IN CORPSE
 
@@ -41,6 +41,9 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
                     MapManager.map[t.__position.x, t.__position.y].letter = "";
                 }
             }
+
+            corpse.enemyBody = t.enemySO;
+            MapManager.map[t.__position.x, t.__position.y].structure = corpse;
         }
         else
         {

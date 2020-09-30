@@ -749,20 +749,34 @@ public class GameManager : MonoBehaviour
             _selectedItem.OnUnequip(playerStats);
         }
 
-        if (MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].structure == null)
+        if (CanItemBeDroppedHere(MapManager.playerPos)) posToDrop = MapManager.playerPos;
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1);
+        else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1);
+        else
         {
-            if (CanItemBeDroppedHere(MapManager.playerPos)) posToDrop = MapManager.playerPos;
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y - 1);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x, MapManager.playerPos.y + 1);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y - 1);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y + 1);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1))) posToDrop = new Vector2Int(MapManager.playerPos.x + 1, MapManager.playerPos.y - 1);
-            else if (CanItemBeDroppedHere(new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1))) posToDrop = new Vector2Int(MapManager.playerPos.x - 1, MapManager.playerPos.y + 1);
-            else UpdateMessages("There is no space around you.");
+            UpdateMessages("There is no space around you.");
+            decisionMade = true;
+            FinishPlayersTurn();
+            return;
+        }
 
-            if (posToDrop != new Vector2Int(1000, 1000))
+        if (posToDrop != new Vector2Int(1000, 1000))
+        {
+            if (GetComponent<RevivingMonster>().TestRevive(MapManager.playerPos, _selectedItem))
+            {
+                UpdateInventoryText();
+                decisionMade = true;
+                FinishPlayersTurn();
+                ApplyChangesInInventory(_selectedItem.iso);
+                return;
+            }
+            else
             {
                 if (ColorUtility.TryParseHtmlString(_selectedItem.iso.I_color, out Color color))
                 {
@@ -1162,7 +1176,7 @@ public class GameManager : MonoBehaviour
 
     bool CanItemBeDroppedHere(Vector2Int pos)
     {
-        if(MapManager.map[pos.x, pos.y].item == null && MapManager.map[pos.x, pos.y].isWalkable && MapManager.map[pos.x, pos.y].enemy == null && MapManager.map[pos.x, pos.y].type != "Door")
+        if(MapManager.map[pos.x, pos.y].item == null && MapManager.map[pos.x, pos.y].isWalkable && MapManager.map[pos.x, pos.y].enemy == null && MapManager.map[pos.x, pos.y].type != "Door" && MapManager.map[pos.x, pos.y].structure == null)
         {
             return true;
         }

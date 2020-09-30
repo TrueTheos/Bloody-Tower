@@ -8152,6 +8152,7 @@ GameObject:
   - component: {fileID: 1911366297}
   - component: {fileID: 1911366298}
   - component: {fileID: 1911366306}
+  - component: {fileID: 1911366307}
   - component: {fileID: 1911366302}
   - component: {fileID: 1911366296}
   - component: {fileID: 1911366300}
@@ -8236,9 +8237,11 @@ MonoBehaviour:
   - {r: 0.5943396, g: 0, b: 0, a: 0}
   - {r: 0.454, g: 0, b: 0, a: 0}
   _prefabRooms:
-  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
+  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
   - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
+  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
   - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
+  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
   - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
@@ -8435,7 +8438,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 24299824f675d9d45b522d31f9a30fd2, type: 2}
   - {fileID: 11400000, guid: da2b45d7ce61f434ba475954d757f83e, type: 2}
   tools:
-  - {fileID: 11400000, guid: 0009b43b70bf94c428a2a982593ef047, type: 2}
+  - {fileID: 0}
   gems:
   - {fileID: 11400000, guid: d515d880e9d333b43939eeea72999846, type: 2}
   - {fileID: 11400000, guid: afcb74b4284834f4891f899a371cca43, type: 2}
@@ -8626,6 +8629,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f2d21cfd766f54ab81eec873754833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1911366307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911366292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3816097773575d488e4009d9891867d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  candle: {fileID: 11400000, guid: 7b008a58a592fcc41b5f5f1ad85a07aa, type: 2}
+  fingerOfDeath: {fileID: 11400000, guid: 328ef3b1ad286a54abb353b3f3281362, type: 2}
+  shake: {fileID: 1247768445}
 --- !u!1 &1912740332
 GameObject:
   m_ObjectHideFlags: 0
@@ -9186,7 +9204,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 588168077c7aa0c4a886aa59a0d08449,
+      objectReference: {fileID: 11400000, guid: 328ef3b1ad286a54abb353b3f3281362,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

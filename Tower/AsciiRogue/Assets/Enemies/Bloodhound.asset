@@ -20,6 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
+  maxHealth: 79
   strength: 15
   dexterity: 19
   intelligence: 15

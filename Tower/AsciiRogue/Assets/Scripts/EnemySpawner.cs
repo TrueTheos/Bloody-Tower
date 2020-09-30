@@ -87,12 +87,13 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
+        so.__currentHp = enemySO.maxHealth;
         so.str = enemySO.strength;
         so.dex = enemySO.dexterity;
         so.intell = enemySO.intelligence;
         so.end = enemySO.endurance;
 
-        so.__currentHp = Mathf.FloorToInt(so.str + (so.end * 3) - 5);
+        //so.__currentHp = Mathf.FloorToInt(so.str + (so.end * 3) - 5);
 
         so.xpDrop = Mathf.RoundToInt((so.str + so.dex + so.intell + so.end) / 3);
 

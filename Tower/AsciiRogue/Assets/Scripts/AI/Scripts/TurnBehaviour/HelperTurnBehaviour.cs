@@ -24,9 +24,11 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
 
             if (t.Board.ContainsKey("Target"))
             {
+                Debug.Log("Has Target");
                 if (t.Board["Target"] != null && t.Board["Target"] is RoamingNPC)
                 {
-                    if (Vector2Int.Distance(t.__position,((RoamingNPC)t.Board["Target"]).__position)>4||((RoamingNPC)t.Board["Target"]).gameObject != null)
+                    RoamingNPC testNPC = (RoamingNPC)t.Board["Target"];
+                    if ((testNPC == null) || Vector2Int.Distance(t.__position, testNPC.__position) > 5 || testNPC.gameObject == null)
                     {
                         t.Board["Target"] = null;
                     }
@@ -38,6 +40,7 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
             }
             if (searchEnemy)
             {
+                Debug.Log("Has to search enemy");
                 Vector2Int enemyPos = new Vector2Int(-100, -100);
                 float minDis = 10000;
                 bool found = false;
@@ -45,9 +48,9 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
                 {
                     try
                     {
-                        if (MapManager.map[pos.x, pos.y].enemy != null && 
-                            MapManager.map[pos.x, pos.y].enemy !=t.gameObject &&
-                            MapManager.map[pos.x, pos.y].enemy.GetComponent<RoamingNPC>().enemySO.MyTurnAI != t.enemySO.MyTurnAI && 
+                        if (MapManager.map[pos.x, pos.y].enemy != null &&
+                            MapManager.map[pos.x, pos.y].enemy != t.gameObject &&
+                            MapManager.map[pos.x, pos.y].enemy.GetComponent<RoamingNPC>().enemySO.MyTurnAI != t.enemySO.MyTurnAI &&
                             Vector2Int.Distance(PlayerMovement.playerMovement.position, pos) <= 3)
                         {
                             if (Vector2Int.Distance(PlayerMovement.playerMovement.position, pos) < minDis)
@@ -63,61 +66,73 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
 
                 if (found)
                 {
+                    Debug.Log("Found enemy");
                     t.Board["Target"] = MapManager.map[enemyPos.x, enemyPos.y].enemy.GetComponent<RoamingNPC>();
                 }
             }
-
-            if (t.Board.ContainsKey("Target") && t.Board["Target"]!=null && t.Board["Target"] is RoamingNPC)
+            if (t.Board.ContainsKey("Target"))
             {
+                Debug.Log("Has enemy missing: " + t.Board["Target"] == null);
+            }
+            if (t.Board.ContainsKey("Target") && t.Board["Target"] != null && t.Board["Target"] is RoamingNPC)
+            {
+                Debug.Log("Try attack");
                 RoamingNPC npc = (RoamingNPC)t.Board["Target"];
                 int distance = Mathf.Max(Mathf.Abs(npc.__position.x - t.__position.x), Mathf.Abs(npc.__position.y - t.__position.y));
                 // move to target and attack
                 if (distance == 1)
                 {
-                    GetAttack(t).Attack(t,npc);
+                    Debug.Log("Attack enemy");
+                    GetAttack(t).Attack(t, npc);
+                    return;
                 }
                 else
                 {
                     t.path = AStar.CalculatePath(t.__position, PlayerMovement.playerMovement.position);
 
-                    t.MoveTo(t.path[0].x, t.path[0].y);
+                    if (PlayerMovement.playerMovement.position != t.path[0] || PlayerMovement.playerMovement.position != t.path[1])
+                    {
+                        Debug.Log("Move to enemy");
+                        t.MoveTo(t.path[0].x, t.path[0].y);
+                        return;
+                    }
                 }
+            }
+
+
+            // move to player 
+            // check if next to player 
+            int pDistance = Mathf.Max(Mathf.Abs(PlayerMovement.playerMovement.position.x - t.__position.x), Mathf.Abs(PlayerMovement.playerMovement.position.y - t.__position.y));
+
+
+            Debug.Log(pDistance);
+            if (pDistance == 1)
+            {
+                // we are too close
+                Vector2Int diff = t.__position - PlayerMovement.playerMovement.position;
+
+                // we move away from the player
+
+                t.MoveTo(t.__position.x + diff.x, t.__position.y + diff.y);
             }
             else
             {
-                // move to player 
-                // check if next to player 
-                int distance = Mathf.Max(Mathf.Abs(PlayerMovement.playerMovement.position.x - t.__position.x), Mathf.Abs(PlayerMovement.playerMovement.position.y - t.__position.y));
-
-
-                Debug.Log(distance);
-                if ( distance == 1)
+                // check how far away
+                // if far away follow
+                if (pDistance > 2)
                 {
-                    // we are too close
-                    Vector2Int diff =   t.__position - PlayerMovement.playerMovement.position ;
-
-                    // we move away from the player
-
-                    t.MoveTo(t.__position.x + diff.x, t.__position.y + diff.y);
+                    Debug.Log("Follow");
+                    t.path = AStar.CalculatePath(t.__position, PlayerMovement.playerMovement.position);
+                    t.MoveTo(t.path[0].x, t.path[0].y);
                 }
                 else
                 {
-                    // check how far away
-                    // if far away follow
-                    if (distance > 2)
-                    {
-                        Debug.Log("Follow");
-                        t.path = AStar.CalculatePath(t.__position, PlayerMovement.playerMovement.position);
-                        t.MoveTo(t.path[0].x, t.path[0].y);
-                    }
-                    else
-                    {
-                        // else go random
-                        t.MoveTo(t.__position.x + Random.Range(-1, 2), t.__position.y + Random.Range(-1, 2)); //move to random direction
-                    }
+                    // else go random
+                    t.MoveTo(t.__position.x + Random.Range(-1, 2), t.__position.y + Random.Range(-1, 2)); //move to random direction
                 }
             }
-            
+
+
 
 
         }

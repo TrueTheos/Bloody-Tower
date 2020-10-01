@@ -42,6 +42,7 @@ public abstract class ItemScriptableObject : ScriptableObject
         Weapon,
         Key,
         Ammo,
+        Readable
     }
     public itemType I_itemType;
 

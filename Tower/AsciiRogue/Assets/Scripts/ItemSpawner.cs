@@ -14,21 +14,14 @@ public class ItemSpawner : MonoBehaviour
     public List<ItemScriptableObject> potions;
     public List<ItemScriptableObject> wands;
     public List<ItemScriptableObject> bandages;
-
-
     public List<ItemScriptableObject> scrolls;
     public List<ItemScriptableObject> spellbooks;
-
     public List<ItemScriptableObject> tools;
     public List<ItemScriptableObject> gems;
-
+    public List<ItemScriptableObject> readables;
     public List<ItemScriptableObject> artfiacts;
 
-
-    private List<int> scoreTable;
-    private List<Vector2Int> ranomItemTable;
-
-    [SerializeField] public List<ItemScriptableObject> itemsToSpawn;
+    public List<ItemScriptableObject> itemsToSpawn;
 
     public GameObject itemPrefab;
 
@@ -72,7 +65,7 @@ public class ItemSpawner : MonoBehaviour
 
             int itemRarirty = UnityEngine.Random.Range(1, 100);
 
-            float itemType = UnityEngine.Random.Range(1, 75);        
+            float itemType = UnityEngine.Random.Range(1, 81);        
 
             string itemTypeCompariser = "";
 
@@ -85,10 +78,9 @@ public class ItemSpawner : MonoBehaviour
             else if (itemType <= 59) itemTypeCompariser = "Ring";
             else if (itemType <= 67) itemTypeCompariser = "Gem";
             else if (itemType <= 74) itemTypeCompariser = "Money";
+            else if (itemType <= 80) itemTypeCompariser = "Readable";
 
             List<ItemScriptableObject> validItems = new List<ItemScriptableObject>();
-
-            scoreTable = new List<int>();
 
             switch (itemTypeCompariser)
             {
@@ -127,6 +119,9 @@ public class ItemSpawner : MonoBehaviour
                     break;
                 case "Artifact":
                     itemToSpawn = artfiacts[UnityEngine.Random.Range(0, artfiacts.Count)];
+                    break;
+                case "Readable":
+                    itemToSpawn = readables[UnityEngine.Random.Range(0, readables.Count)];
                     break;
                     /*case "Tool":
                         itemToSpawn = tools[UnityEngine.Random.Range(0, tools.Count)];

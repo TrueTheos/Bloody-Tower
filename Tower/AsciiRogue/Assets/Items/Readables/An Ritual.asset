@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e843ad85e02875d49aba59bee6a2cca2, type: 3}
+  m_Name: An Ritual
+  m_EditorClassIdentifier: 
+  I_name: An Ritual
+  I_unInName: An Ritual
+  I_symbol: +
+  I_color: '#410EA6'
+  chanceOfSpawning1to10: 0
+  chanceOfSpawning11to20: 0
+  chanceOfSpawning21to30: 0
+  chanceOfSpawning31to40: 0
+  I_weight: 5
+  I_rareness: 0
+  I_itemType: 13
+  I_whereToPutIt: 0
+  I_damageType: 0
+  lightFactor: 0
+  normalIdentifState: 1
+  pickupableByMonsters: 0
+  effect: 
+  worth: 0
+  SkillsToLearn: []
+  bonusToHealth: 0
+  bonusToStrength: 0
+  bonusToIntelligence: 0
+  bonusToDexterity: 0
+  bonusToEndurance: 0
+  bonusToNoise: 0
+  text: 'The Note is in bad condition, you can barely read:
+
+    ...
+
+    <i>Four
+    candles ... around the corpse. Pray to the God! Hopefully... his Finger of Death
+    will fulfill your dream...</i>
+
+    ...'

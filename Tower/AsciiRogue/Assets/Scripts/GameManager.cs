@@ -293,10 +293,16 @@ public class GameManager : MonoBehaviour
                             decisions.text += "\n" + decisionsCount + ". " + "Use";
                             AddAnotherOption("Use");
                         }
-                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Potion)
+                        else if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Potion)
                         {
                             decisionsCount++;
                             decisions.text += "\n" + decisionsCount + ". " + "Drink";
+                            AddAnotherOption("Use");
+                        }
+                        else if(_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Readable)
+                        {
+                            decisionsCount++;
+                            decisions.text += "\n" + decisionsCount + ". " + "Read";
                             AddAnotherOption("Use");
                         }
                         if (!equipState && ItemThrowHelper.CanBeThrown(_selectedItem))
@@ -423,7 +429,6 @@ public class GameManager : MonoBehaviour
                     UpdateSkillStats();
                     if (Input.GetButtonDown("Use"))
                     {
-                        Debug.Log("USE skill");
                         if (VisibleSkills[SelectedSkillIndex].IsCastable(playerStats))
                         {
                             // we will now cast the spell
@@ -431,7 +436,6 @@ public class GameManager : MonoBehaviour
                             {
                                 // we dont have to block anything
                                 VisibleSkills[SelectedSkillIndex].Prepare(playerStats);
-                                Debug.Log("cast instant");
                             }
                             else
                             {

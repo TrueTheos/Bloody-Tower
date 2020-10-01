@@ -64,7 +64,9 @@ public class FOVNEW : MonoBehaviour
                 }
             }
             catch{}
-        }       
+        }
+
+        MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].isVisible = true;
 
         for (int octant = 0; octant < 8; octant++) Compute(octant, origin, rangeLimit, 1, new Slope(1, 1), new Slope(0, 1));
     }

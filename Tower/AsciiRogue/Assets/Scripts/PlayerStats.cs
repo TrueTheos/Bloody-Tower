@@ -884,6 +884,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     {
         __currentHp -= damage;
         LossBlood(Mathf.RoundToInt(damage / 2));
+        gameManager.gameObject.GetComponent<MousePointer>().StopAllCoroutines();
 
         if(!isDead && __currentHp <= 0)
         {

@@ -51,7 +51,6 @@ public class DungeonGenerator : MonoBehaviour
     public int minCorridorLength;
     public int maxCorridorLength;
     public int maxFeatures;
-    private int countFeatures;
 
     public int currentFloor = 0;
 

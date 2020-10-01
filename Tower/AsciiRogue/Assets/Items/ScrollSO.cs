@@ -256,7 +256,7 @@ public class ScrollSO : ItemScriptableObject
                 player.IncreaseBleedingDuration(20 - (player.__intelligence / 7));
                 player.Bleeding();
 
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding<color> now!");
+                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding</color> now!");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {

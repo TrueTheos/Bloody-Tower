@@ -154,30 +154,67 @@ public class RoamingNPC : MonoBehaviour,IUnit
             {
                 if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].type == "Door")
                 {
-                    if (isBleeding)
+                    if (MapManager.map[x, y].type == "Door" && MapManager.map[x, y].structure is Door door)
                     {
-                        MapManager.map[__position.x, __position.y].letter = "";
-                        MapManager.map[__position.x, __position.y].isWalkable = true;
-                        MapManager.map[__position.x, __position.y].enemy = null;
-                        MapManager.map[__position.x, __position.y].exploredColor = new Color(0.54f,0.01f,0.01f);
-                        MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
-                    }
+                        if(door.opened)
+                        {
+                            if (isBleeding)
+                            {
+                                MapManager.map[__position.x, __position.y].letter = "";
+                                MapManager.map[__position.x, __position.y].isWalkable = true;
+                                MapManager.map[__position.x, __position.y].enemy = null;
+                                MapManager.map[__position.x, __position.y].exploredColor = new Color(0.54f, 0.01f, 0.01f);
+                                MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                            }
+                            else
+                            {
+                                MapManager.map[__position.x, __position.y].letter = "";
+                                MapManager.map[__position.x, __position.y].isWalkable = true;
+                                MapManager.map[__position.x, __position.y].enemy = null;
+                                MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                            }
+
+                            __position = new Vector2Int(x, y);
+
+                            if (!isInvisible) MapManager.map[x, y].letter = EnemySymbol;
+                            MapManager.map[x, y].isWalkable = false;
+                            MapManager.map[x, y].enemy = this.gameObject;
+                            MapManager.map[x, y].timeColor = EnemyColor;
+
+                            return;
+                        }
+                        else
+                        {
+                            door.Use();
+                        }
+                    }   
                     else
                     {
-                        MapManager.map[__position.x, __position.y].letter = "";
-                        MapManager.map[__position.x, __position.y].isWalkable = true;
-                        MapManager.map[__position.x, __position.y].enemy = null;
-                        MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                        if (isBleeding)
+                        {
+                            MapManager.map[__position.x, __position.y].letter = "";
+                            MapManager.map[__position.x, __position.y].isWalkable = true;
+                            MapManager.map[__position.x, __position.y].enemy = null;
+                            MapManager.map[__position.x, __position.y].exploredColor = new Color(0.54f, 0.01f, 0.01f);
+                            MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                        }
+                        else
+                        {
+                            MapManager.map[__position.x, __position.y].letter = "";
+                            MapManager.map[__position.x, __position.y].isWalkable = true;
+                            MapManager.map[__position.x, __position.y].enemy = null;
+                            MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+                        }
+
+                        __position = new Vector2Int(x, y);
+
+                        if (!isInvisible) MapManager.map[x, y].letter = EnemySymbol;
+                        MapManager.map[x, y].isWalkable = false;
+                        MapManager.map[x, y].enemy = this.gameObject;
+                        MapManager.map[x, y].timeColor = EnemyColor;
+
+                        return;
                     }
-
-                    __position = new Vector2Int(x, y);
-
-                    if(!isInvisible) MapManager.map[x, y].letter = EnemySymbol;
-                    MapManager.map[x, y].isWalkable = false;
-                    MapManager.map[x, y].enemy = this.gameObject;
-                    MapManager.map[x, y].timeColor = EnemyColor;
-
-                    return;
                 }
             }   
         } 

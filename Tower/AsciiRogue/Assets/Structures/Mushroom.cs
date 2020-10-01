@@ -11,21 +11,21 @@ public class Mushroom : Structure
         if(GameManager.manager.playerStats.hasPoisonResistance)
         {
             GameManager.manager.UpdateMessages("You ate mushroom but it was poisonous. You lose <color=red>1 health</color>.");
-            GameManager.manager.playerStats.TakeDamage(1);
+            GameManager.manager.playerStats.TakeDamage(1,ItemScriptableObject.damageType.normal);
         }
         else if(Random.Range(0,100) > 40 + GameManager.manager.playerStats.__endurance)
         {
             if(Random.Range(0,3) > 1)
             {
                 GameManager.manager.UpdateMessages("You ate mushroom but it was poisonous. You lose <color=red>1 health</color>.");
-                GameManager.manager.playerStats.TakeDamage(1);
+                GameManager.manager.playerStats.TakeDamage(1, ItemScriptableObject.damageType.normal);
             }
             else
             {
                 GameManager.manager.UpdateMessages("You feel pain in your chest, suddenly <color=red>blood</color> is pouring out of your mouth.");
                 GameManager.manager.UpdateMessages("You lose <color=red>1 health</color>.");
                 GameManager.manager.playerStats.LossBlood(2);
-                GameManager.manager.playerStats.TakeDamage(1);
+                GameManager.manager.playerStats.TakeDamage(1, ItemScriptableObject.damageType.normal);
             }       
         }
         else

@@ -1,4 +1,4 @@
 ﻿public interface ITakeDamage
 {
-    void TakeDamage(int damage);
+    void TakeDamage(int damage, ItemScriptableObject.damageType dmgType);
 }

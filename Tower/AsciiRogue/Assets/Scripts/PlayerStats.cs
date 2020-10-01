@@ -6,19 +6,19 @@ using System.Collections;
 using System;
 using System.Linq;
 
-public class PlayerStats : MonoBehaviour, ITakeDamage
+public class PlayerStats : MonoBehaviour, IUnit
 {
     public ItemScriptableObject startingWeapon;
 
     [Header("Variables")]
     public new string name;
-    public int maxHp;
-    public int currentHp;
-    public int strength;
-    public int intelligence;
-    public int dexterity;
-    public int endurance;
-    public int lvl;
+    public int maxHp { get; set; }
+    public int currHp { get; set; }
+    public int str { get; set; }
+    public int intell { get; set; }
+    public int dex { get; set; }
+    public int end { get; set; }
+    public int lvl { get; set; }
     public int experience;
     public int experienceNeededToLvlUp;
     public int coins;
@@ -82,12 +82,12 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     {
         get
         {
-            return currentHp;
+            return currHp;
         }
         set
         {
-            currentHp = value;
-            if (currentHp > __maxHp) currentHp = __maxHp;
+            currHp = value;
+            if (currHp > __maxHp) currHp = __maxHp;
             UpdateText(statType.hp);
         }
     }
@@ -95,13 +95,13 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     {
         get
         {
-            return strength;
+            return str;
         }
         set
         {
             if(value > __strength) //we gained strength
             {
-                strength = value;             
+                str = value;             
 
                 maxWeight += 5;
 
@@ -111,7 +111,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
             }
             else
             {
-                strength = value;
+                str = value;
 
                 maxWeight -= 5;
 
@@ -126,11 +126,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     {
         get
         {
-            return intelligence;
+            return intell;
         }
         set
         {
-            intelligence = value;
+            intell = value;
             UpdateText(statType.intelligence);
         }
     }
@@ -138,11 +138,11 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     {
         get
         {
-            return dexterity;
+            return dex;
         }
         set
         {
-            dexterity = value;
+            dex = value;
             UpdateArmorClass();
 
             UpdateText(statType.dexterity);
@@ -152,13 +152,13 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     {
         get
         {
-            return endurance;
+            return end;
         }
         set
         {
-            if (value > endurance) //we gained end
+            if (value > end) //we gained end
             {
-                endurance = value;
+                end = value;
 
                 __maxHp += 2;
 
@@ -168,7 +168,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
             }
             else //we losed end
             {
-                endurance = value;
+                end = value;
 
                 __maxHp -= 2;
 
@@ -301,8 +301,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     public int maxWeight = 60;
     public int currentWeight;
 
-    [Header("Base AC is 0")]
-    public int ac = 0;
+    //[Header("Base AC is 0")]
+    public int ac { get; set; } = 0;
+
     public int armorClass
     {
         get
@@ -880,7 +881,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage,ItemScriptableObject.damageType type)
     {
         __currentHp -= damage;
         LossBlood(Mathf.RoundToInt(damage / 2));
@@ -986,7 +987,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
        
         if(poisonDuration > 0)
         {
-            TakeDamage(1);
+            TakeDamage(1, ItemScriptableObject.damageType.normal);
             poisonDuration--;
 
             if(UnityEngine.Random.Range(1, 100) == 1)
@@ -1176,7 +1177,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
         if (bleegingDuration > 0)
         {
             bleegingDuration--;
-            TakeDamage(1);
+            TakeDamage(1, ItemScriptableObject.damageType.normal);
             __blood -= 1;
         }
         else

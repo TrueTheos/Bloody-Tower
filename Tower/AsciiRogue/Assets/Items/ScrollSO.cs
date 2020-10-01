@@ -204,12 +204,12 @@ public class ScrollSO : ItemScriptableObject
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5), ItemScriptableObject.damageType.magic);
-                player.TakeDamage(5);
+                player.TakeDamage(5, damageType.normal);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.TakeDamage(5);
+                player.TakeDamage(5, damageType.normal);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You feel piercing pain.");
             }
             else
@@ -332,7 +332,7 @@ public class ScrollSO : ItemScriptableObject
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
+                player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.normal);
                 GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You feel piercing pain.");
             }
             else

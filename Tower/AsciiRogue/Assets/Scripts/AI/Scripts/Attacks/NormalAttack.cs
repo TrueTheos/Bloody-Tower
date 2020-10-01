@@ -6,7 +6,7 @@ using UnityEngine;
 public class NormalAttack : BasicAttack
 {
 
-    public override void Calculate(RoamingNPC t)
+    public override void Attack(RoamingNPC t,IUnit target)
     {
         int totalDamage = 0;
 
@@ -34,7 +34,7 @@ public class NormalAttack : BasicAttack
             {
                 t.manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> attack you. <color=red>{totalDamage} ({t.playerStats.__currentHp - totalDamage}/{t.playerStats.__maxHp}) damage</color>!");
             }
-            t.playerStats.TakeDamage(totalDamage);
+            target.TakeDamage(totalDamage, ItemScriptableObject.damageType.normal);
         }
         else
         {

@@ -32,6 +32,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc0f76b0586c2be44bbaa2bedb160dcd, type: 2}
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

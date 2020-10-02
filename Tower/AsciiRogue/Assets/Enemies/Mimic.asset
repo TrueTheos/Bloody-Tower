@@ -31,6 +31,7 @@ MonoBehaviour:
   E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

@@ -20,7 +20,7 @@ MonoBehaviour:
   E_realName: Mimic
   E_realSymbol: M
   E_realColor: {r: 0, g: 0.47058827, b: 0.007843138, a: 0}
-  maxHealth: 50
+  maxHealth: 20
   strength: 11
   dexterity: 11
   intelligence: 6

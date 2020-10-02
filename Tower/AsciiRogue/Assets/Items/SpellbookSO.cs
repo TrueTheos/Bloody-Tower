@@ -182,7 +182,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             {
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Finger of Death</color>.");
                 GameManager.manager.UpdateMessages($"You feel painful energy bursting through body...");
-                player.TakeDamage(player.__maxHp);
+                player.TakeDamage(player.__maxHp, damageType.normal);
             }
             else
             {
@@ -293,12 +293,12 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5), damageType.magic);
-                player.TakeDamage(5);
+                player.TakeDamage(5, damageType.normal);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.TakeDamage(5);
+                player.TakeDamage(5, damageType.normal);
                 GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You feel piercing pain.");
             }
             else
@@ -421,7 +421,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7));
+                player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.normal);
                 GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart.</color> You feel piercing pain.");
             }
             else

@@ -31,7 +31,7 @@ public class PoisonBite : BasicAttack
                 t.playerStats.IncreasePoisonDuration(3);
                 t.playerStats.Poison();
             }
-            t.playerStats.TakeDamage(totalDamage);
+            t.playerStats.TakeDamage(totalDamage,ItemScriptableObject.damageType.normal);
 
             t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> used <color=green>Poison Bite</color>!");
             t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> attacked you for <color=red>{totalDamage}</color>!");

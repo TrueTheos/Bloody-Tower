@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
+  m_Name: HelpingDog
+  m_EditorClassIdentifier: 
+  E_name: Good Boy
+  E_symbol: '@'
+  E_color: {r: 0, g: 1, b: 1, a: 0}
+  E_lvlMin: 0
+  E_lvlMax: 100
+  E_realName: Good Boy
+  E_realSymbol: '@'
+  E_realColor: {r: 0, g: 1, b: 1, a: 0}
+  maxHealth: 20
+  strength: 13
+  dexterity: 13
+  intelligence: 13
+  endurance: 13
+  _Behaviour: 0
+  attacks: 
+  attackText: []
+  E_possileDrops: []
+  leavesCorpse: 0
+  isBoss: 0
+  W_light: 0
+  W_magic: 0
+  finishedDialogue: 0
+  rewardItem: {fileID: 0}
+  MyTurnAI: {fileID: 11400000, guid: 756fb679260b89641b9bc64ee97a16c7, type: 2}
+  MyDOT: {fileID: 11400000, guid: 06f43bddfc6899942aff3c5265e74a9a, type: 2}
+  MyWakeUp: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}
+  MyStun: {fileID: 11400000, guid: 274c60eeb499b9a42a79e8c106fa1085, type: 2}
+  MyBleed: {fileID: 11400000, guid: c310436b651e72a449b535d4a163d651, type: 2}
+  MyTakeDamage: {fileID: 11400000, guid: b9a21c18c94a9ec4fbf5ef595221e69e, type: 2}
+  MyTestToWakeUp: {fileID: 11400000, guid: a95113c0a2875f1408092fc4ce02ee86, type: 2}
+  MyKill: {fileID: 11400000, guid: a27ad001d4de1624fbcd7d2884358fbf, type: 2}

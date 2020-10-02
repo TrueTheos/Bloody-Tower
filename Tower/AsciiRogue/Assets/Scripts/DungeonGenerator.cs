@@ -580,7 +580,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             for(int i = 0; i < enemyNames.Count; i++)
             {
-                manager.enemySpawner.SpawnAt(enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).SingleOrDefault(), enemySleeping[i].ToString());
+                manager.enemySpawner.SpawnAt(enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).FirstOrDefault(), enemySleeping[i].ToString());
             }
         }
         else if(enemyPositions.Count > 0)

@@ -7,9 +7,11 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
 {
     public List<BasicAttack> ToAttack;
 
-    public override void Calculate(RoamingNPC t)
+
+
+    public virtual void Attack(RoamingNPC source, IUnit target)
     {
-        if (t.isInvisible) t.RemoveInvisibility();
+        if (source.isInvisible) source.RemoveInvisibility();
         try
         {
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
@@ -20,17 +22,16 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
         catch { }
 
         BasicAttack attack = null;
-        if (t.nextAttack != null)
+        if (source.nextAttack != null)
         {
-            attack = t.nextAttack;
-            attack.Calculate(t);
-            t.nextAttack = null;
+            attack = source.nextAttack;
+            attack.Attack(source,target);
+            source.nextAttack = null;
         }
         else
         {
             attack = ToAttack[Random.Range(0, ToAttack.Count)];
-            attack.Calculate(t);
+            attack.Attack(source,target);
         }
-
     }
 }

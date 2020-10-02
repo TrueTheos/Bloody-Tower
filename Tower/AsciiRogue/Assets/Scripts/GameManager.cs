@@ -1218,7 +1218,7 @@ public class GameManager : MonoBehaviour
                 if (randomBadEffect == 1)
                 {
                     UpdateMessages("<color=red>As you read the book, it radiates explosive energy in your face!</color>");
-                    playerStats.TakeDamage(UnityEngine.Random.Range(3, 8));
+                    playerStats.TakeDamage(UnityEngine.Random.Range(3, 8),ItemScriptableObject.damageType.normal);
                 }
                 else if (randomBadEffect == 2)
                 {

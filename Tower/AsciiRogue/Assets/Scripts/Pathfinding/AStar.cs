@@ -69,11 +69,13 @@ public class AStar
                     foundTarget = true;
                     break;
                 }
-
-                Node neighbour = new Node() { position = position, parent = node, gCost = CalculateGCost(node, position), hCost = CalculateHCost(position, target), isOnOpenList = true };
-                neighbour.fCost = neighbour.gCost + neighbour.hCost;
-                allNodes[position.x, position.y] = neighbour;
-                openList.Add(neighbour);
+                if (MapManager.map[position.x, position.y].enemy == null)
+                {
+                    Node neighbour = new Node() { position = position, parent = node, gCost = CalculateGCost(node, position), hCost = CalculateHCost(position, target), isOnOpenList = true };
+                    neighbour.fCost = neighbour.gCost + neighbour.hCost;
+                    allNodes[position.x, position.y] = neighbour;
+                    openList.Add(neighbour);
+                }                
             }
 
             if (foundTarget)
@@ -121,7 +123,7 @@ public class AStar
                 {
                     if (MapManager.map[x, y] != null )
                     {                        
-                        if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].type == "Door")
+                        if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].enemy != null || MapManager.map[x, y].type == "Door")
                         {
                             if (!allNodes[x, y].isOnClosedList && !allNodes[x, y].isOnOpenList)
                             {

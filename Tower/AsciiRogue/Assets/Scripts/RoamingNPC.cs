@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 using System;
 using System.Collections;
 
-public class RoamingNPC : MonoBehaviour
+public class RoamingNPC : MonoBehaviour,IUnit
 {
     public EnemiesScriptableObject enemySO;
 
@@ -51,18 +51,29 @@ public class RoamingNPC : MonoBehaviour
     }
 
     //Statistics
-    public int __currentHp;
-    public int maxHp;
+    public int __currentHp { get; set; }
+    public int currHp { get { return __currentHp; } set { __currentHp = value; } }
+    public int maxHp { get; set; }
 
-    public int str;
-    public int dex;
-    public int intell;
-    public int end;
-    public int lvl;
-    public int xpDrop;
+    public int str { get; set; }
+    public int dex { get; set; }
+    public int intell { get; set; }
+    public int end { get; set; }
+    public int lvl { get; set; }
+    public int xpDrop { get; set; }
 
-    public int AC;
-
+    public int AC { get; set; }
+    public int ac
+    {
+        get
+        {
+            return AC;
+        }
+        set
+        {
+            AC = value;
+        }
+    }
 
     //Variables for Cowardly enemies
     public int runCounter = 5;
@@ -102,7 +113,8 @@ public class RoamingNPC : MonoBehaviour
 
     public int howLongWillFololwInvisiblepLayer = 10;
     [HideInInspector] public int _x;
-
+    // This can be used to 
+    [NonSerialized]public Dictionary<string, object> Board = new Dictionary<string, object>();
 
     public void Start()
     {

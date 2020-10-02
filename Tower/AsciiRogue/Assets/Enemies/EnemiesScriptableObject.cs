@@ -62,6 +62,7 @@ public class EnemiesScriptableObject : ScriptableObject
     [Header("Settings")]
     public bool leavesCorpse;
     public bool isBoss = false;
+    public bool canOpenDoor = false;
 
     [Header("Weakness")]
     public bool W_light;

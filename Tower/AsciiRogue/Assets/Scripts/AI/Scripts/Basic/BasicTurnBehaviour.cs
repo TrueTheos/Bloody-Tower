@@ -29,6 +29,8 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
         if (t.rootDuration > 0) t.rootDuration--;
         else if (t.rooted) t.rooted = false;
 
+        t.playerDetected = false;
+
         if (t.enemySO._Behaviour != EnemiesScriptableObject.E_behaviour.npc)
         {
             if (t.sleeping) return;
@@ -44,6 +46,7 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                     if (MapManager.map[pos.x, pos.y].hasPlayer && !t.playerStats.isInvisible)
                     {
                         t.playerDetected = true;
+                        t._x = t.howLongWillFololwInvisiblepLayer;
                     }
                 }
                 catch { }
@@ -131,7 +134,20 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
             }
             else
             {
-                t.MoveTo(t.__position.x + Random.Range(-1, 2), t.__position.y + Random.Range(-1, 2)); //move to random direction
+                if (t._x > 0)
+                {
+                    t._x--;
+
+                    t.path = null;
+
+                    t.path = AStar.CalculatePath(t.__position, MapManager.playerPos);
+
+                    t.MoveTo(t.path[0].x, t.path[0].y);
+                }
+                else
+                {
+                    t.MoveTo(t.__position.x + Random.Range(-1, 2), t.__position.y + Random.Range(-1, 2)); //move to random direction
+                }
             }
         }
         else

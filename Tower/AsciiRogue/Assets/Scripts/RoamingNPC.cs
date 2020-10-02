@@ -111,8 +111,9 @@ public class RoamingNPC : MonoBehaviour,IUnit
 
     public List<Vector2Int> path;
 
-    public int howLongWillFololwInvisiblepLayer = 10;
+    public int howLongWillFololwInvisiblepLayer = 8;
     [HideInInspector] public int _x;
+
     // This can be used to 
     [NonSerialized]public Dictionary<string, object> Board = new Dictionary<string, object>();
 
@@ -185,7 +186,8 @@ public class RoamingNPC : MonoBehaviour,IUnit
                         }
                         else
                         {
-                            door.Use();
+                            if (enemySO.canOpenDoor) door.Use();
+                            else {}
                         }
                     }   
                     else

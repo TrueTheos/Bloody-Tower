@@ -26,21 +26,34 @@ public static class MapUtility
     public static Vector2Int[] Box1 = Cross1.Copy().Combine(Diagonal1.Copy());
     public static Vector2Int[] Origin = new Vector2Int[] { new Vector2Int(0, 0) };
 
-
+    public static int MoveDistance(Vector2Int a, Vector2Int b) => Mathf.Max(Mathf.Abs(a.x - b.x), Mathf.Abs(a.y - b.y));
 
     public static bool IsInbounds(int gx, int gy) => !(gx < 0 || gy < 0 || gx >= MapManager.map.GetLength(0) || gy >= MapManager.map.GetLength(1));
     public static bool IsInbounds(Vector2Int pos) => !(pos.x < 0 || pos.y < 0 || pos.x >= MapManager.map.GetLength(0) || pos.y >= MapManager.map.GetLength(1));
+    /// <summary>
+    /// Check if a position can be moved to
+    /// </summary>
+    public static bool IsMoveable(int gx, int gy) => 
+        IsInbounds(gx,gy) && 
+        MapManager.map[gx,gy].isWalkable && 
+        MapManager.map[gx, gy].enemy == null && 
+        !MapManager.map[gx, gy].hasPlayer;
+
+    public static bool IsMoveable(Vector2Int pos) => IsMoveable(pos.x, pos.y);
 
     public static Vector2Int[] Combine(this Vector2Int[] me, Vector2Int[] other)
     {
         Vector2Int[] res = new Vector2Int[me.Length + other.Length];
+        int ci = 0;
         for (int i = 0; i < me.Length; i++)
         {
-            res[i] = me[i];
+            res[ci] = me[i];
+            ci++;
         }
         for (int i = 0; i < other.Length; i++)
         {
-            res[me.Length - 1 + i] = other[i];
+            res[ci] = other[i];
+            ci++;
         }
         return res;
     }

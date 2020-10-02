@@ -6,6 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Items/Readable")]
 public class Readable : ItemScriptableObject
 {
+    [TextArea]
     public string text;
 
     public override void onEquip(MonoBehaviour foo)
@@ -22,8 +23,14 @@ public class Readable : ItemScriptableObject
 
     public override void Use(MonoBehaviour foo, Item itemObject)
     {
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("");
         GameManager.manager.UpdateMessages(text);
-        GameManager.manager.ApplyChangesInInventory(this);
-        GameManager.manager.UpdateMessages("As soon as you read the contents of the scroll, it broke into small pieces due to corrosion");
     }
 }

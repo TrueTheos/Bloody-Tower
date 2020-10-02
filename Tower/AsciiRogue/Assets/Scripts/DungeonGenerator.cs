@@ -988,27 +988,31 @@ public class DungeonGenerator : MonoBehaviour
     string CalculateFade(Color rgb_value, int x, int y, Vector2Int playerPos, float refadeFactor = 1)
     {
         int dst = (int)(Mathf.Abs(x - playerPos.x) + Mathf.Abs(y - playerPos.y)) + 1;
-        float R = rgb_value.r / dst;
-        float G = rgb_value.g / dst;
-        float B = rgb_value.b / dst;
+        float R = rgb_value.r;
+        float G = rgb_value.g;
+        float B = rgb_value.b;
 
         Color color;
        
         if (MapManager.map[x, y].isVisible)
         {
+            R = rgb_value.r / dst;
+            G = rgb_value.g / dst;
+            B = rgb_value.b / dst;
+
             if (MapManager.map[x, y].item != null)
             {
-                R *= 2;
-                G *= 2;
-                B *= 2;
+                R *= 3;
+                G *= 3;
+                B *= 3;
                 color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
             else if(MapManager.map[x, y].enemy != null)
             {
-                R *= 2;
-                G *= 2;
-                B *= 2;
+                R *= 3;
+                G *= 3;
+                B *= 3;
                 color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
@@ -1019,7 +1023,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
         else
-            return ColorUtility.ToHtmlStringRGBA(new Color(R / 2, G / 2, B / 2));
+            return ColorUtility.ToHtmlStringRGBA(new Color(R / 9, G / 9, B / 9));
     }
 
     //-----------------------------------------------------------------------------------

@@ -8524,6 +8524,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ed57a33545dea5446a9388c5a8b843fd, type: 2}
   - {fileID: 11400000, guid: 0bbe760eed66d0d4f9a270ac50ea4ba9, type: 2}
   - {fileID: 11400000, guid: 48621e4f0312ab64ebe6f79e08f7671e, type: 2}
+  readables:
+  - {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997, type: 2}
   artfiacts:
   - {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}
   itemsToSpawn: []
@@ -9282,7 +9284,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 328ef3b1ad286a54abb353b3f3281362,
+      objectReference: {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

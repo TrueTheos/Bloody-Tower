@@ -8560,8 +8560,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14637aac611fd6847a0862222e0acd1c, type: 2}
   - {fileID: 11400000, guid: ecba9f6a490c3d34a967b6155548e600, type: 2}
   - {fileID: 11400000, guid: 69c56262bb138aa408c90f29212dc3af, type: 2}
-  - {fileID: 11400000, guid: a1bd0a0fda6961943b6a59866930b54c, type: 2}
-  - {fileID: 11400000, guid: a1bd0a0fda6961943b6a59866930b54c, type: 2}
   Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
   Zombie: {fileID: 11400000, guid: 69c56262bb138aa408c90f29212dc3af, type: 2}
   spawnedEnemies: []
@@ -9284,7 +9282,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997,
+      objectReference: {fileID: 11400000, guid: 0009b43b70bf94c428a2a982593ef047,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

@@ -10,31 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Skeleton
+  m_Name: Azbun
   m_EditorClassIdentifier: 
-  E_name: Skeleton
-  E_symbol: z
-  E_color: {r: 1, g: 1, b: 1, a: 0}
-  E_lvlMin: 3
+  E_name: Azbun
+  E_symbol: a
+  E_color: {r: 0.7075472, g: 0.12348701, b: 0.12348701, a: 0}
+  E_lvlMin: 7
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 16
+  maxHealth: 15
   strength: 7
   dexterity: 7
-  intelligence: 3
-  endurance: 9
-  _Behaviour: 3
+  intelligence: 4
+  endurance: 13
+  _Behaviour: 0
   attacks: 00000000
-  attackText:
-  - claws at you with its bony fingertips.
-  - ' punches you with an uncomfortable fist.'
-  - backhands you, unhinging its wrist. It quickly snaps the wrist back into place.
-  E_possileDrops:
-  - {fileID: 11400000, guid: 15e51088fc9d371479b85ff5ca7f28cc, type: 2}
+  attackText: []
+  E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

@@ -54,7 +54,7 @@ public class MousePointer : MonoBehaviour
 
                 foreach (var pathTile in path)
                 {
-                    MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=yellow>\u205C</color>";
+                    MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=#2B3659>\u205C</color>";
                 }
 
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);

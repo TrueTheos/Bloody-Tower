@@ -10,33 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Orc
+  m_Name: Kar
   m_EditorClassIdentifier: 
-  E_name: Orc
-  E_symbol: O
-  E_color: {r: 0.31623915, g: 0.5471698, b: 0.21422213, a: 0}
-  E_lvlMin: 4
+  E_name: Kar
+  E_symbol: K
+  E_color: {r: 0.4392157, g: 0.12156863, b: 0.15686275, a: 0}
+  E_lvlMin: 0
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 18
-  strength: 13
-  dexterity: 8
-  intelligence: 7
-  endurance: 14
+  maxHealth: 9
+  strength: 5
+  dexterity: 3
+  intelligence: 3
+  endurance: 6
   _Behaviour: 0
   attacks: 00000000
   attackText:
-  - slams it's shoulder into you.
-  - punches you in the face.
-  - wraps it's arms around you and squeezes.
-  E_possileDrops:
-  - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
-  - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
+  - bites at your ankles.
+  - jumps and scratches at your face.
+  - scurries up your leg, biting at your leg as it does.
+  E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
-  canOpenDoor: 1
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

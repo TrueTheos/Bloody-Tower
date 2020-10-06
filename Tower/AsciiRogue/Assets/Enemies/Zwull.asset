@@ -10,30 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Bat
+  m_Name: Zwull
   m_EditorClassIdentifier: 
-  E_name: Bat
-  E_symbol: b
-  E_color: {r: 0.509434, g: 0.32714862, b: 0.0985226, a: 0}
-  E_lvlMin: 0
+  E_name: Zwull
+  E_symbol: d
+  E_color: {r: 0.5377358, g: 0, b: 0, a: 0}
+  E_lvlMin: 2
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
   maxHealth: 10
-  strength: 6
-  dexterity: 3
-  intelligence: 3
-  endurance: 6
+  strength: 9
+  dexterity: 5
+  intelligence: 6
+  endurance: 7
   _Behaviour: 0
   attacks: 00000000
   attackText:
-  - screeches loudly in your ear.
-  - dips down and claws at your face.
-  - flies into you at high speeds.
+  - lunges for your throat.The dog digs its canines into your leg.
+  - bites into your forearm.
+  - digs its canines into your leg.
   E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

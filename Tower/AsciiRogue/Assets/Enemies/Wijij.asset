@@ -10,32 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Goblin
+  m_Name: Wijij
   m_EditorClassIdentifier: 
-  E_name: Goblin
-  E_symbol: g
-  E_color: {r: 0.14852096, g: 0.33962262, b: 0.11694552, a: 0}
-  E_lvlMin: 1
+  E_name: Wijij
+  E_symbol: W
+  E_color: {r: 0.38679248, g: 0.0529103, b: 0.0529103, a: 0}
+  E_lvlMin: 3
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 15
-  strength: 9
-  dexterity: 5
+  maxHealth: 17
+  strength: 10
+  dexterity: 7
   intelligence: 4
-  endurance: 7
-  _Behaviour: 1
+  endurance: 11
+  _Behaviour: 0
   attacks: 00000000
   attackText:
-  - kicks you in the shin.
-  - ' slaps your thigh and then your face. '
-  - slaps your stomach.
-  E_possileDrops:
-  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  - claws at you with bloody fingerbones underneath its decrepit flesh.
+  - bites into your shoulder.
+  - bites into your face.
+  E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
-  canOpenDoor: 1
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

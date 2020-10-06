@@ -10,30 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Zombie
+  m_Name: Zirr
   m_EditorClassIdentifier: 
-  E_name: Zombie
-  E_symbol: Z
-  E_color: {r: 0.38679248, g: 0.0529103, b: 0.0529103, a: 0}
-  E_lvlMin: 3
+  E_name: Zirr
+  E_symbol: z
+  E_color: {r: 0.509434, g: 0.32714862, b: 0.0985226, a: 0}
+  E_lvlMin: 0
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 17
-  strength: 10
-  dexterity: 7
-  intelligence: 4
-  endurance: 11
+  maxHealth: 10
+  strength: 6
+  dexterity: 3
+  intelligence: 3
+  endurance: 6
   _Behaviour: 0
   attacks: 00000000
   attackText:
-  - claws at you with bloody fingerbones underneath its decrepit flesh.
-  - bites into your shoulder.
-  - bites into your face.
+  - screeches loudly in your ear.
+  - dips down and claws at your face.
+  - flies into you at high speeds.
   E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

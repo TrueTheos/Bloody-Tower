@@ -93,24 +93,15 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButtonUp("Use"))
             {
-                if(MapManager.map[position.x, position.y].structure != null)
-                {
-                    MapManager.map[position.x, position.y].structure.Use();
-
-                    //FOVNEW.fv.Initialize(FOVNEW.fv.CanLightPass, FOVNEW.fv.SetToVisible, FOVNEW.fv.Distance);
-                    FoV.Initialize();
-                    //manager.UpdateVisibility();
-                    manager.StartPlayersTurn();
-                }
-                else if(MapManager.map[position.x, position.y].item != null)
+                if (MapManager.map[position.x, position.y].item != null)
                 {
                     if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[position.x, position.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
                     {
-                        playerStats.currentWeight += MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight;
-                        playerStats.Pickup(MapManager.map[target.x, target.y].item, MapManager.map[target.x, target.y].item.GetComponent<Item>().iso, target);
+                        playerStats.currentWeight += MapManager.map[position.x, position.y].item.GetComponent<Item>().iso.I_weight;
+                        playerStats.Pickup(MapManager.map[position.x, position.y].item, MapManager.map[position.x, position.y].item.GetComponent<Item>().iso, target);
                         MapManager.map[position.x, position.y].letter = "";
-                        MapManager.map[target.x, target.y].baseChar = ".";
-                        MapManager.map[target.x, target.y].exploredColor = new Color(1, 1, 1);
+                        MapManager.map[position.x, position.y].baseChar = ".";
+                        MapManager.map[position.x, position.y].exploredColor = new Color(1, 1, 1);
                         MapManager.map[position.x, position.y].hasPlayer = false;
                         MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
                         position = target;
@@ -153,6 +144,15 @@ public class PlayerMovement : MonoBehaviour
                         MapManager.map[position.x, position.y].letter = "@";
                         MapManager.playerPos = new Vector2Int(position.x, position.y);
                     }
+                }
+                else if (MapManager.map[position.x, position.y].structure != null)
+                {
+                    MapManager.map[position.x, position.y].structure.Use();
+
+                    //FOVNEW.fv.Initialize(FOVNEW.fv.CanLightPass, FOVNEW.fv.SetToVisible, FOVNEW.fv.Distance);
+                    FoV.Initialize();
+                    //manager.UpdateVisibility();
+                    manager.StartPlayersTurn();
                 }
             }
         }

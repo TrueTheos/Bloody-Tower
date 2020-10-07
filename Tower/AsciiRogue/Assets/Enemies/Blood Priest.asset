@@ -30,6 +30,9 @@ MonoBehaviour:
   attackText: []
   E_possileDrops:
   - {fileID: 11400000, guid: cc0f76b0586c2be44bbaa2bedb160dcd, type: 2}
+  enemyInfo: 'Blood Priest - 40HP / 15STR / 16DEX/ 19INT / 15END
+
+    Can open doors.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1

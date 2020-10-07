@@ -29,9 +29,12 @@ MonoBehaviour:
   attacks: 0100000002000000
   attackText: []
   E_possileDrops: []
+  enemyInfo: 'Ahogog - 30HP / 15STR / 15DEX/ 10INT / 15END
+
+    Can open doors.'
   leavesCorpse: 1
   isBoss: 1
-  canOpenDoor: 0
+  canOpenDoor: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

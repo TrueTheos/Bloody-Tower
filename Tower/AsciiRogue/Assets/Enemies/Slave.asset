@@ -29,6 +29,9 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
+  enemyInfo: 'Slave - 37HP / 12STR / 12DEX/ 12INT / 12END
+
+    Can''t open doors. '
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1

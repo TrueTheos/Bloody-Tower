@@ -59,6 +59,9 @@ public class EnemiesScriptableObject : ScriptableObject
 
     public List<ItemScriptableObject> E_possileDrops;
 
+    [TextArea]
+    public string enemyInfo;
+
     [Header("Settings")]
     public bool leavesCorpse;
     public bool isBoss = false;

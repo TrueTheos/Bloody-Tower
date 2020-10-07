@@ -32,10 +32,14 @@ MonoBehaviour:
   - jumps and scratches at your face.
   - scurries up your leg, biting at your leg as it does.
   E_possileDrops: []
+  enemyInfo: 'Kar - 9HP / 5STR / 3DEX/ 3INT / 6END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
-  W_light: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

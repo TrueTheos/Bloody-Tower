@@ -32,10 +32,14 @@ MonoBehaviour:
   - bites into your forearm.
   - digs its canines into your leg.
   E_possileDrops: []
+  enemyInfo: 'Zwull - 10HP / 9STR / 5DEX/ 6INT / 7END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
-  W_light: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

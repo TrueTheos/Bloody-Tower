@@ -32,10 +32,14 @@ MonoBehaviour:
   - dips down and claws at your face.
   - flies into you at high speeds.
   E_possileDrops: []
+  enemyInfo: 'Zirr - 10HP / 6STR / 3DEX/ 3INT / 6END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
-  W_light: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

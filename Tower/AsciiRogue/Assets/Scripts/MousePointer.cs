@@ -69,6 +69,14 @@ public class MousePointer : MonoBehaviour
         {
             StartCoroutine(WalkPath(path));
         }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            if (MapManager.map[mousePos.x, mousePos.y].isVisible && MapManager.map[mousePos.x, mousePos.y].isExplored && MapManager.map[mousePos.x, mousePos.y].enemy != null)
+            {
+                GameManager.manager.UpdateMessages($"<color=red>{MapManager.map[mousePos.x, mousePos.y].enemy.GetComponent<RoamingNPC>().enemySO.enemyInfo}</color>");
+            }
+        }
     }
 
     IEnumerator WalkPath(List<Vector2Int> _path)

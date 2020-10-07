@@ -33,10 +33,14 @@ MonoBehaviour:
   - slaps your stomach.
   E_possileDrops:
   - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  enemyInfo: 'Nakor - 15HP / 9STR / 5DEX/ 4INT / 7END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1
-  W_light: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

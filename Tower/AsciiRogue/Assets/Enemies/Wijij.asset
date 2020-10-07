@@ -32,10 +32,14 @@ MonoBehaviour:
   - bites into your shoulder.
   - bites into your face.
   E_possileDrops: []
+  enemyInfo: 'Wijij - 17HP / 10STR / 7DEX/ 4INT / 11END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
-  W_light: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

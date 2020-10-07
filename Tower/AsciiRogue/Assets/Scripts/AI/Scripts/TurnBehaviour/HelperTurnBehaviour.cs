@@ -41,7 +41,7 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
                 {
                     //Debug.Log("Has Target");
                     RoamingNPC testNPC = (RoamingNPC)t.Board["Target"];
-                    if ((testNPC == null) || Vector2Int.Distance(t.__position, testNPC.__position) > 5 || testNPC.gameObject == null)
+                    if ((testNPC == null) || Vector2Int.Distance(PlayerMovement.playerMovement.position, testNPC.__position) > 5 || testNPC.gameObject == null)
                     {
                         t.Board["Target"] = null;
                     }
@@ -153,7 +153,7 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
                     t.path = null;
                     //Debug.Log("Follow");
                     t.path = AStar.CalculatePath(t.__position, PlayerMovement.playerMovement.position);
-                    Debug.Log(t.path.Count);
+                    //Debug.Log(t.path.Count);
                     t.MoveTo(t.path[0].x, t.path[0].y);
                 }
                 else

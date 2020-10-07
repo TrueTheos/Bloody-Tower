@@ -19,7 +19,7 @@ public class AcidBarf : BasicAttack
         else
         {
             source.attackCharged = false;
-            GameManager.manager.UpdateMessages($"<color={source.enemySO.E_color}>Sulyvan's Beast</color> barfs a puddle of <color=green>acid</color> onto the player!");
+            GameManager.manager.UpdateMessages($"<color={source.enemySO.E_color}>Sulyvan's Beast</color> barfs a puddle of <color=green>acid</color> onto" +(target is PlayerStats ? "the player!" : target.noun));
             GameManager.manager.playerStats.MeltItem();
             ToCharge.Attack(source,target);
         }

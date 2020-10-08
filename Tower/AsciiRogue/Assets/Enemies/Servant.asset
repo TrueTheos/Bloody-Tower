@@ -20,7 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 57
+  maxHealth: 38
   strength: 14
   dexterity: 12
   intelligence: 10
@@ -29,8 +29,12 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
+  enemyInfo: 'Servant - 38HP / 14STR / 12DEX/ 10INT / 12END
+
+    Can''t open doors. '
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

@@ -20,7 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 60
+  maxHealth: 30
   strength: 3
   dexterity: 3
   intelligence: 3
@@ -31,6 +31,7 @@ MonoBehaviour:
   E_possileDrops: []
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

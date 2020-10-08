@@ -28,9 +28,9 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
 
             if (MapManager.map[t.__position.x, t.__position.y].structure == null)
             {
-                if (droppedItem)
+                /*if (droppedItem)
                 {
-                    MapManager.map[t.__position.x, t.__position.y].timeColor = new Color(0, 0, 0);
+                    /*MapManager.map[t.__position.x, t.__position.y].timeColor = new Color(0, 0, 0);
                     MapManager.map[t.__position.x, t.__position.y].letter = "";
                     GameManager.manager.itemSpawner.SpawnAt(t.__position.x, t.__position.y, corpse.itemInCorpse);
                 }
@@ -39,7 +39,16 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
                     MapManager.map[t.__position.x, t.__position.y].baseChar = t.EnemySymbol;
                     MapManager.map[t.__position.x, t.__position.y].exploredColor = new Color(0.2784f, 0, 0);
                     MapManager.map[t.__position.x, t.__position.y].letter = "";
+                }*/
+
+                if(droppedItem)
+                {
+                    GameManager.manager.itemSpawner.SpawnAt(t.__position.x, t.__position.y, corpse.itemInCorpse);
                 }
+
+                MapManager.map[t.__position.x, t.__position.y].baseChar = t.EnemySymbol;
+                MapManager.map[t.__position.x, t.__position.y].exploredColor = new Color(0.2784f, 0, 0);
+                MapManager.map[t.__position.x, t.__position.y].letter = "";
             }
 
             corpse.enemyBody = t.enemySO;

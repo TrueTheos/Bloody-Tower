@@ -54,7 +54,7 @@ public class MousePointer : MonoBehaviour
 
                 foreach (var pathTile in path)
                 {
-                    MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=yellow>\u205C</color>";
+                    MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=#2B3659>\u205C</color>";
                 }
 
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
@@ -68,6 +68,14 @@ public class MousePointer : MonoBehaviour
         if(_selected && Input.GetMouseButtonDown(0))
         {
             StartCoroutine(WalkPath(path));
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            if (MapManager.map[mousePos.x, mousePos.y].isVisible && MapManager.map[mousePos.x, mousePos.y].isExplored && MapManager.map[mousePos.x, mousePos.y].enemy != null)
+            {
+                GameManager.manager.UpdateMessages($"<color=red>{MapManager.map[mousePos.x, mousePos.y].enemy.GetComponent<RoamingNPC>().enemySO.enemyInfo}</color>");
+            }
         }
     }
 

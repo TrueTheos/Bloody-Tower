@@ -93,24 +93,15 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButtonUp("Use"))
             {
-                if(MapManager.map[position.x, position.y].structure != null)
-                {
-                    MapManager.map[position.x, position.y].structure.Use();
-
-                    //FOVNEW.fv.Initialize(FOVNEW.fv.CanLightPass, FOVNEW.fv.SetToVisible, FOVNEW.fv.Distance);
-                    FoV.Initialize();
-                    //manager.UpdateVisibility();
-                    manager.StartPlayersTurn();
-                }
-                else if(MapManager.map[position.x, position.y].item != null)
+                if (MapManager.map[position.x, position.y].item != null)
                 {
                     if (playerStats.maximumInventorySpace > playerStats.currentItems && playerStats.currentWeight + MapManager.map[position.x, position.y].item.GetComponent<Item>().iso.I_weight <= playerStats.maxWeight)
                     {
-                        playerStats.currentWeight += MapManager.map[target.x, target.y].item.GetComponent<Item>().iso.I_weight;
-                        playerStats.Pickup(MapManager.map[target.x, target.y].item, MapManager.map[target.x, target.y].item.GetComponent<Item>().iso, target);
+                        playerStats.currentWeight += MapManager.map[position.x, position.y].item.GetComponent<Item>().iso.I_weight;
+                        playerStats.Pickup(MapManager.map[position.x, position.y].item, MapManager.map[position.x, position.y].item.GetComponent<Item>().iso, target);
                         MapManager.map[position.x, position.y].letter = "";
-                        MapManager.map[target.x, target.y].baseChar = ".";
-                        MapManager.map[target.x, target.y].exploredColor = new Color(1, 1, 1);
+                        MapManager.map[position.x, position.y].baseChar = ".";
+                        MapManager.map[position.x, position.y].exploredColor = new Color(1, 1, 1);
                         MapManager.map[position.x, position.y].hasPlayer = false;
                         MapManager.map[position.x, position.y].timeColor = new Color(0, 0, 0);
                         position = target;
@@ -153,6 +144,15 @@ public class PlayerMovement : MonoBehaviour
                         MapManager.map[position.x, position.y].letter = "@";
                         MapManager.playerPos = new Vector2Int(position.x, position.y);
                     }
+                }
+                else if (MapManager.map[position.x, position.y].structure != null)
+                {
+                    MapManager.map[position.x, position.y].structure.Use();
+
+                    //FOVNEW.fv.Initialize(FOVNEW.fv.CanLightPass, FOVNEW.fv.SetToVisible, FOVNEW.fv.Distance);
+                    FoV.Initialize();
+                    //manager.UpdateVisibility();
+                    manager.StartPlayersTurn();
                 }
             }
         }
@@ -361,21 +361,21 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Attack(GameObject e, int x, int y) //float damageMultiplier, WeaponsSO.additionalEffects effect
-    {        
-        for(int y2 = position.y - 2; y2 < position.y + 2; y2++)
+    {
+        for (int y2 = position.y - 2; y2 < position.y + 2; y2++)
         {
-            for(int x2 = position.x - 2; x2 < position.x + 2; x2++)
+            for (int x2 = position.x - 2; x2 < position.x + 2; x2++)
             {
                 try
                 {
-                    if(MapManager.map[x2,y2].enemy != null)
+                    if (MapManager.map[x2, y2].enemy != null)
                     {
-                        MapManager.map[x2,y2].enemy.GetComponent<RoamingNPC>().TestToWakeUp();
+                        MapManager.map[x2, y2].enemy.GetComponent<RoamingNPC>().TestToWakeUp();
                     }
                 }
-                catch{}
-                
-            }  
+                catch { }
+
+            }
         }
 
         if (playerStats._Lhand?.iso is WeaponsSO w)
@@ -387,10 +387,10 @@ public class PlayerMovement : MonoBehaviour
             w2.onHit(playerStats);
         }
 
-        if (playerStats.isInvisible) 
+        if (playerStats.isInvisible)
         {
             playerStats.RemoveInvisibility();
-        }     
+        }
 
         RoamingNPC roamingNpcScript = e.GetComponent<RoamingNPC>();
 
@@ -400,63 +400,63 @@ public class PlayerMovement : MonoBehaviour
         ItemScriptableObject.damageType leftHandDamageType = ItemScriptableObject.damageType.normal;
         ItemScriptableObject.damageType rightHandDamageType = ItemScriptableObject.damageType.normal;
 
-        int r = Random.Range(1,100);
+        int r = Random.Range(1, 100);
 
         int valueRequiredToHit = 0; //value required to hit the monster
 
-        if(roamingNpcScript.sleeping)
+        if (roamingNpcScript.sleeping)
         {
-            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex / 4 - roamingNpcScript.AC;         
+            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex / 4 - roamingNpcScript.AC;
         }
         else
         {
-            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex - roamingNpcScript.AC;       
+            valueRequiredToHit = r + playerStats.__dexterity - roamingNpcScript.dex - roamingNpcScript.AC;
         }
 
-        if(r <= 0)
+        if (r <= 0)
         {
             manager.UpdateMessages("You missed!");
             WakeUpEnemy(roamingNpcScript);
             return;
         }
 
-        if(valueRequiredToHit > 50 || r >= 80) //Do we hit?
+        if (valueRequiredToHit > 50 || r >= 80) //Do we hit?
         {
-            if(playerStats._Lhand?.iso is WeaponsSO weaponL)
+            if (playerStats._Lhand?.iso is WeaponsSO weaponL)
             {
                 leftHandDamageType = weaponL.I_damageType;
 
-                for(x = 0; x < weaponL.attacks.Count; x++)
+                for (x = 0; x < weaponL.attacks.Count; x++)
                 {
                     damageLeftHand += Random.Range(1, weaponL.attacks[x].y);
 
                     //IF WEAPON IS BLOOD SWORD WE INCREASE ITS DAMAGE
-                    if(weaponL.I_name == "Bloodsword") 
+                    if (weaponL.I_name == "Bloodsword")
                     {
                         weaponL.attacks[0] = new Vector2Int(1, weaponL.attacks[0].y + 1);
                         weaponL.bloodSwordCounter = manager.tasks.bloodSwordCooldown;
                     }
                 }
             }
-            if(playerStats._Rhand?.iso is WeaponsSO weaponR)
+            if (playerStats._Rhand?.iso is WeaponsSO weaponR)
             {
                 rightHandDamageType = weaponR.I_damageType;
 
-                for(x = 0; x < weaponR.attacks.Count; x++)
+                for (x = 0; x < weaponR.attacks.Count; x++)
                 {
                     damageRightHand += Random.Range(1, weaponR.attacks[x].y);
 
                     //IF WEAPON IS BLOOD SWORD WE INCREASE ITS DAMAGE
-                    if(weaponR.I_name == "Bloodsword") 
+                    if (weaponR.I_name == "Bloodsword")
                     {
-                        weaponR.attacks[0] = new Vector2Int(1, weaponR.attacks[0].y + 1); 
+                        weaponR.attacks[0] = new Vector2Int(1, weaponR.attacks[0].y + 1);
                         weaponR.bloodSwordCounter = manager.tasks.bloodSwordCooldown;
                     }
                 }
             }
 
             //CRIT?
-            if(Random.Range(1,100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex -  playerStats.__dexterity)
+            if (Random.Range(1, 100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex - playerStats.__dexterity)
             {
                 if (playerStats._Lhand?.iso is WeaponsSO wep)
                 {
@@ -465,7 +465,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                damageLeftHand += Random.Range(1,4) + Mathf.FloorToInt(playerStats.__strength / 5);
+                //damageLeftHand += Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5);
             }
 
             if (Random.Range(1, 100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex - playerStats.__dexterity)
@@ -477,8 +477,11 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                damageRightHand += Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5);
+               // damageRightHand += Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5);
             }
+
+            if (damageLeftHand == 0) damageLeftHand = Random.Range(1, 4);
+            if (damageRightHand == 0) damageRightHand = Random.Range(1, 4);
 
             if (roamingNpcScript.sleeping)
             {
@@ -501,7 +504,21 @@ public class PlayerMovement : MonoBehaviour
         {
             manager.UpdateMessages("You missed!");
             WakeUpEnemy(roamingNpcScript);
-        }        
+        }
+    }
+
+    private float GetRoll()
+    {
+        float result = (Random.Range(0, 1f) + Random.Range(0, 1f)) * 3;
+        if (result > 5.75f) result += GetRoll();
+        return result;
+    }
+
+    private bool AttackHits(RoamingNPC npc)
+    {
+        float roll = GetRoll();
+        if (roll < .25f) return false;
+        else return (playerStats.__dexterity - npc.dex) >= 3;
     }
 
     public void WakeUpEnemy(RoamingNPC roamingNpc)

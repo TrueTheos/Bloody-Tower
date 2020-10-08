@@ -214,7 +214,7 @@ public class GameManager : MonoBehaviour
                     CloseEQ();
                 }               
             }
-            else if (Input.GetKeyDown(KeyCode.Escape) && inventoryOpen)
+            else if (Input.GetKeyDown(KeyCode.Escape))
             {
                 CloseEQ();
             }

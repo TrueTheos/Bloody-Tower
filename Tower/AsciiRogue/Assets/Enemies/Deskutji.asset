@@ -10,32 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Giant Rat
+  m_Name: Deskutji
   m_EditorClassIdentifier: 
-  E_name: Giant Rat
-  E_symbol: R
-  E_color: {r: 0.52156866, g: 0.1254902, b: 0.047058824, a: 0}
-  E_lvlMin: 200
-  E_lvlMax: 200
+  E_name: Deskutji
+  E_symbol: d
+  E_color: {r: 1, g: 1, b: 1, a: 0}
+  E_lvlMin: 3
+  E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 74
-  strength: 15
-  dexterity: 15
-  intelligence: 10
-  endurance: 15
-  _Behaviour: 0
-  attacks: 0100000002000000
-  attackText: []
-  E_possileDrops: []
+  maxHealth: 16
+  strength: 7
+  dexterity: 7
+  intelligence: 3
+  endurance: 9
+  _Behaviour: 3
+  attacks: 00000000
+  attackText:
+  - claws at you with its bony fingertips.
+  - ' punches you with an uncomfortable fist.'
+  - backhands you, unhinging its wrist. It quickly snaps the wrist back into place.
+  E_possileDrops:
+  - {fileID: 11400000, guid: 15e51088fc9d371479b85ff5ca7f28cc, type: 2}
+  enemyInfo: 'Deskutji - 16HP / 7STR / 7DEX/ 3INT / 9END
+
+    Can''t open doors.
+    Wurnerable to light.'
   leavesCorpse: 1
-  isBoss: 1
-  W_light: 0
+  isBoss: 0
+  canOpenDoor: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}
-  MyTurnAI: {fileID: 11400000, guid: eac72395dfd2ae7408b64be36aed747f, type: 2}
+  MyTurnAI: {fileID: 11400000, guid: aee29e33e3c2c2b489e973071aba4739, type: 2}
   MyDOT: {fileID: 11400000, guid: 06f43bddfc6899942aff3c5265e74a9a, type: 2}
   MyWakeUp: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}
   MyStun: {fileID: 11400000, guid: 274c60eeb499b9a42a79e8c106fa1085, type: 2}

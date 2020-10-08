@@ -75,7 +75,7 @@ public class WandSO : ItemScriptableObject, IRestrictTargeting
 
                         foreach(GameObject enemy in GameManager.manager.enemies)
                         {
-                            enemy.GetComponent<RoamingNPC>().playerDetected = false;
+                            enemy.GetComponent<RoamingNPC>().CurrentTarget = null;
                         }
 
                         GameManager.manager.FinishPlayersTurn();

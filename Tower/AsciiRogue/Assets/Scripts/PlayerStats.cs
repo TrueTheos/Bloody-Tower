@@ -10,8 +10,6 @@ public class PlayerStats : MonoBehaviour, IUnit
 {
     public ItemScriptableObject startingWeapon;
 
-    [Header("Variables")]
-    public new string name;
     public int maxHp { get; set; }
     public int currHp { get; set; }
     public int str { get; set; }
@@ -19,10 +17,14 @@ public class PlayerStats : MonoBehaviour, IUnit
     public int dex { get; set; }
     public int end { get; set; }
     public int lvl { get; set; }
+    [Header("Variables")]
     public int experience;
     public int experienceNeededToLvlUp;
     public int coins;
     public int blood;
+
+    public Vector2Int pos => PlayerMovement.playerMovement.position;
+    public string noun => "the player";
 
     private float strModifier = 1;
     private float dexModifier = 1;
@@ -156,7 +158,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
         set
         {
-            if (value > end) //we gained end
+            if (value >end) //we gained end
             {
                 end = value;
 

@@ -63,16 +63,16 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
 
         t.manager.UpdateMessages($"You have killed the <color={t.EnemyColor}>{t.EnemyName}</color>");
         t.manager.playerStats.UpdateLevel(t.xpDrop);
-
+        /*
         GameObject e = null;
 
-        /*foreach (var enemy in manager.enemies)
+        foreach (var enemy in manager.enemies)
         {
             if(enemy.GetComponent<RoamingNPC>().__position == __position)
             {
                 e = enemy;
             }
-        }*/
+        }
 
         foreach (var enemy in t.manager.enemies)
         {
@@ -81,6 +81,7 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
                 e = enemy;
             }
         }
+        */
 
         t.manager.StartPlayersTurn();
 

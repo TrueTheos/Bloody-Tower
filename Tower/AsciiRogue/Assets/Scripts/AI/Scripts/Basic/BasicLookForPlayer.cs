@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 [CreateAssetMenu(menuName = "AI/Look For Player/Basic")]
 public class BasicLookForPlayer : BaseAIBehaviour<RoamingNPC>
 {
@@ -132,3 +132,4 @@ public class BasicLookForPlayer : BaseAIBehaviour<RoamingNPC>
     }
 
 }
+*/

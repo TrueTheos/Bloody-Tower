@@ -28,11 +28,11 @@ public class NormalAttack : BasicAttack
 
             if (t.enemySO.attackText.Count > 0)
             {
-                t.manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> {t.enemySO.attackText[Random.Range(0, t.enemySO.attackText.Count)]} <color=red>{totalDamage} ({t.playerStats.__currentHp - totalDamage}/{t.playerStats.__maxHp}) damage</color>!");
+                t.manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> {t.enemySO.attackText[Random.Range(0, t.enemySO.attackText.Count)]} <color=red>{totalDamage} ({target.currHp - totalDamage}/{target.maxHp}) damage</color>!");
             }
             else
             {
-                t.manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> attack you. <color=red>{totalDamage} ({t.playerStats.__currentHp - totalDamage}/{t.playerStats.__maxHp}) damage</color>!");
+                t.manager.UpdateMessages($"The <color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> attacks "+ (target is PlayerStats ? "you" : target.noun) + $". <color=red>{totalDamage} ({target.currHp - totalDamage}/{target.maxHp}) damage</color>!");
             }
             target.TakeDamage(totalDamage, ItemScriptableObject.damageType.normal);
         }

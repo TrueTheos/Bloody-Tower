@@ -75,6 +75,8 @@ public class RoamingNPC : MonoBehaviour,IUnit
         }
     }
 
+    public string noun => enemySO.E_realName!=""?enemySO.E_realName:enemySO.E_name;
+
     //Variables for Cowardly enemies
     public int runCounter = 5;
     public Vector2Int runDirection;
@@ -84,8 +86,9 @@ public class RoamingNPC : MonoBehaviour,IUnit
 
 
     public Vector2Int __position;
+    public Vector2Int pos => __position;
 
-    [HideInInspector] public bool playerDetected;
+    //[HideInInspector] public bool playerDetected;
     [HideInInspector] public bool sleeping;
     [HideInInspector] public bool sleepDecided = false; //is it is true, we don't do this  sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
     [HideInInspector] public bool attacked;
@@ -108,6 +111,11 @@ public class RoamingNPC : MonoBehaviour,IUnit
     [HideInInspector] public PlayerStats playerStats;
     [HideInInspector] public GameManager manager;
     [HideInInspector] public GameObject canvas;
+
+    // Who attacked you
+    [NonSerialized] public List<IUnit> RetailiationList = new List<IUnit>();
+    [NonSerialized] public IUnit CurrentTarget = null;
+    [NonSerialized] public Vector2Int? LastKnownTargetPos = null;
 
     public List<Vector2Int> path;
 
@@ -238,6 +246,7 @@ public class RoamingNPC : MonoBehaviour,IUnit
     public void DoTurn()
     {
         enemySO.MyTurnAI.Calculate(this);
+        RetailiationList.Clear();
     }
     public BasicAttack nextAttack = null;
     

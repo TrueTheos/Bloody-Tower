@@ -24,16 +24,18 @@ MonoBehaviour:
   I_rareness: 1
   I_itemType: 6
   I_whereToPutIt: 0
-  _BUC: 0
+  I_damageType: 0
+  lightFactor: 0
   normalIdentifState: 0
-  identified: 0
   pickupableByMonsters: 0
-  effect: Drank makes you blind.
+  effect: A potion of blindness.
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
   bonusToStrength: 0
   bonusToIntelligence: 0
   bonusToDexterity: 0
   bonusToEndurance: 0
   bonusToNoise: 0
+  potionSplashColor: 
   PotionEffect: 10

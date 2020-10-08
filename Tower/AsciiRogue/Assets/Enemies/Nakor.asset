@@ -10,28 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Blood Slime
+  m_Name: Nakor
   m_EditorClassIdentifier: 
-  E_name: Blood Slime
-  E_symbol: S
-  E_color: {r: 0.7075472, g: 0.12348701, b: 0.12348701, a: 0}
-  E_lvlMin: 7
+  E_name: Nakor
+  E_symbol: N
+  E_color: {r: 0.14852096, g: 0.33962262, b: 0.11694552, a: 0}
+  E_lvlMin: 1
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 55
-  strength: 7
-  dexterity: 7
+  maxHealth: 15
+  strength: 9
+  dexterity: 5
   intelligence: 4
-  endurance: 13
-  _Behaviour: 0
+  endurance: 7
+  _Behaviour: 1
   attacks: 00000000
-  attackText: []
-  E_possileDrops: []
+  attackText:
+  - kicks you in the shin.
+  - ' slaps your thigh and then your face. '
+  - slaps your stomach.
+  E_possileDrops:
+  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  enemyInfo: 'Nakor - 15HP / 9STR / 5DEX/ 4INT / 7END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
-  W_light: 0
+  canOpenDoor: 1
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

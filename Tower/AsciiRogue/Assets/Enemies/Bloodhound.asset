@@ -20,7 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 79
+  maxHealth: 38
   strength: 15
   dexterity: 19
   intelligence: 15
@@ -29,8 +29,12 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
+  enemyInfo: 'Bloodhound - 38HP / 15STR / 19DEX/ 15INT / 15END
+
+    Can''t open doors.'
   leavesCorpse: 1
   isBoss: 0
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

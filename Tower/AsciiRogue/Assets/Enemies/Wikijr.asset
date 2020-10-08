@@ -10,31 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Bat
+  m_Name: Wikijr
   m_EditorClassIdentifier: 
-  E_name: Bat
-  E_symbol: b
-  E_color: {r: 0.509434, g: 0.32714862, b: 0.0985226, a: 0}
-  E_lvlMin: 0
+  E_name: Wikijr
+  E_symbol: w
+  E_color: {r: 0.31623915, g: 0.5471698, b: 0.21422213, a: 0}
+  E_lvlMin: 4
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 43
-  strength: 6
-  dexterity: 9
-  intelligence: 3
-  endurance: 6
+  maxHealth: 18
+  strength: 13
+  dexterity: 8
+  intelligence: 7
+  endurance: 14
   _Behaviour: 0
   attacks: 00000000
   attackText:
-  - screeches loudly in your ear.
-  - dips down and claws at your face.
-  - flies into you at high speeds.
-  E_possileDrops: []
+  - slams it's shoulder into you.
+  - punches you in the face.
+  - wraps it's arms around you and squeezes.
+  E_possileDrops:
+  - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
+  - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
+  enemyInfo: 'Wikijr - 18HP / 13STR / 8DEX/ 7INT / 14END
+
+    Can open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
-  W_light: 0
+  canOpenDoor: 1
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

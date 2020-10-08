@@ -10,31 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Rat
+  m_Name: Zwull
   m_EditorClassIdentifier: 
-  E_name: Rat
-  E_symbol: r
-  E_color: {r: 0.4392157, g: 0.12156863, b: 0.15686275, a: 0}
-  E_lvlMin: 0
+  E_name: Zwull
+  E_symbol: d
+  E_color: {r: 0.5377358, g: 0, b: 0, a: 0}
+  E_lvlMin: 2
   E_lvlMax: 9
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 38
-  strength: 5
-  dexterity: 9
-  intelligence: 3
-  endurance: 6
+  maxHealth: 10
+  strength: 9
+  dexterity: 5
+  intelligence: 6
+  endurance: 7
   _Behaviour: 0
   attacks: 00000000
   attackText:
-  - bites at your ankles.
-  - jumps and scratches at your face.
-  - scurries up your leg, biting at your leg as it does.
+  - lunges for your throat.The dog digs its canines into your leg.
+  - bites into your forearm.
+  - digs its canines into your leg.
   E_possileDrops: []
+  enemyInfo: 'Zwull - 10HP / 9STR / 5DEX/ 6INT / 7END
+
+    Can''t open doors. Wurnerable
+    to light.'
   leavesCorpse: 1
   isBoss: 0
-  W_light: 0
+  canOpenDoor: 0
+  W_light: 1
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}

@@ -29,7 +29,7 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
         if (t.rootDuration > 0) t.rootDuration--;
         else if (t.rooted) t.rooted = false;
 
-        t.playerDetected = false;
+        //t.playerDetected = false;
 
         if (t.enemySO._Behaviour != EnemiesScriptableObject.E_behaviour.npc)
         {

@@ -45,7 +45,7 @@ public class MousePointer : MonoBehaviour
         if(mapRect.Contains(Input.mousePosition))
         {
             mousePos = new Vector2Int(Mathf.FloorToInt((Input.mousePosition.x - 19) / 14), Mathf.FloorToInt((Input.mousePosition.y - 254) / 20));
-            if (MapManager.map[mousePos.x, mousePos.y].isExplored && MapManager.map[mousePos.x, mousePos.y].isWalkable || MapManager.map[mousePos.x, mousePos.y].type == "Door")
+            if (MapManager.map[mousePos.x, mousePos.y].isExplored && MapManager.map[mousePos.x, mousePos.y].isWalkable || MapManager.map[mousePos.x, mousePos.y].type == "Door" || MapManager.map[mousePos.x, mousePos.y].enemy != null)
             {
                 _selected = true;
                 path = null;

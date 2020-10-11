@@ -10,34 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Sulyvahn's Beast
+  m_Name: Hamp
   m_EditorClassIdentifier: 
-  E_name: Sulyvahn's Beast
-  E_symbol: D
-  E_color: {r: 0.4245283, g: 0.014017452, b: 0.014017452, a: 0}
-  E_lvlMin: 200
-  E_lvlMax: 200
+  E_name: Hamp
+  E_symbol: h
+  E_color: {r: 0.5585571, g: 0.5754717, b: 0.22530259, a: 0}
+  E_lvlMin: 0
+  E_lvlMax: 50
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 30
-  strength: 17
+  maxHealth: 4
+  strength: 4
   dexterity: 15
-  intelligence: 10
-  endurance: 17
+  intelligence: 4
+  endurance: 4
   _Behaviour: 0
-  attacks: 0400000003000000
+  attacks: 01000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 
+  enemyInfo: 'Hamp - 4HP / 4STR / 15DEX/ 4INT / 4END
+
+    Can''t open doors. Poisonous
+    attacks.'
   leavesCorpse: 1
-  isBoss: 1
+  isBoss: 0
   canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0
   rewardItem: {fileID: 0}
-  MyTurnAI: {fileID: 11400000, guid: 6d4e3e318c13f674094179789406f2ee, type: 2}
+  MyTurnAI: {fileID: 11400000, guid: 36dca1f7a663d9b4d957a18ef3ad8bf4, type: 2}
   MyDOT: {fileID: 11400000, guid: 06f43bddfc6899942aff3c5265e74a9a, type: 2}
   MyWakeUp: {fileID: 11400000, guid: 680a5d1f847cb8c49934f6da8172733d, type: 2}
   MyStun: {fileID: 11400000, guid: 274c60eeb499b9a42a79e8c106fa1085, type: 2}

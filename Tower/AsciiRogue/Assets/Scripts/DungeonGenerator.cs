@@ -170,6 +170,7 @@ public class DungeonGenerator : MonoBehaviour
     //3 - Blood Torch
     //7 - Prefab Monster
     //9 - Prefab room item
+    //{ - Fountain
 
     public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
     {
@@ -538,6 +539,21 @@ public class DungeonGenerator : MonoBehaviour
                         BloodTorch torch = new BloodTorch();
                         torch.position = new Vector2Int(x, y);
                         MapManager.map[x, y].structure = torch;
+                        break;
+                    case "{":
+                        MapManager.map[x, y] = new Tile
+                        {
+                            type = "Fountain",
+                            baseChar = "{",
+                            exploredColor = new Color(.418f, 0f, 1f),
+                            isWalkable = false,
+                            isOpaque = true
+                        };
+                        Fountain fountain = new Fountain
+                        {
+                            position = new Vector2Int(x, y)
+                        };
+                        MapManager.map[x, y].structure = fountain;
                         break;
                     default:
                         MapManager.map[x, y] = new Tile

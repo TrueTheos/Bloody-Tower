@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a7051858aabc4b4492cdf166d654afb, type: 3}
-  m_Name: TestInvoaction
+  m_Name: FountainBasic
   m_EditorClassIdentifier: 
-  room: ......9.9.......9.9......
-  height: 5
-  width: 5
+  room: ....{....
+  height: 3
+  width: 3
   enemyNames: []
   enemySleeping: 
-  itemsToSpawn:
-  - {fileID: 11400000, guid: 7b008a58a592fcc41b5f5f1ad85a07aa, type: 2}
-  - {fileID: 11400000, guid: 7b008a58a592fcc41b5f5f1ad85a07aa, type: 2}
-  - {fileID: 11400000, guid: 7b008a58a592fcc41b5f5f1ad85a07aa, type: 2}
-  - {fileID: 11400000, guid: 7b008a58a592fcc41b5f5f1ad85a07aa, type: 2}
+  itemsToSpawn: []

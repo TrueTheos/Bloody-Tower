@@ -6,8 +6,10 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public EnemiesScriptableObject[] allEnemies;
+    [Header("Preset monsters")]
     public EnemiesScriptableObject Mimic;
     public EnemiesScriptableObject Zombie;
+    public EnemiesScriptableObject Hamp;
     [HideInInspector]public List<GameObject> spawnedEnemies = new List<GameObject>();
     public List<int> enemiesPerRoom;
     
@@ -37,7 +39,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnAt(int x, int y, EnemiesScriptableObject enemySO = null, string sleep = "")
     {        
-        try{if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null) return;}
+        try{if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null || MapManager.map[x,y].hasPlayer) return;}
         catch{};
 
         __position = new Vector2Int(x, y);

@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2700fcc6f25da814d9b40f6c1a20b27d, type: 3}
   m_Name: PoisonBite
   m_EditorClassIdentifier: 
+  ToAttack: []
+  MaxRange: 1
+  MinRange: 1

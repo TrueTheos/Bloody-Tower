@@ -166,10 +166,10 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
 
             if (t.CurrentTarget != null)
             {
-
-                if (MapUtility.MoveDistance(t.__position,t.CurrentTarget.pos) == 1)
+                var att = GetAttack(t);
+                if (att.InRange( t.__position,t.CurrentTarget.pos ))
                 {
-                    GetAttack(t).Attack(t, t.CurrentTarget);
+                    att.Attack(t, t.CurrentTarget);
                     return;
                 }
                 /*

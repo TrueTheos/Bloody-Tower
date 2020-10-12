@@ -8299,12 +8299,6 @@ MonoBehaviour:
   - {r: 0.454, g: 0, b: 0, a: 0}
   _prefabRooms:
   - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
-  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
-  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
-  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
-  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
-  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
-  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0

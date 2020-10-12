@@ -7,9 +7,17 @@ public class Fountain : Structure
     public bool used = false;
     public Vector2Int position;
 
+    private bool canBeUsed = true;
 
     public override void Use()
     {
+        if(!canBeUsed)
+        {
+            GameManager.manager.UpdateMessages("Fountain is empty.");
+            GameManager.manager.FinishPlayersTurn();
+            return;
+        }
+
         int random = Random.Range(1, 22);
 
         if(random <= 9)
@@ -55,6 +63,12 @@ public class Fountain : Structure
             {
                 item.cursed = true;
             }
+        }
+
+        if(Random.Range(1,100) < 30)
+        {
+            canBeUsed = false;
+            GameManager.manager.UpdateMessages("There is nothing left in the fountain.");
         }
 
         GameManager.manager.FinishPlayersTurn();

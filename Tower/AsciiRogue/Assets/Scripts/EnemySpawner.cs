@@ -10,6 +10,9 @@ public class EnemySpawner : MonoBehaviour
     public EnemiesScriptableObject Mimic;
     public EnemiesScriptableObject Zombie;
     public EnemiesScriptableObject Hamp;
+
+    public BaseOmniAI SecretDoorAI;
+
     [HideInInspector]public List<GameObject> spawnedEnemies = new List<GameObject>();
     public List<int> enemiesPerRoom;
     
@@ -121,6 +124,28 @@ public class EnemySpawner : MonoBehaviour
         }
 
         return null;
+    }
+
+    internal void SpawnSpecial(int x, int y, string type)
+    {
+        switch (type)
+        {
+            case "h":
+                // hidden Door:
+                GameObject go = new GameObject("Hidden door",typeof(OmniBehaviour));
+                var b = go.GetComponent<OmniBehaviour>();
+                go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                b.AI = SecretDoorAI;
+                b.Position = new Vector2Int(x, y);
+
+                manager.enemies.Add(go);
+                spawnedEnemies.Add(go);
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     /*private void Spawn(int x, int y)

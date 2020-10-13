@@ -1375,7 +1375,11 @@ public class GameManager : MonoBehaviour
     {
         foreach(var enemy in enemies.ToList())
         {
-            if(enemy != null) enemy.GetComponent<RoamingNPC>().DoTurn();
+            if (enemy!=null && enemy.gameObject.activeInHierarchy)
+            {
+                enemy.GetComponent<RoamingNPC>()?.DoTurn();
+                enemy.GetComponent<OmniBehaviour>()?.AI.Calculate(enemy.GetComponent<OmniBehaviour>());
+            }
         }
 
         dungeonGenerator.DrawMap(true, MapManager.map);

@@ -94,10 +94,11 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
 
                 int distance = Mathf.Max(Mathf.Abs(npc.__position.x - t.__position.x), Mathf.Abs(npc.__position.y - t.__position.y));
                 // move to target and attack
-                if (distance == 1)
+
+                var att = GetAttack(t);
+                if (att.InRange(t.__position, npc.pos))
                 {
-                    //Debug.Log("Attack enemy");
-                    GetAttack(t).Attack(t, npc);
+                    att.Attack(t, npc);
                     return;
                 }
                 else

@@ -25,6 +25,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public List<string> enemyNames = new List<string>();
     public List<Vector2Int> enemyPositions = new List<Vector2Int>();
+    public List<(Vector2Int pos, string type)> specialEnemy = new List<(Vector2Int pos, string type)>();
     public List<bool> enemySleeping = new List<bool>();
 
     private List<ItemScriptableObject> Prefab_itemsToSpawn = new List<ItemScriptableObject>();
@@ -367,6 +368,31 @@ public class DungeonGenerator : MonoBehaviour
                             isOpaque = true
                         };
                         break;
+                    case "h":
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                xPosition = x,
+                                yPosition = y,
+                                baseChar = "#",
+                                isWalkable = false,
+                                isOpaque = true,
+                                type = "Wall"
+                            };
+                            if (currentFloor >= 11)
+                            {
+                                MapManager.map[x, y].exploredColor = fleshWallColors[UnityEngine.Random.Range(0, fleshWallColors.Count)];
+                                MapManager.map[x, y].specialNameOfTheCell = "Flesh Wall";
+                            }
+                            else if (currentFloor < 11 && UnityEngine.Random.Range(0, 100) > currentFloor * 1.5f)
+                            {
+                                MapManager.map[x, y].exploredColor = mouldWallColors[UnityEngine.Random.Range(0, mouldWallColors.Count)];
+                                MapManager.map[x, y].specialNameOfTheCell = "Mould Wall";
+                            }
+                            // now add something to spawning
+                            specialEnemy.Add((new Vector2Int(x, y), "h"));
+                        }
+                        break;
                     case "0":
                         MapManager.map[x, y] = new Tile
                         {
@@ -609,6 +635,12 @@ public class DungeonGenerator : MonoBehaviour
                 if(y == 21) y--;
 
                 manager.enemySpawner.SpawnAt(enemyPositions[i].x, y);
+            }
+            for (int i = 0; i < specialEnemy.Count; i++)
+            {
+                (Vector2Int pos, string type) = specialEnemy[i];
+                manager.enemySpawner.SpawnSpecial(pos.x, pos.y, type);
+
             }
         }
 

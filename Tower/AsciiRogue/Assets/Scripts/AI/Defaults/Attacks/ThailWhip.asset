@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ToAttack:
   - {fileID: 11400000, guid: 48b9241cad8c233458cd3609a4ce9fb7, type: 2}
+  MaxRange: 1
+  MinRange: 1

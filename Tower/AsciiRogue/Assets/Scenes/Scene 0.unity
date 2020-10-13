@@ -8558,6 +8558,7 @@ MonoBehaviour:
   Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
   Zombie: {fileID: 11400000, guid: 69c56262bb138aa408c90f29212dc3af, type: 2}
   Hamp: {fileID: 11400000, guid: 1f2f86327a44fdb478fea1b77ad22d7f, type: 2}
+  SecretDoorAI: {fileID: 11400000, guid: de0b39b379c73e9489b8fe3be35cd1d0, type: 2}
   spawnedEnemies: []
   enemiesPerRoom: 010000000100000002000000020000000200000003000000
   enemyPrefab: {fileID: 8274568063289460321, guid: 99266b4a833436c478b0239b58339a72,

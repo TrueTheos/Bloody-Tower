@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c7a90b51abe4db4bac86652953ca2f2, type: 3}
-  m_Name: NormalAttack
+  m_Script: {fileID: 11500000, guid: 537ee701af48e5e44b6602c4fc67172e, type: 3}
+  m_Name: HiddenDoor
   m_EditorClassIdentifier: 
-  ToAttack: []
-  MaxRange: 1
-  MinRange: 1
+  TriggerRange: 2

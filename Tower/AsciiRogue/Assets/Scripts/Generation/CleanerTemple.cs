@@ -316,7 +316,7 @@ public static class CleanerTemple
             // remove it from door spawn
             GenPositionTile entry = temple.GetDoorableTiles(secret.GetEdge().ToList()).GetRandom();
             secret.AddDetail(entry.PositionG.x, entry.PositionG.y,
-                new GenDetail() { Char = '+', Entity = GenDetail.EntityType.Door, Type = GenDetail.DetailType.Door });
+                new GenDetail() { Char = 'h', Entity = GenDetail.EntityType.Door, Type = GenDetail.DetailType.Door });
 
             GenPositionTile myChest = secret
                 .GetAllTiles()

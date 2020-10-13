@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d081567a1675247bb8539ae15c6cf4, type: 3}
   m_Name: AcidBarf
   m_EditorClassIdentifier: 
+  ToAttack: []
+  MaxRange: 1
+  MinRange: 1
   ToCharge: {fileID: 11400000, guid: 48b9241cad8c233458cd3609a4ce9fb7, type: 2}

@@ -5,6 +5,17 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Prefab Room")]
 public class PrefabRoom : ScriptableObject
 {
+    [Header("# - Wall")]
+    [Header(". - Floor")]
+    [Header("= - Chest")]
+    [Header("\" - Mushroom")]
+    [Header("& - Cobweb")]
+    [Header("~ - Blood")]
+    [Header("2 - Pillar")]
+    [Header("3 - Blood Torch")]
+    [Header("7 - Prefab Monster")]
+    [Header("9 - Prefab Monster")]
+    [Header("{ - Fountain")]
     public string room;
     public int height, width;
 

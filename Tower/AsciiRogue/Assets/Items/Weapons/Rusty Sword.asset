@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
-  m_Name: Sword
+  m_Name: Rusty Sword
   m_EditorClassIdentifier: 
-  I_name: Sword
-  I_unInName: Sword
+  I_name: Rusty Sword
+  I_unInName: Rusty Sword
   I_symbol: )
   I_color: '#ab6626'
-  chanceOfSpawning1to10: 0.3
-  chanceOfSpawning11to20: 0.56
-  chanceOfSpawning21to30: 0.3
-  chanceOfSpawning31to40: 0.2
-  I_weight: 10
+  chanceOfSpawning1to10: 0.211
+  chanceOfSpawning11to20: 0.173
+  chanceOfSpawning21to30: 0.125
+  chanceOfSpawning31to40: 0.08
+  I_weight: 7
   I_rareness: 0
   I_itemType: 10
   I_whereToPutIt: 3
@@ -28,7 +28,7 @@ MonoBehaviour:
   lightFactor: 0
   normalIdentifState: 1
   pickupableByMonsters: 0
-  effect: <color=red>d5</color> damage on hit.
+  effect: <color=red>d2</color> damage on hit.
   worth: 0
   SkillsToLearn: []
   bonusToHealth: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
   bonusToEndurance: 0
   bonusToNoise: 0
   attacks:
-  - {x: 1, y: 5}
+  - {x: 1, y: 2}
   effectsOnHit: 
   MaximumProjection: 0
   BowDamage: 0

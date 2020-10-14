@@ -31,6 +31,7 @@ public class Readable : ItemScriptableObject
         GameManager.manager.UpdateMessages("");
         GameManager.manager.UpdateMessages("");
         GameManager.manager.UpdateMessages("");
+        GameManager.manager.UpdateMessages("<i>You read...</i>");
         GameManager.manager.UpdateMessages(text);
     }
 }

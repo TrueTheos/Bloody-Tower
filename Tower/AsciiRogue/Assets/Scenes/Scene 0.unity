@@ -477,8 +477,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 14.799988, y: -25}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -263.13, y: -446.33}
+  m_SizeDelta: {x: 188.25763, y: 25.536743}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &69573619
 MonoBehaviour:
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 60.151978, y: 0, z: 40.595398, w: 28.957031}
+  m_margin: {x: -1.0061646, y: 25.441788, z: -0.01361084, w: 24.55365}
   m_textInfo:
     textComponent: {fileID: 69573619}
     characterCount: 0
@@ -5118,8 +5118,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0.000030517578, y: 82.27}
-  m_SizeDelta: {x: 0, y: 164.54}
+  m_AnchoredPosition: {x: 3.5, y: 82.27}
+  m_SizeDelta: {x: 7.041748, y: 164.54}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1097892140
 MonoBehaviour:
@@ -8299,6 +8299,14 @@ MonoBehaviour:
   - {r: 0.454, g: 0, b: 0, a: 0}
   _prefabRooms:
   - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
+  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
+  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
+  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
+  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
+  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
+  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
+  - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
+  - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8443,6 +8451,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f3720cd781456f346b7704570a9e5812, type: 2}
   - {fileID: 11400000, guid: b2ee8dd915bd7a44786cae91e5dc1b66, type: 2}
   - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  - {fileID: 11400000, guid: b8a53231f8bc21d43879db9aa4a4ad2d, type: 2}
+  - {fileID: 11400000, guid: d95775dd3913dec4b99c8954cfc7cfac, type: 2}
   armors:
   - {fileID: 11400000, guid: 55eda9861085f504d847215a975acf80, type: 2}
   - {fileID: 11400000, guid: b3f193a927150d84ea166b03654c265e, type: 2}
@@ -8521,6 +8531,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 48621e4f0312ab64ebe6f79e08f7671e, type: 2}
   readables:
   - {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997, type: 2}
+  - {fileID: 11400000, guid: ad0f3df6ba1f0af4aa7c26aa8ea444ab, type: 2}
+  - {fileID: 11400000, guid: f01fe5dcd2e773a40a055bcc7efd9c42, type: 2}
+  - {fileID: 11400000, guid: b0b5d81b707dca4499283a8b1b7b3ec7, type: 2}
+  - {fileID: 11400000, guid: 9fd9b923009836a43acf0036015ca206, type: 2}
+  - {fileID: 11400000, guid: 3a56aabf9c1fe934abae1793587dd0f9, type: 2}
+  - {fileID: 11400000, guid: 9be2d01a25a5ece449db2c1f51eb8855, type: 2}
+  - {fileID: 11400000, guid: fdbe1006f4649d040ad4129352d71c9e, type: 2}
+  - {fileID: 11400000, guid: ddd5db3072e5e6c43968ad93999b906e, type: 2}
+  - {fileID: 11400000, guid: cd9e71394617e4144bb8340d10211435, type: 2}
+  - {fileID: 11400000, guid: 29116ce0fac0a2d47bb8470d95d7f752, type: 2}
   artfiacts:
   - {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}
   itemsToSpawn: []

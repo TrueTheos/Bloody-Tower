@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e843ad85e02875d49aba59bee6a2cca2, type: 3}
-  m_Name: An Ritual
+  m_Name: Note4
   m_EditorClassIdentifier: 
-  I_name: An Ritual
-  I_unInName: An Ritual
+  I_name: Note
+  I_unInName: Note
   I_symbol: +
-  I_color: '#410EA6'
+  I_color: '#794B0B'
   chanceOfSpawning1to10: 0
   chanceOfSpawning11to20: 0
   chanceOfSpawning21to30: 0
@@ -39,16 +39,8 @@ MonoBehaviour:
   bonusToNoise: 0
   text: '<color=#a38745>===============================================================================</color>
 
-    The
-    Note is in bad condition, you can barely read:
-
-    ...
-
-    <i>The four lights
-    and the body of the fallen. Let them all burn, let there be light! Fall down
-    and pray to your god, pray that he would send the Finger of Death that other
-    gods fear...</i>
-
-    ...
+    <i>There''s
+    another god watching us. It wants something. It''s why we''re here. Whoever is
+    reading this, you better hope you get the chance to find out what it wants.</i>
 
     <color=#a38745>===============================================================================</color>'

@@ -428,7 +428,7 @@ public class PlayerMovement : MonoBehaviour
 
                 for (x = 0; x < weaponL.attacks.Count; x++)
                 {
-                    damageLeftHand += Random.Range(1, weaponL.attacks[x].y);
+                    damageLeftHand += Random.Range(1, weaponL.attacks[x].y + 1);
 
                     //IF WEAPON IS BLOOD SWORD WE INCREASE ITS DAMAGE
                     if (weaponL.I_name == "Bloodsword")
@@ -444,7 +444,7 @@ public class PlayerMovement : MonoBehaviour
 
                 for (x = 0; x < weaponR.attacks.Count; x++)
                 {
-                    damageRightHand += Random.Range(1, weaponR.attacks[x].y);
+                    damageRightHand += Random.Range(1, weaponR.attacks[x].y + 1);
 
                     //IF WEAPON IS BLOOD SWORD WE INCREASE ITS DAMAGE
                     if (weaponR.I_name == "Bloodsword")

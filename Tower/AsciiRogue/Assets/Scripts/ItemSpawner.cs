@@ -121,12 +121,17 @@ public class ItemSpawner : MonoBehaviour
                     itemToSpawn = artfiacts[UnityEngine.Random.Range(0, artfiacts.Count)];
                     break;
                 case "Readable":
-                    itemToSpawn = readables[UnityEngine.Random.Range(0, readables.Count)];
+                    int index = UnityEngine.Random.Range(0, readables.Count);
+                    if (readables.Count > 0)
+                    {
+                        itemToSpawn = readables[index];
+                        readables.RemoveAt(index);
+                    }
                     break;
-                    /*case "Tool":
-                        itemToSpawn = tools[UnityEngine.Random.Range(0, tools.Count)];
-                        Debug.Log("Tool");
-                        break;*/
+              /*case "Tool":
+                    itemToSpawn = tools[UnityEngine.Random.Range(0, tools.Count)];
+                    Debug.Log("Tool");
+                    break;*/
             }     
 
             if (itemTypeCompariser == "Money")

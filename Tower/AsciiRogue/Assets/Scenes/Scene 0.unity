@@ -1838,7 +1838,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Rarenss
+  m_Text: 
 --- !u!222 &351718989
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6645,7 +6645,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Type
+  m_Text: 
 --- !u!222 &1506945675
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7488,7 +7488,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Name
+  m_Text: 
 --- !u!222 &1797277795
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10050,7 +10050,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Effects
+  m_Text: 
 --- !u!222 &2084354339
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -247,7 +247,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         {
             blood = value;
             if (blood > 100) blood = 100;
-            if (blood < 0) blood = 0;
+            if (blood < 0) Die();
 
             if (blood <= 25)
             {
@@ -891,25 +891,30 @@ public class PlayerStats : MonoBehaviour, IUnit
 
         if(!isDead && __currentHp <= 0)
         {
-            PlayerMovement.playerMovement.StopAllCoroutines();
-            gameManager.UpdateMessages("You are <color=#990000>dead</color>.");
-            if (_ring != null && _ring.iso.I_name == "Ring of Life Saving")
-            {
-                EffectCoroutine = LifeSaveEffect();
-                StartCoroutine(EffectCoroutine);
-                gameManager.UpdateMessages("<color=yellow>But wait... Your medallion begins to glow! You feel much better! The medallion crumbles to dust!</color>");
-                __currentHp = __maxHp;
-                __blood = 100;  
-                gameManager.ApplyChangesInInventory(_ring.iso);
-                gameManager.UpdateEquipment(Ring, "<color=#ffffff>Ring: </color>");
-                _ring = null;               
-            }
-            else
-            {
-                isDead = true;
-                PlayerMovement.playerMovement.canMove = false;
-                DungeonGenerator.dungeonGenerator.screen.text = deadText;
-            }
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        PlayerMovement.playerMovement.StopAllCoroutines();
+        gameManager.UpdateMessages("You are <color=#990000>dead</color>.");
+        if (_ring != null && _ring.iso.I_name == "Ring of Life Saving")
+        {
+            EffectCoroutine = LifeSaveEffect();
+            StartCoroutine(EffectCoroutine);
+            gameManager.UpdateMessages("<color=yellow>But wait... Your medallion begins to glow! You feel much better! The medallion crumbles to dust!</color>");
+            __currentHp = __maxHp;
+            __blood = 100;
+            gameManager.ApplyChangesInInventory(_ring.iso);
+            gameManager.UpdateEquipment(Ring, "<color=#ffffff>Ring: </color>");
+            _ring = null;
+        }
+        else
+        {
+            isDead = true;
+            PlayerMovement.playerMovement.canMove = false;
+            DungeonGenerator.dungeonGenerator.screen.text = deadText;
         }
     }
 
@@ -1401,7 +1406,6 @@ public class PlayerStats : MonoBehaviour, IUnit
             gameManager.ApplyChangesInInventory(randomMeltedItem.iso);
         }
     }
-
 
     private IEnumerator UpdateEffects()
     {

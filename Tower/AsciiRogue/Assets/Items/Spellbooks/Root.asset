@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2317f94407078c94ea046f01559f36cd, type: 3}
   m_Name: Root
   m_EditorClassIdentifier: 
-  I_name: Root
+  I_name: Ruus
   I_unInName: Spellbook
   I_symbol: $
   I_color: '#432123'
@@ -24,6 +24,8 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 8
   I_whereToPutIt: 0
+  I_damageType: 0
+  lightFactor: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
   effect: 'Root creature for (<color=blue>INT</color> / 10) + 10 turns.

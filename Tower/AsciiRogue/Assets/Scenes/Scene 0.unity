@@ -8297,16 +8297,41 @@ MonoBehaviour:
   - {r: 0.5377358, g: 0.1699448, b: 0.1699448, a: 0}
   - {r: 0.5943396, g: 0, b: 0, a: 0}
   - {r: 0.454, g: 0, b: 0, a: 0}
+  statueNames:
+  - Ceramic Statue
+  - Obsidian Statue
+  - Wooden Statue
+  - Iron Statue
+  - Copper Statue
+  - Gold Statue
+  statueColors:
+  - {r: 0.501335, g: 0.7569436, b: 0.8113208, a: 0}
+  - {r: 0.21868345, g: 0.07716268, b: 0.3207547, a: 0}
+  - {r: 0.4245283, g: 0.26771584, b: 0.13016199, a: 0}
+  - {r: 0.6870773, g: 0.754717, b: 0.73598975, a: 0}
+  - {r: 1, g: 0.56445867, b: 0.16509432, a: 0}
+  - {r: 0.7924528, g: 0.6928865, b: 0.16820934, a: 0}
   _prefabRooms:
-  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
-  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
-  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
-  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
-  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
-  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
+  - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
+  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
   - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
+  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
+  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
+  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
+  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
+  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
   - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
   - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
+  - {fileID: 11400000, guid: 4f3a39350370d834b819cf80b80cda07, type: 2}
+  - {fileID: 11400000, guid: a61dde49ef4997e429bc17e1ed262e63, type: 2}
+  - {fileID: 11400000, guid: a3119d29421f2ea43a5f9df2b02f491a, type: 2}
+  - {fileID: 11400000, guid: 7d28ecc10ab512741a3577e5a523eb54, type: 2}
+  - {fileID: 11400000, guid: c1aba9dc3def109419bb402b9b6e1932, type: 2}
+  - {fileID: 11400000, guid: 13f101848cd22c24a940f258bc5d9dd9, type: 2}
+  - {fileID: 11400000, guid: 23d0d6e82f73ed043805363fc310aeec, type: 2}
+  - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
+  - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
+  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -287,7 +287,7 @@ public class GameManager : MonoBehaviour
                                 AddAnotherOption("UEquip");
                             }
                         }
-                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Wand || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem)
+                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Wand || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem || _selectedItem.iso is Bell bell)
                         {
                             decisionsCount++;
                             decisions.text += "\n" + decisionsCount + ". " + "Use";

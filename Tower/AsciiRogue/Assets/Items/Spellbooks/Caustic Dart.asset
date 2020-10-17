@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2317f94407078c94ea046f01559f36cd, type: 3}
   m_Name: Caustic Dart
   m_EditorClassIdentifier: 
-  I_name: Caustic Dart
+  I_name: Caiatsuth Da's
   I_unInName: Spellbook
   I_symbol: $
   I_color: '#432123'
@@ -24,6 +24,8 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 8
   I_whereToPutIt: 0
+  I_damageType: 0
+  lightFactor: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
   effect: 'Deal (<color=blue>INT</color> / 7) + 10 damage.

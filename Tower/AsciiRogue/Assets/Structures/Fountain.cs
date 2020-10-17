@@ -24,6 +24,7 @@ public class Fountain : Structure
         {
             GameManager.manager.UpdateMessages("You take a sip, you feel refreshed.");
             GameManager.manager.playerStats.__currentHp += Random.Range(1, 8);
+            GameManager.manager.playerStats.__blood += Random.Range(1, 8) + Random.Range(1, 8); 
         }
         else if(random <= 18)
         {
@@ -68,7 +69,7 @@ public class Fountain : Structure
         if(Random.Range(1,100) < 30)
         {
             canBeUsed = false;
-            GameManager.manager.UpdateMessages("There is nothing left in the fountain.");
+            GameManager.manager.UpdateMessages("The fountain dries up...");
         }
 
         GameManager.manager.FinishPlayersTurn();

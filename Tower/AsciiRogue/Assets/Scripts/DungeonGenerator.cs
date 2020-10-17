@@ -81,6 +81,10 @@ public class DungeonGenerator : MonoBehaviour
     public List<Color> mouldWallColors;
     [Header("Flesh Wall Colors")]
     public List<Color> fleshWallColors;
+    [Header("Statue Names")]
+    public List<string> statueNames = new List<string>() { "Ceramic Statue", "Obsidian Statue", "Wooden Statue", "Iron Statue", "Copper Statue", "Gold Statue" };
+    [Header("Statue Colors")]
+    public List<Color> statueColors = new List<Color>();
 
     public void Start()
     {
@@ -172,6 +176,7 @@ public class DungeonGenerator : MonoBehaviour
     //7 - Prefab Monster
     //9 - Prefab room item
     //{ - Fountain
+    //} - Statue
 
     public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
     {
@@ -286,7 +291,8 @@ public class DungeonGenerator : MonoBehaviour
                         {
                             MapManager.map[x, y] = new Tile
                             {
-                                structure = new Stairs()
+                                structure = new Stairs(),
+                                specialNameOfTheCell = "Stairs"
                             };
                             if (MapManager.map[x, y].structure is Stairs stairsDown)
                             {
@@ -306,7 +312,8 @@ public class DungeonGenerator : MonoBehaviour
                             {
                                 MapManager.map[x, y] = new Tile
                                 {
-                                    structure = new Stairs()
+                                    structure = new Stairs(),
+                                    specialNameOfTheCell = "Stairs"
                                 };
                                 if (MapManager.map[x, y].structure is Stairs stairsUp)
                                 {
@@ -618,6 +625,28 @@ public class DungeonGenerator : MonoBehaviour
                                 position = new Vector2Int(x, y)
                             };
                             MapManager.map[x, y].structure = fountain;
+                        }
+                        break;
+                    case "}": //STATUE
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                type = "Floor",
+                                baseChar = ".",
+                                letter = "}",
+                                isWalkable = false,
+                                isOpaque = true,                 
+                            };
+                            Statue statue = new Statue
+                            {
+                                position = new Vector2Int(x, y)        
+                            };
+  
+                            statue.statueName = statueNames[UnityEngine.Random.Range(0, statueNames.Count)];
+                            statue.statueColor = statueColors[UnityEngine.Random.Range(0, statueColors.Count)];
+                            MapManager.map[x, y].specialNameOfTheCell = statue.statueName;
+                            MapManager.map[x, y].timeColor = statue.statueColor;
+                            MapManager.map[x, y].structure = statue;
                         }
                         break;
                     default:
@@ -1623,6 +1652,17 @@ public class DungeonGenerator : MonoBehaviour
                         {
                             m.set(x, y, '&');
                         }
+                    }
+                }
+
+                if(UnityEngine.Random.Range(0, 100) < 50)
+                {
+                    int x = s.getRandom().x;
+                    int y = s.getRandom().y;
+
+                    if (m.get(x, y) != '<' && m.get(x, y) != '>')
+                    {
+                        m.set(x, y, '}');
                     }
                 }
 

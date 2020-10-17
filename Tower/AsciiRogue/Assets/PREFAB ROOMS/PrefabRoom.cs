@@ -14,8 +14,9 @@ public class PrefabRoom : ScriptableObject
     [Header("2 - Pillar")]
     [Header("3 - Blood Torch")]
     [Header("7 - Prefab Monster")]
-    [Header("9 - Prefab Monster")]
+    [Header("9 - Prefab Item")]
     [Header("{ - Fountain")]
+    [Header("} - Statue")]
     public string room;
     public int height, width;
 

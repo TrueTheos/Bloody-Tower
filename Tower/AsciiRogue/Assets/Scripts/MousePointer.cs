@@ -42,27 +42,35 @@ public class MousePointer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.manager.playerStats.isDead) return;
+
         if(mapRect.Contains(Input.mousePosition))
         {
             mousePos = new Vector2Int(Mathf.FloorToInt((Input.mousePosition.x - 19) / 14), Mathf.FloorToInt((Input.mousePosition.y - 254) / 20));
-            if (MapManager.map[mousePos.x, mousePos.y].isExplored && MapManager.map[mousePos.x, mousePos.y].isWalkable || MapManager.map[mousePos.x, mousePos.y].type == "Door" || MapManager.map[mousePos.x, mousePos.y].enemy != null)
+
+            if(MapManager.map[mousePos.x, mousePos.y].isExplored)
             {
-                _selected = true;
-                path = null;
+                Selector.Current.SelectedTile(mousePos.x, mousePos.y);
 
-                path = AStar.CalculatePath(MapManager.playerPos, mousePos);
-
-                foreach (var pathTile in path)
+                if (MapManager.map[mousePos.x, mousePos.y].isWalkable || MapManager.map[mousePos.x, mousePos.y].type == "Door" || MapManager.map[mousePos.x, mousePos.y].enemy != null)
                 {
-                    MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=#2B3659>\u205C</color>";
-                }
+                    _selected = true;
+                    path = null;
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-            }         
-            else
-            {
-                _selected = false;
-            }
+                    path = AStar.CalculatePath(MapManager.playerPos, mousePos);
+
+                    foreach (var pathTile in path)
+                    {
+                        MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=#2B3659>\u205C</color>";
+                    }
+
+                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                }
+                else
+                {
+                    _selected = false;
+                }
+            }       
         }
 
         if(_selected && Input.GetMouseButtonDown(0))

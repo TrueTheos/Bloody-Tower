@@ -1135,6 +1135,10 @@ public class GameManager : MonoBehaviour
                 UpdateMessages($"You drank the <color={potion.I_color}>{potion.I_name}</color>.");
             }
 
+            _selectedItem.identified = true;
+
+            UpdateItemStats(_selectedItem);
+
             ApplyChangesInInventory(null);
 
             decisionMade = true;

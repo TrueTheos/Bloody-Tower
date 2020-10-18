@@ -1481,110 +1481,118 @@ public class DungeonGenerator : MonoBehaviour
     {
         public static Map createSewerMap()
         {
-            Map m = new Map();
-
-            // start with basic architecture
-
-            // carve a central room, then attach stuff to it
-            Structure centralRoom;
-
-            int x = Map.WIDTH / 2 + Rand.range(-5, 6);
-            int y = Map.HEIGHT / 2 + Rand.range(-5, 6);
-
-            int w = 0;
-            int h = 0;
-            if (dungeonGenerator.prefabRooms.Count > 0)
+            try
             {
-                dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
-                w =  dungeonGenerator.prefabRoom.height;
-                h = dungeonGenerator.prefabRoom.width;
-                centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
-                centralRoom.isPrefabRoom = true;
-                dungeonGenerator.prefabRooms.RemoveAt(dungeonGenerator.prefabRooms.IndexOf(dungeonGenerator.prefabRoom));
-            }
-            else
-            {
-                w = Rand.range(3, 11);
-                h = Rand.range(3, 11);
-                centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
-            }
-     
+                Map m = new Map();
 
-            m.carve(centralRoom, '.');
+                // start with basic architecture
 
-            List<Structure> structs = new List<Structure>
+                // carve a central room, then attach stuff to it
+                Structure centralRoom;
+
+                int x = Map.WIDTH / 2 + Rand.range(-5, 6);
+                int y = Map.HEIGHT / 2 + Rand.range(-5, 6);
+
+                int w = 0;
+                int h = 0;
+                if (dungeonGenerator.prefabRooms.Count > 0)
+                {
+                    dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
+                    w = dungeonGenerator.prefabRoom.height;
+                    h = dungeonGenerator.prefabRoom.width;
+                    centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
+                    centralRoom.isPrefabRoom = true;
+                    dungeonGenerator.prefabRooms.RemoveAt(dungeonGenerator.prefabRooms.IndexOf(dungeonGenerator.prefabRoom));
+                }
+                else
+                {
+                    w = Rand.range(3, 11);
+                    h = Rand.range(3, 11);
+                    centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
+                }
+
+
+                m.carve(centralRoom, '.');
+
+                List<Structure> structs = new List<Structure>
             {
                 centralRoom
             };
 
 
-            for (int i = 0; i < 10; i++)
-            {
-                // pick a structure to attach to. 
-                Structure anchor = null;
-
-                // generate a new structure to attach to it
-                Structure newStruct = null;
-
-                // number of attempts to try
-                int attempts = 0;
-                int maxAttempts = 20;
-
-                while (newStruct == null && attempts < maxAttempts)
+                for (int i = 0; i < 10; i++)
                 {
-                    anchor = structs[Rand.range(0, structs.Count)];
-                    newStruct = GenerateNewStructure(m, structs, anchor);
-                    attempts++;
+                    // pick a structure to attach to. 
+                    Structure anchor = null;
+
+                    // generate a new structure to attach to it
+                    Structure newStruct = null;
+
+                    // number of attempts to try
+                    int attempts = 0;
+                    int maxAttempts = 20;
+
+                    while (newStruct == null && attempts < maxAttempts)
+                    {
+                        anchor = structs[Rand.range(0, structs.Count)];
+                        newStruct = GenerateNewStructure(m, structs, anchor);
+                        attempts++;
+                    }
+                    if (newStruct == null)
+                        break; // we couldn't find one. Avoid endless loops
+
+                    m.carve(newStruct, '.');
+                    //Console.WriteLine("New {0}", newStruct.toString());
+
+                    // add doors
+                    List<Location> candidates = anchor.findCommonBorder(newStruct);
+                    Location l = candidates[Rand.range(0, candidates.Count)];
+                    if (anchor.isRoom() || newStruct.isRoom())
+                    {
+                        newStruct.doors.Add(new Vector2Int(l.x, l.y));
+                        m.set(l.x, l.y, '+'); // at least one of them is a room. Connect them with a door
+                    }
+                    else
+                    {
+                        m.set(l.x, l.y, '.'); // both corridors. connect with open space
+                    }
+
+                    // now add more doors to other nearby structures
+                    foreach (Structure other in structs)
+                    {
+                        if (other == anchor)
+                            continue;
+                        candidates = other.findCommonBorder(newStruct);
+                        if (candidates.Count == 0)
+                            continue;
+                        if (Rand.range(0, 100) < 33)
+                            continue;
+                        l = candidates[Rand.range(0, candidates.Count)];
+                        m.set(l.x, l.y, (other.isCorridor() && anchor.isCorridor()) ? '.' : '+');
+                    }
+
+                    structs.Add(newStruct);
                 }
-                if (newStruct == null)
-                    break; // we couldn't find one. Avoid endless loops
 
-                m.carve(newStruct, '.');
-                //Console.WriteLine("New {0}", newStruct.toString());
+                // furnish the dungeon
+                foreach (Structure s in structs)
+                {
+                    if (s.isRoom())
+                        furnishRoom(m, s);
+                    else
+                        furnishCorridor(m, s);
 
-                // add doors
-                List<Location> candidates = anchor.findCommonBorder(newStruct);
-                Location l = candidates[Rand.range(0, candidates.Count)];
-                if (anchor.isRoom() || newStruct.isRoom())
-                {
-                    newStruct.doors.Add(new Vector2Int(l.x, l.y));
-                    m.set(l.x, l.y, '+'); // at least one of them is a room. Connect them with a door
-                } else
-                {
-                    m.set(l.x, l.y, '.'); // both corridors. connect with open space
                 }
 
-                // now add more doors to other nearby structures
-                foreach (Structure other in structs)
-                {
-                    if (other == anchor)
-                        continue;
-                    candidates = other.findCommonBorder(newStruct);
-                    if (candidates.Count == 0)
-                        continue;
-                    if (Rand.range(0, 100) < 33)
-                        continue;
-                    l = candidates[Rand.range(0, candidates.Count)];
-                    m.set(l.x, l.y, (other.isCorridor() && anchor.isCorridor()) ? '.' : '+');
-                }
-
-                structs.Add(newStruct);
+                // spawn the stairs
+                Structure r = SpawnStairsPlaceHolder('<', m, structs, null);
+                SpawnStairsPlaceHolder('>', m, structs, r);
+                return m;
             }
-
-            // furnish the dungeon
-            foreach (Structure s in structs)
+            catch
             {
-                if (s.isRoom())
-                    furnishRoom(m, s);
-                else
-                    furnishCorridor(m, s);
-
-            }
-
-            // spawn the stairs
-            Structure r = SpawnStairsPlaceHolder('<', m, structs, null);
-            SpawnStairsPlaceHolder('>', m, structs, r);
-            return m;
+                return createSewerMap();
+            }         
         }
 
         private static Structure SpawnStairsPlaceHolder(char c, Map m, List<Structure> structs, Structure notHere)

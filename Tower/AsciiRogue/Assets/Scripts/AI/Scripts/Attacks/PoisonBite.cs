@@ -6,43 +6,43 @@ using UnityEngine;
 public class PoisonBite : BasicAttack
 {
 
-    public override void Attack(RoamingNPC t,IUnit target)
+    public override void Calculate((RoamingNPC source,IUnit target) t)
     {
         int totalDamage = 0;
 
         int valueRequiredToHit = 0; //value required to hit the monster
 
-        valueRequiredToHit = Random.Range(1, 100) + t.dex - target.dex - target.ac;
+        valueRequiredToHit = Random.Range(1, 100) + t.source.dex - t.target.dex - t.target.ac;
         //manager.UpdateMessages($"<color=red>Value required to hit player: = d20 + {dex} - {playerStats.__dexterity} - {playerStats.armorClass} = {valueRequiredToHit}</color>");
 
         if (valueRequiredToHit > 50)
         {
-            if (Random.Range(1, 100) < 10 - target.ac + t.dex - target.dex)
+            if (Random.Range(1, 100) < 10 - t.target.ac + t.source.dex - t.target.dex)
             {
-                totalDamage += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(t.str / 5)) * 1.5f);
+                totalDamage += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(t.source.str / 5)) * 1.5f);
             }
             else
             {
-                totalDamage += Random.Range(1, 4) + Mathf.FloorToInt(t.str / 5);
+                totalDamage += Random.Range(1, 4) + Mathf.FloorToInt(t.source.str / 5);
             }
 
-            if (target is PlayerStats && !t.playerStats.isPoisoned)
+            if (t.target is PlayerStats && !t.source.playerStats.isPoisoned)
             {
-                t.playerStats.IncreasePoisonDuration(3);
-                t.playerStats.Poison();
+                t.source.playerStats.IncreasePoisonDuration(3);
+                t.source.playerStats.Poison();
             }
-            target.TakeDamage(totalDamage,ItemScriptableObject.damageType.normal);
+            t.target.TakeDamage(totalDamage,ItemScriptableObject.damageType.normal);
 
-            t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> used <color=green>Poison Bite</color>!");
-            t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> attacked "+ (target is PlayerStats?"you":target.noun) +" for <color=red>{totalDamage}</color>!");
+            t.source.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.source.EnemyColor)}>{t.source.enemySO.name}</color> used <color=green>Poison Bite</color>!");
+            t.source.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.source.EnemyColor)}>{t.source.enemySO.name}</color> attacked "+ (t.target is PlayerStats?"you": t.target.noun) +" for <color=red>{totalDamage}</color>!");
         }
         else
         {
-            t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.EnemyName}</color> missed.");
+            t.source.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.source.EnemyColor)}>{t.source.EnemyName}</color> missed.");
         }
-        if (target is PlayerStats)
+        if (t.target is PlayerStats)
         {
-            t.canvas.GetComponent<Animator>().SetTrigger("Shake");
+            t.source.canvas.GetComponent<Animator>().SetTrigger("Shake");
         }
     }
 

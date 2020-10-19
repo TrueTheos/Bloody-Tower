@@ -7,15 +7,15 @@ public class FadingBite : BasicAttack
 {
 
 
-    public override void Attack(RoamingNPC source, IUnit target)
+    public override void Calculate((RoamingNPC source, IUnit target)t)
     {
-        source.StartCoroutine(_FadingBite(source,target));
+        t.source.StartCoroutine(_FadingBite(t.source, t.target));
     }
 
     private IEnumerator _FadingBite(RoamingNPC t,IUnit target)
     {
         t.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.EnemyColor)}>{t.enemySO.name}</color> used <color=red>Fading Bite</color>!");
-        ToAttack[Random.Range(0,ToAttack.Count)].Attack(t,target);
+        ToAttack[Random.Range(0,ToAttack.Count)].Calculate((t,target));
         yield return new WaitForSeconds(.2f);
 
         //run away

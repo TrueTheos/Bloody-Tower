@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName ="AI/Turn/Crazy")]
 public class CrazyTurnBehaviour : BasicTurnBehaviour
 {
 
@@ -23,12 +24,19 @@ public class CrazyTurnBehaviour : BasicTurnBehaviour
                 t.CurrentTarget = null;
             }
 
+            // check for out of sight enemy
+            if (!(t.CurrentTarget == null)) 
+            {
+                if (!FoV.InLineOfSight(t.pos,t.CurrentTarget.pos))
+                {
+                    // out of sight out of mind i guess
+                    t.CurrentTarget = null;
+                }
+            }
 
             // check if current target is still valid
             if (!(t.CurrentTarget == null))
-            {
-                // TODO: make it so that we loose a target when out of sight
-
+            {               
                 // we are targeting something
                 // range here
                 if (MapUtility.MoveDistance(t.pos, t.CurrentTarget.pos) == 1)
@@ -150,7 +158,7 @@ public class CrazyTurnBehaviour : BasicTurnBehaviour
                 var att = GetAttack(t);
                 if (att.InRange(t.__position, t.CurrentTarget.pos))
                 {
-                    att.Attack(t, t.CurrentTarget);
+                    att.Calculate((t, t.CurrentTarget));
                     return;
                 }
                 /*

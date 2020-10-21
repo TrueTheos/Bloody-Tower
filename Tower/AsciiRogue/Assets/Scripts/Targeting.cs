@@ -129,7 +129,7 @@ public static class Targeting
     /// <returns>returns the new targeting position</returns>
     public static void MoveTargeting(int dx, int dy)
     {
-        Position = Position + new Vector2Int(dx, dy);
+        Position += new Vector2Int(dx, dy);
     }
     /// <summary>
     /// checks a cell for being not wall or door that is stopping us
@@ -147,6 +147,4 @@ public static class Targeting
             && MapManager.map[x, y].type != "Door"
             && (Vector2Int.Distance(MapManager.playerPos, new Vector2Int(x, y)) < MaxRange || MaxRange == -1);
     }
-    
-
 }

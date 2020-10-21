@@ -34,10 +34,10 @@ MonoBehaviour:
   E_possileDrops:
   - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
   - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
-  enemyInfo: 'Wikijr - 18HP / 13STR / 8DEX/ 7INT / 14END
+  enemyInfo: 'Wikijr - 18 HP / 13 STR / 8 DEX/ 7 INT / 14 END
 
-    Can open doors. Wurnerable
-    to light.'
+    Can open doors.
+    Wurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1

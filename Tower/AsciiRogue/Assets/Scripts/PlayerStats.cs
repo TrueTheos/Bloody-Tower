@@ -17,57 +17,22 @@ public class PlayerStats : MonoBehaviour, IUnit
     public int dex { get; set; }
     public int end { get; set; }
     public int lvl { get; set; }
-    [Header("Variables")]
-    public int experience;
-    public int experienceNeededToLvlUp;
-    public int coins;
-    public int blood;
 
-    public Vector2Int pos => PlayerMovement.playerMovement.position;
-    public string noun => "the player";
-
-    private float strModifier = 1;
-    private float dexModifier = 1;
-    private float intModifier = 1;
-    private float endModifier = 1;
-
-    public int noise;
-    public int __noise
-    {
-        get
-        {
-            return noise;
-        }
-        set
-        {
-            noise = value;
-            UpdateText(statType.noise);
-        }
-    }
-
-    private GameObject statsCanvas;
-    private GameManager gameManager;
-
-    [HideInInspector]
-    public enum statType
-    {
-        hp,
-        strength,
-        intelligence,
-        dexterity,
-        endurance,
-        lvl,
-        experience,
-        coins,
-        ac,
-        noise,
-        blood
-    }
-    [HideInInspector]
-    public statType _statType;
+    [HideInInspector] public int experience;
+    [HideInInspector] public int experienceNeededToLvlUp;
+    [HideInInspector] public int coins;
+    [HideInInspector] public int blood;
+    [HideInInspector] public int noise;
+    [HideInInspector] public int maxWeight = 60;
+    [HideInInspector] public int currentWeight;
+    [HideInInspector] public int startingViewRange = 7;
+    [HideInInspector] public int viewRange;
+    [HideInInspector] public int maximumInventorySpace = 17;
+    [HideInInspector] public int currentItems;
+    [HideInInspector] public int skillpoints;
+    [HideInInspector] public int ac { get; set; } = 0;
 
     #region Statistics
-
     public int __maxHp
     {
         get
@@ -101,15 +66,15 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
         set
         {
-            if(value > __strength) //we gained strength
+            if (value > __strength) //we gained strength
             {
-                str = value;             
+                str = value;
 
                 maxWeight += 5;
 
-                UpdateCapacity();       
+                UpdateCapacity();
 
-                __maxHp++;            
+                __maxHp++;
             }
             else
             {
@@ -158,7 +123,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
         set
         {
-            if (value >end) //we gained end
+            if (value > end) //we gained end
             {
                 end = value;
 
@@ -166,7 +131,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
                 maxWeight++;
 
-                UpdateCapacity();    
+                UpdateCapacity();
             }
             else //we losed end
             {
@@ -232,11 +197,18 @@ public class PlayerStats : MonoBehaviour, IUnit
             UpdateText(statType.coins);
         }
     }
-
-
-    private int strLost, dexLost;
-
-
+    public int __noise
+    {
+        get
+        {
+            return noise;
+        }
+        set
+        {
+            noise = value;
+            UpdateText(statType.noise);
+        }
+    }
     public int __blood
     {
         get
@@ -268,19 +240,19 @@ public class PlayerStats : MonoBehaviour, IUnit
 
             if (blood > 75)
             {
-                if(strModifier != 1)
+                if (strModifier != 1)
                 {
                     strModifier = 1;
                     __strength += strLost;
-                }   
-                if(dexModifier != 1)
+                }
+                if (dexModifier != 1)
                 {
                     dexModifier = 1;
                     __dexterity += dexLost;
                 }
                 if (isBlind) CureBlindness();
             }
-            else if(blood > 50)
+            else if (blood > 50)
             {
                 if (dexModifier != 1)
                 {
@@ -289,7 +261,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                 }
                 if (isBlind) CureBlindness();
             }
-            else if(blood > 25)
+            else if (blood > 25)
             {
                 if (isBlind) CureBlindness();
             }
@@ -297,15 +269,6 @@ public class PlayerStats : MonoBehaviour, IUnit
             UpdateText(statType.blood);
         }
     }
-
-    #endregion
-
-    public int maxWeight = 60;
-    public int currentWeight;
-
-    //[Header("Base AC is 0")]
-    public int ac { get; set; } = 0;
-
     public int armorClass
     {
         get
@@ -319,18 +282,34 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
     }
 
-    public int skillpoints;
+    private float strModifier = 1;
+    private float dexModifier = 1;
+    private float intModifier = 1;
+    private float endModifier = 1;
 
-    public int maximumInventorySpace;
-    public int currentItems;
+    private int strLost, dexLost;
 
-    public int startingViewRange;
-    [HideInInspector] public int viewRange; //how far we can see
-    /*[HideInInspector] public bool damagedEyes;
-    [HideInInspector] public int damagedEyesCounter;
-    [HideInInspector] public int eyesTimer = 60; //how long should it take to regenerate damaged eyes*/
+    [HideInInspector] public enum statType
+    {
+        hp,
+        strength,
+        intelligence,
+        dexterity,
+        endurance,
+        lvl,
+        experience,
+        coins,
+        ac,
+        noise,
+        blood
+    }
+    [HideInInspector] public statType _statType;
 
-    [HideInInspector] public bool fullLevelVision = false;
+    private GameObject statsCanvas;
+
+    #endregion
+
+    private GameManager gameManager;  
 
     #region text meshes
     [Header("Text Components")]
@@ -354,7 +333,8 @@ public class PlayerStats : MonoBehaviour, IUnit
     public GameObject _enduranceButton;
     #endregion
 
-    //Effects and bools
+    #region Effects
+    /** EFFECTS **/
     public bool isPoisoned;
     public int poisonDuration;
 
@@ -378,8 +358,12 @@ public class PlayerStats : MonoBehaviour, IUnit
     public bool isBlind;
     private int viewRangeInBlindMode = 3;
 
-    public List<SpellbookSO> rememberedSpells = new List<SpellbookSO>();
+    [HideInInspector] public bool fullLevelVision = false;
 
+    private List<string> effects = new List<string>();
+    public TextMeshProUGUI effectsText;
+
+    public bool isDead;
 
     /** SPELLS **/
     [HideInInspector] public bool HasBloodRestore;
@@ -388,11 +372,10 @@ public class PlayerStats : MonoBehaviour, IUnit
     [HideInInspector] public bool HasAnoint;
     [HideInInspector] public int AnointDuration;
 
+    public List<SpellbookSO> rememberedSpells = new List<SpellbookSO>();
 
-    private List<string> effects = new List<string>();
-    public TextMeshProUGUI effectsText;
+    #endregion
 
-    public bool isDead;
 
     #region Body Parts & Text
     [Header("Items")]
@@ -436,6 +419,9 @@ public class PlayerStats : MonoBehaviour, IUnit
     //DIALOGUE
     public bool dialogue;
     public RoamingNPC npcDialogue;
+
+    [HideInInspector] public Vector2Int pos => PlayerMovement.playerMovement.position;
+    public string noun => "the player";
 
     [TextArea]
     public string deadText;
@@ -710,7 +696,6 @@ public class PlayerStats : MonoBehaviour, IUnit
             }     
         }
     }
-
 
     private bool CellIsAvailable(int x, int y)
     {
@@ -1217,6 +1202,9 @@ public class PlayerStats : MonoBehaviour, IUnit
             tile.isVisible = false;
         }
         viewRange = viewRangeInBlindMode;
+
+        gameManager.fv.Compute(MapManager.playerPos, viewRange);
+        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
     }
 
     public void CureBlindness()

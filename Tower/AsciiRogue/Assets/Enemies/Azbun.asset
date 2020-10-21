@@ -29,10 +29,10 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 'Azbun - 15HP / 7STR / 7DEX/ 4INT / 13END
+  enemyInfo: 'Azbun - 15 HP / 7 STR / 7 DEX/ 4 INT / 13 END
 
-    Can''t open doors. Wurnerable
-    to light.'
+    Can''t open doors.
+    Wurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

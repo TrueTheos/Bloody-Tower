@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
     public bool IsThrowingItem;
 
 
-    private FOVNEW fv;
+    [HideInInspector] public FOVNEW fv;
 
     private string itemOption1;
     private string itemOption2;
@@ -109,7 +109,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Item itemToAnvil;
     [HideInInspector] public bool anvilMenuOpened;
     [HideInInspector] public Anvil anvil;
-    //[HideInInspector] public ItemScriptableObject isoAnvil;
 
     void Awake()
     {
@@ -158,6 +157,11 @@ public class GameManager : MonoBehaviour
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
         dungeonGenerator.DrawMap(true, MapManager.map);
+
+        m_Messages.Clear();
+        messagesText = "";
+        messages.text = messagesText;
+
         FirstTurn();
     }
 
@@ -172,9 +176,10 @@ public class GameManager : MonoBehaviour
             {
                 if (!SkillsOpen)
                 {
+                    UpdateItemStats();
                     InitSkillWindow();
                     UpdateSkillText();
-                    UpdateSkillStats();
+                    UpdateSkillStats();            
                 }
                 else
                 {
@@ -195,6 +200,7 @@ public class GameManager : MonoBehaviour
                     mapText.SetActive(false);
                     mainUItext.enabled = false;
                     selector.GetComponent<Text>().enabled = true;
+                    if (playerStats.rememberedSpells.Count < 1) UpdateItemStats();
                     try { UpdateSpellStats(playerStats.rememberedSpells[0]); }
                     catch { }
                 }
@@ -208,6 +214,7 @@ public class GameManager : MonoBehaviour
                 if (!inventoryOpen)
                 {
                     OpenEQ();
+                    if (playerStats.itemsInEqGO.Count < 1) UpdateItemStats();
                 }
                 else
                 {
@@ -323,7 +330,7 @@ public class GameManager : MonoBehaviour
                     choosingWeapon = false;
                     choosenWeapon = playerStats.itemsInEqGO[selectedItem];
                     choosenWeapon.AddGem(gemToConnect);
-                    try { if (choosenWeapon.isEquipped) gemToConnect.Use(playerStats, playerStats.itemsInEqGO[selectedItem]); } catch { }
+                    /*try { if (choosenWeapon.isEquipped) gemToConnect.Use(playerStats, playerStats.itemsInEqGO[selectedItem]); } catch { }*/
                     FinishPlayersTurn();
                 }
 
@@ -1135,16 +1142,26 @@ public class GameManager : MonoBehaviour
                 UpdateMessages($"You drank the <color={potion.I_color}>{potion.I_name}</color>.");
             }
 
-            _selectedItem.identified = true;
+            if (playerStats.isBlind && _selectedItem.iso is ScrollSO scr || _selectedItem.iso is SpellbookSO spl)
+            {
+                ApplyChangesInInventory(null);
 
-            UpdateItemStats(_selectedItem);
+                decisionMade = true;
 
-            ApplyChangesInInventory(null);
+                FinishPlayersTurn();
+            }
+            else
+            {
+                _selectedItem.identified = true;
 
-            decisionMade = true;
+                UpdateItemStats(_selectedItem);
 
-            FinishPlayersTurn();
+                ApplyChangesInInventory(null);
 
+                decisionMade = true;
+
+                FinishPlayersTurn();
+            }
         }
     }
 
@@ -1173,7 +1190,6 @@ public class GameManager : MonoBehaviour
         ItemThrowHelper.PrepareItem(playerStats,_selectedItem);
         UpdateMessages("Choose a target for the throw");
     }
-
 
     private void Upgrade()
     {
@@ -1559,74 +1575,88 @@ public class GameManager : MonoBehaviour
         inventory.text = inventoryText;
     }
 
-    public void UpdateItemStats(Item item)
+    public void UpdateItemStats(Item item = null)
     {
-        if(item.identified) itemName.text = $"<color={item.iso.I_color}>{item.iso.I_name}</color>";
-        else itemName.text = $"<color=purple>{item.iso.I_unInName}</color>";
-
-        itemType.text = item.iso.I_itemType.ToString();
-
-        if (item.identified)
+        if (item == null)
         {
-            itemEffects.text =
-                $"{item.iso.effect}" +
-                "\n" +
-                (item.cursed == true && item.equippedPreviously ? "<color=red>Cursed</color> \n" : "\n");
-
-            if (item.cursed == true && item.equippedPreviously) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
-            else if (item.iso is PotionSO) { }
-            else
+            itemName.text = "";
+            itemType.text = "";
+            itemEffects.text = "";
+            itemRare.text = "";
+        }
+        else
+        {
+            if (item.iso is PotionSO potion && potion.previouslyDrank)
             {
-                if (item._BUC == Item.BUC.cursed) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
-                else if (item._BUC == Item.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
+                item.identified = true;
             }
 
-            if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + (item.iso.bonusToHealth + item.Anvil_bonusToHealth) + "\n";
-            if (item.iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + (item.iso.bonusToStrength + item.Anvil_bonusToStrength) + "\n";
-            if (item.iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + (item.iso.bonusToIntelligence + item.Anvil_bonusToIntelligence) + "\n";
-            if (item.iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + (item.iso.bonusToDexterity + item.Anvil_bonusToDexterity) + "\n";
-            if (item.iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + (item.iso.bonusToEndurance + item.Anvil_bonusToEndurance) + "\n";
-            if (item.iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + (item.iso.bonusToNoise + item.Anvil_bonusToNoise) + "\n";
+            if (item.identified) itemName.text = $"<color={item.iso.I_color}>{item.iso.I_name}</color>";
+            else itemName.text = $"<color=purple>{item.iso.I_unInName}</color>";
 
-            itemEffects.text += "Weight: " + $"<color=green>{item.iso.I_weight}</color>" + "\n";
-        }
-        else itemEffects.text = "???" + "\n" + "Weight: " + $"<color=green>{item.iso.I_weight}</color>";
+            itemType.text = item.iso.I_itemType.ToString();
 
-        if(item.sockets == 1)
-        {
-            itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
-        }
-        else if(item.sockets == 2)
-        {
-            itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
-            itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
-        }
-        else if(item.sockets == 3)
-        {
-            itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
-            itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
-            itemEffects.text += "\n" + "Socket: " + (item.socket3 == null ? "" : $"<color={item.socket3.I_color}>{item.socket3.I_name}</color>");
-        }
-
-        if(item.identified) 
-        {
-            switch (item.iso.I_rareness)
+            if (item.identified)
             {
-                case ItemScriptableObject.rareness.common:
-                    itemRare.text = "<color=grey>Common</color>";
-                    break;
-                case ItemScriptableObject.rareness.rare:
-                    itemRare.text = "<color=green>Rare</color>";
-                    break;
-                case ItemScriptableObject.rareness.very_rare:
-                    itemRare.text = "<color=yellow>Very rare</color>";
-                    break;
-                case ItemScriptableObject.rareness.mythical:
-                    itemRare.text = "<color=red>Mythical</color>";
-                    break;
+                itemEffects.text =
+                    $"{item.iso.effect}" +
+                    "\n" +
+                    (item.cursed == true && item.equippedPreviously ? "<color=red>Cursed</color> \n" : "\n");
+
+                if (item.iso is PotionSO) { }
+                else
+                {
+                    if (item._BUC == Item.BUC.cursed) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
+                    else if (item._BUC == Item.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
+                }
+
+                if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + (item.iso.bonusToHealth + item.Anvil_bonusToHealth) + "\n";
+                if (item.iso.bonusToStrength != 0) itemEffects.text += "<color=red>STR</color>: " + (item.iso.bonusToStrength + item.Anvil_bonusToStrength) + "\n";
+                if (item.iso.bonusToIntelligence != 0) itemEffects.text += "<color=red>INT</color>: " + (item.iso.bonusToIntelligence + item.Anvil_bonusToIntelligence) + "\n";
+                if (item.iso.bonusToDexterity != 0) itemEffects.text += "<color=red>DEX</color>: " + (item.iso.bonusToDexterity + item.Anvil_bonusToDexterity) + "\n";
+                if (item.iso.bonusToEndurance != 0) itemEffects.text += "<color=red>END</color>: " + (item.iso.bonusToEndurance + item.Anvil_bonusToEndurance) + "\n";
+                if (item.iso.bonusToNoise != 0) itemEffects.text += "<color=red>Noise</color>: " + (item.iso.bonusToNoise + item.Anvil_bonusToNoise) + "\n";
+
+                itemEffects.text += "Weight: " + $"<color=green>{item.iso.I_weight}</color>" + "\n";
             }
+            else itemEffects.text = "???" + "\n" + "Weight: " + $"<color=green>{item.iso.I_weight}</color>";
+
+            if (item.sockets == 1)
+            {
+                itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
+            }
+            else if (item.sockets == 2)
+            {
+                itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
+                itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
+            }
+            else if (item.sockets == 3)
+            {
+                itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
+                itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
+                itemEffects.text += "\n" + "Socket: " + (item.socket3 == null ? "" : $"<color={item.socket3.I_color}>{item.socket3.I_name}</color>");
+            }
+
+            if (item.identified)
+            {
+                switch (item.iso.I_rareness)
+                {
+                    case ItemScriptableObject.rareness.common:
+                        itemRare.text = "<color=grey>Common</color>";
+                        break;
+                    case ItemScriptableObject.rareness.rare:
+                        itemRare.text = "<color=green>Rare</color>";
+                        break;
+                    case ItemScriptableObject.rareness.very_rare:
+                        itemRare.text = "<color=yellow>Very rare</color>";
+                        break;
+                    case ItemScriptableObject.rareness.mythical:
+                        itemRare.text = "<color=red>Mythical</color>";
+                        break;
+                }
+            }
+            else itemRare.text = "<color=purple>???</color>";
         }
-        else itemRare.text = "<color=purple>???</color>";               
     }
 
     public void UpdateSkillStats()

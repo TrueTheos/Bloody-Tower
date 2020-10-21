@@ -207,6 +207,7 @@ public class ItemSpawner : MonoBehaviour
                 else if(itemToSpawn is PotionSO p)
                 {
                     int i = UnityEngine.Random.Range(1, 100);
+                    p.previouslyDrank = false;
                     if (i <= 9)
                     {
                         item.GetComponent<Item>()._BUC = Item.BUC.cursed;

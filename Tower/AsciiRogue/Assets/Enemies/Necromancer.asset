@@ -30,6 +30,7 @@ MonoBehaviour:
   attackText: []
   E_possileDrops:
   - {fileID: 11400000, guid: 328ef3b1ad286a54abb353b3f3281362, type: 2}
+  enemyInfo: Necromancer - ???
   leavesCorpse: 1
   isBoss: 1
   canOpenDoor: 1

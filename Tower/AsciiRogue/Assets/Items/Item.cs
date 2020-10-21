@@ -50,18 +50,21 @@ public class Item : MonoBehaviour
             if(socket1 == null && sockets > 0)
             {
                 socket1 = (Gem)gem;
+                socket1.Use(GameManager.manager.playerStats, this);
                 GameManager.manager.UpdateMessages($"You connected <color={gem.I_color}>{gem.I_name}</color> with <color={iso.I_color}>{iso.I_name}</color>.");
                 GameManager.manager.ApplyChangesInInventory(GameManager.manager.gemToConnect);
             }
             else if(socket2 == null && sockets > 1)
             {
                 socket2 = (Gem)gem;
+                socket1.Use(GameManager.manager.playerStats, this);
                 GameManager.manager.UpdateMessages($"You connected <color={gem.I_color}>{gem.I_name}</color> with <color={iso.I_color}>{iso.I_name}</color>.");
                 GameManager.manager.ApplyChangesInInventory(GameManager.manager.gemToConnect);
             }
             else if(socket3 == null && sockets == 3)
             {
                 socket3 = (Gem)gem;
+                socket1.Use(GameManager.manager.playerStats, this);
                 GameManager.manager.UpdateMessages($"You connected <color={gem.I_color}>{gem.I_name}</color> with <color={iso.I_color}>{iso.I_name}</color>.");
                 GameManager.manager.ApplyChangesInInventory(GameManager.manager.gemToConnect);
             }

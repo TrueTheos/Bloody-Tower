@@ -7,6 +7,7 @@ using System.Linq;
 public class PotionSO : ItemScriptableObject
 {
     public string potionSplashColor;
+    public bool previouslyDrank = false;
 
     public enum potionEffect
     {
@@ -72,7 +73,8 @@ public class PotionSO : ItemScriptableObject
                 BloodRestore(foo);
                 break;
         }
-
+        previouslyDrank = true;
+        
         GameManager.manager.ApplyChangesInInventory(this);      
     }
 

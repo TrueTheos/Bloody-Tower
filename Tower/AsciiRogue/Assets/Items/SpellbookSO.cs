@@ -180,13 +180,13 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             }
             else if(MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Finger of Death</color>.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>Finger of Death</color>.");
                 GameManager.manager.UpdateMessages($"You feel painful energy bursting through body...");
                 player.TakeDamage(player.__maxHp, damageType.normal);
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Finger of Death</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>Finger of Death</color> but nothing happens.");
             }
         }
     }
@@ -202,16 +202,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(damage, ItemScriptableObject.damageType.magic);
                 player.__currentHp += damage;
                 item.spellbookCooldown = 20;
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Drain Life</color>. You drained <color=red>{damage}</color> health.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You drained <color=red>{damage}</color> health.");
             }
             else if(MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 item.spellbookCooldown = 20;
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Drain Life</color>. You feel pain but but it goes away after a while.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You feel pain but but it goes away after a while.");
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Drain Life</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -225,25 +225,25 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn(); 
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color>. Monster is now poisoned.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. Monster is now poisoned.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 if(player.isPoisoned)
                 {
                     player.poisonDuration += spellDuration;
-                    GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color>.");
+                    GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>.");
                 }
                 else
                 {
                     player.IncreasePoisonDuration(spellDuration);
                     player.Poison();
-                    GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color>. You are now <color=green>poisoned</color>.");
+                    GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You are now <color=green>poisoned</color>.");
                 }
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Poison Bolt</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -257,7 +257,7 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rooted = true;
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);  
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Root</color>. Monster can't move!");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. Monster can't move!");
             }
         }
     }
@@ -270,17 +270,17 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().MakeInvisible();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Invisiblity</color>.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.invisibleDuration = 20 + player.__intelligence;
                 player.Invisible();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Invisiblity</color>.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Invisiblity</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -294,16 +294,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5), damageType.magic);
                 player.TakeDamage(5, damageType.normal);
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.TakeDamage(5, damageType.normal);
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color>. You feel piercing pain.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You feel piercing pain.");
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You read the <color=red>Book of Blood for Blood</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -315,16 +315,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.BloodRestore();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Restore</color>.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Restore</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Restore</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -345,16 +345,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 player.IncreaseBleedingDuration(20 - (player.__intelligence / 7));
                 player.Bleeding();
 
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding<color> now!");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You restore 25 health but you are <color=red>bleeding<color> now!");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Pact</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Blood Pact</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -370,16 +370,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                     player.CureBleeding();
                 }
 
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Cauterize</color>. You are no longer bleeding!");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You are no longer bleeding!");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Cauterize</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Cauterize</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -393,18 +393,18 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 if (player.isPoisoned)
                 {
                     player.CurePoison();
-                    GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color>. You are no longer poisoned!");
+                    GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You are no longer poisoned!");
                 }
-                else GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color> but nothing happens.");
+                else GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Remove Poison</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -417,16 +417,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.magic);
-                GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.normal);
-                GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart.</color> You feel piercing pain.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. You feel piercing pain.");
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You read the <color=green>Book of Poison Dart</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>. but nothing happens.");
             }
         }
     }
@@ -438,16 +438,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
             if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.Anoint();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Anoint</color>.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Anoint</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Anoint</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }
@@ -461,21 +461,21 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
                 if (player.isPoisoned)
                 {
                     player.CurePoison();
-                    GameManager.manager.UpdateMessages("You read the <color=red>Book of Purify</color>.");
+                    GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color>.");
                 }
                 else
                 {
-                    GameManager.manager.UpdateMessages("You read the <color=red>Book of Purify</color> but nothing happens.");
+                    GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
                 }
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Purify</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Book of Purify</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the book called <color=red>{I_name}</color> but nothing happens.");
             }
         }
     }

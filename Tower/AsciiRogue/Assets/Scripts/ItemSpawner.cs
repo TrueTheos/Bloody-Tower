@@ -30,6 +30,11 @@ public class ItemSpawner : MonoBehaviour
     private void Awake()
     {
         itemsToSpawn = allItems;
+
+        foreach (PotionSO potion in potions)
+        {
+            potion.previouslyDrank = potion.normalIdentifState;
+        }
     }
 
     public void Spawn()
@@ -207,7 +212,6 @@ public class ItemSpawner : MonoBehaviour
                 else if(itemToSpawn is PotionSO p)
                 {
                     int i = UnityEngine.Random.Range(1, 100);
-                    p.previouslyDrank = false;
                     if (i <= 9)
                     {
                         item.GetComponent<Item>()._BUC = Item.BUC.cursed;

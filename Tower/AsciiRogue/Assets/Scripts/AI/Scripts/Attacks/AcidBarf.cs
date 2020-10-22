@@ -8,20 +8,20 @@ public class AcidBarf : BasicAttack
     public BasicAttack ToCharge;
 
 
-    public override void Attack(RoamingNPC source, IUnit target)
+    public override void Calculate((RoamingNPC source, IUnit target)t)
     {
-        if (!source.attackCharged)
+        if (!t.source.attackCharged)
         {
-            source.attackCharged = true;
-            GameManager.manager.UpdateMessages($"<color={source.enemySO.E_color}>Sulyvan's Beast</color> starts coughing!");
-            source.nextAttack = this;
+            t.source.attackCharged = true;
+            GameManager.manager.UpdateMessages($"<color={t.source.enemySO.E_color}>Sulyvan's Beast</color> starts coughing!");
+            t.source.nextAttack = this;
         }
         else
         {
-            source.attackCharged = false;
-            GameManager.manager.UpdateMessages($"<color={source.enemySO.E_color}>Sulyvan's Beast</color> barfs a puddle of <color=green>acid</color> onto" +(target is PlayerStats ? "the player!" : target.noun));
+            t.source.attackCharged = false;
+            GameManager.manager.UpdateMessages($"<color={t.source.enemySO.E_color}>Sulyvan's Beast</color> barfs a puddle of <color=green>acid</color> onto" +(t.target is PlayerStats ? "the player!" : t.target.noun));
             GameManager.manager.playerStats.MeltItem();
-            ToCharge.Attack(source,target);
+            ToCharge.Calculate((t.source, t.target));
         }
     }
 

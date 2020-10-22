@@ -98,7 +98,7 @@ public class HelperTurnBehaviour : BasicTurnBehaviour
                 var att = GetAttack(t);
                 if (att.InRange(t.__position, npc.pos))
                 {
-                    att.Attack(t, npc);
+                    att.Calculate((t, npc));
                     return;
                 }
                 else

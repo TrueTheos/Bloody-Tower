@@ -43,18 +43,28 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                 t.CurrentTarget = null;
             }
 
+            // check for out of sight enemy
+            if (!(t.CurrentTarget == null))
+            {
+                if (!FoV.InLineOfSight(t.pos, t.CurrentTarget.pos))
+                {
+                    // out of sight out of mind i guess
+                    t.LastKnownTargetPos = t.CurrentTarget.pos;
+
+                    t.CurrentTarget = null;
+                    // TODO: make enemy run to last known position
+                }
+            }
+
 
             // check if current target is still valid
             if (!(t.CurrentTarget == null))
-            {
-                // TODO: make it so that we loose a target when out of sight
-                
+            {                
                 // we are targeting something
                 // range here
                 if (MapUtility.MoveDistance(t.pos,t.CurrentTarget.pos)==1)
                 {
                     // the target is in attackrange so we dont change anything
-
                 }
                 else
                 {
@@ -169,7 +179,7 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                 var att = GetAttack(t);
                 if (att.InRange( t.__position,t.CurrentTarget.pos ))
                 {
-                    att.Attack(t, t.CurrentTarget);
+                    att.Calculate((t, t.CurrentTarget));
                     return;
                 }
                 /*

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI/Attack/Basic")]
-public class BasicAttack : BaseAIBehaviour<RoamingNPC>
+public class BasicAttack : BaseAIBehaviour<(RoamingNPC source,IUnit target)>
 {
     public List<BasicAttack> ToAttack;
 
@@ -17,9 +17,9 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
         return dis >= MinRange && dis <= MaxRange;
     }
 
-    public virtual void Attack(RoamingNPC source, IUnit target)
+    public override void Calculate((RoamingNPC source, IUnit target) t)
     {
-        if (source.isInvisible) source.RemoveInvisibility();
+        if (t.source.isInvisible) t.source.RemoveInvisibility();
         try
         {
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
@@ -30,16 +30,16 @@ public class BasicAttack : BaseAIBehaviour<RoamingNPC>
         catch { }
 
         BasicAttack attack = null;
-        if (source.nextAttack != null)
+        if (t.source.nextAttack != null)
         {
-            attack = source.nextAttack;
-            attack.Attack(source,target);
-            source.nextAttack = null;
+            attack = t.source.nextAttack;
+            attack.Calculate((t.source, t.target));
+            t.source.nextAttack = null;
         }
         else
         {
             attack = ToAttack[Random.Range(0, ToAttack.Count)];
-            attack.Attack(source,target);
+            attack.Calculate((t.source, t.target));
         }
     }
 }

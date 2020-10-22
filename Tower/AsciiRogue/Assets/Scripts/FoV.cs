@@ -87,6 +87,18 @@ public class FoV
 
         return positions;
     }
+    
+    public static bool InLineOfSight(Vector2Int origin, Vector2Int destination)
+    {
+        foreach (var cell in GetCellsAlongLine(origin,destination))
+        {
+            if (MapManager.map[cell.x,cell.y].isOpaque)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /*static public void VisibilityCheck(Vector2Int position)
     {

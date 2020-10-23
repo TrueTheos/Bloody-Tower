@@ -19,6 +19,9 @@ public class PrefabRoom : ScriptableObject
     [Header("} - Statue")]
     public string room;
     public int height, width;
+    [Space]
+    [Tooltip("Omni AI which should be spawned with the room")]
+    public PrefabAIDictionary OmniAIs;
 
     [Header("Enemies")]
     public List<EnemiesScriptableObject> enemyNames = new List<EnemiesScriptableObject>();

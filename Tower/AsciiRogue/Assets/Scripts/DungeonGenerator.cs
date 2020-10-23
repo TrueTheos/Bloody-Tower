@@ -1495,6 +1495,10 @@ public class DungeonGenerator : MonoBehaviour
             int h = 0;
             if (dungeonGenerator.prefabRooms.Count > 0)
             {
+                // TODO: REMOVE THIS. having a global variable for something that could exist multiple times
+                // should not be used this way. Instead move the <dungeonGenerator.prefabRoom> to a field in structure
+                // like: "centralRoom.Prefab = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];"
+                // Having something like that as a public/global field just adds pollution
                 dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
                 w =  dungeonGenerator.prefabRoom.height;
                 h = dungeonGenerator.prefabRoom.width;
@@ -1705,6 +1709,12 @@ public class DungeonGenerator : MonoBehaviour
                         m.set(loc.x, loc.y, dungeonGenerator.prefabRoom.room[i]);
                     }
                     i++;
+                }
+
+                foreach (var omni in dungeonGenerator.prefabRoom.OmniAIs)
+                {
+
+
                 }
              
             }

@@ -82,35 +82,35 @@ public static class Targeting
             changePosition = Position;
             if (PlayerMovement.playerMovement.canMove) PlayerMovement.playerMovement.canMove = false;
 
-            if ((Input.GetKeyDown(KeyCode.W) ||Input.GetKeyDown( KeyCode.Keypad8))&& CellIsAvailable(Position.x, Position.y + 1))
+            if ((Controls.GetKeyDown(Controls.Inputs.MoveUp))&& CellIsAvailable(Position.x, Position.y + 1))
             {
                 MoveTargeting(0, 1);
             }
-            else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Keypad2)) && CellIsAvailable(Position.x, Position.y - 1))
+            else if ((Controls.GetKeyDown(Controls.Inputs.MoveDown)) && CellIsAvailable(Position.x, Position.y - 1))
             {
                 MoveTargeting(0, -1);
             }
-            else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Keypad4)) && CellIsAvailable(Position.x - 1, Position.y))
+            else if (( Controls.GetKeyDown(Controls.Inputs.MoveLeft)) && CellIsAvailable(Position.x - 1, Position.y))
             {
                 MoveTargeting(-1, 0);
             }
-            else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Keypad6)) && CellIsAvailable(Position.x + 1, Position.y))
+            else if ((Controls.GetKeyDown(Controls.Inputs.MoveRight)) && CellIsAvailable(Position.x + 1, Position.y))
             {
                 MoveTargeting(1, 0);
             }
-            else if ( Input.GetKeyDown(KeyCode.Keypad1) && CellIsAvailable(Position.x -1, Position.y -1))
+            else if ( Controls.GetKeyDown(Controls.Inputs.MoveDownLeft) && CellIsAvailable(Position.x -1, Position.y -1))
             {
                 MoveTargeting(-1,-1);
             }
-            else if ( Input.GetKeyDown(KeyCode.Keypad3) && CellIsAvailable(Position.x + 1, Position.y - 1))
+            else if ( Controls.GetKeyDown(Controls.Inputs.MoveDownRight) && CellIsAvailable(Position.x + 1, Position.y - 1))
             {
                 MoveTargeting(1, -1);
             }
-            else if ( Input.GetKeyDown(KeyCode.Keypad9) && CellIsAvailable(Position.x + 1, Position.y + 1))
+            else if ( Controls.GetKeyDown(Controls.Inputs.MoveUpRight) && CellIsAvailable(Position.x + 1, Position.y + 1))
             {
                 MoveTargeting(1, 1);
             }
-            else if (Input.GetKeyDown(KeyCode.Keypad7) && CellIsAvailable(Position.x - 1, Position.y + 1))
+            else if (Controls.GetKeyDown(Controls.Inputs.MoveUpLeft) && CellIsAvailable(Position.x - 1, Position.y + 1))
             {
                 MoveTargeting(-1, 1);
             }

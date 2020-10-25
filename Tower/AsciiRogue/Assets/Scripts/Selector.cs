@@ -28,7 +28,7 @@ public class Selector : MonoBehaviour
 
     void Update()
     {    
-        if(Input.GetKey(KeyCode.LeftControl))
+        if(Controls.GetKey(Controls.Inputs.LookKey))
         {
             if (!active)
             {
@@ -40,28 +40,28 @@ public class Selector : MonoBehaviour
                 currentPos = MapManager.playerPos;
             }
 
-            if (Input.GetKeyUp(KeyCode.W))
+            if (Controls.GetKeyUp(Controls.Inputs.MoveUp))
             {
                 currentPos.y += 1;
                 selector.anchoredPosition = new Vector2(currentPos.x * 14 + 26, currentPos.y * 20 - 455);
 
                 SelectedTile(currentPos.x, currentPos.y);
             }
-            if (Input.GetKeyUp(KeyCode.S))
+            if (Controls.GetKeyUp(Controls.Inputs.MoveDown))
             {
                 currentPos.y -= 1;
                 selector.anchoredPosition = new Vector2(currentPos.x * 14 + 26, currentPos.y * 20 - 455);
 
                 SelectedTile(currentPos.x, currentPos.y);
             }
-            if (Input.GetKeyUp(KeyCode.A))
+            if (Controls.GetKeyUp(Controls.Inputs.MoveLeft))
             {
                 currentPos.x -= 1;
                 selector.anchoredPosition = new Vector2(currentPos.x * 14 + 26, currentPos.y * 20 - 455);
 
                 SelectedTile(currentPos.x, currentPos.y);
             }
-            if (Input.GetKeyUp(KeyCode.D))
+            if (Controls.GetKeyUp(Controls.Inputs.MoveRight))
             {
                 currentPos.x += 1;
                 selector.anchoredPosition = new Vector2(currentPos.x * 14 + 26, currentPos.y * 20 - 455);
@@ -69,12 +69,12 @@ public class Selector : MonoBehaviour
                 SelectedTile(currentPos.x, currentPos.y);
             }
 
-            if(Input.GetKeyUp(KeyCode.Return) && MapManager.map[currentPos.x, currentPos.y].enemy)
+            if(Controls.GetKeyUp(Controls.Inputs.Use) && MapManager.map[currentPos.x, currentPos.y].enemy)
             {
                 GameManager.manager.gameObject.GetComponent<Bestiary>().UpdateText(MapManager.map[currentPos.x, currentPos.y].enemy.GetComponent<RoamingNPC>().enemySO);
             }
         }
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        if (Controls.GetKeyUp(Controls.Inputs.LookKey))
         {
             active = false;
 

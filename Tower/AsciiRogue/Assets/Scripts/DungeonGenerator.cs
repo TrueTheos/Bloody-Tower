@@ -1511,7 +1511,6 @@ public class DungeonGenerator : MonoBehaviour
                     centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
                 }
 
-
                 m.carve(centralRoom, '.');
 
                 List<Structure> structs = new List<Structure>
@@ -1543,6 +1542,7 @@ public class DungeonGenerator : MonoBehaviour
 
                     m.carve(newStruct, '.');
                     //Console.WriteLine("New {0}", newStruct.toString());
+
 
                     // add doors
                     List<Location> candidates = anchor.findCommonBorder(newStruct);
@@ -1713,6 +1713,12 @@ public class DungeonGenerator : MonoBehaviour
                         m.set(loc.x, loc.y, dungeonGenerator.prefabRoom.room[i]);
                     }
                     i++;
+                }
+
+                foreach (var omni in dungeonGenerator.prefabRoom.OmniAIs)
+                {
+
+
                 }
              
             }

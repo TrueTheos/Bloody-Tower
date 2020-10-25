@@ -112,6 +112,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if (!Controls.IsInitialized)
+        {
+            Debug.Log("whoops");
+        }
         fv = GetComponent<FOVNEW>();
 
         manager = this;
@@ -172,7 +176,7 @@ public class GameManager : MonoBehaviour
 
         if (isPlayerTurn)
         {
-            if (Input.GetKeyDown(KeyCode.T) && !inventoryOpen && !openGrimoire && !IsThrowingItem)
+            if (Controls.GetKeyDown(Controls.Inputs.TechnicOpen) && !inventoryOpen && !openGrimoire && !IsThrowingItem)
             {
                 if (!SkillsOpen)
                 {
@@ -187,7 +191,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.G) && !inventoryOpen && !SkillsOpen && !IsThrowingItem)
+            if(Controls.GetKeyDown(Controls.Inputs.GrimoirOpen) && !inventoryOpen && !SkillsOpen && !IsThrowingItem)
             {
                 if(!openGrimoire)
                 {
@@ -209,7 +213,7 @@ public class GameManager : MonoBehaviour
                     CloseEQ();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.I) && !choosingWeapon && !openGrimoire && !SkillsOpen && !IsThrowingItem)
+            if (Controls.GetKeyDown(Controls.Inputs.InventoryOpen) && !choosingWeapon && !openGrimoire && !SkillsOpen && !IsThrowingItem)
             {
                 if (!inventoryOpen)
                 {
@@ -221,14 +225,14 @@ public class GameManager : MonoBehaviour
                     CloseEQ();
                 }               
             }
-            else if (Input.GetKeyDown(KeyCode.Escape))
+            else if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
             {
                 CloseEQ();
             }
 
             if (inventoryOpen)
             {
-                if (Input.GetButtonDown("Use") && !choosingWeapon)
+                if (Controls.GetKeyDown(Controls.Inputs.Use) && !choosingWeapon)
                 {
                     decisions.text = "";
 
@@ -325,7 +329,7 @@ public class GameManager : MonoBehaviour
                         DecisionTurn();
                     }                                     
                 }
-                else if(Input.GetButtonDown("Use") && choosingWeapon && playerStats.itemsInEqGO[selectedItem].iso is WeaponsSO) //ADD GEM TO THE SOCKET
+                else if(Controls.GetKeyDown(Controls.Inputs.Use) && choosingWeapon && playerStats.itemsInEqGO[selectedItem].iso is WeaponsSO) //ADD GEM TO THE SOCKET
                 {
                     choosingWeapon = false;
                     choosenWeapon = playerStats.itemsInEqGO[selectedItem];
@@ -334,7 +338,7 @@ public class GameManager : MonoBehaviour
                     FinishPlayersTurn();
                 }
 
-                if (Input.GetKeyDown(KeyCode.Keypad2))
+                if (Controls.GetKeyDown(Controls.Inputs.InventoryDown))
                 {
                     if (selectedItem < playerStats.itemsInEqGO.Count - 1)
                     {
@@ -349,7 +353,7 @@ public class GameManager : MonoBehaviour
                         UpdateItemStats(playerStats.itemsInEqGO[selectedItem]);
                     }
                 }
-                else if (Input.GetKeyDown(KeyCode.Keypad8))
+                else if (Controls.GetKeyDown(Controls.Inputs.InventoryUp))
                 {
                     if (selectedItem > 0)
                     {
@@ -371,7 +375,7 @@ public class GameManager : MonoBehaviour
 
             if (openGrimoire)
             {
-                if (Input.GetButtonDown("Use") && playerStats.rememberedSpells.Count > 0)
+                if (Controls.GetKeyDown(Controls.Inputs.Use) && playerStats.rememberedSpells.Count > 0)
                 {
                     GOdec.SetActive(true);
                     decisions.text = "1. Cast";
@@ -381,7 +385,7 @@ public class GameManager : MonoBehaviour
                     DecisionTurn();
                 }
 
-                if (Input.GetKeyDown(KeyCode.Keypad2))
+                if (Controls.GetKeyDown(Controls.Inputs.GrimoirDown))
                 {
                     if (selectedItem < playerStats.rememberedSpells.Count - 1)
                     {
@@ -396,7 +400,7 @@ public class GameManager : MonoBehaviour
                         UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
                     }
                 }
-                else if (Input.GetKeyDown(KeyCode.Keypad8))
+                else if (Controls.GetKeyDown(Controls.Inputs.GrimoirUp))
                 {
                     if (selectedItem > 0)
                     {
@@ -420,12 +424,12 @@ public class GameManager : MonoBehaviour
             {
                 if (!SkillCasting)
                 {
-                    if (Input.GetKeyDown(KeyCode.Keypad2))
+                    if (Controls.GetKeyDown(Controls.Inputs.TechnicDown))
                     {
                         // move down one
                         SelectedSkillIndex++;
                     }
-                    if (Input.GetKeyDown(KeyCode.Keypad8))
+                    if (Controls.GetKeyDown(Controls.Inputs.TechnicUp))
                     {
                         SelectedSkillIndex--;
                     }
@@ -434,7 +438,7 @@ public class GameManager : MonoBehaviour
 
                     UpdateSkillText();
                     UpdateSkillStats();
-                    if (Input.GetButtonDown("Use"))
+                    if (Controls.GetKeyDown(Controls.Inputs.Use))
                     {
                         if (VisibleSkills[SelectedSkillIndex].IsCastable(playerStats))
                         {
@@ -483,7 +487,7 @@ public class GameManager : MonoBehaviour
 
                     Selector.Current.SelectedTile(Targeting.Position.x, Targeting.Position.y);
                     
-                    if (Input.GetButtonDown("Use"))
+                    if (Controls.GetKeyDown(Controls.Inputs.Use))
                     {
                         if (LastSkill.IsValidTarget())
                         {
@@ -493,7 +497,7 @@ public class GameManager : MonoBehaviour
                             dungeonGenerator.DrawMap(true, MapManager.map);
                         }
                     }
-                    if (Input.GetKeyDown(KeyCode.Escape))
+                    if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
                     {
                         SkillCasting = false;
                         CloseEQ();
@@ -526,7 +530,7 @@ public class GameManager : MonoBehaviour
                 
                 Selector.Current.SelectedTile(Targeting.Position.x, Targeting.Position.y);
 
-                if (Input.GetButtonDown("Use"))
+                if (Controls.GetKeyDown(Controls.Inputs.Use))
                 {
                     if (ItemThrowHelper.IsValidTarget())
                     {
@@ -537,7 +541,7 @@ public class GameManager : MonoBehaviour
                         IsThrowingItem = false;
                     }
                 }
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
                 {
                     IsThrowingItem = false;
                     CloseEQ();
@@ -549,7 +553,7 @@ public class GameManager : MonoBehaviour
         
         if(decidingSpell)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice1))
             {
                 if(playerStats.rememberedSpells[selectedItem] is SpellbookSO book)
                 {
@@ -561,21 +565,21 @@ public class GameManager : MonoBehaviour
 
         if (deciding && !choosingWeapon)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) //drop item
+            if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice1)) //drop item
             {
                 if (itemOption1 !="")
                 {
                     try { SendMessage(itemOption1); } catch { }
                 }                
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            else if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice2))
             {
                 if (itemOption2 != "")
                 {
                     try { SendMessage(itemOption2); } catch { }
                 }                
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            else if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice3))
             {
                 if (itemOption3 != "")
                 {
@@ -583,7 +587,7 @@ public class GameManager : MonoBehaviour
                 }                
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.I))
+            if (Controls.GetKeyDown(Controls.Inputs.CancelButton) || Controls.GetKeyDown(Controls.Inputs.InventoryOpen))
             {
                 decisionMade = true;
                 FinishPlayersTurn();
@@ -601,20 +605,20 @@ public class GameManager : MonoBehaviour
         {
             dungeonGenerator.screen.text = playerStats.deadText;
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Controls.GetKeyDown(Controls.Inputs.Use))
             {
                 Application.LoadLevel(0);
             }
         }   
         
-        if(Input.GetKeyDown(KeyCode.C))
+        if(Controls.GetKeyDown(Controls.Inputs.CheatOpen))
         {
             cheatMenu = true;
         }
         
         if(cheatMenu)
         {
-            if(Input.GetKeyDown(KeyCode.Return))
+            if(Controls.GetKeyDown(Controls.Inputs.CheatActivate))
             {
                 cheatMenu = false;
 

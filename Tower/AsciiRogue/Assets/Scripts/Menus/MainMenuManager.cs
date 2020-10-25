@@ -87,7 +87,7 @@ public class MainMenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown( KeyCode.Space))
+        if (Controls.GetKeyDown(Controls.Inputs.Use))
         {
             if (InMenu)
             {
@@ -129,7 +129,7 @@ public class MainMenuManager : MonoBehaviour
             }
             
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
         {
             if (InMenu)
             {
@@ -151,7 +151,7 @@ public class MainMenuManager : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown( KeyCode.DownArrow))
+        if (Controls.GetKeyDown(Controls.Inputs.MoveDown))
         {
             if (InMenu)
             {
@@ -172,7 +172,7 @@ public class MainMenuManager : MonoBehaviour
                 }
             }         
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Controls.GetKeyDown(Controls.Inputs.MoveUp))
         {
             if (InMenu)
             {

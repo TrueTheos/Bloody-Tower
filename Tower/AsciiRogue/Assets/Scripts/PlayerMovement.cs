@@ -44,38 +44,38 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vector2Int move = new Vector2Int();
 
-                if (Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKey(KeyCode.Keypad8))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveUp) || Controls.GetKey(Controls.Inputs.MoveUp))
                 {
                     move.y = 1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKey(KeyCode.Keypad2))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveDown) || Controls.GetKey(Controls.Inputs.MoveDown))
                 {
                     move.y=-1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKey(KeyCode.Keypad4))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveLeft) || Controls.GetKey(Controls.Inputs.MoveLeft))
                 {
                     move.x = -1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad6) || Input.GetKey(KeyCode.Keypad6))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveRight) || Controls.GetKey(Controls.Inputs.MoveRight))
                 {
                     move.x = 1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKey(KeyCode.Keypad7))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveUpLeft) || Controls.GetKey(Controls.Inputs.MoveUpLeft))
                 {
                     move.x = -1;
                     move.y = 1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKey(KeyCode.Keypad9))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveUpRight) || Controls.GetKey(Controls.Inputs.MoveUpRight))
                 {
                     move.x = 1;
                     move.y = 1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKey(KeyCode.Keypad3))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveDownRight) || Controls.GetKey(Controls.Inputs.MoveDownRight))
                 {
                     move.x = 1;
                     move.y = -1;
                 }
-                if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKey(KeyCode.Keypad1))
+                if (Controls.GetKeyDown(Controls.Inputs.MoveDownLeft) || Controls.GetKey(Controls.Inputs.MoveDownLeft))
                 {
                     move.x = -1;
                     move.y = -1;
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
             
             Selector.Current.SelectedTile(position.x, position.y);
 
-            if (Input.GetButtonUp("Use"))
+            if (Controls.GetKeyUp(Controls.Inputs.Use))
             {
                 if (MapManager.map[position.x, position.y].item != null)
                 {

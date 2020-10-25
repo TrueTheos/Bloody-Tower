@@ -1548,31 +1548,34 @@ public class DungeonGenerator : MonoBehaviour
 
                 // add doors
                 List<Location> candidates = anchor.findCommonBorder(newStruct);
-                Location l = candidates[Rand.range(0, candidates.Count)];
-                if (anchor.isRoom() || newStruct.isRoom())
+                if (candidates.Count>0)
                 {
-                    newStruct.doors.Add(new Vector2Int(l.x, l.y));
-                    m.set(l.x, l.y, '+'); // at least one of them is a room. Connect them with a door
-                } else
-                {
-                    m.set(l.x, l.y, '.'); // both corridors. connect with open space
-                }
+                    Location l = candidates[Rand.range(0, candidates.Count)];
+                    if (anchor.isRoom() || newStruct.isRoom())
+                    {
+                        newStruct.doors.Add(new Vector2Int(l.x, l.y));
+                        m.set(l.x, l.y, '+'); // at least one of them is a room. Connect them with a door
+                    }
+                    else
+                    {
+                        m.set(l.x, l.y, '.'); // both corridors. connect with open space
+                    }
+                    // now add more doors to other nearby structures
+                    foreach (Structure other in structs)
+                    {
+                        if (other == anchor)
+                            continue;
+                        candidates = other.findCommonBorder(newStruct);
+                        if (candidates.Count == 0)
+                            continue;
+                        if (Rand.range(0, 100) < 33)
+                            continue;
+                        l = candidates[Rand.range(0, candidates.Count)];
+                        m.set(l.x, l.y, (other.isCorridor() && anchor.isCorridor()) ? '.' : '+');
+                    }
 
-                // now add more doors to other nearby structures
-                foreach (Structure other in structs)
-                {
-                    if (other == anchor)
-                        continue;
-                    candidates = other.findCommonBorder(newStruct);
-                    if (candidates.Count == 0)
-                        continue;
-                    if (Rand.range(0, 100) < 33)
-                        continue;
-                    l = candidates[Rand.range(0, candidates.Count)];
-                    m.set(l.x, l.y, (other.isCorridor() && anchor.isCorridor()) ? '.' : '+');
+                    structs.Add(newStruct);
                 }
-
-                structs.Add(newStruct);
             }
 
             // furnish the dungeon

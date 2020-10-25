@@ -13,7 +13,7 @@ public class Help : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Slash))
+        if(Controls.GetKeyDown(Controls.Inputs.Help))
         {
             manager.UpdateMessages("<color=yellow>7 8 9</color>");
             manager.UpdateMessages("<color=yellow>4   6 - Movement</color>");

@@ -580,7 +580,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Controls.GetKeyDown(Controls.Inputs.Use))
             {
                 if (usedWand.IsValidTarget())
                 {
@@ -627,7 +627,7 @@ public class PlayerStats : MonoBehaviour, IUnit
             
             DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
 
-            if (Input.GetButtonDown("Use"))
+            if (Controls.GetKeyDown(Controls.Inputs.Use))
             {
                 if (usedScrollOrBook is IRestrictTargeting target)
                 {
@@ -650,7 +650,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                 }
                 DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
             }
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
             {
                 PlayerMovement.playerMovement.canMove = true;
                 Targeting.IsTargeting = false;
@@ -677,7 +677,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                 gameManager.UpdateMessages("\n <i>[1. Help] [2. Refuse] [3. Cancel]</i>");
             }
 
-            if(Input.GetKeyDown(KeyCode.Alpha1))
+            if(Controls.GetKeyDown(Controls.Inputs.InventoryChoice1))
             {               
                 gameManager.UpdateMessages("\n <b><color=red>Grim</color></b>: <i>Very well. I am Grim, I am grateful for your help. As I promised, in return for your help...</i>");
 
@@ -694,14 +694,14 @@ public class PlayerStats : MonoBehaviour, IUnit
                 npcDialogue.enemySO.finishedDialogue = true;
                 npcDialogue = null;              
             }
-            if(Input.GetKeyDown(KeyCode.Alpha2))
+            if(Controls.GetKeyDown(Controls.Inputs.InventoryChoice2))
             {
                 gameManager.UpdateMessages("\n <b><color=red>???</color></b>: <i>Yes, well, why should you? But if you change your mind, give me a shout, eh?</i>");
                 dialogue = false;
                 PlayerMovement.playerMovement.canMove = true;
                 npcDialogue = null;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha3))
+            if(Controls.GetKeyDown(Controls.Inputs.InventoryChoice3))
             {
                 PlayerMovement.playerMovement.canMove = true;
                 gameManager.UpdateMessages("\n <b><color=red>???</color></b>: <i>I will wait...</i>");

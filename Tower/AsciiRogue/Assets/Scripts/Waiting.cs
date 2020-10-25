@@ -15,7 +15,7 @@ public class Waiting : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.KeypadPeriod) && playerMovement.canMove && !manager.waiting && manager.isPlayerTurn)
+        if(Controls.GetKeyDown(Controls.Inputs.Wait) && playerMovement.canMove && !manager.waiting && manager.isPlayerTurn)
         {
             manager.waitingCoroutine = manager.WaitTurn(1);
             manager.StartCoroutine(manager.waitingCoroutine);

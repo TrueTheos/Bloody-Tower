@@ -15,7 +15,7 @@ public class WhatICanSee : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad0))
+        if(Controls.GetKeyDown(Controls.Inputs.WhatCanISee))
         {
             Debug.Log("LOLO");
             fv.Compute(MapManager.playerPos, playerStats.viewRange);

@@ -28,7 +28,9 @@ MonoBehaviour:
   lightFactor: 0
   normalIdentifState: 0
   pickupableByMonsters: 0
-  effect: '<color=red>Blood cost</color>: 10'
+  effect: 'Causes invisibility.
+
+    <color=red>Blood cost</color>: 10'
   worth: 0
   SkillsToLearn: []
   bonusToHealth: 0

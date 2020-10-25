@@ -24,10 +24,13 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 5
   I_whereToPutIt: 0
+  I_damageType: 0
+  lightFactor: 0
   normalIdentifState: 1
   pickupableByMonsters: 0
-  effect: +3 Str
+  effect: +3 Str, Can be combined with weapons
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
   bonusToStrength: 0
   bonusToIntelligence: 0

@@ -29,7 +29,7 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 'Mimic - 20HP / 11STR / 11DEX/ 6INT / 8END
+  enemyInfo: 'Mimic - 20 HP / 11 STR / 11 DEX/ 6 INT / 8 END
 
     Can open doors. '
   leavesCorpse: 1

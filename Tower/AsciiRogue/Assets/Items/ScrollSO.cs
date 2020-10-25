@@ -42,12 +42,14 @@ public class ScrollSO : ItemScriptableObject
     {
         if (GameManager.manager.playerStats.isBlind)
         {
-            GameManager.manager.UpdateMessages("You can't read because you are <color=green>blind</color>!");
+            GameManager.manager.UpdateMessages($"You can't read because you are <color=green>blind</color>!");
             return;
         }
         if (_type == type.self)
         {
             UseSpell(foo);
+            GameManager.manager.ApplyChangesInInventory(itemObject.iso);
+            GameManager.manager.UpdateItemStats();
         }
         else
         {
@@ -88,7 +90,7 @@ public class ScrollSO : ItemScriptableObject
                     }
                     else
                     {
-                        GameManager.manager.UpdateMessages("You can't use this scroll while you are <color=red>bleeding.</color>");
+                        GameManager.manager.UpdateMessages($"You can't use this scroll while you are <color=red>bleeding.</color>");
                     }
                 }               
                 break;
@@ -136,25 +138,25 @@ public class ScrollSO : ItemScriptableObject
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().dotDuration = spellDuration;
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().DamageOverTurn();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>. Monster is now poisoned.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. Monster is now poisoned.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 if (player.isPoisoned)
                 {
                     player.poisonDuration += spellDuration;
-                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>.");
+                    GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>.");
                 }
                 else
                 {
                     player.IncreasePoisonDuration(spellDuration);
                     player.Poison();
-                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color>. You are now <color=green>poisoned</color>.");
+                    GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You are now <color=green>poisoned</color>.");
                 }
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Poison Bolt</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -168,7 +170,7 @@ public class ScrollSO : ItemScriptableObject
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rooted = true;
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().rootDuration = 10 + Mathf.FloorToInt(player.__intelligence / 10);
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Root</color>. Monster can't move!");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. Monster can't move!");
             }
         }
     }
@@ -181,17 +183,17 @@ public class ScrollSO : ItemScriptableObject
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().MakeInvisible();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisiblity</color>.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.invisibleDuration = 20 + player.__intelligence;
                 player.Invisible();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisiblity</color>.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Invisiblity</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -204,17 +206,17 @@ public class ScrollSO : ItemScriptableObject
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(Mathf.FloorToInt((20 + player.__intelligence) / 5), ItemScriptableObject.damageType.magic);
-                player.TakeDamage(5, damageType.normal);
-                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
+                player.TakeDamage(5, damageType.magic);
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You dealt {(20 + player.__intelligence) / 5} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
-                player.TakeDamage(5, damageType.normal);
-                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color>. You feel piercing pain.");
+                player.TakeDamage(5, damageType.magic);
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You feel piercing pain.");
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of Blood for Blood</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -226,16 +228,16 @@ public class ScrollSO : ItemScriptableObject
             if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.BloodRestore();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color>.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Restore</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -256,16 +258,16 @@ public class ScrollSO : ItemScriptableObject
                 player.IncreaseBleedingDuration(20 - (player.__intelligence / 7));
                 player.Bleeding();
 
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color>. You restore 25 health but you are <color=red>bleeding</color> now!");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You restore 25 health but you are <color=red>bleeding</color> now!");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Blood Pact</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -281,16 +283,16 @@ public class ScrollSO : ItemScriptableObject
                     player.CureBleeding();
                 }
 
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color>. You are no longer bleeding!");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You are no longer bleeding!");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Cauterize</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -304,18 +306,18 @@ public class ScrollSO : ItemScriptableObject
                 if (player.isPoisoned)
                 {
                     player.CurePoison();
-                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color>. You are no longer poisoned!");
+                    GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You are no longer poisoned!");
                 }
-                else GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color> but nothing happens.");
+                else GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Remove Poison</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -328,16 +330,16 @@ public class ScrollSO : ItemScriptableObject
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.magic);
-                GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You dealt {10 + Mathf.FloorToInt(player.__intelligence / 7)} damage to the monster.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.TakeDamage(10 + Mathf.FloorToInt(player.__intelligence / 7), damageType.normal);
-                GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart.</color> You feel piercing pain.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>. You feel piercing pain.");
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You read the <color=green>Scroll of Poison Dart</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -349,16 +351,16 @@ public class ScrollSO : ItemScriptableObject
             if (MapManager.map[Targeting.Position.x, Targeting.Position.y].hasPlayer)
             {
                 player.Anoint();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color>.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>.");
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Anoint</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }
@@ -372,21 +374,21 @@ public class ScrollSO : ItemScriptableObject
                 if (player.isPoisoned)
                 {
                     player.CurePoison();
-                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color>.");
+                    GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color>.");
                 }
                 else
                 {
-                    GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color> but nothing happens.");
+                    GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
                 }
             }
             else if (MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy != null)
             {
                 MapManager.map[Targeting.Position.x, Targeting.Position.y].enemy.GetComponent<RoamingNPC>().WakeUp();
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
             else
             {
-                GameManager.manager.UpdateMessages("You read the <color=red>Scroll of Purify</color> but nothing happens.");
+                GameManager.manager.UpdateMessages($"You read the <color=red>Scroll of {I_name}</color> but nothing happens.");
             }
         }
     }

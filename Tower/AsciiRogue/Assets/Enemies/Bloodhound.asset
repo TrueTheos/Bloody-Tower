@@ -29,9 +29,10 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 'Bloodhound - 38HP / 15STR / 19DEX/ 15INT / 15END
+  enemyInfo: 'Bloodhound - 38 HP / 15 STR / 19 DEX/ 15 INT / 15 END
 
-    Can''t open doors.'
+    Can''t open
+    doors.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

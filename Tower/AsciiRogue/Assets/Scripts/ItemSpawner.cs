@@ -30,6 +30,11 @@ public class ItemSpawner : MonoBehaviour
     private void Awake()
     {
         itemsToSpawn = allItems;
+
+        foreach (PotionSO potion in potions)
+        {
+            potion.previouslyDrank = potion.normalIdentifState;
+        }
     }
 
     public void Spawn()

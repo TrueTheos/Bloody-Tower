@@ -29,7 +29,7 @@ MonoBehaviour:
   attacks: 0100000002000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 'Ahogog - 30HP / 15STR / 15DEX/ 10INT / 15END
+  enemyInfo: 'Ahogog - 30 HP / 15 STR / 15 DEX/ 10 INT / 15 END
 
     Can open doors.'
   leavesCorpse: 1

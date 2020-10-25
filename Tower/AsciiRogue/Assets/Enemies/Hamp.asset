@@ -29,10 +29,10 @@ MonoBehaviour:
   attacks: 01000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 'Hamp - 4HP / 4STR / 15DEX/ 4INT / 4END
+  enemyInfo: 'Hamp - 4 HP / 4 STR / 15 DEX/ 4 INT / 4 END
 
-    Can''t open doors. Poisonous
-    attacks.'
+    Can''t open doors.
+    Poisonous attacks.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

@@ -255,7 +255,8 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (MapManager.map[x, y].enemy != null)
                     {
-                        MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().TestToWakeUp();
+                        //MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().TestToWakeUp(); //TEST TO WAKE 
+                        MapManager.map[x, y].enemy.GetComponent<RoamingNPC>().WakeUp(); //WAKE UP 100%
                     }
                 }
                 catch { }

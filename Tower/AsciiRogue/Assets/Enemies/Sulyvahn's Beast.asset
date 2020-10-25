@@ -29,7 +29,7 @@ MonoBehaviour:
   attacks: 0400000003000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 
+  enemyInfo: Sulyvahn's Beast - ???
   leavesCorpse: 1
   isBoss: 1
   canOpenDoor: 0

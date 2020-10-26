@@ -49,10 +49,10 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
                 MapManager.map[t.__position.x, t.__position.y].baseChar = t.EnemySymbol;
                 MapManager.map[t.__position.x, t.__position.y].exploredColor = new Color(0.2784f, 0, 0);
                 MapManager.map[t.__position.x, t.__position.y].letter = "";
-            }
 
-            corpse.enemyBody = t.enemySO;
-            MapManager.map[t.__position.x, t.__position.y].structure = corpse;
+                corpse.enemyBody = t.enemySO;
+                MapManager.map[t.__position.x, t.__position.y].structure = corpse;
+            }      
         }
         else
         {

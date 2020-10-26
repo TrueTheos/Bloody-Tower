@@ -17,6 +17,31 @@ public class BasicAttack : BaseAIBehaviour<(RoamingNPC source,IUnit target)>
         return dis >= MinRange && dis <= MaxRange;
     }
 
+    public virtual bool BlobInRange(Vector2Int a, Vector2Int b)
+    {
+        if (MapUtility.MoveDistance(a, b) >= MinRange && MapUtility.MoveDistance(a, b) <= MinRange)
+        {
+            return true;
+        }
+        else if (MapUtility.MoveDistance(new Vector2Int(a.x, a.y + 1), b) >= MinRange && MapUtility.MoveDistance(new Vector2Int(a.x, a.y + 1), b) <= MinRange)
+        {
+            return true;
+        }
+        else if (MapUtility.MoveDistance(new Vector2Int(a.x, a.y - 1), b) >= MinRange && MapUtility.MoveDistance(new Vector2Int(a.x, a.y - 1), b) <= MinRange)
+        {
+            return true;
+        }
+        else if (MapUtility.MoveDistance(new Vector2Int(a.x + 1, a.y), b) >= MinRange && MapUtility.MoveDistance(new Vector2Int(a.x + 1, a.y), b) <= MinRange)
+        {
+            return true;
+        }
+        else if (MapUtility.MoveDistance(new Vector2Int(a.x - 1, a.y), b) >= MinRange && MapUtility.MoveDistance(new Vector2Int(a.x - 1, a.y), b) <= MinRange)
+        {
+            return true;
+        }
+        else return false;
+    }
+
     public override void Calculate((RoamingNPC source, IUnit target) t)
     {
         if (t.source.isInvisible) t.source.RemoveInvisibility();

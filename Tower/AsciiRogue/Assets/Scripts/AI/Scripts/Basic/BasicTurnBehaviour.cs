@@ -259,9 +259,4 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
             }
         }
     }
-
-
-
-
-
 }

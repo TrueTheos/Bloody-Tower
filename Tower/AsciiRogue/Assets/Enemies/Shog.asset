@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Blob
+  m_Name: Shog
   m_EditorClassIdentifier: 
-  E_name: Blob
-  E_symbol: B
+  E_name: Shog
+  E_symbol: S
   E_color: {r: 0.35753658, g: 0.4528302, b: 0.23709506, a: 0}
   E_lvlMin: 100
   E_lvlMax: 100
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 4
+  maxHealth: 20
   strength: 10
   dexterity: 10
   intelligence: 10
@@ -29,7 +29,9 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 
+  enemyInfo: 'Shog - 20 HP / 10 STR / 10 DEX/ 10 INT / 10 END
+
+    Can open doors.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

@@ -6,7 +6,6 @@ using UnityEngine;
 public class BasicTakeDamage : BaseAIBehaviour<RoamingNPC>
 {
     public BasicWakeUp ToWakeUp;
-    public BasicDie ToDie;
 
 
     public virtual void TakeDamage(RoamingNPC npc, int amount, ItemScriptableObject.damageType dmgType)
@@ -37,7 +36,7 @@ public class BasicTakeDamage : BaseAIBehaviour<RoamingNPC>
         npc.canvas.GetComponent<Animator>().SetTrigger("Shake");
         if (npc.__currentHp <= 0)
         {
-            ToDie.Calculate(npc);
+            npc.enemySO.MyKill.Calculate(npc);
         }
     }
 }

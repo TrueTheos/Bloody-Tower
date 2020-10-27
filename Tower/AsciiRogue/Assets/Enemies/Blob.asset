@@ -20,7 +20,7 @@ MonoBehaviour:
   E_realName: 
   E_realSymbol: 
   E_realColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 30
+  maxHealth: 4
   strength: 10
   dexterity: 10
   intelligence: 10
@@ -44,4 +44,4 @@ MonoBehaviour:
   MyBleed: {fileID: 11400000, guid: c310436b651e72a449b535d4a163d651, type: 2}
   MyTakeDamage: {fileID: 11400000, guid: b9a21c18c94a9ec4fbf5ef595221e69e, type: 2}
   MyTestToWakeUp: {fileID: 11400000, guid: a95113c0a2875f1408092fc4ce02ee86, type: 2}
-  MyKill: {fileID: 11400000, guid: a27ad001d4de1624fbcd7d2884358fbf, type: 2}
+  MyKill: {fileID: 11400000, guid: ea767d5a0a99af04692937b3b0186900, type: 2}

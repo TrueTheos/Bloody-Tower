@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI/Turn/Blob")]
-public class BlobTurn : BasicTurnBehaviour
+public class BlobTurnBehaviour : BasicTurnBehaviour
 {
 
     public override void Calculate(RoamingNPC t)

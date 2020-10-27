@@ -15,6 +15,9 @@ MonoBehaviour:
   room: ......777.9777...........
   height: 5
   width: 5
+  OmniAIs:
+    m_keys: []
+    m_values: []
   enemyNames:
   - {fileID: 11400000, guid: aef0ba8d2c99ee742933890573b65bff, type: 2}
   - {fileID: 11400000, guid: aef0ba8d2c99ee742933890573b65bff, type: 2}

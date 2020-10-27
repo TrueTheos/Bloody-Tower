@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.mathieu_le_ber.serializabledictionary": {
-      "version": "https://github.com/RobertClassen/Unity-SerializableDictionary.git#UPM",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "9f812cfc7e07387cdc36314db2bc0c48c858e7c5"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

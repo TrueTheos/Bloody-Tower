@@ -29,8 +29,10 @@ MonoBehaviour:
   attacks: 
   attackText: []
   E_possileDrops: []
+  enemyInfo: 
   leavesCorpse: 0
   isBoss: 0
+  canOpenDoor: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

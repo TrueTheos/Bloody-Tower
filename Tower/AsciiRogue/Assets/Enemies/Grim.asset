@@ -29,6 +29,7 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
+  enemyInfo: 
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1

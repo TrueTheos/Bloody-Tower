@@ -85,6 +85,8 @@ public class DungeonGenerator : MonoBehaviour
     public List<string> statueNames = new List<string>() { "Ceramic Statue", "Obsidian Statue", "Wooden Statue", "Iron Statue", "Copper Statue", "Gold Statue" };
     [Header("Statue Colors")]
     public List<Color> statueColors = new List<Color>();
+    [Header("Painting Texts")]
+    public List<string> paintingTexts = new List<string>();
 
     public void Start()
     {
@@ -173,6 +175,7 @@ public class DungeonGenerator : MonoBehaviour
     //~ - Blood
     //2 - Pillar
     //3 - Blood Torch
+    //5 - Painting
     //7 - Prefab Monster
     //9 - Prefab room item
     //{ - Fountain
@@ -649,6 +652,26 @@ public class DungeonGenerator : MonoBehaviour
                             MapManager.map[x, y].structure = statue;
                         }
                         break;
+                    case "5": //PAINTING
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                xPosition = x,
+                                yPosition = y,
+                                baseChar = "#",
+                                isWalkable = false,
+                                isOpaque = true,
+                                type = "Wall"
+                            };
+                            Painting painting = new Painting
+                            {
+                                paintingText = paintingTexts[UnityEngine.Random.Range(0, paintingTexts.Count)]
+                            };
+                            MapManager.map[x, y].specialNameOfTheCell = "Painting";
+                            MapManager.map[x, y].structure = painting;
+                            MapManager.map[x, y].exploredColor = new Color(1, 0.85f, 0);
+                            break;
+                        }
                     default:
                         {
                             MapManager.map[x, y] = new Tile
@@ -1632,6 +1655,43 @@ public class DungeonGenerator : MonoBehaviour
 
                 Location[] location = s.getAllLocations();
 
+                if (UnityEngine.Random.Range(0, 100) < 8)
+                {
+                    float randomN = UnityEngine.Random.Range(0, 1f);
+                    if (randomN > .75f)
+                    {
+                        int randomTile = UnityEngine.Random.Range(0, s.width - 1);
+                        if (m.get(location[randomTile].x, location[0].y - 1) != '+' && m.get(location[randomTile].x, location[0].y - 1) != '1')
+                        {
+                            m.set(location[randomTile].x, location[0].y - 1, '5');
+                        }
+                    }
+                    else if(randomN > .5f)
+                    {
+                        int randomTile = UnityEngine.Random.Range(0, s.height - 1);
+                        if (m.get(location[0].x - 1, location[randomTile].y) != '+' && m.get(location[0].x - 1, location[randomTile].y) != '1')
+                        {
+                            m.set(location[0].x - 1, location[randomTile].y, '5');
+                        }
+                    }
+                    else if (randomN > .25f)
+                    {
+                        int randomTile = UnityEngine.Random.Range(0, s.height - 1);
+                        if (m.get(location[s.width].x + 1, location[randomTile].y) != '+' && m.get(location[s.width].x + 1, location[randomTile].y) != '1')
+                        {
+                            m.set(location[s.width].x + 1, location[randomTile].y, '5');
+                        }
+                    }
+                    else
+                    {
+                        int randomTile = UnityEngine.Random.Range(0, s.width - 1);
+                        if (m.get(location[randomTile].x, location[s.height].y + 1) != '+' && m.get(location[randomTile].x, location[s.height].y + 1) != '1')
+                        {
+                            m.set(location[randomTile].x, location[s.height].y + 1, '5');
+                        }
+                    }
+                }
+
                 if (UnityEngine.Random.Range(0, 100) < 15)
                 {
                     foreach (var door in s.doors)
@@ -1640,6 +1700,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                 }
 
+                //GENERATE MUSHROOMS
                 if (UnityEngine.Random.Range(0, 100) < 50)
                 {
                     foreach (var loc in location)
@@ -1650,6 +1711,7 @@ public class DungeonGenerator : MonoBehaviour
                         }
                     }
                 }
+                //GENERATE COBWEB
                 if (UnityEngine.Random.Range(0, 100) > 50 + dungeonGenerator.currentFloor)
                 {
                     for (int i = 0; i < UnityEngine.Random.Range(location.Length * 0.25f, location.Length * 0.75f); i++)
@@ -1663,6 +1725,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                 }
 
+                //GENERATE STATUE
                 if(UnityEngine.Random.Range(0, 100) < 50)
                 {
                     int x = s.getRandom().x;
@@ -1672,6 +1735,16 @@ public class DungeonGenerator : MonoBehaviour
                     {
                         m.set(x, y, '}');
                     }
+                }
+
+                int randomRoomDesign = UnityEngine.Random.Range(0, 20);
+
+                if (randomRoomDesign <= 2)
+                {
+                    if (m.get(location[0].x, location[0].y) != '<' && m.get(location[0].x, location[0].y) != '>') m.set(location[0].x, location[0].y, '}');
+                    if (m.get(location[size - 1].x, location[size - 1].y) != '<' && m.get(location[size - 1].x, location[size - 1].y) != '>') m.set(location[size - 1].x, location[size - 1].y, '}');
+                    if (m.get(location[s.width - 1].x, location[0].y) != '<' && m.get(location[s.width - 1].x, location[0].y) != '>') m.set(location[s.width - 1].x, location[0].y, '}');
+                    if (m.get(location[0].x, location[s.height - 1].y) != '<' && m.get(location[0].x, location[s.height - 1].y) != '>') m.set(location[0].x, location[s.height - 1].y, '}');
                 }
 
                 // loot

@@ -8311,6 +8311,20 @@ MonoBehaviour:
   - {r: 0.6870773, g: 0.754717, b: 0.73598975, a: 0}
   - {r: 1, g: 0.56445867, b: 0.16509432, a: 0}
   - {r: 0.7924528, g: 0.6928865, b: 0.16820934, a: 0}
+  paintingTexts:
+  - A beautiful man sits at a lacquered table. They are sipping on a glass of deep
+    red wine.
+  - A crimson waterfall rages over a mountainside. The sun sitting halfway across
+    the horizon casts a red glow over everything. The water is sparkling, reflecting
+    the sunlight.
+  - A palm tree stands tall, swaying in the wind. It's roots bleed to the surface.
+    Puddles of deep crimson are everywhere.
+  - An obelisk, surrounded by fire, was encircled by an even wider ring of ten scaffolds.
+    Hanging from the scaffolds were strangely massacred bodies of the unfortunates.
+  - In the middle of the marshes stretched a small, dry island. On the island, an
+    indescribable naked horde swirled. They writhed around a monstrous circle of
+    fire, and in the center of the circle stood a large granite obelisk, and at the
+    top of the obelisk stood a small carved figure.
   _prefabRooms:
   - {fileID: 11400000, guid: cef9830c4c79b8743a3ab5cdf911c4af, type: 2}
   - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
@@ -8559,7 +8573,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 48621e4f0312ab64ebe6f79e08f7671e, type: 2}
   readables:
   - {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997, type: 2}
-  - {fileID: 11400000, guid: ad0f3df6ba1f0af4aa7c26aa8ea444ab, type: 2}
   - {fileID: 11400000, guid: f01fe5dcd2e773a40a055bcc7efd9c42, type: 2}
   - {fileID: 11400000, guid: b0b5d81b707dca4499283a8b1b7b3ec7, type: 2}
   - {fileID: 11400000, guid: 9fd9b923009836a43acf0036015ca206, type: 2}

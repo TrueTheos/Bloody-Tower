@@ -1655,7 +1655,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 Location[] location = s.getAllLocations();
 
-                if (UnityEngine.Random.Range(0, 100) < 8)
+                if (UnityEngine.Random.Range(0, 100) < 7)
                 {
                     float randomN = UnityEngine.Random.Range(0, 1f);
                     if (randomN > .75f)

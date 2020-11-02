@@ -1794,7 +1794,7 @@ public class DungeonGenerator : MonoBehaviour
                     var b = go.GetComponent<OmniBehaviour>();
                     go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
                     b.AI = omni.Value;
-                    b.Position = omni.Key;
+                    b.Position = new Vector2Int(s.x + omni.Key.x,s.y+omni.Key.y);
                     GameManager.manager.enemies.Add(go);
                 }
              

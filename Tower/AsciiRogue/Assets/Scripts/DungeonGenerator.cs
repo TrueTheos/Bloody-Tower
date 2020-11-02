@@ -1790,8 +1790,12 @@ public class DungeonGenerator : MonoBehaviour
 
                 foreach (var omni in dungeonGenerator.prefabRoom.OmniAIs)
                 {
-
-
+                    GameObject go = new GameObject(omni.Value.name, typeof(OmniBehaviour));
+                    var b = go.GetComponent<OmniBehaviour>();
+                    go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                    b.AI = omni.Value;
+                    b.Position = omni.Key;
+                    GameManager.manager.enemies.Add(go);
                 }
              
             }

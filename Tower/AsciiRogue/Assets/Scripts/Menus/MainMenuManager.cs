@@ -10,8 +10,8 @@ public class MainMenuManager : MonoBehaviour
     public int MaxHeight;
 
 
-    public OptionInfo options;
-    public OptionInfo NewGame;
+    public MenuInfo options;
+    public MenuInfo NewGame;
     public TextPrintable Credits;
 
     public IPrintable CurrentMenu;
@@ -39,7 +39,7 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        options = new OptionInfo(35, 20, 20, 1,
+        options = new MenuInfo(35, 20, 20, 1,
             new KeyValuePair<string, IOptionType>("Test Option", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Testing another", new TextOption(new List<string>() { "Options", "Attackpower","Automatic" })),
             new KeyValuePair<string, IOptionType>("tester", new TextOption(new List<string>() { "Hello", "Is it me", "you are", "looking", "for" })),
@@ -52,7 +52,7 @@ public class MainMenuManager : MonoBehaviour
             new KeyValuePair<string, IOptionType>("Test Option 6", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Test Option 8", new TextOption(new List<string>() { "A", "Longer A", "B", "C" }))
             );
-        NewGame = new OptionInfo(35, 20, 20, 1,
+        NewGame = new MenuInfo(35, 20, 20, 1,
             new KeyValuePair<string, IOptionType>("Start Game", new ButtonOption(StartGame)),
             new KeyValuePair<string, IOptionType>("Difficulty", new TextOption(new List<string>() { "Baby", "Normal", "Blood Tower", "Impossible" })),
             new KeyValuePair<string, IOptionType>("Start Item", new TextOption(new List<string>() { "Torch", "Random Ring", "Dagger" })),
@@ -113,7 +113,7 @@ public class MainMenuManager : MonoBehaviour
             }
             else
             {
-                if (CurrentMenu is OptionInfo info)
+                if (CurrentMenu is MenuInfo info)
                 {
                     if (info.GetCurrentOption() is ButtonOption btn)
                     {
@@ -140,7 +140,7 @@ public class MainMenuManager : MonoBehaviour
                 if (Selected)
                 {
                     Selected = false;
-                    if (CurrentMenu is OptionInfo info)
+                    if (CurrentMenu is MenuInfo info)
                     {
                         info.Focus = false;
                     }
@@ -159,7 +159,7 @@ public class MainMenuManager : MonoBehaviour
             }
             else
             {
-                if (CurrentMenu is OptionInfo info)
+                if (CurrentMenu is MenuInfo info)
                 {
                     if (Selected)
                     {
@@ -180,7 +180,7 @@ public class MainMenuManager : MonoBehaviour
             }
             else
             {
-                if (CurrentMenu is OptionInfo info)
+                if (CurrentMenu is MenuInfo info)
                 {
                     if (Selected)
                     {

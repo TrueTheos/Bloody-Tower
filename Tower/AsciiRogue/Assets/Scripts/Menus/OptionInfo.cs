@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class OptionInfo : IPrintable
+public class MenuInfo : IPrintable
 {
 
     public Dictionary<string, IOptionType> Options = new Dictionary<string, IOptionType>();
@@ -38,7 +38,7 @@ public class OptionInfo : IPrintable
         }
     }
 
-    public OptionInfo(int maxWidth, int maxHeight, int leftWidth, int verticalSpacing,params KeyValuePair<string, IOptionType>[] options)
+    public MenuInfo(int maxWidth, int maxHeight, int leftWidth, int verticalSpacing,params KeyValuePair<string, IOptionType>[] options)
     {
         MaxWidth = maxWidth;
         MaxHeight = maxHeight;
@@ -51,7 +51,7 @@ public class OptionInfo : IPrintable
         }
     }
 
-    public OptionInfo(params KeyValuePair<string,IOptionType>[] options)
+    public MenuInfo(params KeyValuePair<string,IOptionType>[] options)
     {
         for (int i = 0; i < options.Length; i++)
         {

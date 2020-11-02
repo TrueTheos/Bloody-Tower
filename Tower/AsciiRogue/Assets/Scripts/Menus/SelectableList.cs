@@ -77,7 +77,7 @@ public class SelectableList<T> : IPrintable where T : System.Enum
 
             string entry = Entries[i];
 
-            char[,] obj = OptionInfo.GetBorder(MaxWidth, 3, i == SelectedIndex).Place(1,1,entry.AsPlaceable());
+            char[,] obj = MenuInfo.GetBorder(MaxWidth, 3, i == SelectedIndex).Place(1,1,entry.AsPlaceable());
             res.Place(0, startPos, obj);
         }
         return res;

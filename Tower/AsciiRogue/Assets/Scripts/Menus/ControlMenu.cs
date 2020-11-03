@@ -44,8 +44,20 @@ public class ControlMenu : MenuInfo
     {
         if (Focus)
         {
-            // 
-            Input.
+
+            if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
+            {
+                Cancel();
+            }
+
+            foreach (KeyCode key in (KeyCode[])System.Enum.GetValues(typeof(KeyCode)))
+            {
+                if (Input.GetKeyDown(key))
+                {
+                    // there is a button press
+                    
+                }
+            }
 
 
         }

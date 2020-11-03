@@ -3,101 +3,76 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class SelectableList<T> : IPrintable where T : System.Enum 
+public class SelectableList : IPrintable 
 {
 
-    public List<string> Entries;
-    public Dictionary<string, T> Mapping;
 
-    private int _selectedIndex = 0;
-    public int SelectedIndex
+    public MenuInfo RootMenu;
+
+    public Stack<IPrintable> InfoStack;
+
+    public IPrintable GetCurrent() => InfoStack.Count > 0 ? InfoStack.Peek() : RootMenu;
+
+    public SelectableList(MenuInfo root)
     {
-        get
-        {
-            return _selectedIndex;
-        }
-        set
-        {
-            _selectedIndex = Mathf.Clamp(value, 0, Entries.Count-1);
-        }
+        RootMenu = root;
+        InfoStack = new Stack<IPrintable>();
     }
 
-    public int MaxWidth;
-    public int MaxHeight;
-
-    public int Spacing;
-
-    public SelectableList(int maxWidth, int maxHeight, int spacing, Dictionary<string, T> mapping)
-    {
-        MaxWidth = maxWidth;
-        MaxHeight = maxHeight;
-        Spacing = spacing;
-        Entries = new List<string>();
-        Mapping = new Dictionary<string, T>();
-        foreach (var item in mapping)
-        {
-            Entries.Add(item.Key);
-            Mapping.Add(item.Key, item.Value);
-        }
-    }
-
-    public T GetSelected()
-    {
-        return Mapping[Entries[SelectedIndex]];
-    }
-
-    public void MoveDown()
-    {
-        SelectedIndex = SelectedIndex+1;
-    }
-    public void MoveUp()
-    {
-        SelectedIndex = SelectedIndex - 1;
-    }
-    public void Reset()
-    {
-        SelectedIndex = 0;
-    }
-
+    
     public char[,] GetPixels()
     {
-        int height = Mathf.Min(MaxHeight, Entries.Count * 4);
-        char[,] res = new char[MaxWidth, height];
-        for (int x = 0; x < MaxWidth; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                res[x, y] = ' ';
-            }
-        }
-
-        for (int i = 0; i < Mathf.Min(MaxHeight/4,Entries.Count); i++)
-        {
-            int startPos = i * 4;
-
-            string entry = Entries[i];
-
-            char[,] obj = MenuInfo.GetBorder(MaxWidth, 3, i == SelectedIndex).Place(1,1,entry.AsPlaceable());
-            res.Place(0, startPos, obj);
-        }
-        return res;
+        return GetCurrent().GetPixels();
     }
     public string GetAsText()
     {
-        char[,] chars = GetPixels();
-
-        StringBuilder sb = new StringBuilder();
-        for (int y = 0; y < chars.GetLength(1); y++)
+        return GetCurrent().GetAsText();
+    }
+    
+    public void PopInfo(IPrintable info = null)
+    {
+        if (InfoStack.Count==0)
         {
-            for (int x = 0; x < chars.GetLength(0); x++)
-            {
-                sb.Append(chars[x, y]);
-            }
-            sb.AppendLine();
+            return;
         }
-        return sb.ToString();
+        // i know this is hacky way of doing it, but it works
+        IPrintable tmp = InfoStack.Peek();
+        info = info ?? tmp;
+        if (tmp != info)
+        {
+            return;
+        }
+
+        // pop the menu
+        InfoStack.Pop();
+            
+        
+    }
+    public void AddMenu(IPrintable info)
+    {
+        InfoStack.Push(info);
     }
 
+
+    public void Update()
+    {
+        var c = GetCurrent();
+
+        if (c is MenuInfo m)
+        {
+            if (m.Update())
+            {
+                PopInfo(m);
+            }
+        }
+        else
+        {
+            if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
+            {
+                PopInfo();
+            }
+        }
+    }
 
 
 }

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class ButtonOption : IOptionType
 {
-    public System.Action Trigger;
+    public System.Func<bool> Trigger;
 
-    public ButtonOption(Action trigger)
+    public ButtonOption(System.Func<bool> trigger)
     {
         Trigger = trigger;
     }

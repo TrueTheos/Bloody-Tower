@@ -12,12 +12,18 @@ public class TextPrintable : IPrintable
     public int MaxHeight;
     public int Spacing;
 
-    public TextPrintable(List<string> lines, int maxWidth, int maxHeight, int spacing)
+    public int PaddingLeft;
+    public int PaddingTop;
+
+
+    public TextPrintable(List<string> lines, int maxWidth, int maxHeight, int spacing,int padTop, int padLeft)
     {
         Lines = lines;
         MaxWidth = maxWidth;
         MaxHeight = maxHeight;
         Spacing = spacing;
+        PaddingLeft = padLeft;
+        PaddingTop = padTop;
     }
 
     public string GetAsText()
@@ -43,7 +49,7 @@ public class TextPrintable : IPrintable
 
         for (int i = 0; i < Lines.Count; i++)
         {
-            res.Place(0, i * Spacing, Lines[i].AsPlaceable());
+            res.Place(0+PaddingLeft,PaddingTop+ i * Spacing, Lines[i].AsPlaceable());
         }
         return res;
     }

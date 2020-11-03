@@ -37,6 +37,7 @@ public class MenuInfo : IPrintable
             return max;
         }
     }
+    public void LooseFocus() => Focus = false;
 
     public MenuInfo(int maxWidth, int maxHeight, int leftWidth, int verticalSpacing,params KeyValuePair<string, IOptionType>[] options)
     {
@@ -66,7 +67,7 @@ public class MenuInfo : IPrintable
 
     }
 
-    public char[,] GetPixels()
+    public virtual char[,] GetPixels()
     {
         char[,] res = new char[MaxWidth, MaxHeight];
         for (int x = 0; x < MaxWidth; x++)
@@ -172,7 +173,71 @@ public class MenuInfo : IPrintable
     }
 
 
+    public virtual bool Trigger()
+    {
+        var opt = GetCurrentOption();
 
+        if (opt is ButtonOption btn)
+        {
+            return btn.Trigger.Invoke();
+        }
+        if (opt is TextOption txt)
+        {
+            Focus = !Focus;
+        }
+
+        return false;
+    }
+    public virtual bool Cancel()
+    {
+        var opt = GetCurrentOption();
+        
+        if (Focus)
+        {
+            Focus = false;
+        }
+        else
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual bool Update()
+    {
+        if (Controls.GetKeyDown(Controls.Inputs.InventoryDown))
+        {
+            if (Focus)
+            {
+                GetCurrentOption()?.Next();
+            }
+            else
+            {
+                MoveDown();
+            }            
+        }
+        if (Controls.GetKeyDown(Controls.Inputs.InventoryUp))
+        {
+            if (Focus)
+            {
+                GetCurrentOption()?.Previous();
+            }
+            else
+            {
+                MoveUp();
+            }
+        }
+        if (Controls.GetKeyDown(Controls.Inputs.Use))
+        {
+            return Trigger();
+        }
+        if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
+        {
+            return Cancel();
+        }
+        return false;
+    }
 
 
 }

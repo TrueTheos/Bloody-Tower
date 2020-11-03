@@ -755,6 +755,31 @@ public class DungeonGenerator : MonoBehaviour
             k++;
         }
 
+        bool spawnedRandomTextEvent = false;
+        if (manager.enemySpawner.textEvents.Count > 0)
+        {
+            int breakI = 0;
+            while (!spawnedRandomTextEvent)
+            {
+                if (breakI > 200) break;
+                int rX = UnityEngine.Random.Range(0, mapWidth);
+                int rY = UnityEngine.Random.Range(0, mapHeight);
+
+                try
+                {
+                    if (MapManager.map[rX, rY].type == "Floor" && MapManager.map[rX, rY].structure == null && MapManager.map[rX, rY].isWalkable)
+                    {
+                        int randomEventIndex = UnityEngine.Random.Range(0, manager.enemySpawner.textEvents.Count);
+                        manager.enemySpawner.SpawnTextEvent(rX, rY, manager.enemySpawner.textEvents[randomEventIndex]);
+                        manager.enemySpawner.textEvents.RemoveAt(randomEventIndex);
+                    }
+                }
+                catch { }
+
+                breakI++;
+            }
+        }
+
         //if (currentFloor != 0) MovePlayerToLowerStairs();
 
         manager.mapName.text = "Floor " + currentFloor;
@@ -1028,37 +1053,6 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         return cornerPositions;
-    }
-
-    private void SpawnPlayer()
-    {
-        if (!playerExists)
-        {
-            playerExists = true;
-
-            Feature room = rooms[0];
-
-            List<Vector2Int> positions = new List<Vector2Int>();
-
-            foreach (Vector2Int position in room.positions)
-            {
-                if (MapManager.map[position.x, position.y].type == "Floor")
-                {
-                    positions.Add(position);
-                }
-            }
-
-            Vector2Int pos = positions[UnityEngine.Random.Range(0, positions.Count - 1)];
-
-            GameObject player = GameObject.Find("Player");
-
-            player.GetComponent<PlayerMovement>().position = pos;
-            MapManager.map[pos.x, pos.y].hasPlayer = true;
-            MapManager.map[pos.x, pos.y].timeColor = new Color(0.5f, 1, 0);
-            MapManager.map[pos.x, pos.y].letter = "@";
-            MapManager.playerPos = new Vector2Int(pos.x, pos.y);
-            room.hasPlayer = true;
-        }
     }
 
     public void DrawMap(bool isASCII, Tile[,] map)

@@ -5134,7 +5134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.79607844, g: 0.79607844, b: 0.79607844, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8319,35 +8319,15 @@ MonoBehaviour:
     the sunlight.
   - A palm tree stands tall, swaying in the wind. It's roots bleed to the surface.
     Puddles of deep crimson are everywhere.
-  - An obelisk, surrounded by fire, was encircled by an even wider ring of ten scaffolds.
-    Hanging from the scaffolds were strangely massacred bodies of the unfortunates.
+  - An obelisk, surrounded by fire, is encircled by an even wider ring of ten scaffolds.
+    Hanging from the scaffolds are strangely massacred bodies of the unfortunates.
   - In the middle of the marshes stretched a small, dry island. On the island, an
     indescribable naked horde swirled. They writhed around a monstrous circle of
     fire, and in the center of the circle stood a large granite obelisk, and at the
     top of the obelisk stood a small carved figure.
   _prefabRooms:
-  - {fileID: 11400000, guid: cef9830c4c79b8743a3ab5cdf911c4af, type: 2}
-  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
   - {fileID: 11400000, guid: d0e8b321ac9e1a041bf80074a20318dd, type: 2}
-  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
-  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
-  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
-  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
-  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
-  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
-  - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
-  - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
-  - {fileID: 11400000, guid: 4f3a39350370d834b819cf80b80cda07, type: 2}
-  - {fileID: 11400000, guid: a61dde49ef4997e429bc17e1ed262e63, type: 2}
-  - {fileID: 11400000, guid: a3119d29421f2ea43a5f9df2b02f491a, type: 2}
-  - {fileID: 11400000, guid: 7d28ecc10ab512741a3577e5a523eb54, type: 2}
-  - {fileID: 11400000, guid: c1aba9dc3def109419bb402b9b6e1932, type: 2}
-  - {fileID: 11400000, guid: 13f101848cd22c24a940f258bc5d9dd9, type: 2}
-  - {fileID: 11400000, guid: 23d0d6e82f73ed043805363fc310aeec, type: 2}
-  - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
-  - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
-  - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
-  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
+  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8619,6 +8599,8 @@ MonoBehaviour:
   Mimic: {fileID: 11400000, guid: ce43879e1e45184488a2718866747461, type: 2}
   Zombie: {fileID: 11400000, guid: 69c56262bb138aa408c90f29212dc3af, type: 2}
   Hamp: {fileID: 11400000, guid: 1f2f86327a44fdb478fea1b77ad22d7f, type: 2}
+  textEvents:
+  - {fileID: 11400000, guid: 9ee11bac31a236346a9be643f3d4a8d5, type: 2}
   SecretDoorAI: {fileID: 11400000, guid: de0b39b379c73e9489b8fe3be35cd1d0, type: 2}
   spawnedEnemies: []
   enemiesPerRoom: 010000000100000002000000020000000200000003000000

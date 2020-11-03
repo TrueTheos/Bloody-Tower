@@ -16,8 +16,10 @@ MonoBehaviour:
   height: 5
   width: 5
   OmniAIs:
-    m_keys: []
-    m_values: []
+    m_keys:
+    - {x: 1, y: 1}
+    m_values:
+    - {fileID: 11400000, guid: 46456495452f6844fb181ced2543c819, type: 2}
   enemyNames:
   - {fileID: 11400000, guid: 33403ddba1c4e8f4c92d7e41ae74faef, type: 2}
   enemySleeping: 00

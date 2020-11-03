@@ -11,6 +11,9 @@ public class EnemySpawner : MonoBehaviour
     public EnemiesScriptableObject Zombie;
     public EnemiesScriptableObject Hamp;
 
+    [Header("Random Text Events")]
+    public List<TriggerTextAI> textEvents = new List<TriggerTextAI>();
+
     public BaseOmniAI SecretDoorAI;
 
     [HideInInspector]public List<GameObject> spawnedEnemies = new List<GameObject>();
@@ -144,8 +147,16 @@ public class EnemySpawner : MonoBehaviour
             default:
                 break;
         }
+    }
 
-
+    public void SpawnTextEvent(int x, int y, TriggerTextAI eve)
+    {
+        GameObject go = new GameObject("Random Text Event" , typeof(OmniBehaviour));
+        var b = go.GetComponent<OmniBehaviour>();
+        go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+        b.AI = eve; // what AI you want to use has to be the SO
+        b.Position = new Vector2Int(x,y); // the position of the SO if relevant for what it should do
+        GameManager.manager.enemies.Add(go);
     }
 
     /*private void Spawn(int x, int y)

@@ -157,7 +157,7 @@ public static class Controls
         IsInitialized = true;   
     }
 
-    private static void ResetConfig()
+    public static void ResetConfig()
     {
         CurrentControls = new Dictionary<string, KeyCode>(defaultControls);
     }
@@ -168,6 +168,13 @@ public static class Controls
         if (AutoSave)
         {
             SaveConfig();
+        }
+    }
+    public static void ChangeConfig(string name, KeyCode key)
+    {
+        if (System.Enum.TryParse<Inputs>(name, out Inputs res))
+        {
+            ChangeConfig(res, key);
         }
     }
 
@@ -189,7 +196,7 @@ public static class Controls
                     string[] parts = line.Split(' ');
                     if (parts.Length >= 2 &&  System.Enum.TryParse<KeyCode>(parts[1],out KeyCode res))
                     {
-
+                        CurrentControls[parts[0]] = res;
                     }
 
                 }
@@ -218,6 +225,13 @@ public static class Controls
         return File.Exists(Application.persistentDataPath + "\\controls.bloodC");
     }
 
+
+    public static Dictionary<string,KeyCode> GetConfig()
+    {
+        Dictionary<string, KeyCode> controls = new Dictionary<string, KeyCode>(CurrentControls);
+
+        return controls;
+    }
 
 
 }

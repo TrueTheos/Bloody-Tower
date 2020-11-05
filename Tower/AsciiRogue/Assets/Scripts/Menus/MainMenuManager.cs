@@ -14,6 +14,7 @@ public class MainMenuManager : MonoBehaviour
     public MenuInfo NewGame;
     public TextPrintable Credits;
     public MenuInfo MainMenu;
+    public ControlMenu ControlMenu;
 
     public IPrintable CurrentMenu;
 
@@ -44,7 +45,7 @@ public class MainMenuManager : MonoBehaviour
             new KeyValuePair<string, IOptionType>("Test Option", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Testing another", new TextOption(new List<string>() { "Options", "Attackpower","Automatic" })),
             new KeyValuePair<string, IOptionType>("tester", new TextOption(new List<string>() { "Hello", "Is it me", "you are", "looking", "for" })),
-            new KeyValuePair<string, IOptionType>("Test Option 0", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
+            new KeyValuePair<string, IOptionType>("Controls", new ButtonOption(()=> {ControlMenu.Reload(); Menu.AddMenu(ControlMenu); return false; })),
             new KeyValuePair<string, IOptionType>("Test Option 1", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Test Option 2", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Test Option 3 ", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
@@ -61,6 +62,8 @@ public class MainMenuManager : MonoBehaviour
             );
 
         Credits = new TextPrintable(new List<string>() { "Theos", "Demidemon", "MCR" }, 20, 15, 3,2,1);
+
+        ControlMenu = new ControlMenu(35, 15, 20, 1);
 
         MainMenu = new MenuInfo(
             35, 15, 20, 1,

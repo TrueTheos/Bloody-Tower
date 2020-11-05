@@ -10,13 +10,15 @@ public class MainMenuManager : MonoBehaviour
     public int MaxHeight;
 
 
-    public OptionInfo options;
-    public OptionInfo NewGame;
+    public MenuInfo options;
+    public MenuInfo NewGame;
     public TextPrintable Credits;
+    public MenuInfo MainMenu;
+    public ControlMenu ControlMenu;
 
     public IPrintable CurrentMenu;
 
-    public SelectableList<MenuThing> MainMenu;
+    public SelectableList Menu;
 
     public bool InMenu = true;
 
@@ -39,11 +41,11 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        options = new OptionInfo(35, 20, 20, 1,
+        options = new MenuInfo(35, 15, 20, 1,
             new KeyValuePair<string, IOptionType>("Test Option", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Testing another", new TextOption(new List<string>() { "Options", "Attackpower","Automatic" })),
             new KeyValuePair<string, IOptionType>("tester", new TextOption(new List<string>() { "Hello", "Is it me", "you are", "looking", "for" })),
-            new KeyValuePair<string, IOptionType>("Test Option 0", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
+            new KeyValuePair<string, IOptionType>("Controls", new ButtonOption(()=> {ControlMenu.Reload(); Menu.AddMenu(ControlMenu); return false; })),
             new KeyValuePair<string, IOptionType>("Test Option 1", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Test Option 2", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Test Option 3 ", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
@@ -52,171 +54,49 @@ public class MainMenuManager : MonoBehaviour
             new KeyValuePair<string, IOptionType>("Test Option 6", new TextOption(new List<string>() { "A", "Longer A", "B", "C" })),
             new KeyValuePair<string, IOptionType>("Test Option 8", new TextOption(new List<string>() { "A", "Longer A", "B", "C" }))
             );
-        NewGame = new OptionInfo(35, 20, 20, 1,
+        NewGame = new MenuInfo(35, 15, 20, 1,
             new KeyValuePair<string, IOptionType>("Start Game", new ButtonOption(StartGame)),
             new KeyValuePair<string, IOptionType>("Difficulty", new TextOption(new List<string>() { "Baby", "Normal", "Blood Tower", "Impossible" })),
             new KeyValuePair<string, IOptionType>("Start Item", new TextOption(new List<string>() { "Torch", "Random Ring", "Dagger" })),
             new KeyValuePair<string, IOptionType>("Base Skill", new TextOption(new List<string>() { "Slash", "Jump", "Heal Poison"}))
             );
 
-        Credits = new TextPrintable(new List<string>() { "Theos", "Demidemon", "MCR" }, 20, 15, 3);
+        Credits = new TextPrintable(new List<string>() { "Theos", "Demidemon", "MCR" }, 20, 15, 3,2,1);
 
+        ControlMenu = new ControlMenu(35, 15, 20, 1);
 
-        MainMenu = new SelectableList<MenuThing>(
-            15,
-            25,
-            1,
-            new Dictionary<string, MenuThing>()
-            {
-                {"New Game",MenuThing.NewGame },
-                {"Settings",MenuThing.Setting },
-                {"Credits",MenuThing.Credits }
-            });
+        MainMenu = new MenuInfo(
+            35, 15, 20, 1,
+            new KeyValuePair<string, IOptionType>("New Game",new ButtonOption(()=> { Menu.AddMenu(NewGame);return false; })),
+            new KeyValuePair<string, IOptionType>("Settings",new ButtonOption(()=> { Menu.AddMenu(options);return false; })),
+            new KeyValuePair<string, IOptionType>("Credits",new ButtonOption(()=> { Menu.AddMenu(Credits);return false; }))
+            );
+
+        Menu = new SelectableList(MainMenu);
 
         text = GetComponent<Text>();
     }
 
-    public void StartGame()
+    public bool StartGame()
     {
         NewGameSettings = NewGame.Options;
         Settings = options.Options;
         SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
+        return true;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (Controls.GetKeyDown(Controls.Inputs.Use))
-        {
-            if (InMenu)
-            {
-                switch (MainMenu.GetSelected())
-                {
-                    case MenuThing.NewGame:
-                        CurrentMenu = NewGame;
-                        NewGame.ResetPos();
-                        break;
-                    case MenuThing.Setting:
-                        CurrentMenu = options;
-                        options.ResetPos();
-                        break;
-                    case MenuThing.Credits:
-                        CurrentMenu = Credits;
-                        break;
-                    default:
-                        break;
-                }
-                CurrentSubMenu = MainMenu.GetSelected();
-                InMenu = false;
-                
-            }
-            else
-            {
-                if (CurrentMenu is OptionInfo info)
-                {
-                    if (info.GetCurrentOption() is ButtonOption btn)
-                    {
-                        // we do something
-                        btn?.Trigger();
-                    }
-                    else
-                    {
-                        Selected = !Selected;
-                        info.Focus = Selected;
-                    }                    
-                }                
-            }
-            
-        }
-        if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
-        {
-            if (InMenu)
-            {
-                // do nothing
-            }
-            else
-            {
-                if (Selected)
-                {
-                    Selected = false;
-                    if (CurrentMenu is OptionInfo info)
-                    {
-                        info.Focus = false;
-                    }
-                }
-                else
-                {
-                    InMenu = true;
-                }
-            }
-        }
-        if (Controls.GetKeyDown(Controls.Inputs.MoveDown))
-        {
-            if (InMenu)
-            {
-                MainMenu.MoveDown();
-            }
-            else
-            {
-                if (CurrentMenu is OptionInfo info)
-                {
-                    if (Selected)
-                    {
-                        info.GetCurrentOption().Next();
-                    }
-                    else
-                    {
-                        info.MoveDown();
-                    }
-                }
-            }         
-        }
-        if (Controls.GetKeyDown(Controls.Inputs.MoveUp))
-        {
-            if (InMenu)
-            {
-                MainMenu.MoveUp();
-            }
-            else
-            {
-                if (CurrentMenu is OptionInfo info)
-                {
-                    if (Selected)
-                    {
-                        info.GetCurrentOption().Previous();
-                    }
-                    else
-                    {
-                        info.MoveUp();
-                    }
-                }
-            }
-            
-        }
+        Menu.Update();
+
         char[,] Text = new char[MaxWidth, MaxWidth];
         Text.FillEmpty();
-        if (InMenu)
-        {
-            Text.Place(2, 10, MainMenu.GetPixels());
-        }
-        else
-        {
-            switch (CurrentSubMenu)
-            {
-                case MenuThing.NewGame:
-                    Text.Place(2, 9, CurrentMenu.GetPixels());
-                    break;
-                case MenuThing.Setting:
-                    Text.Place(2, 9, CurrentMenu.GetPixels());
-                    break;
-                case MenuThing.Credits:
-                    Text.Place(10, 13, CurrentMenu.GetPixels());
-                    break;
-                default:
-                    break;
-            }
-        }
+        
+        Text.Place(2, 10, Menu.GetPixels());
+        
+        
         text.text = Text.ConvertToString();
     }
 }

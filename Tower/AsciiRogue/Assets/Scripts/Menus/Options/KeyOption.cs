@@ -1,35 +1,36 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonOption : IOptionType
+public class KeyOption : IOptionType
 {
-    public System.Func<bool> Trigger;
+    public KeyCode Key;
+    public string Name;
 
-    public ButtonOption(System.Func<bool> trigger)
+    public KeyOption(string name, KeyCode key)
     {
-        Trigger = trigger;
+        Key = key;
+        Name = name;
     }
 
     public List<string> GetAll()
     {
-        return new List<string>();
+        return new List<string>() { GetCurrent() };
     }
 
     public int GetCount()
     {
-        return 0;
+        return 1;
     }
 
     public string GetCurrent()
     {
-        return "";
+        return Key.ToString();
     }
 
     public int GetCurrentIndex()
     {
-        return 0;
+        return 1;
     }
 
     public void Next()

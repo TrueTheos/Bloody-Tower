@@ -211,7 +211,8 @@ public class DungeonGenerator : MonoBehaviour
 
         if(spawnEnemiesFromString)
         {
-            enemies = fixedLevel.Substring((mapWidth * mapHeight));
+            string[] enemiesArray = fixedLevel.Split(new char[] { '|' });
+            enemies = enemiesArray[1];
 
             enemiesList = enemies.Split(new string[] {";"}, StringSplitOptions.None);
             str = String.Join("/", enemiesList);
@@ -806,18 +807,22 @@ public class DungeonGenerator : MonoBehaviour
         Vector2Int vector = new Vector2Int(100,100);
 
         bool loopBr = false;
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < 300; i++)
         {
             if(loopBr) break;
 
             int x = UnityEngine.Random.Range(1, mapWidth);
             int y = UnityEngine.Random.Range(1, mapHeight);
 
-            if(MapManager.map[x,y].type == "Floor")
+            try
             {
-                startPos = new Vector2Int(x,y);
-                loopBr = true;
+                if (MapManager.map[x, y].type == "Floor")
+                {
+                    startPos = new Vector2Int(x, y);
+                    loopBr = true;
+                }
             }
+            catch { Debug.Log(x + " " + y); }
         }
 
         waterTilesToGrow.Add(startPos);
@@ -1168,7 +1173,7 @@ public class DungeonGenerator : MonoBehaviour
 
     class Map
     {
-        public static int WIDTH = 56;
+        public static int WIDTH = 59;
         public static int HEIGHT = 22;
         private char[,] cells = new char[WIDTH, HEIGHT]; // x,y
 

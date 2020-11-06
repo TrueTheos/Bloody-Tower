@@ -349,7 +349,7 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         selectedItem = 0;
-                        selector.anchoredPosition = new Vector3(-7, -234, 0);
+                        selector.anchoredPosition = new Vector3(selector.anchoredPosition.x, -284, 0);
                         UpdateItemStats(playerStats.itemsInEqGO[selectedItem]);
                     }
                 }
@@ -396,7 +396,7 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         selectedItem = 0;
-                        selector.anchoredPosition = new Vector3(-7, -234, 0);
+                        selector.anchoredPosition = new Vector3(selector.anchoredPosition.x, -284, 0);
                         UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
                     }
                 }
@@ -1321,16 +1321,14 @@ public class GameManager : MonoBehaviour
 
         openGrimoire = false;
 
-
         SkillsOpen = false;
         SkillCasting = false;
-
 
 
         invBorder.SetActive(false);
         mapText.SetActive(true);
         mainUItext.enabled = true;
-        selector.anchoredPosition = new Vector3(-7, -234, 0);
+        selector.anchoredPosition = new Vector3(selector.anchoredPosition.x, -284, 0);
         selector.GetComponent<Text>().enabled = false;
         anvilMenuOpened = false;
     }

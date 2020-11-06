@@ -27,7 +27,7 @@ public class PlayerStats : MonoBehaviour, IUnit
     [HideInInspector] public int currentWeight;
     [HideInInspector] public int startingViewRange = 7;
     [HideInInspector] public int viewRange;
-    [HideInInspector] public int maximumInventorySpace = 17;
+    [HideInInspector] public int maximumInventorySpace = 15;
     [HideInInspector] public int currentItems;
     [HideInInspector] public int skillpoints;
     [HideInInspector] public int ac { get; set; } = 0;

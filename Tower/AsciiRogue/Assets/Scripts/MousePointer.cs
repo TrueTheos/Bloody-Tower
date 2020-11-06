@@ -17,6 +17,10 @@ public class MousePointer : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
+    public static MousePointer mousePointer;
+
+    public int smallY, bigY;
+
     private bool _selected
     {
         get
@@ -35,8 +39,9 @@ public class MousePointer : MonoBehaviour
 
     void Start()
     {
-        mapRect = new Rect(pointA.transform.position.x, pointA.transform.position.y, pointB.transform.position.x - pointA.transform.position.x, pointB.transform.position.y - pointA.transform.position.y);
+        mousePointer = this;
         playerMovement = GameManager.manager.player;
+        UpdateMapRect();
     }
 
     // Update is called once per frame
@@ -46,8 +51,9 @@ public class MousePointer : MonoBehaviour
 
         if(mapRect.Contains(Input.mousePosition))
         {
-            mousePos = new Vector2Int(Mathf.FloorToInt((Input.mousePosition.x - 19) / 14), Mathf.FloorToInt((Input.mousePosition.y - 254) / 20));
+            mousePos = new Vector2Int(Mathf.FloorToInt((Input.mousePosition.x - pointA.position.x) / ((pointB.position.x - pointA.position.x) / DungeonGenerator.dungeonGenerator.mapWidth)), Mathf.FloorToInt((Input.mousePosition.y - (ResolutionManager.resolutionManager._Resolution == ResolutionManager.resolutionType.small ? bigY : smallY)) / ((pointB.position.y - pointA.position.y) / DungeonGenerator.dungeonGenerator.mapHeight))); //14 20
 
+            Debug.Log(Input.mousePosition.y);
             if(MapManager.map[mousePos.x, mousePos.y].isExplored)
             {
                 Selector.Current.SelectedTile(mousePos.x, mousePos.y);
@@ -85,6 +91,11 @@ public class MousePointer : MonoBehaviour
                 }
             }
         }    
+    }
+
+    public void UpdateMapRect()
+    {
+        mapRect = new Rect(pointA.transform.position.x, pointA.transform.position.y, pointB.transform.position.x - pointA.transform.position.x, pointB.transform.position.y - pointA.transform.position.y);
     }
 
     IEnumerator WalkPath(List<Vector2Int> _path)

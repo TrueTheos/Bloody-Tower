@@ -1169,7 +1169,6 @@ public class DungeonGenerator : MonoBehaviour
 
     public List<PrefabRoom> _prefabRooms = new List<PrefabRoom>();
     private List<PrefabRoom> prefabRooms = new List<PrefabRoom>();
-    PrefabRoom prefabRoom;
 
     class Map
     {
@@ -1258,6 +1257,7 @@ public class DungeonGenerator : MonoBehaviour
         private Purpose purpose;
         public List<Vector2Int> doors = new List<Vector2Int>();
         public bool isPrefabRoom;
+        public PrefabRoom prefabValue;
 
         public enum Purpose
         {
@@ -1519,12 +1519,13 @@ public class DungeonGenerator : MonoBehaviour
                 int h = 0;
                 if (dungeonGenerator.prefabRooms.Count > 0)
                 {
-                    dungeonGenerator.prefabRoom = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
-                    w = dungeonGenerator.prefabRoom.height;
-                    h = dungeonGenerator.prefabRoom.width;
+                    PrefabRoom prefab = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
+                    w = prefab.height;
+                    h = prefab.width;
                     centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
+                    centralRoom.prefabValue = prefab;
                     centralRoom.isPrefabRoom = true;
-                    dungeonGenerator.prefabRooms.RemoveAt(dungeonGenerator.prefabRooms.IndexOf(dungeonGenerator.prefabRoom));
+                    dungeonGenerator.prefabRooms.RemoveAt(dungeonGenerator.prefabRooms.IndexOf(prefab));
                 }
                 else
                 {
@@ -1767,27 +1768,27 @@ public class DungeonGenerator : MonoBehaviour
                 int enemiesSpawned = 0;
                 foreach (var loc in location)
                 {
-                    if (dungeonGenerator.prefabRoom.room[i] == '9')
+                    if (s.prefabValue.room[i] == '9')
                     {
                         m.set(loc.x, loc.y, '9');
-                        dungeonGenerator.Prefab_itemsToSpawn.Add(dungeonGenerator.prefabRoom.itemsToSpawn[itemsSpawned]);
+                        dungeonGenerator.Prefab_itemsToSpawn.Add(s.prefabValue.itemsToSpawn[itemsSpawned]);
                         itemsSpawned++;
                     }
-                    else if(dungeonGenerator.prefabRoom.room[i] == '7')
+                    else if(s.prefabValue.room[i] == '7')
                     {
                         m.set(loc.x, loc.y, '7');
-                        dungeonGenerator.Prefab_enemyNames.Add(dungeonGenerator.prefabRoom.enemyNames[enemiesSpawned]);
-                        dungeonGenerator.Prefab_enemySleeping.Add(dungeonGenerator.prefabRoom.enemySleeping[enemiesSpawned]);
+                        dungeonGenerator.Prefab_enemyNames.Add(s.prefabValue.enemyNames[enemiesSpawned]);
+                        dungeonGenerator.Prefab_enemySleeping.Add(s.prefabValue.enemySleeping[enemiesSpawned]);
                         enemiesSpawned++;
                     }
                     else
                     {
-                        m.set(loc.x, loc.y, dungeonGenerator.prefabRoom.room[i]);
+                        m.set(loc.x, loc.y, s.prefabValue.room[i]);
                     }
                     i++;
                 }
 
-                foreach (var omni in dungeonGenerator.prefabRoom.OmniAIs)
+                foreach (var omni in s.prefabValue.OmniAIs)
                 {
                     GameObject go = new GameObject(omni.Value.name, typeof(OmniBehaviour));
                     var b = go.GetComponent<OmniBehaviour>();

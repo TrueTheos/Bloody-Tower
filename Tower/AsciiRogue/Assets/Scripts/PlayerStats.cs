@@ -313,18 +313,30 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     #region text meshes
     [Header("Text Components")]
-    public TextMeshProUGUI _nick;
-    public TextMeshProUGUI _health;
-    public TextMeshProUGUI _strength;
-    public TextMeshProUGUI _intelligence;
-    public TextMeshProUGUI _dexteirty;
-    public TextMeshProUGUI _endurance;
-    public TextMeshProUGUI _lvl;
-    public TextMeshProUGUI _experience;
-    public TextMeshProUGUI _coins;
-    public TextMeshProUGUI _ac;
-    public TextMeshProUGUI _noise;
-    public TextMeshProUGUI _blood;
+    [UnityEngine.Serialization.FormerlySerializedAs("_nick")]
+    public TextMeshProUGUI _nickText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_health")]
+    public TextMeshProUGUI _healthText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_strength")]
+    public TextMeshProUGUI _strengthText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_intelligence")]
+    public TextMeshProUGUI _intelligenceText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_dexteirty")]
+    public TextMeshProUGUI _dexteirtyText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_endurance")]
+    public TextMeshProUGUI _enduranceText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_lvl")]
+    public TextMeshProUGUI _lvlText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_experience")]
+    public TextMeshProUGUI _experienceText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_coins")]
+    public TextMeshProUGUI _coinsText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_ac")]
+    public TextMeshProUGUI _acText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_noise")]
+    public TextMeshProUGUI _noiseText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_blood")]
+    public TextMeshProUGUI _bloodText;
 
     //buttons
     public GameObject _strengthButton;
@@ -402,10 +414,12 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     #endregion
 
+    /*
     public bool Int;
     public bool Str;
     public bool Dex;
     public bool End;
+    */
 
     //WAND STUFF
     [SerializeField] public bool usingWand;
@@ -491,6 +505,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     public void Update()
     {
+        /*
         if (Int)
         {
             Int = false;
@@ -510,7 +525,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         {
             End = false;
             __endurance++;
-        }
+        }*/
 
         Targeting.UpdateTargeting();
 
@@ -777,40 +792,40 @@ public class PlayerStats : MonoBehaviour, IUnit
         switch (stat)
         {
             case statType.hp:
-                _health.text = "Hp: " + $"<color=green>{__currentHp} / {__maxHp}</color>";
+                _healthText.text = "Hp: " + $"<color=green>{__currentHp} / {__maxHp}</color>";
                 break;
             case statType.dexterity:
-                _dexteirty.text = "Dex: " + $"<color=green>{__dexterity}</color>";
+                _dexteirtyText.text = "Dex: " + $"<color=green>{__dexterity}</color>";
                 break;
             case statType.coins:
-                _coins.text = "$: " + $"<color=green>{__coins}</color>";
+                _coinsText.text = "$: " + $"<color=green>{__coins}</color>";
                 break;
             case statType.intelligence:
-                _intelligence.text = "Int: " + $"<color=green>{__intelligence}</color>";
+                _intelligenceText.text = "Int: " + $"<color=green>{__intelligence}</color>";
                 break;
             case statType.strength:
-                _strength.text = "Str: " + $"<color=green>{__strength}</color>";
+                _strengthText.text = "Str: " + $"<color=green>{__strength}</color>";
                 break;
             case statType.endurance:
-                _endurance.text = "End: " + $"<color=green>{__endurance}</color>";
+                _enduranceText.text = "End: " + $"<color=green>{__endurance}</color>";
                 break;
             case statType.experience:
-                _experience.text = "Exp: " + $"<color=green>{__experience} / {__experienceNeededToLvlUp}</color>";
+                _experienceText.text = "Exp: " + $"<color=green>{__experience} / {__experienceNeededToLvlUp}</color>";
                 break;
             case statType.lvl:
-                _lvl.text = "Lvl: " + $"<color=green>{lvl}</color>";
+                _lvlText.text = "Lvl: " + $"<color=green>{lvl}</color>";
                 break;
             case statType.ac:
-                _ac.text = "AC: " + $"<color=green>{armorClass}</color>";
+                _acText.text = "AC: " + $"<color=green>{armorClass}</color>";
                 break;
             case statType.noise:
-                _noise.text = "Noise: " + $"<color=green>{__noise}</color>";
+                _noiseText.text = "Noise: " + $"<color=green>{__noise}</color>";
                 break;
             case statType.blood:
-                _blood.text = "";
+                _bloodText.text = "";
                 for (int i = 0; i < __blood; i++)
                 {
-                    _blood.text += "<color=#761616>|</color>";
+                    _bloodText.text += "<color=#761616>|</color>";
                 }
                 break;
         }

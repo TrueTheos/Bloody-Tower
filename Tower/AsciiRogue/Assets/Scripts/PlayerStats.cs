@@ -313,17 +313,29 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     #region text meshes
     [Header("Text Components")]
+    [UnityEngine.Serialization.FormerlySerializedAs("_nick")]
     public TextMeshProUGUI _nickText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_health")]
     public TextMeshProUGUI _healthText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_strength")]
     public TextMeshProUGUI _strengthText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_intelligence")]
     public TextMeshProUGUI _intelligenceText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_dexteirty")]
     public TextMeshProUGUI _dexteirtyText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_endurance")]
     public TextMeshProUGUI _enduranceText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_lvl")]
     public TextMeshProUGUI _lvlText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_experience")]
     public TextMeshProUGUI _experienceText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_coins")]
     public TextMeshProUGUI _coinsText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_ac")]
     public TextMeshProUGUI _acText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_noise")]
     public TextMeshProUGUI _noiseText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_blood")]
     public TextMeshProUGUI _bloodText;
 
     //buttons

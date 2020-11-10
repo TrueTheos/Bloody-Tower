@@ -14,8 +14,6 @@ public class DungeonGenerator : MonoBehaviour
     [Header("Fixed Levels")]
     public List<FixedLevels> floor10BossRooms;
     public FixedLevels necromancerLevel;
-    public FixedLevels lvl7;
-    public ItemScriptableObject keyToCell;
 
     public string[] enemiesList;
     public string[] splitted;
@@ -67,7 +65,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private bool playerExists;
 
-    private GameObject floorObject = null;
+    public GameObject floorObject = null;
 
     public Text screen;
     public float lightFactor = 1f;
@@ -110,9 +108,9 @@ public class DungeonGenerator : MonoBehaviour
         {            
             GenerateFixedLevel(floor10BossRooms[UnityEngine.Random.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
         }
-        else if(floorNumber == 7 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber == 5 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
-            GenerateFixedLevel(lvl7.fixedLevel, 7, true, false);  
+            GenerateFixedLevel(MapGenerator.createSewerMap().print(), floorNumber, false, false, 2);
         }
         else if (floorNumber == 13 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
@@ -152,6 +150,11 @@ public class DungeonGenerator : MonoBehaviour
                 MovePlayerToLowerStairs(); //comming from the higher floor
             }
 
+            if(floorObject.GetComponent<FloorInfo>().viewRange != 666)
+            {
+                manager.playerStats.viewRange = 0;
+            }
+
             manager.mapName.text = "Floor " + currentFloor;
             manager.UpdateMessages($"You entered Floor {currentFloor}");
 
@@ -181,7 +184,7 @@ public class DungeonGenerator : MonoBehaviour
     //{ - Fountain
     //} - Statue
 
-    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
+    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
     {
         mimicPositions = new List<Vector2Int>();
 
@@ -194,6 +197,11 @@ public class DungeonGenerator : MonoBehaviour
         {
             floorObject = new GameObject($"Floor {currentFloor}");
             floorObject.AddComponent<FloorInfo>();
+        }
+
+        if (_viewRange != 666)
+        {
+            floorObject.GetComponent<FloorInfo>().viewRange = _viewRange;
         }
 
         MapManager.map = new Tile[mapWidth, mapHeight];
@@ -434,7 +442,7 @@ public class DungeonGenerator : MonoBehaviour
                             itemPositions.Add(new Vector2Int(x, y));
                         }
                         break;
-                    case "-": //KEY TO CELL
+                    /*case "-": //KEY TO CELL
                         {
                             MapManager.map[x, y] = new Tile
                             {
@@ -453,7 +461,7 @@ public class DungeonGenerator : MonoBehaviour
 
                             MapManager.map[x, y].item = item.gameObject;
                         }
-                        break;
+                        break;*/
                     case "=": //CHEST OR MIMIC
                         {
                             if (UnityEngine.Random.Range(0, 100) < 10)

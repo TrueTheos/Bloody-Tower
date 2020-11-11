@@ -136,12 +136,7 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                         t.LastKnownTargetPos = nt.pos;
                     }
                 }
-            }
-
-
-
-
-            
+            }      
 
             switch (t.enemySO._Behaviour)
             {

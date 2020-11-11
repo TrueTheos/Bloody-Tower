@@ -8070,6 +8070,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
   - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
   - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
+  - {fileID: 11400000, guid: b80af3384b6ac4d47bfabd2797417397, type: 2}
   - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
@@ -8305,6 +8306,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ddd5db3072e5e6c43968ad93999b906e, type: 2}
   - {fileID: 11400000, guid: cd9e71394617e4144bb8340d10211435, type: 2}
   - {fileID: 11400000, guid: 29116ce0fac0a2d47bb8470d95d7f752, type: 2}
+  - {fileID: 11400000, guid: f242a224a9158f44ea12f27072e72f8e, type: 2}
   artfiacts:
   - {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}
   itemsToSpawn: []
@@ -9146,7 +9148,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 7cc588d54cd743b4a8b10ab98bd165f3,
+      objectReference: {fileID: 11400000, guid: f242a224a9158f44ea12f27072e72f8e,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

@@ -35,6 +35,8 @@ public class DungeonGenerator : MonoBehaviour
 
     public List<Vector2Int> mimicPositions = new List<Vector2Int>();
 
+    private List<Vector2Int> torchPositions = new List<Vector2Int>();
+
     public static DungeonGenerator dungeonGenerator;
     [HideInInspector] public FloorManager floorManager;
     private GameManager manager;
@@ -183,9 +185,12 @@ public class DungeonGenerator : MonoBehaviour
     //9 - Prefab room item
     //{ - Fountain
     //} - Statue
+    //! - Torch
 
     public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
     {
+        torchPositions = new List<Vector2Int>();
+
         mimicPositions = new List<Vector2Int>();
 
         List<Vector2Int> itemPositions = new List<Vector2Int>();
@@ -681,6 +686,22 @@ public class DungeonGenerator : MonoBehaviour
                             MapManager.map[x, y].exploredColor = new Color(1, 0.85f, 0);
                             break;
                         }
+                    case "!":
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                xPosition = x,
+                                yPosition = y,
+                                baseChar = "!",
+                                isWalkable = false,
+                                isOpaque = true,
+                                type = "Torch"
+                            };
+                            MapManager.map[x, y].specialNameOfTheCell = "Torch";
+                            MapManager.map[x, y].exploredColor = new Color(1, 1, 0);                          
+                            torchPositions.Add(new Vector2Int(x, y));
+                            break;
+                        }
                     default:
                         {
                             MapManager.map[x, y] = new Tile
@@ -793,6 +814,11 @@ public class DungeonGenerator : MonoBehaviour
 
         manager.mapName.text = "Floor " + currentFloor;
         manager.UpdateMessages($"You entered Floor {currentFloor}");
+
+        foreach(var torch in torchPositions)
+        {
+            manager.fv.ComputeTorch(new Vector2Int(torch.x, torch.y), 6);
+        }
 
         enemyNames = new List<string>();
         enemyPositions = new List<Vector2Int>();
@@ -1140,6 +1166,9 @@ public class DungeonGenerator : MonoBehaviour
         float B = rgb_value.b;
 
         Color color;
+
+        float tileLight = MapManager.map[x, y].tileLightFactor;
+        if (tileLight != 0) Debug.Log(tileLight);
        
         if (MapManager.map[x, y].isVisible)
         {
@@ -1152,7 +1181,7 @@ public class DungeonGenerator : MonoBehaviour
                 R *= 3;
                 G *= 3;
                 B *= 3;
-                color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
+                color = new Color(R * (refadeFactor + tileLight), G * (refadeFactor + tileLight), B * (refadeFactor + tileLight));
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
             else if(MapManager.map[x, y].enemy != null)
@@ -1160,12 +1189,12 @@ public class DungeonGenerator : MonoBehaviour
                 R *= 3;
                 G *= 3;
                 B *= 3;
-                color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
+                color = new Color(R * (refadeFactor + tileLight), G * (refadeFactor + tileLight), B * (refadeFactor + tileLight));
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
             else
             {
-                color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
+                color = new Color(R * (refadeFactor + tileLight), G * (refadeFactor + tileLight), B * (refadeFactor + tileLight));
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
         }

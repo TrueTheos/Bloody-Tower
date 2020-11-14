@@ -53,7 +53,6 @@ public class MousePointer : MonoBehaviour
         {
             mousePos = new Vector2Int(Mathf.FloorToInt((Input.mousePosition.x - pointA.position.x) / ((pointB.position.x - pointA.position.x) / DungeonGenerator.dungeonGenerator.mapWidth)), Mathf.FloorToInt((Input.mousePosition.y - (ResolutionManager.resolutionManager._Resolution == ResolutionManager.resolutionType.small ? bigY : smallY)) / ((pointB.position.y - pointA.position.y) / DungeonGenerator.dungeonGenerator.mapHeight))); //14 20
 
-            Debug.Log(Input.mousePosition.y);
             if(MapManager.map[mousePos.x, mousePos.y].isExplored)
             {
                 Selector.Current.SelectedTile(mousePos.x, mousePos.y);

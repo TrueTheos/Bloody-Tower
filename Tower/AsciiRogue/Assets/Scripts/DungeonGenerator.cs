@@ -1597,15 +1597,37 @@ public class DungeonGenerator : MonoBehaviour
                     structs.Add(newStruct);
                 }
 
+                FloorGenData gen = new FloorGenData();
+                if (centralRoom.isPrefabRoom)
+                {
+                    gen.AddRoom(centralRoom.prefabValue);
+                }
+
+                int MaxPrefabRoom = 3;
+
                 // furnish the dungeon
-                foreach (Structure s in structs)
+                foreach (Structure s in structs.EnumerateRandom())
                 {
                     if (s.isRoom())
+                    {
+                        if (!s.isPrefabRoom && gen.PrefabRoomCount<MaxPrefabRoom)
+                        {
+                            // check if we can add one
+                            if (PrefabProvider.Rooms.TryGetRoom(s.width,s.height,gen,out PrefabRoom prefab))
+                            {
+                                gen.AddRoom(prefab);
+                                s.prefabValue = prefab;
+                                s.isPrefabRoom = true;
+                            }                            
+                        }
+
                         furnishRoom(m, s);
+                    }                        
                     else
                         furnishCorridor(m, s);
 
                 }
+                Debug.Log("Furnish rooms complete: " + gen.PrefabRoomCount);
 
                 // spawn the stairs
                 Structure r = SpawnStairsPlaceHolder('<', m, structs, null);
@@ -1912,7 +1934,34 @@ public class DungeonGenerator : MonoBehaviour
 
                         Direction dr = (Direction)(Rand.range(0, 4) * 2);
                         int tryCount = 0;
-                        int maxDim = 10;
+
+                        int maxDRand = Rand.range(1, 11);
+
+                        int maxDim = 9;
+
+                        switch (maxDRand)
+                        {
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                                maxDim -= 0;
+                                break;
+                            case 7:
+                            case 8:
+                                maxDim -= 1;
+                                break;
+                            case 9:
+                            case 10:
+                                maxDim -= 2;
+                                break;
+                            default:
+                                break;
+                        }
+                        
+                        
                         int minDim = 3;
                         
                         

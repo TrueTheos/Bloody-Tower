@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
         m_Messages.Clear();
         messagesText = "";
         messages.text = messagesText;
-
+        MapManager.IsValid = true;
         FirstTurn();
     }
 

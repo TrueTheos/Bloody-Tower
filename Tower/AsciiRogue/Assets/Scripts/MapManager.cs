@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MapManager
 {
+    public static bool IsValid = false;
     public static Tile[,] map; // the 2-dimensional map with the information for all the tiles
     public static Vector2Int playerPos;
     public static Vector2Int upperStairsPos, lowerStairsPos;

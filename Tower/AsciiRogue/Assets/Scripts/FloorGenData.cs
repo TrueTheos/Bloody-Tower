@@ -12,8 +12,15 @@ public class FloorGenData
     public Dictionary<string, int> ExistingTags = new Dictionary<string, int>();
     public Dictionary<string, int> ExcludedTags = new Dictionary<string, int>();
 
+    public List<TagSetCheck> RequiredChecks = new List<TagSetCheck>();
+
     public FloorGenData()
     {
+    }
+
+    public void AddCheck(TagSetCheck check)
+    {
+        RequiredChecks.Add(check);
     }
 
     public void AddRoom(PrefabRoom room)

@@ -67,14 +67,14 @@ public static class PrefabProvider
             Loaded = true;
         }
 
-        public static bool TryGetRoom(int width, int height, FloorGenData genData, string requiredTag, out PrefabRoom room)
+        public static bool TryGetRoom(int width, int height, FloorGenData genData, TagCheck requiredTag, out PrefabRoom room)
         {
             if (_indexTable.ContainsKey(new Vector2Int(width,height)))
             {
                 // there is a room of that size
                 foreach (var r in _indexTable[new Vector2Int(width,height)])
                 {                    
-                    if (r.Key == requiredTag)
+                    if (requiredTag[r.Key])
                     {
                         // we found the right tag
                         foreach (var opt in r.Value.AsArray().EnumerateRandom())
@@ -128,7 +128,6 @@ public static class PrefabProvider
                     {
                         continue;
                     }
-                    // we found the right tag
 
                     bool valid = true;
                     foreach (var myTag in r.Tags)
@@ -161,8 +160,63 @@ public static class PrefabProvider
             room = null;
             return false;
         }
+        
+        public static bool TryGetRoom(
+            int width, int height, FloorGenData genData,
+            out PrefabRoom room, TagSetCheck setCheck )
+        {
+            if (_sizeTable.ContainsKey(new Vector2Int(width, height)))
+            {
+                // there is a room of that size
+                foreach (var r in _sizeTable[new Vector2Int(width, height)].AsArray().EnumerateRandom())
+                {
+                    if (genData.PlacedRooms.Contains(r))
+                    {
+                        continue;
+                    }
+
+                    bool valid = true;
+
+                    foreach (var myTag in r.Tags)
+                    {
+                        if (genData.ExcludedTags.ContainsKey(myTag))
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if (!valid) continue;
+                    foreach (var exTag in r.ExcludeTags)
+                    {
+                        if (genData.ExistingTags.ContainsKey(exTag))
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if (!valid) continue;
+                    var hash = r.HashTags;
+                    foreach (var check in genData.RequiredChecks)
+                    {
+                        if (!check[hash])
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if (valid && setCheck[hash])
+                    {
+                        room = r;
+                        return true;
+                    }
 
 
+                }
+            }
+
+            room = null;
+            return false;
+        }
 
     }
 }

@@ -35,4 +35,8 @@ public class PrefabRoom : ScriptableObject
 
     public List<string> ExcludeTags;
 
+
+    public HashSet<string> HashTags => new HashSet<string>(Tags);
+    public HashSet<string> ExcludeHashTags => new HashSet<string>(ExcludeTags);
+
 }

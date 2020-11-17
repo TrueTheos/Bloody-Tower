@@ -1603,7 +1603,7 @@ public class DungeonGenerator : MonoBehaviour
                     gen.AddRoom(centralRoom.prefabValue);
                 }
 
-                int MaxPrefabRoom = 3;
+                int MaxPrefabRoom = 4;
 
                 // furnish the dungeon
                 foreach (Structure s in structs.EnumerateRandom())
@@ -1613,8 +1613,8 @@ public class DungeonGenerator : MonoBehaviour
                         if (!s.isPrefabRoom && gen.PrefabRoomCount<MaxPrefabRoom)
                         {
                             // check if we can add one
-                            if (PrefabProvider.Rooms.TryGetRoom(s.width,s.height,gen,out PrefabRoom prefab))
-                            {
+                            if (PrefabProvider.Rooms.TryGetRoom(s.width,s.height,gen,out PrefabRoom prefab,(TagSetCheck)"Room" | "All"))
+                            {                                
                                 gen.AddRoom(prefab);
                                 s.prefabValue = prefab;
                                 s.isPrefabRoom = true;
@@ -1628,6 +1628,11 @@ public class DungeonGenerator : MonoBehaviour
 
                 }
                 Debug.Log("Furnish rooms complete: " + gen.PrefabRoomCount);
+                foreach (var placed in gen.PlacedRooms)
+                {
+                    Debug.Log(placed.name);
+                }
+                Debug.Log("------------");
 
                 // spawn the stairs
                 Structure r = SpawnStairsPlaceHolder('<', m, structs, null);

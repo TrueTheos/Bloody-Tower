@@ -137,6 +137,17 @@ public static class MapUtility
     }
 
 
+    public static T[] AsArray<T>(this HashSet<T> me)
+    {
+        T[] arr = new T[me.Count];
+        int i = 0;
+        foreach (var item in me)
+        {
+            arr[i] = item;
+            i++;
+        }
+        return arr;
+    }
     public static IEnumerable<Vector2Int> GetSimpleNeighbours(Vector2Int position,System.Func<Vector2Int,bool> valid = null, bool repeat = false)
     {
 
@@ -169,5 +180,20 @@ public static class MapUtility
             yield return data[i % n];
             i++;
         } while (repeat);
+    }
+
+    public static IEnumerable<T> EnumerateRandom<T>(this IList<T> data)
+    {
+        int[] index = new int[data.Count];
+        for (int i = 0; i < data.Count; i++)
+        {
+            index[i] = i;
+        }
+        index = index.Randomize();
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            yield return data[index[i]];
+        }
     }
 }

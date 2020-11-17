@@ -26,7 +26,19 @@ public class PlayerStats : MonoBehaviour, IUnit
     [HideInInspector] public int maxWeight = 60;
     [HideInInspector] public int currentWeight;
     [HideInInspector] public int startingViewRange = 7;
-    [HideInInspector] public int viewRange;
+
+    public int _viewRange;
+    public int viewRange
+    {
+        get
+        {
+            return _viewRange;
+        }
+        set
+        {
+            _viewRange = RecalculateViewRange();
+        }
+    }
     [HideInInspector] public int maximumInventorySpace = 15;
     [HideInInspector] public int currentItems;
     [HideInInspector] public int skillpoints;
@@ -442,7 +454,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     public void Start()
     {
-        viewRange = startingViewRange;
+        _viewRange = startingViewRange;
 
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
@@ -710,6 +722,46 @@ public class PlayerStats : MonoBehaviour, IUnit
                 npcDialogue = null;
             }     
         }
+    }
+
+
+    public int RecalculateViewRange()
+    {
+        int _vr = 0;
+
+        _vr = startingViewRange;
+        if (DungeonGenerator.dungeonGenerator.floorObject.GetComponent<FloorInfo>().viewRange != 666)
+        {
+            _vr = DungeonGenerator.dungeonGenerator.floorObject.GetComponent<FloorInfo>().viewRange;
+        }
+
+        if(_Lhand != null)
+        {
+            if(_Lhand.iso is WeaponsSO w1)
+            {
+                if(_vr < startingViewRange)
+                {
+                    _vr += w1.lightFactor;
+                }
+            }
+        }
+
+        if (_Rhand != null)
+        {
+            if (_Rhand.iso is WeaponsSO w2)
+            {
+                if (_vr < startingViewRange)
+                {
+                    _vr += w2.lightFactor;
+                }
+            }
+        }
+
+        if (_vr > startingViewRange) _vr = startingViewRange;
+
+        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+
+        return _vr;
     }
 
     private bool CellIsAvailable(int x, int y)

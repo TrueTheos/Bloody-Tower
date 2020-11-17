@@ -3814,7 +3814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -6.7599487, y: 207.59998}
+  m_AnchoredPosition: {x: -6.76001, y: 207.59998}
   m_SizeDelta: {x: -945.0464, y: 22.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &792540167
@@ -7961,8 +7961,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 541d34abbb63551408daf9ade481cc0b, type: 2}
   - {fileID: 11400000, guid: e3b03e62a1319374a8532e52c91a5c60, type: 2}
   necromancerLevel: {fileID: 11400000, guid: c728acb842546aa4c9eec4d5d7baf8ba, type: 2}
-  lvl7: {fileID: 11400000, guid: ff295eefe3fa6024db49793024a93a08, type: 2}
-  keyToCell: {fileID: 11400000, guid: ffcdee82e8232744188ff2a3b7d5fd67, type: 2}
   enemiesList: []
   splitted: []
   enemies: 
@@ -7990,6 +7988,7 @@ MonoBehaviour:
   rooms: []
   playerPrefab: {fileID: 217120817462417562, guid: 4eabca731634a0a48b42c10cf57d7f97,
     type: 3}
+  floorObject: {fileID: 0}
   screen: {fileID: 25631524}
   lightFactor: 1
   waterColors:
@@ -8050,28 +8049,7 @@ MonoBehaviour:
     dry and cracked ground. As far back as the painting depicts, pillars of blood
     can be seen rising.
   _prefabRooms:
-  - {fileID: 11400000, guid: cef9830c4c79b8743a3ab5cdf911c4af, type: 2}
-  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
-  - {fileID: 11400000, guid: d0e8b321ac9e1a041bf80074a20318dd, type: 2}
-  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
-  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
-  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
-  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
-  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
-  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
-  - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
-  - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
-  - {fileID: 11400000, guid: 4f3a39350370d834b819cf80b80cda07, type: 2}
-  - {fileID: 11400000, guid: a61dde49ef4997e429bc17e1ed262e63, type: 2}
-  - {fileID: 11400000, guid: a3119d29421f2ea43a5f9df2b02f491a, type: 2}
-  - {fileID: 11400000, guid: 7d28ecc10ab512741a3577e5a523eb54, type: 2}
-  - {fileID: 11400000, guid: c1aba9dc3def109419bb402b9b6e1932, type: 2}
-  - {fileID: 11400000, guid: 13f101848cd22c24a940f258bc5d9dd9, type: 2}
-  - {fileID: 11400000, guid: 23d0d6e82f73ed043805363fc310aeec, type: 2}
-  - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
-  - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
-  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
-  - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
+  - {fileID: 11400000, guid: 61350fec123f8e04b9a7cbd587dcb0ae, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8306,6 +8284,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ddd5db3072e5e6c43968ad93999b906e, type: 2}
   - {fileID: 11400000, guid: cd9e71394617e4144bb8340d10211435, type: 2}
   - {fileID: 11400000, guid: 29116ce0fac0a2d47bb8470d95d7f752, type: 2}
+  - {fileID: 11400000, guid: f242a224a9158f44ea12f27072e72f8e, type: 2}
   artfiacts:
   - {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}
   itemsToSpawn: []
@@ -9147,7 +9126,8 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: f242a224a9158f44ea12f27072e72f8e,
+        type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}
       propertyPath: _ac
@@ -9183,6 +9163,66 @@ PrefabInstance:
       propertyPath: blood
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _nickText
+      value: 
+      objectReference: {fileID: 752988040}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _healthText
+      value: 
+      objectReference: {fileID: 77379554}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _strengthText
+      value: 
+      objectReference: {fileID: 1308505716}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _intelligenceText
+      value: 
+      objectReference: {fileID: 2078186224}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _dexteirtyText
+      value: 
+      objectReference: {fileID: 953815883}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _enduranceText
+      value: 
+      objectReference: {fileID: 845663044}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _lvlText
+      value: 
+      objectReference: {fileID: 2049583025}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _experienceText
+      value: 
+      objectReference: {fileID: 1795586158}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _coinsText
+      value: 
+      objectReference: {fileID: 416528846}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _acText
+      value: 
+      objectReference: {fileID: 1038671856}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _noiseText
+      value: 
+      objectReference: {fileID: 753867701}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _bloodText
+      value: 
+      objectReference: {fileID: 1605805455}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4eabca731634a0a48b42c10cf57d7f97, type: 3}
 --- !u!1 &2001329958

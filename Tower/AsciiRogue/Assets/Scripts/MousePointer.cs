@@ -60,6 +60,7 @@ public class MousePointer : MonoBehaviour
             Debug.Log(Input.mousePosition);
             
             if( MapManager.map[mousePos.x, mousePos.y].isExplored)
+
             {
                 Selector.Current.SelectedTile(mousePos.x, mousePos.y);
 

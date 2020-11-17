@@ -69,7 +69,11 @@ public class WeaponsSO : ItemScriptableObject
             if (bonusToDexterity != 0) player.__dexterity += bonusToDexterity;
             if (bonusToEndurance != 0) player.__endurance += bonusToEndurance;
             if (bonusToNoise != 0) player.__noise += bonusToNoise;
-            if (lightFactor != 0) DungeonGenerator.dungeonGenerator.lightFactor += lightFactor;
+            if (lightFactor != 0)
+            {
+                player.viewRange = 0;
+                DungeonGenerator.dungeonGenerator.lightFactor += lightFactor;
+            }
         }
     }
 
@@ -83,7 +87,11 @@ public class WeaponsSO : ItemScriptableObject
             if (bonusToDexterity != 0) player.__dexterity += -bonusToDexterity;
             if (bonusToEndurance != 0) player.__endurance += -bonusToEndurance;
             if (bonusToNoise != 0) player.__noise += -bonusToNoise;
-            if (lightFactor != 0) DungeonGenerator.dungeonGenerator.lightFactor -= lightFactor;
+            if (lightFactor != 0)
+            {
+                player.viewRange = 0;
+                DungeonGenerator.dungeonGenerator.lightFactor -= lightFactor;
+            }
         }
     }
 

@@ -7,4 +7,6 @@ public class FixedLevels : ScriptableObject
 {
    // [TextArea]
     public string fixedLevel;
+    [Header("Light factor")]
+    public int ligtFactor = 0; 
 }

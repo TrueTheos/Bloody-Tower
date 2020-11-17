@@ -14,8 +14,6 @@ public class DungeonGenerator : MonoBehaviour
     [Header("Fixed Levels")]
     public List<FixedLevels> floor10BossRooms;
     public FixedLevels necromancerLevel;
-    public FixedLevels lvl7;
-    public ItemScriptableObject keyToCell;
 
     public string[] enemiesList;
     public string[] splitted;
@@ -36,6 +34,8 @@ public class DungeonGenerator : MonoBehaviour
     public List<bool> Prefab_enemySleeping = new List<bool>();
 
     public List<Vector2Int> mimicPositions = new List<Vector2Int>();
+
+    private List<Vector2Int> torchPositions = new List<Vector2Int>();
 
     public static DungeonGenerator dungeonGenerator;
     [HideInInspector] public FloorManager floorManager;
@@ -67,7 +67,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private bool playerExists;
 
-    private GameObject floorObject = null;
+    public GameObject floorObject = null;
 
     public Text screen;
     public float lightFactor = 1f;
@@ -110,9 +110,9 @@ public class DungeonGenerator : MonoBehaviour
         {            
             GenerateFixedLevel(floor10BossRooms[UnityEngine.Random.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
         }
-        else if(floorNumber == 7 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber == 5 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
-            GenerateFixedLevel(lvl7.fixedLevel, 7, true, false);  
+            GenerateFixedLevel(MapGenerator.createSewerMap().print(), floorNumber, false, false, 2);
         }
         else if (floorNumber == 13 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
         {
@@ -152,6 +152,11 @@ public class DungeonGenerator : MonoBehaviour
                 MovePlayerToLowerStairs(); //comming from the higher floor
             }
 
+            if(floorObject.GetComponent<FloorInfo>().viewRange != 666)
+            {
+                manager.playerStats.viewRange = 0;
+            }
+
             manager.mapName.text = "Floor " + currentFloor;
             manager.UpdateMessages($"You entered Floor {currentFloor}");
 
@@ -180,9 +185,12 @@ public class DungeonGenerator : MonoBehaviour
     //9 - Prefab room item
     //{ - Fountain
     //} - Statue
+    //! - Torch
 
-    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true)
+    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
     {
+        torchPositions = new List<Vector2Int>();
+
         mimicPositions = new List<Vector2Int>();
 
         List<Vector2Int> itemPositions = new List<Vector2Int>();
@@ -194,6 +202,11 @@ public class DungeonGenerator : MonoBehaviour
         {
             floorObject = new GameObject($"Floor {currentFloor}");
             floorObject.AddComponent<FloorInfo>();
+        }
+
+        if (_viewRange != 666)
+        {
+            floorObject.GetComponent<FloorInfo>().viewRange = _viewRange;
         }
 
         MapManager.map = new Tile[mapWidth, mapHeight];
@@ -434,7 +447,7 @@ public class DungeonGenerator : MonoBehaviour
                             itemPositions.Add(new Vector2Int(x, y));
                         }
                         break;
-                    case "-": //KEY TO CELL
+                    /*case "-": //KEY TO CELL
                         {
                             MapManager.map[x, y] = new Tile
                             {
@@ -453,7 +466,7 @@ public class DungeonGenerator : MonoBehaviour
 
                             MapManager.map[x, y].item = item.gameObject;
                         }
-                        break;
+                        break;*/
                     case "=": //CHEST OR MIMIC
                         {
                             if (UnityEngine.Random.Range(0, 100) < 10)
@@ -673,6 +686,22 @@ public class DungeonGenerator : MonoBehaviour
                             MapManager.map[x, y].exploredColor = new Color(1, 0.85f, 0);
                             break;
                         }
+                    case "!":
+                        {
+                            MapManager.map[x, y] = new Tile
+                            {
+                                xPosition = x,
+                                yPosition = y,
+                                baseChar = "!",
+                                isWalkable = false,
+                                isOpaque = true,
+                                type = "Torch"
+                            };
+                            MapManager.map[x, y].specialNameOfTheCell = "Torch";
+                            MapManager.map[x, y].exploredColor = new Color(1, 1, 0);                          
+                            torchPositions.Add(new Vector2Int(x, y));
+                            break;
+                        }
                     default:
                         {
                             MapManager.map[x, y] = new Tile
@@ -785,6 +814,11 @@ public class DungeonGenerator : MonoBehaviour
 
         manager.mapName.text = "Floor " + currentFloor;
         manager.UpdateMessages($"You entered Floor {currentFloor}");
+
+        foreach(var torch in torchPositions)
+        {
+            manager.fv.ComputeTorch(new Vector2Int(torch.x, torch.y), 6);
+        }
 
         enemyNames = new List<string>();
         enemyPositions = new List<Vector2Int>();
@@ -1132,6 +1166,9 @@ public class DungeonGenerator : MonoBehaviour
         float B = rgb_value.b;
 
         Color color;
+
+        float tileLight = MapManager.map[x, y].tileLightFactor;
+        if (tileLight != 0) Debug.Log(tileLight);
        
         if (MapManager.map[x, y].isVisible)
         {
@@ -1144,7 +1181,7 @@ public class DungeonGenerator : MonoBehaviour
                 R *= 3;
                 G *= 3;
                 B *= 3;
-                color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
+                color = new Color(R * (refadeFactor + tileLight), G * (refadeFactor + tileLight), B * (refadeFactor + tileLight));
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
             else if(MapManager.map[x, y].enemy != null)
@@ -1152,12 +1189,12 @@ public class DungeonGenerator : MonoBehaviour
                 R *= 3;
                 G *= 3;
                 B *= 3;
-                color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
+                color = new Color(R * (refadeFactor + tileLight), G * (refadeFactor + tileLight), B * (refadeFactor + tileLight));
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
             else
             {
-                color = new Color(R * refadeFactor, G * refadeFactor, B * refadeFactor);
+                color = new Color(R * (refadeFactor + tileLight), G * (refadeFactor + tileLight), B * (refadeFactor + tileLight));
                 return ColorUtility.ToHtmlStringRGBA(color);
             }
         }

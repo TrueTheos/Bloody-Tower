@@ -130,6 +130,7 @@ public class Tile
     public GameObject enemy;
     public GameObject item;
     public Structure structure;
+    public float tileLightFactor;
 
     public string decoy = "";
 

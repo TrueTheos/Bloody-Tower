@@ -92,6 +92,89 @@ public class AStar
         return path;
     }
 
+    public static List<Vector2Int> CalculatePathNoCollisions(Vector2Int start, Vector2Int target)
+    {
+        if (dungeon == null) dungeon = GameObject.Find("GameManager").GetComponent<DungeonGenerator>();
+
+        List<Vector2Int> path = new List<Vector2Int>();
+
+        openList = new List<Node>();
+        closedList = new List<Node>();
+        allNodes = new Node[dungeon.mapWidth, dungeon.mapHeight];
+        for (int y = 0; y < dungeon.mapHeight; y++)
+        {
+            for (int x = 0; x < dungeon.mapWidth; x++)
+            {
+                allNodes[x, y] = new Node();
+            }
+        }
+
+        Node firstNode = new Node() { position = start, gCost = 0, isOnClosedList = true };
+        closedList.Add(firstNode);
+
+        foreach (Vector2Int position in GetNeighboursNoCollisions(firstNode.position))
+        {
+            Node node = new Node() { position = position, parent = firstNode, hCost = CalculateHCost(position, target), gCost = CalculateGCost(firstNode, position) };
+            node.fCost = node.gCost + node.hCost;
+            node.isOnOpenList = true;
+            allNodes[position.x, position.y] = node;
+            openList.Add(node);
+        }
+
+        Node lastNode = new Node();
+
+        while (openList.Count > 0)
+        {
+            Node node = openList[0];
+
+            foreach (Node pathNode in openList)
+            {
+                if (node.fCost > pathNode.fCost || (node.fCost == pathNode.fCost && node.hCost > pathNode.hCost)) node = pathNode;
+            }
+
+            if (node.position == target)
+            {
+                lastNode = node;
+                break;
+            }
+
+            closedList.Add(node);
+            allNodes[node.position.x, node.position.y].isOnClosedList = true;
+            openList.Remove(node);
+            allNodes[node.position.x, node.position.y].isOnOpenList = false;
+
+            bool foundTarget = false;
+
+            foreach (Vector2Int position in GetNeighboursNoCollisions(node.position))
+            {
+                if (position == target)
+                {
+                    foundTarget = true;
+                    break;
+                }
+                if (MapManager.map[position.x, position.y].enemy == null)
+                {
+                    Node neighbour = new Node() { position = position, parent = node, gCost = CalculateGCost(node, position), hCost = CalculateHCost(position, target), isOnOpenList = true };
+                    neighbour.fCost = neighbour.gCost + neighbour.hCost;
+                    allNodes[position.x, position.y] = neighbour;
+                    openList.Add(neighbour);
+                }
+            }
+
+            if (foundTarget)
+            {
+                openList.Clear();
+                lastNode = node;
+                break;
+            }
+        }
+
+        path.Add(target);
+        RetracePath(path, start, lastNode);
+
+        return path;
+    }
+
     static void RetracePath(List<Vector2Int> path, Vector2Int start, Node lastNode)
     {
         Node current = lastNode;
@@ -124,6 +207,33 @@ public class AStar
                     if (MapManager.map[x, y] != null )
                     {                        
                         if(MapManager.map[x, y].isWalkable || MapManager.map[x, y].enemy != null || MapManager.map[x, y].type == "Door")
+                        {
+                            if (!allNodes[x, y].isOnClosedList && !allNodes[x, y].isOnOpenList)
+                            {
+                                neighbours.Add(new Vector2Int(x, y));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return neighbours;
+    }
+
+    static List<Vector2Int> GetNeighboursNoCollisions(Vector2Int parent)
+    {
+        List<Vector2Int> neighbours = new List<Vector2Int>();
+
+        for (int y = parent.y - 1; y <= parent.y + 1; y++)
+        {
+            for (int x = parent.x - 1; x <= parent.x + 1; x++)
+            {
+                if (x >= 0 && y >= 0 && x < dungeon.mapWidth && y < dungeon.mapHeight)
+                {
+                    if (MapManager.map[x, y] != null)
+                    {
+                        if (MapManager.map[x, y].enemy == null )
                         {
                             if (!allNodes[x, y].isOnClosedList && !allNodes[x, y].isOnOpenList)
                             {

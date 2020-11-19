@@ -30,4 +30,14 @@ public class PrefabRoom : ScriptableObject
 
     [Header("Items")]
     public List<ItemScriptableObject> itemsToSpawn = new List<ItemScriptableObject>();
+
+    [Header("Tags and more")]
+    public List<string> Tags;
+
+    public List<string> ExcludeTags;
+
+
+    public HashSet<string> HashTags => new HashSet<string>(Tags);
+    public HashSet<string> ExcludeHashTags => new HashSet<string>(ExcludeTags);
+
 }

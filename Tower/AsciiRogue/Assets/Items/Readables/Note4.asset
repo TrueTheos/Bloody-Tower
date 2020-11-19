@@ -37,10 +37,8 @@ MonoBehaviour:
   bonusToDexterity: 0
   bonusToEndurance: 0
   bonusToNoise: 0
-  text: '<color=#a38745>===============================================================================</color>
-
-    <i>There''s
-    another god watching us. It wants something. It''s why we''re here. Whoever is
-    reading this, you better hope you get the chance to find out what it wants.</i>
-
-    <color=#a38745>===============================================================================</color>'
+  text: "<color=#a38745>===========================================================================================</color>\n<i>There
+    is another one watching. Different from the others. This one...it desires something
+    from\r us. But what? It is the reason we are here. If you are reading this then
+    know that we failed to\r give it what it wants. Hope that you will be able to
+    or we shall both share the same fate.</i>\n<color=#a38745>===========================================================================================</color>"

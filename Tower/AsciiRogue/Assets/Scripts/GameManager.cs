@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
-        for (int i = 1; i <= 2; i++)
+        for (int i = 1; i <= 20; i++)
         {
             dungeonGenerator.GenerateDungeon(i);
             yield return new WaitForEndOfFrame();

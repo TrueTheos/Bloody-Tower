@@ -8027,28 +8027,66 @@ MonoBehaviour:
   - {r: 1, g: 0.56445867, b: 0.16509432, a: 0}
   - {r: 0.7924528, g: 0.6928865, b: 0.16820934, a: 0}
   paintingTexts:
-  - A beautiful man sits at a lacquered table. They are sipping on a glass of deep
-    red wine.
-  - A crimson waterfall rages over a mountainside. The sun sitting halfway across
-    the horizon casts a red glow over everything. The water is sparkling, reflecting
-    the sunlight.
-  - A palm tree stands tall, swaying in the wind. It's roots bleed to the surface.
-    Puddles of deep crimson are everywhere.
-  - An obelisk, surrounded by fire, is encircled by an even wider ring of ten scaffolds.
-    Hanging from the scaffolds are strangely massacred bodies of the unfortunates.
-  - In the middle of the marshes stretched a small, dry island. On the island, an
-    indescribable naked horde swirled. They writhed around a monstrous circle of
-    fire, and in the center of the circle stood a large granite obelisk, and at the
-    top of the obelisk stood a small carved figure.
-  - A humanoid silhoutte takes up the painting. The humanoid's heart is outlined.
-    It is red but glittering with gold. Large veins are shown across the silhoutte.
-    They are red with moving blood, glittered gold.
-  - A man sits naked, cross legged. Blood pours over him. The blood is shimmering
-    as if it were full of diamonds.
-  - There is a vast desert, tinted red by it's sun. Pillars of blood rise from the
-    dry and cracked ground. As far back as the painting depicts, pillars of blood
-    can be seen rising.
+  - Crimson walls flood the horizon, creating a milky brownish-blue hue at their
+    collision. The half-sun Ra sets in the distance, watching in anger as it is tainted
+    by the residue of the dead. And yet, these tainted waves sparkle with life, glistening
+    beautifully as it reflects light for the last time before yet another bloody
+    night.
+  - "A gentleman is seen seated at a lacquered table, the glossy black coating of
+    it reflecting his tarnished soul. A murky glass of what seems to be red wine
+    cupped in his hand, held close to his lips as if in contemplation. Everyone always
+    hesitates on their first sip of another\u2019s life. "
+  - "On the sand there stands a grove of palm trees near the shore. Many of them
+    are waiting at death\u2019s door, but there remains one that stalls above all.
+    Cryptic hieroglyphics tattooed on its bark that glow throughout the night. Grotesque
+    roots protrude through the soil. Each night it grows in size, nourished by the
+    puddles of those who\u2019ve fallen off the path. "
+  - 'Past the marshes there sits an island, one that has become a tourist attraction.
+    It holds what others yearns, so at night it burns. Though many have come to learn
+    that this would be their last wrong turn. Naked hordes of men swirl around the
+    bodies that churn, their praises to the obelisk where all souls are said to return. '
+  - 'The sun never sleeps, but at night it must lend its light to the moon. So that
+    Ra may stay alive, others must die. Thus his followers dig a pit, encircling
+    trenches with benches of those they had lynched. These are the graves for what
+    remains of those who hang from the scaffolds. The unfortunate souls who heard
+    the rumors yet still did the opposite of what they were told. '
+  - "Have you ever seen a heart that has been consumed by greed? It\u2019s not as
+    ugly as one would think, but rather quite pretty. The core\u2019s a lively cherry
+    red, the outlines pitch black like mankind's past. A network of veins replaced
+    with golden chains. Despite their riches, these poor souls still die in vain.
+    Their bodies now silhouettes, for overtime they\u2019ve become hollow and lame. "
+  - On a torn soiled parchment there sits a man, naked and cross-legged. Rivers of
+    blood trickling from his head to his toes. It pours from a bowl, showing that
+    the blood is not his own. A being that was once broke now shining as if he was
+    made out of pure gold
+  - "In a vast desert, both cold and heated, there lie pillars, chipped and grounded.
+    To the sky they point, but in a crescent they\u2019re shaped. Their sharpened
+    jaded tips refracting the red glow of the eclipse. When the sun meets the moon,
+    they grow."
   _prefabRooms:
+  - {fileID: 11400000, guid: cef9830c4c79b8743a3ab5cdf911c4af, type: 2}
+  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
+  - {fileID: 11400000, guid: d0e8b321ac9e1a041bf80074a20318dd, type: 2}
+  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
+  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
+  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
+  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
+  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
+  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
+  - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
+  - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
+  - {fileID: 11400000, guid: 4f3a39350370d834b819cf80b80cda07, type: 2}
+  - {fileID: 11400000, guid: a61dde49ef4997e429bc17e1ed262e63, type: 2}
+  - {fileID: 11400000, guid: a3119d29421f2ea43a5f9df2b02f491a, type: 2}
+  - {fileID: 11400000, guid: 7d28ecc10ab512741a3577e5a523eb54, type: 2}
+  - {fileID: 11400000, guid: c1aba9dc3def109419bb402b9b6e1932, type: 2}
+  - {fileID: 11400000, guid: 13f101848cd22c24a940f258bc5d9dd9, type: 2}
+  - {fileID: 11400000, guid: 23d0d6e82f73ed043805363fc310aeec, type: 2}
+  - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
+  - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
+  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
+  - {fileID: 11400000, guid: b80af3384b6ac4d47bfabd2797417397, type: 2}
+  - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
   - {fileID: 11400000, guid: 61350fec123f8e04b9a7cbd587dcb0ae, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
@@ -8275,15 +8313,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 48621e4f0312ab64ebe6f79e08f7671e, type: 2}
   readables:
   - {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997, type: 2}
-  - {fileID: 11400000, guid: f01fe5dcd2e773a40a055bcc7efd9c42, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: b0b5d81b707dca4499283a8b1b7b3ec7, type: 2}
   - {fileID: 11400000, guid: 9fd9b923009836a43acf0036015ca206, type: 2}
-  - {fileID: 11400000, guid: 3a56aabf9c1fe934abae1793587dd0f9, type: 2}
   - {fileID: 11400000, guid: 9be2d01a25a5ece449db2c1f51eb8855, type: 2}
-  - {fileID: 11400000, guid: fdbe1006f4649d040ad4129352d71c9e, type: 2}
-  - {fileID: 11400000, guid: ddd5db3072e5e6c43968ad93999b906e, type: 2}
-  - {fileID: 11400000, guid: cd9e71394617e4144bb8340d10211435, type: 2}
-  - {fileID: 11400000, guid: 29116ce0fac0a2d47bb8470d95d7f752, type: 2}
   - {fileID: 11400000, guid: f242a224a9158f44ea12f27072e72f8e, type: 2}
   artfiacts:
   - {fileID: 11400000, guid: 45844943a27b8cb42aea8fe471b22de1, type: 2}
@@ -9126,7 +9159,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: f242a224a9158f44ea12f27072e72f8e,
+      objectReference: {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997,
         type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}

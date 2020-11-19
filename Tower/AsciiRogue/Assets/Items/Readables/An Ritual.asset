@@ -37,18 +37,10 @@ MonoBehaviour:
   bonusToDexterity: 0
   bonusToEndurance: 0
   bonusToNoise: 0
-  text: '<color=#a38745>===============================================================================</color>
-
-    The
-    Note is in bad condition, you can barely read:
-
-    ...
-
-    <i>The four lights
-    and the body of the fallen. Let them all burn, let there be light! Fall down
-    and pray to your god, pray that he would send the Finger of Death that other
-    gods fear...</i>
-
-    ...
-
-    <color=#a38745>===============================================================================</color>'
+  text: "<color=#a38745>===========================================================================================</color>\nA
+    note that has seen better days. The fading words, which you can barely make out,
+    read:\n<i>Place these four lights around the body of the fallen. Let flame consume
+    their mortal vessel,\r let the blaze reduce them all to ashes, and let there
+    be light. Fall to your knees, unworthy, and pray! Pray that your God would take
+    pity on you and send proof of his might. His unseen\r Finger of Death that stalks
+    the heavens and strikes fear into even the other Gods.\r</i>\n<color=#a38745>===========================================================================================</color>"

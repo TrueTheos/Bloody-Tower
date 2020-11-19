@@ -37,10 +37,7 @@ MonoBehaviour:
   bonusToDexterity: 0
   bonusToEndurance: 0
   bonusToNoise: 0
-  text: '<color=#a38745>===============================================================================</color>
-
-    <i>The
-    gods... I can feel their eyes on me. The further I get... the more those eyes
-    burn</i>
-
-    <color=#a38745>===============================================================================</color>'
+  text: "<color=#a38745>===========================================================================================</color>\n<i>Their
+    eyes continue to burrow into me. I can feel their many eyes on me from afar.
+    Every\r step, every breath. All is beneath their gaze. The further I try to get,
+    the more their gaze\r burns...\r</i>\n<color=#a38745>===========================================================================================</color>"

@@ -12,26 +12,34 @@ public class Chest : Structure
 
     public override void Use()
     {
-        if (itemInChest == null)
-        {
-            GameManager.manager.UpdateMessages("The chest is empty.");
-            return;
-        }
-
         if (!opened)
         {
-            if (itemInChest.normalIdentifState)
+            if (itemInChest == null) 
             {
-                GameManager.manager.UpdateMessages($"You opened the chest. It contains <color={itemInChest.I_color}>{itemInChest.I_name}</color>.");
+                GameManager.manager.UpdateMessages("Nothing here.");
+                return;
             }
             else
             {
-                GameManager.manager.UpdateMessages($"You opened the chest. It contains <color=purple>{itemInChest.I_unInName}</color>.");
+                if (itemInChest.normalIdentifState)
+                {
+                    GameManager.manager.UpdateMessages($"You opened the chest. It contains <color={itemInChest.I_color}>{itemInChest.I_name}</color>.");
+                }
+                else
+                {
+                    GameManager.manager.UpdateMessages($"You opened the chest. It contains <color=purple>{itemInChest.I_unInName}</color>.");
+                }
+                opened = true;
             }
-            opened = true;
         }
         if (opened)
         {
+            if(itemInChest == null)
+            {
+                GameManager.manager.UpdateMessages("The chest is empty.");
+                return;
+            }
+
             if (manager.playerStats.maximumInventorySpace > manager.playerStats.currentItems && manager.playerStats.currentWeight + itemInChest.I_weight <= manager.playerStats.maxWeight)
             {
                 manager.playerStats.currentWeight += itemInChest.I_weight;
@@ -55,11 +63,11 @@ public class Chest : Structure
             }
             else if (manager.playerStats.maximumInventorySpace < manager.playerStats.currentItems)
             {
-                manager.UpdateMessages("Your backpack can't hold any more items!");               
+                manager.UpdateMessages("I can't carry anything more.");               
             }
             else if (manager.playerStats.currentWeight + itemInChest.I_weight > manager.playerStats.maxWeight)
             {
-                manager.UpdateMessages($"Item in the chest weighs too much.");
+                manager.UpdateMessages($"Its too heavy.");
             }
         }
     }

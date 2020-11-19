@@ -1421,20 +1421,20 @@ public class PlayerStats : MonoBehaviour, IUnit
                             _Lhand = null;
                             LHand.text = "Left Hand:";
                             if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
-                            if (_selectedItem.iso is WeaponsSO weapon)
+                            /*if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.UnequipWithGems();
-                            }
+                            }*/
                         }
                         else if (_selectedItem._handSwitch == Item.hand.right)
                         {
                             _Rhand = null;
                             RHand.text = "Right Hand:";
                             if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
-                            if (_selectedItem.iso is WeaponsSO weapon)
+                            /*if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.UnequipWithGems();
-                            }
+                            }*/
                         }
                         break;
                     case ItemScriptableObject.whereToPutIt.ring:

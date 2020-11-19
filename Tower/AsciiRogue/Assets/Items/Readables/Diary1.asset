@@ -37,15 +37,12 @@ MonoBehaviour:
   bonusToDexterity: 0
   bonusToEndurance: 0
   bonusToNoise: 0
-  text: '<color=#a38745>===============================================================================</color>
-
-    <i><b>On
-    my way to the Dreamland #1</b>
-
-    When I turned around there was no way out.
-    ... Its ... dark and cold here. ... Every now and then I hear some scary sounds.
-    ... For heaven''s sakes, this place is fucked up. ... Bones scattered around.
-    ...  Okey, I need to calm down... ... It wasn''t supposed to be like that, NOT
-    LIKE THAT! ...</i> ~ <b>J.</b>
-
-    <color=#a38745>===============================================================================</color>'
+  text: "<i><b>Journey to the Dreamland #1</b>\r\nWhen I turned around the path had
+    already disappeared. I was stranded... The cold crept into\r my bones and the
+    darkness was like a living thing, coiling and winding itself around me...\r This
+    is a land of nightmares... My feet crunch upon bone with every step I take but
+    this does\r not unnerve me anymore. The sound that truly rattles me to my core
+    is the constant\r whispering at my ear. They tell me I am lost, that I will die
+    here unknown and forgotten. At\r first I fought and denied them but now I know
+    their words to be true. This was never what I\r wanted. I shouldn't have come.
+    I shouldn't have come...</i> ~ <b>J.</b>"

@@ -14,10 +14,10 @@ public class ItemSpawner : MonoBehaviour
     public List<ItemScriptableObject> potions;
     public List<ItemScriptableObject> wands;
     public List<ItemScriptableObject> bandages;
-    public List<ItemScriptableObject> scrolls;
-    public List<ItemScriptableObject> spellbooks;
+   // public List<ItemScriptableObject> scrolls;
+   // public List<ItemScriptableObject> spellbooks;
     public List<ItemScriptableObject> tools;
-    public List<ItemScriptableObject> gems;
+   // public List<ItemScriptableObject> gems;
     public List<ItemScriptableObject> readables;
     public List<ItemScriptableObject> artfiacts;
 
@@ -70,7 +70,7 @@ public class ItemSpawner : MonoBehaviour
 
             int itemRarirty = UnityEngine.Random.Range(1, 100);
 
-            float itemType = UnityEngine.Random.Range(1, 81);        
+            float itemType = UnityEngine.Random.Range(1, 53);        
 
             string itemTypeCompariser = "";
 
@@ -78,12 +78,9 @@ public class ItemSpawner : MonoBehaviour
             else if (itemType <= 10) itemTypeCompariser = "Weapon";//spawn weapon
             else if (itemType <= 20) itemTypeCompariser = "Armor";//spawn armor
             else if (itemType <= 36) itemTypeCompariser = "Potion";
-            else if (itemType <= 52) itemTypeCompariser = "Scroll";
-            else if (itemType <= 56) itemTypeCompariser = "Spellbook";
-            else if (itemType <= 59) itemTypeCompariser = "Ring";
-            else if (itemType <= 67) itemTypeCompariser = "Gem";
-            else if (itemType <= 74) itemTypeCompariser = "Money";
-            else if (itemType <= 80) itemTypeCompariser = "Readable";
+            else if (itemType <= 39) itemTypeCompariser = "Ring";
+            else if (itemType <= 46) itemTypeCompariser = "Money";
+            else if (itemType <= 52) itemTypeCompariser = "Readable";
 
             List<ItemScriptableObject> validItems = new List<ItemScriptableObject>();
 
@@ -95,18 +92,6 @@ public class ItemSpawner : MonoBehaviour
                     break;
                 case "Armor":
                     validItems = armors;
-                    itemToSpawn = ItemToSpawn(validItems);
-                    break;
-                case "Scroll":
-                    validItems = scrolls;
-                    itemToSpawn = ItemToSpawn(validItems);
-                    break;
-                case "Spellbook":
-                    validItems = spellbooks;
-                    itemToSpawn = ItemToSpawn(validItems);
-                    break;
-                case "Gem":
-                    validItems = gems;
                     itemToSpawn = ItemToSpawn(validItems);
                     break;
                 case "Wand":
@@ -133,10 +118,6 @@ public class ItemSpawner : MonoBehaviour
                         readables.RemoveAt(index);
                     }
                     break;
-              /*case "Tool":
-                    itemToSpawn = tools[UnityEngine.Random.Range(0, tools.Count)];
-                    Debug.Log("Tool");
-                    break;*/
             }     
 
             if (itemTypeCompariser == "Money")
@@ -181,7 +162,7 @@ public class ItemSpawner : MonoBehaviour
 
                 if (itemToSpawn is WeaponsSO weapon)
                 {
-                    if (Enumerable.Range(0, 5).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+                    /*if (Enumerable.Range(0, 5).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
                     {
                         item.GetComponent<Item>().sockets = 1;
                     }
@@ -192,13 +173,13 @@ public class ItemSpawner : MonoBehaviour
                     else if (Enumerable.Range(16, 25).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
                     {
                         item.GetComponent<Item>().sockets = 3;
-                    }
+                    }*/
                 }
-                else if (itemToSpawn is SpellbookSO spellbook)
+                /*else if (itemToSpawn is SpellbookSO spellbook)
                 {
                     item.GetComponent<Item>().learningTurns = spellbook.learnDuration;
                     item.GetComponent<Item>().durationLeft = spellbook.duration;
-                }
+                }*/
 
                 item.GetComponent<Item>().iso = itemToSpawn;
 

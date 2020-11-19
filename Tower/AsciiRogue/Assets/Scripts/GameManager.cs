@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Enemy detect player messages")]
+    public List<string> monsterDetectPlayer = new List<string>();
+
     DungeonGenerator dungeonGenerator;
     public static GameManager manager;
     public EnemySpawner enemySpawner;
@@ -122,7 +125,7 @@ public class GameManager : MonoBehaviour
 
         m_Messages = new Queue();
         m_Inventory = new Queue<string>();
-        m_grimoire = new Queue<string>();
+        //m_grimoire = new Queue<string>();
 
         tasks = GetComponent<Tasks>();
 
@@ -152,7 +155,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
-        for (int i = 1; i <= 2; i++)
+        for (int i = 1; i <= 20; i++)
         {
             dungeonGenerator.GenerateDungeon(i);
             yield return new WaitForEndOfFrame();
@@ -191,7 +194,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            if(Controls.GetKeyDown(Controls.Inputs.GrimoirOpen) && !inventoryOpen && !SkillsOpen && !IsThrowingItem)
+            /*if(Controls.GetKeyDown(Controls.Inputs.GrimoirOpen) && !inventoryOpen && !SkillsOpen && !IsThrowingItem)
             {
                 if(!openGrimoire)
                 {
@@ -212,7 +215,7 @@ public class GameManager : MonoBehaviour
                 {
                     CloseEQ();
                 }
-            }
+            }*/
             if (Controls.GetKeyDown(Controls.Inputs.InventoryOpen) && !choosingWeapon && !openGrimoire && !SkillsOpen && !IsThrowingItem)
             {
                 if (!inventoryOpen)
@@ -329,14 +332,14 @@ public class GameManager : MonoBehaviour
                         DecisionTurn();
                     }                                     
                 }
-                else if(Controls.GetKeyDown(Controls.Inputs.Use) && choosingWeapon && playerStats.itemsInEqGO[selectedItem].iso is WeaponsSO) //ADD GEM TO THE SOCKET
+                /*else if(Controls.GetKeyDown(Controls.Inputs.Use) && choosingWeapon && playerStats.itemsInEqGO[selectedItem].iso is WeaponsSO) //ADD GEM TO THE SOCKET
                 {
                     choosingWeapon = false;
                     choosenWeapon = playerStats.itemsInEqGO[selectedItem];
                     choosenWeapon.AddGem(gemToConnect);
-                    /*try { if (choosenWeapon.isEquipped) gemToConnect.Use(playerStats, playerStats.itemsInEqGO[selectedItem]); } catch { }*/
+                    //try { if (choosenWeapon.isEquipped) gemToConnect.Use(playerStats, playerStats.itemsInEqGO[selectedItem]); } catch { }
                     FinishPlayersTurn();
-                }
+                }*/
 
                 if (Controls.GetKeyDown(Controls.Inputs.InventoryDown))
                 {
@@ -373,7 +376,7 @@ public class GameManager : MonoBehaviour
                 }               
             }
 
-            if (openGrimoire)
+            /*if (openGrimoire)
             {
                 if (Controls.GetKeyDown(Controls.Inputs.Use) && playerStats.rememberedSpells.Count > 0)
                 {
@@ -418,7 +421,7 @@ public class GameManager : MonoBehaviour
                         UpdateSpellStats(playerStats.rememberedSpells[selectedItem]);
                     }
                 }
-            }
+            }*/
 
             if (SkillsOpen)
             {
@@ -551,7 +554,7 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        if(decidingSpell)
+        /*if(decidingSpell)
         {
             if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice1))
             {
@@ -561,7 +564,7 @@ public class GameManager : MonoBehaviour
                 }
                 decisionMade = true;
             }
-        }
+        }*/
 
         if (deciding && !choosingWeapon)
         {
@@ -829,19 +832,19 @@ public class GameManager : MonoBehaviour
                         {
                             playerStats._Lhand = null;
                             playerStats.LHand.text = "Left Hand:";
-                            if (_selectedItem.iso is WeaponsSO weapon)
+                            /*if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.UnequipWithGems();
-                            }
+                            }*/
                         }
                         else if (_selectedItem._handSwitch == Item.hand.right)
                         {
                             playerStats._Rhand = null;
                             playerStats.RHand.text = "Right Hand:";
-                            if (_selectedItem.iso is WeaponsSO weapon)
+                            /*if (_selectedItem.iso is WeaponsSO weapon)
                             {
                                 _selectedItem.UnequipWithGems();
-                            }
+                            }*/
                         }
                         break;
                     case ItemScriptableObject.whereToPutIt.legs:
@@ -933,20 +936,20 @@ public class GameManager : MonoBehaviour
                                 playerStats._Lhand = null;
                                 playerStats.LHand.text = "Left Hand:";
                                 if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
-                                if (_selectedItem.iso is WeaponsSO weapon)
+                                /*if (_selectedItem.iso is WeaponsSO weapon)
                                 {
                                     _selectedItem.UnequipWithGems();
-                                }
+                                }*/
                             }
                             else if (_selectedItem._handSwitch == Item.hand.right)
                             {
                                 playerStats._Rhand = null;
                                 playerStats.RHand.text = "Right Hand:";
                                 if (_selectedItem.isEquipped) _selectedItem.isEquipped = false;
-                                if (_selectedItem.iso is WeaponsSO weapon)
+                                /*if (_selectedItem.iso is WeaponsSO weapon)
                                 {
                                     _selectedItem.UnequipWithGems();
-                                }
+                                }*/
                             }
                             break;
                         case ItemScriptableObject.whereToPutIt.ring:
@@ -1036,7 +1039,7 @@ public class GameManager : MonoBehaviour
 
                             if (_selectedItem.iso is WeaponsSO weapon)
                             {
-                                _selectedItem.EquipWithGems(_selectedItem);
+                                //_selectedItem.EquipWithGems(_selectedItem);
                                 _selectedItem.iso.onEquip(playerStats);
                                 _selectedItem.OnEquip(playerStats);
                             }
@@ -1049,7 +1052,7 @@ public class GameManager : MonoBehaviour
                             _selectedItem._handSwitch = Item.hand.right;
                             if (_selectedItem.iso is WeaponsSO weapon)
                             {
-                                _selectedItem.EquipWithGems(_selectedItem);
+                                //_selectedItem.EquipWithGems(_selectedItem);
                                 _selectedItem.iso.onEquip(playerStats);
                                 _selectedItem.OnEquip(playerStats);
                             }
@@ -1233,7 +1236,7 @@ public class GameManager : MonoBehaviour
             FinishPlayersTurn();
         }
 
-        if (readingBook != null)
+        /*if (readingBook != null)
         {
             if (UnityEngine.Random.Range(1, 36) > playerStats.__intelligence)
             {
@@ -1287,7 +1290,7 @@ public class GameManager : MonoBehaviour
                 ApplyChangesInInventory(readingBook);
                 readingBook = null;
             }
-        }
+        }*/
 
         waiting = false;
         waitingCoroutine = null;
@@ -1500,7 +1503,7 @@ public class GameManager : MonoBehaviour
         inventory.text = SkillText;
     }
 
-    public void UpdateGrimoireQueue(string newSpell)
+    /*public void UpdateGrimoireQueue(string newSpell)
     {
         if (m_grimoire.Count >= 17)
         {
@@ -1511,9 +1514,9 @@ public class GameManager : MonoBehaviour
 
 
         UpdateGrimoireText();
-    }
+    }*/
 
-    public void UpdateGrimoireText()
+    /*public void UpdateGrimoireText()
     {
         grimoireText = "";
 
@@ -1533,8 +1536,8 @@ public class GameManager : MonoBehaviour
             }
         }
         inventory.text = grimoireText;
-    }
-
+    }*/
+    
     public void UpdateInventoryQueue(string newItem)
     {
         if (m_Inventory.Count >= 17)
@@ -1623,7 +1626,7 @@ public class GameManager : MonoBehaviour
             }
             else itemEffects.text = "???" + "\n" + "Weight: " + $"<color=green>{item.iso.I_weight}</color>";
 
-            if (item.sockets == 1)
+            /*if (item.sockets == 1)
             {
                 itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
             }
@@ -1637,7 +1640,7 @@ public class GameManager : MonoBehaviour
                 itemEffects.text += "\n" + "Socket: " + (item.socket1 == null ? "" : $"<color={item.socket1.I_color}>{item.socket1.I_name}</color>");
                 itemEffects.text += "\n" + "Socket: " + (item.socket2 == null ? "" : $"<color={item.socket2.I_color}>{item.socket2.I_name}</color>");
                 itemEffects.text += "\n" + "Socket: " + (item.socket3 == null ? "" : $"<color={item.socket3.I_color}>{item.socket3.I_name}</color>");
-            }
+            }*/
 
             if (item.identified)
             {

@@ -1014,22 +1014,28 @@ public class DungeonGenerator : MonoBehaviour
 
         MapManager.map[x, y].structure = chest;
 
+        int emptyChest = UnityEngine.Random.Range(0, 100); //if < 40 then chest is empty
+
         for (int i = 0; i < manager.itemSpawner.allItems.Count; i++)
         {
             if (loopBreaker) return;
 
-            int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
-
-            if (manager.itemSpawner.allItems[randomItem].I_rareness.ToString() == rarity)
+            if (emptyChest <= 40) 
             {
-                if (manager.itemSpawner.allItems[randomItem] is SpellbookSO book)
-                { }
-                else
+                chest.itemInChest = null;
+                loopBreaker = true;
+            }
+            else
+            {
+                int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
+
+                if (manager.itemSpawner.allItems[randomItem].I_rareness.ToString() == rarity)
                 {
                     chest.itemInChest = manager.itemSpawner.allItems[randomItem];
 
                     loopBreaker = true;
                 }
+
             }
         }
     }
@@ -2092,5 +2098,40 @@ public class DungeonGenerator : MonoBehaviour
             return l;
         }
     }
-}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} //HEHE 2137 funny number ( ͡° ͜ʖ ͡°)

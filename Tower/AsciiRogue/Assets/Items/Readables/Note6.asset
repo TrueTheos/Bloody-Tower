@@ -37,13 +37,10 @@ MonoBehaviour:
   bonusToDexterity: 0
   bonusToEndurance: 0
   bonusToNoise: 0
-  text: '<color=#a38745>===============================================================================</color>
-
-    <i>I
-    found a beautiful medallion and couldn''t resist putting it on. Not long after,
-    I was about to find the end of life. The blade of the enemy came straight for
-    me but somehow hit the medallion instead. It shattered... but it was glowing
-    as it broke apart. I don''t know why but after this all of my pain disappeared
-    and a burst of energy carried me to victory. To survival.</i>
-
-    <color=#a38745>===============================================================================</color>'
+  text: "<color=#a38745>===========================================================================================</color>\n<i>I
+    stumbled across a strange yet enchanting medallion. I couldn't resist putting
+    it on. Not long\r after I had my first brush with death. The enemy's blade gleamed
+    as it lunged for my neck but\r somehow found the face of the medallion. It shattered
+    upon contact in a bright yellow glow\r and vanquished the enemy before me. My
+    wounds began to heal and my pain disappeared as\r I was filled with a new vigour.
+    With this I could reach the end and survive another day more.\r</i>\n<color=#a38745>===========================================================================================</color>"

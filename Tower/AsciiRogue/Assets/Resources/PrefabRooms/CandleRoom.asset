@@ -15,8 +15,14 @@ MonoBehaviour:
   room: ........##.##..#9..#....7....#...#..##.##........
   height: 7
   width: 7
+  OmniAIs:
+    m_keys: []
+    m_values: []
   enemyNames:
   - {fileID: 11400000, guid: 69c56262bb138aa408c90f29212dc3af, type: 2}
   enemySleeping: 01
   itemsToSpawn:
   - {fileID: 11400000, guid: 7b008a58a592fcc41b5f5f1ad85a07aa, type: 2}
+  Tags:
+  - Room
+  ExcludeTags: []

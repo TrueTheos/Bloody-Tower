@@ -15,6 +15,13 @@ MonoBehaviour:
   room: ....2..2.....2..2....
   height: 0
   width: 0
+  OmniAIs:
+    m_keys: []
+    m_values: []
   enemyNames: []
   enemySleeping: 
   itemsToSpawn: []
+  Tags:
+  - All
+  - All
+  ExcludeTags: []

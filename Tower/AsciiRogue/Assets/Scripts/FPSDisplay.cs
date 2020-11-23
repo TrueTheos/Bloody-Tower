@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FPSDisplay : MonoBehaviour
 {
-    float deltaTime = 0.0f;
+    //float deltaTime = 0.0f;
 
     /*void Update()
     {

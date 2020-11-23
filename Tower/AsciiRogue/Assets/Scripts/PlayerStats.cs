@@ -17,6 +17,7 @@ public class PlayerStats : MonoBehaviour, IUnit
     public int dex { get; set; }
     public int end { get; set; }
     public int lvl { get; set; }
+    public int sanity { get; set; }
 
     [HideInInspector] public int experience;
     [HideInInspector] public int experienceNeededToLvlUp;
@@ -110,7 +111,21 @@ public class PlayerStats : MonoBehaviour, IUnit
         set
         {
             intell = value;
-            UpdateText(statType.intelligence);
+            //UpdateText(statType.intelligence);
+        }
+    }
+    public int __sanity
+    {
+        get
+        {
+            return sanity;
+        }
+        set
+        {
+            sanity = value;
+            if (sanity > 100) sanity = 100;
+            if (sanity < 0) sanity = 0;
+            UpdateText(statType.sanity);
         }
     }
     public int __dexterity
@@ -236,18 +251,21 @@ public class PlayerStats : MonoBehaviour, IUnit
             if (blood <= 25)
             {
                 Blindness();
+                __sanity -= 8;
             }
             if (blood <= 50 && dexModifier == 1)
             {
                 dexModifier = 0.6f;
                 dexLost = __dexterity - Mathf.RoundToInt(__dexterity * dexModifier);
                 __dexterity -= dexLost;
+                __sanity -= 5;
             }
             if (blood <= 75 && strModifier == 1)
             {
                 strModifier = 0.6f;
                 strLost = __strength - Mathf.RoundToInt(__strength * strModifier);
                 __strength -= strLost;
+                __sanity -= 5;
             }
 
             if (blood > 75)
@@ -296,8 +314,6 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     private float strModifier = 1;
     private float dexModifier = 1;
-    private float intModifier = 1;
-    private float endModifier = 1;
 
     private int strLost, dexLost;
 
@@ -305,7 +321,7 @@ public class PlayerStats : MonoBehaviour, IUnit
     {
         hp,
         strength,
-        intelligence,
+        sanity,
         dexterity,
         endurance,
         lvl,
@@ -331,8 +347,6 @@ public class PlayerStats : MonoBehaviour, IUnit
     public TextMeshProUGUI _healthText;
     [UnityEngine.Serialization.FormerlySerializedAs("_strength")]
     public TextMeshProUGUI _strengthText;
-    [UnityEngine.Serialization.FormerlySerializedAs("_intelligence")]
-    public TextMeshProUGUI _intelligenceText;
     [UnityEngine.Serialization.FormerlySerializedAs("_dexteirty")]
     public TextMeshProUGUI _dexteirtyText;
     [UnityEngine.Serialization.FormerlySerializedAs("_endurance")]
@@ -349,12 +363,13 @@ public class PlayerStats : MonoBehaviour, IUnit
     public TextMeshProUGUI _noiseText;
     [UnityEngine.Serialization.FormerlySerializedAs("_blood")]
     public TextMeshProUGUI _bloodText;
+    [UnityEngine.Serialization.FormerlySerializedAs("_sanity")]
+    public TextMeshProUGUI _sanityText;
 
     //buttons
-    public GameObject _strengthButton;
-    public GameObject _intelligenceButton;
-    public GameObject _dexterityButton;
-    public GameObject _enduranceButton;
+    [HideInInspector] public GameObject _strengthButton;
+    [HideInInspector] public GameObject _dexterityButton;
+    [HideInInspector] public GameObject _enduranceButton;
     #endregion
 
     #region Effects
@@ -469,19 +484,19 @@ public class PlayerStats : MonoBehaviour, IUnit
         Capacity = GameObject.Find("Capacity").GetComponent<Text>();
 
         _strengthButton = GameObject.Find("strengthLevelUp");
-        _intelligenceButton = GameObject.Find("intelligenceLevelUp");
         _dexterityButton = GameObject.Find("dexterityLevelUp");
         _enduranceButton = GameObject.Find("enduranceLevelUp");
 
         _strengthButton.SetActive(false);
-        _intelligenceButton.SetActive(false);
         _dexterityButton.SetActive(false);
         _enduranceButton.SetActive(false);
 
         __strength = 10;
         __dexterity = 10;
-        __intelligence = 10;
         __endurance = 10;
+
+        __sanity = 100;
+        __blood = 100;
 
         __maxHp = __strength + (__endurance * 2) - 10;
         __currentHp = __maxHp;
@@ -513,6 +528,9 @@ public class PlayerStats : MonoBehaviour, IUnit
 
         gameManager.UpdateInventoryQueue($"<color={startingWeapon.I_color}>{startingWeapon.I_name}</color>");
         UpdateCapacity();
+
+        UpdateText(statType.sanity);
+        UpdateText(statType.blood);
     }
 
     public void Update()
@@ -852,9 +870,9 @@ public class PlayerStats : MonoBehaviour, IUnit
             case statType.coins:
                 _coinsText.text = "$: " + $"<color=green>{__coins}</color>";
                 break;
-            case statType.intelligence:
+            /*case statType.intelligence:
                 _intelligenceText.text = "Int: " + $"<color=green>{__intelligence}</color>";
-                break;
+                break;*/
             case statType.strength:
                 _strengthText.text = "Str: " + $"<color=green>{__strength}</color>";
                 break;
@@ -874,11 +892,13 @@ public class PlayerStats : MonoBehaviour, IUnit
                 _noiseText.text = "Noise: " + $"<color=green>{__noise}</color>";
                 break;
             case statType.blood:
-                _bloodText.text = "";
-                for (int i = 0; i < __blood; i++)
-                {
-                    _bloodText.text += "<color=#761616>|</color>";
-                }
+                _bloodText.text = "Blood: " + $"<color=red>{__blood}%</color>";
+                break;
+            case statType.sanity:
+                if(__sanity <= 20) _sanityText.text = "Sanit: " + $"<color=red>{__sanity}% <size=15>(Insane)</size></color>";
+                else if(__sanity <= 50) _sanityText.text = "Sanit: " + $"<color=red>{__sanity}% <size=15>(Paranoid)</size></color>";
+                else if(__sanity <= 70) _sanityText.text = "Sanit: " + $"<color=red>{__sanity}% <size=15>(Nervous)</size></color>";
+                else _sanityText.text = "Sanit: " + $"<color=red>{__sanity}% <size=15>(Excellent)</size></color>";
                 break;
         }
     } //update stats in ui
@@ -926,7 +946,7 @@ public class PlayerStats : MonoBehaviour, IUnit
             __currentHp += Mathf.RoundToInt(__maxHp * 0.1f);
 
             _strengthButton.SetActive(true);
-            _intelligenceButton.SetActive(true);
+            //_intelligenceButton.SetActive(true);
             _dexterityButton.SetActive(true);
             _enduranceButton.SetActive(true);
 
@@ -937,6 +957,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     public void TakeDamage(int damage,ItemScriptableObject.damageType type)
     {
+        __sanity--;
         __currentHp -= damage;
         LossBlood(Mathf.RoundToInt(damage / 2));
         gameManager.gameObject.GetComponent<MousePointer>().StopAllCoroutines();

@@ -65,7 +65,6 @@ public class WeaponsSO : ItemScriptableObject
         {
             if (bonusToHealth != 0) { }
             if (bonusToStrength != 0) player.__strength += bonusToStrength;
-            if (bonusToIntelligence != 0) player.__intelligence += bonusToIntelligence;
             if (bonusToDexterity != 0) player.__dexterity += bonusToDexterity;
             if (bonusToEndurance != 0) player.__endurance += bonusToEndurance;
             if (bonusToNoise != 0) player.__noise += bonusToNoise;
@@ -83,7 +82,6 @@ public class WeaponsSO : ItemScriptableObject
         {
             if (bonusToHealth != 0) { }
             if (bonusToStrength != 0) player.__strength += -bonusToStrength;
-            if (bonusToIntelligence != 0) player.__intelligence += -bonusToIntelligence;
             if (bonusToDexterity != 0) player.__dexterity += -bonusToDexterity;
             if (bonusToEndurance != 0) player.__endurance += -bonusToEndurance;
             if (bonusToNoise != 0) player.__noise += -bonusToNoise;

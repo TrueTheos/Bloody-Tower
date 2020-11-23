@@ -18,7 +18,7 @@ public class Fountain : Structure
             return;
         }
 
-        int random = Random.Range(1, 22);
+        int random = Random.Range(1, 25);
 
         if(random <= 9)
         {
@@ -64,6 +64,11 @@ public class Fountain : Structure
             {
                 item.cursed = true;
             }
+        }
+        else if(random <= 24)
+        {
+            GameManager.manager.UpdateMessages("You take a sip, it tastes good...You feel oddly calm");
+            GameManager.manager.playerStats.__sanity += 9;
         }
 
         if(Random.Range(1,100) < 30)

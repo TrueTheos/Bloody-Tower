@@ -29,9 +29,7 @@ MonoBehaviour:
   attacks: 00000000
   attackText: []
   E_possileDrops: []
-  enemyInfo: 'Shog - 20 HP / 10 STR / 10 DEX/ 10 INT / 10 END
-
-    Can open doors.'
+  enemyInfo: Shog - ???
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

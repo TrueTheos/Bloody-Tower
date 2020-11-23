@@ -110,6 +110,7 @@ public class PotionSO : ItemScriptableObject
                         player.__currentHp -= player.__currentHp - player.__maxHp;
                     }
                     player.__maxHp += 2;
+                    player.__sanity += 8;
                     break;
                 case Item.BUC.cursed:
                     player.__maxHp -= 2;
@@ -118,6 +119,7 @@ public class PotionSO : ItemScriptableObject
                     {
                         player.__currentHp -= player.__currentHp - player.__maxHp;
                     }
+                    player.__sanity -= 3;
                     break;
                 case Item.BUC.normal:
                     player.__currentHp += 5;
@@ -125,6 +127,7 @@ public class PotionSO : ItemScriptableObject
                     {
                         player.__currentHp -= player.__currentHp - player.__maxHp;
                     }
+                    player.__sanity += 5;
                     break;
             }
         }
@@ -214,6 +217,7 @@ public class PotionSO : ItemScriptableObject
         {
             player.IncreaseRegenerationDuration(Random.Range(GameManager.manager.regenerationDuration.x, GameManager.manager.regenerationDuration.y));
             player.Regeneration();
+            player.__sanity += 7;
         }
     }
 
@@ -231,6 +235,7 @@ public class PotionSO : ItemScriptableObject
         if(foo is PlayerStats player)
         {
             player.FullRestore();
+            player.__sanity += 10;
         }
     }
 
@@ -277,6 +282,7 @@ public class PotionSO : ItemScriptableObject
         if(foo is PlayerStats player)
         {
             player.Blindness();
+            player.__sanity -= 3;
         }
     }
 

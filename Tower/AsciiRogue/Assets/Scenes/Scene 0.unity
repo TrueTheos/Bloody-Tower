@@ -631,11 +631,11 @@ RectTransform:
   m_Children:
   - {fileID: 69573618}
   m_Father: {fileID: 348977943}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.78998, y: -70}
+  m_AnchoredPosition: {x: -162.78998, y: -66}
   m_SizeDelta: {x: 141.2, y: 29.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &77379554
@@ -1566,20 +1566,20 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 752988039}
   - {fileID: 77379553}
   - {fileID: 1308505715}
-  - {fileID: 2078186223}
   - {fileID: 953815882}
   - {fileID: 845663043}
+  - {fileID: 2049583024}
+  - {fileID: 1795586157}
+  - {fileID: 2078186223}
+  - {fileID: 2005186644}
   - {fileID: 379693701}
   - {fileID: 1724547038}
   - {fileID: 412387966}
   - {fileID: 879053187}
   - {fileID: 753867699}
-  - {fileID: 2005186644}
-  - {fileID: 2049583024}
-  - {fileID: 1795586157}
+  - {fileID: 752988039}
   m_Father: {fileID: 785346189}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1946,11 +1946,11 @@ RectTransform:
   m_Children:
   - {fileID: 2001329959}
   m_Father: {fileID: 348977943}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -52, y: -100.25}
+  m_AnchoredPosition: {x: -52, y: -96.25}
   m_SizeDelta: {x: 160, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &379693702
@@ -2076,11 +2076,11 @@ RectTransform:
   m_Children:
   - {fileID: 183976561}
   m_Father: {fileID: 348977943}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -52.005005, y: -159.75}
+  m_AnchoredPosition: {x: -52, y: -125.75}
   m_SizeDelta: {x: 160, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &412387967
@@ -3249,7 +3249,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -3407,11 +3407,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -78.61, y: -66.69}
+  m_AnchoredPosition: {x: -78.609985, y: -62.690002}
   m_SizeDelta: {x: 98.98003, y: 22.881237}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &753867700
@@ -3814,7 +3814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -6.76001, y: 207.59998}
+  m_AnchoredPosition: {x: -6.76001, y: 203}
   m_SizeDelta: {x: -945.0464, y: 22.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &792540167
@@ -4113,11 +4113,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.79, y: -190}
+  m_AnchoredPosition: {x: -162.78998, y: -156}
   m_SizeDelta: {x: 143.24672, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &845663044
@@ -4323,11 +4323,11 @@ RectTransform:
   m_Children:
   - {fileID: 192154152}
   m_Father: {fileID: 348977943}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -52.005005, y: -190.50002}
+  m_AnchoredPosition: {x: -52.005005, y: -155.99998}
   m_SizeDelta: {x: 160, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &879053188
@@ -4452,11 +4452,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.79, y: -160}
+  m_AnchoredPosition: {x: -162.78998, y: -126}
   m_SizeDelta: {x: 141.48, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &953815883
@@ -5775,11 +5775,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.79, y: -100}
+  m_AnchoredPosition: {x: -162.79, y: -96}
   m_SizeDelta: {x: 141.21, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1308505716
@@ -6473,7 +6473,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1605805453
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6787,7 +6787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1724547038
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6801,11 +6801,11 @@ RectTransform:
   m_Children:
   - {fileID: 1138279288}
   m_Father: {fileID: 348977943}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -52.005, y: -130}
+  m_AnchoredPosition: {x: -52.005005, y: -126}
   m_SizeDelta: {x: 160, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724547039
@@ -7007,11 +7007,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 13
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.79, y: -220}
+  m_AnchoredPosition: {x: -162.78998, y: -216}
   m_SizeDelta: {x: 141.48, y: 22.97296}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1795586158
@@ -8064,30 +8064,7 @@ MonoBehaviour:
     jaded tips refracting the red glow of the eclipse. When the sun meets the moon,
     they grow."
   _prefabRooms:
-  - {fileID: 11400000, guid: cef9830c4c79b8743a3ab5cdf911c4af, type: 2}
-  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
   - {fileID: 11400000, guid: d0e8b321ac9e1a041bf80074a20318dd, type: 2}
-  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
-  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
-  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
-  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
-  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
-  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
-  - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
-  - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
-  - {fileID: 11400000, guid: 4f3a39350370d834b819cf80b80cda07, type: 2}
-  - {fileID: 11400000, guid: a61dde49ef4997e429bc17e1ed262e63, type: 2}
-  - {fileID: 11400000, guid: a3119d29421f2ea43a5f9df2b02f491a, type: 2}
-  - {fileID: 11400000, guid: 7d28ecc10ab512741a3577e5a523eb54, type: 2}
-  - {fileID: 11400000, guid: c1aba9dc3def109419bb402b9b6e1932, type: 2}
-  - {fileID: 11400000, guid: 13f101848cd22c24a940f258bc5d9dd9, type: 2}
-  - {fileID: 11400000, guid: 23d0d6e82f73ed043805363fc310aeec, type: 2}
-  - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
-  - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
-  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
-  - {fileID: 11400000, guid: b80af3384b6ac4d47bfabd2797417397, type: 2}
-  - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
-  - {fileID: 11400000, guid: 61350fec123f8e04b9a7cbd587dcb0ae, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9092,8 +9069,7 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: cd632dd2cdfb8494f98762621dd97997,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}
       propertyPath: _ac
@@ -9188,7 +9164,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _bloodText
       value: 
-      objectReference: {fileID: 1605805455}
+      objectReference: {fileID: 2005186646}
+    - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
+        type: 3}
+      propertyPath: _sanityText
+      value: 
+      objectReference: {fileID: 2078186224}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4eabca731634a0a48b42c10cf57d7f97, type: 3}
 --- !u!1 &2001329958
@@ -9379,11 +9360,11 @@ RectTransform:
   m_Children:
   - {fileID: 1605805453}
   m_Father: {fileID: 348977943}
-  m_RootOrder: 11
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -131.20001, y: -275.7}
+  m_AnchoredPosition: {x: -128.75, y: -276}
   m_SizeDelta: {x: 209.56888, y: 26.899994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2005186645
@@ -9393,13 +9374,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005186643}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e1e876608345eb429ab974df22de785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayedText: Losing a lot of blood causes your dexterity, strength and line of
-    sight to decline.
+  displayedText: 
   tooltip: {fileID: 1134536927}
 --- !u!114 &2005186646
 MonoBehaviour:
@@ -9551,11 +9531,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 12
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.79, y: -250}
+  m_AnchoredPosition: {x: -162.78998, y: -186}
   m_SizeDelta: {x: 143.2467, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2049583025
@@ -9689,9 +9669,8 @@ GameObject:
   - component: {fileID: 2078186223}
   - component: {fileID: 2078186225}
   - component: {fileID: 2078186224}
-  - component: {fileID: 2078186226}
   m_Layer: 5
-  m_Name: Intelligence
+  m_Name: Sanity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9709,12 +9688,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348977943}
-  m_RootOrder: 3
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.79, y: -130}
-  m_SizeDelta: {x: 141.21, y: 22.972961}
+  m_AnchoredPosition: {x: -113.32, y: -248.15}
+  m_SizeDelta: {x: 240.4236, y: 28.801785}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2078186224
 MonoBehaviour:
@@ -9735,7 +9714,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Int: 0'
+  m_text: 'Sanity:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 65695a8f076154144b01ee649bef9937, type: 2}
   m_sharedMaterial: {fileID: -170819053036665358, guid: 65695a8f076154144b01ee649bef9937,
@@ -9802,13 +9781,13 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0.48065186, y: 0, z: 0.17626953, w: 0.029968262}
+  m_margin: {x: 0.48065186, y: 0, z: 0.17634398, w: 0.029968262}
   m_textInfo:
     textComponent: {fileID: 2078186224}
-    characterCount: 6
+    characterCount: 7
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -9836,20 +9815,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078186222}
   m_CullTransparentMesh: 0
---- !u!114 &2078186226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078186222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1e876608345eb429ab974df22de785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayedText: Increases spells power and lets you read more books.
-  tooltip: {fileID: 1134536927}
 --- !u!1 &2084354336
 GameObject:
   m_ObjectHideFlags: 0

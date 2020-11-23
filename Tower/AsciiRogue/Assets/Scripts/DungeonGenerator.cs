@@ -8,6 +8,7 @@ using System.Collections;
 using System.IO;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
+using System.Threading;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -447,26 +448,6 @@ public class DungeonGenerator : MonoBehaviour
                             itemPositions.Add(new Vector2Int(x, y));
                         }
                         break;
-                    /*case "-": //KEY TO CELL
-                        {
-                            MapManager.map[x, y] = new Tile
-                            {
-                                baseChar = keyToCell.I_symbol
-                            };
-                            if (ColorUtility.TryParseHtmlString(keyToCell.I_color, out Color color))
-                            {
-                                MapManager.map[x, y].exploredColor = color;
-                            }
-
-                            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-
-                            GameObject item = Instantiate(manager.itemSpawner.itemPrefab.gameObject, transform.position, Quaternion.identity);
-
-                            item.GetComponent<Item>().iso = keyToCell;
-
-                            MapManager.map[x, y].item = item.gameObject;
-                        }
-                        break;*/
                     case "=": //CHEST OR MIMIC
                         {
                             if (UnityEngine.Random.Range(0, 100) < 10)
@@ -715,6 +696,27 @@ public class DungeonGenerator : MonoBehaviour
                             };
                         }
                         break;
+
+                        /*case "-": //KEY TO CELL
+    {
+        MapManager.map[x, y] = new Tile
+        {
+            baseChar = keyToCell.I_symbol
+        };
+        if (ColorUtility.TryParseHtmlString(keyToCell.I_color, out Color color))
+        {
+            MapManager.map[x, y].exploredColor = color;
+        }
+
+        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+
+        GameObject item = Instantiate(manager.itemSpawner.itemPrefab.gameObject, transform.position, Quaternion.identity);
+
+        item.GetComponent<Item>().iso = keyToCell;
+
+        MapManager.map[x, y].item = item.gameObject;
+    }
+    break;*/
                 }
             }
         }
@@ -1264,7 +1266,7 @@ public class DungeonGenerator : MonoBehaviour
                     set(s.x + x, s.y + y, c);
         }
 
-        internal string print()
+        public string print()
         {
             String s = "";
             for (int y = 0; y < HEIGHT; y++)
@@ -2098,40 +2100,4 @@ public class DungeonGenerator : MonoBehaviour
             return l;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} //HEHE 2137 funny number ( ͡° ͜ʖ ͡°)
+} 

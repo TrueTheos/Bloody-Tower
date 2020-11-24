@@ -441,13 +441,6 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     #endregion
 
-    /*
-    public bool Int;
-    public bool Str;
-    public bool Dex;
-    public bool End;
-    */
-
     //WAND STUFF
     [SerializeField] public bool usingWand;
     [SerializeField] public List<Vector2Int> wand_path;

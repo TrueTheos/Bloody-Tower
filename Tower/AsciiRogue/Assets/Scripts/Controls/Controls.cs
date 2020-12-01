@@ -39,6 +39,7 @@ public static class Controls
         InventoryChoice1,
         InventoryChoice2,
         InventoryChoice3,
+        InventoryChoice4,
 
         SkillsOpen,
         SkillsUp,
@@ -86,6 +87,7 @@ public static class Controls
         { Inputs.InventoryChoice1.ToString(),KeyCode.Alpha1},
         { Inputs.InventoryChoice2.ToString(),KeyCode.Alpha2},
         { Inputs.InventoryChoice3.ToString(),KeyCode.Alpha3},
+        { Inputs.InventoryChoice4.ToString(),KeyCode.Alpha4},
 
         { Inputs.SkillsUp.ToString(),KeyCode.Alpha8},
         { Inputs.SkillsDown.ToString(),KeyCode.Alpha2},

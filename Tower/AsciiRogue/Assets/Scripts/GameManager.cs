@@ -60,8 +60,6 @@ public class GameManager : MonoBehaviour
     [Header("Decisions")]
     public Text decisions;
     public GameObject GOdec;
-    private bool decisionMade;
-    private bool deciding;
     private Item _selectedItem;
     private bool equipState;
     private int decisionsCount;
@@ -112,6 +110,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool anvilMenuOpened;
     [HideInInspector] public Anvil anvil;
 
+    public bool MenuOpen => anvilMenuOpened || openGrimoire || inventoryOpen || SkillsOpen ||IsThrowingItem;
+
     void Awake()
     {
         if (!Controls.IsInitialized)
@@ -121,6 +121,8 @@ public class GameManager : MonoBehaviour
         fv = GetComponent<FOVNEW>();
 
         manager = this;
+
+        Popup.Init(GOdec, decisions);
 
         m_Messages = new Queue();
         m_Inventory = new Queue<string>();
@@ -234,7 +236,7 @@ public class GameManager : MonoBehaviour
                 CloseEQ();
             }
 
-            if (inventoryOpen)
+            if (inventoryOpen && !Popup.Showing)
             {
                 if (Controls.GetKeyDown(Controls.Inputs.Use) && !choosingWeapon)
                 {
@@ -250,87 +252,77 @@ public class GameManager : MonoBehaviour
                     if (anvilMenuOpened)
                     {
                         if(_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Armor || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Weapon)
-                        {
-                            itemOption1 = "";
-                            itemOption2 = "";
-                            itemOption3 = "";
-                            itemOption4 = "";
-                            itemOption5 = "";
-
-                            decisionsCount = 1;
+                        {                            
                             equipState = playerStats.itemsInEqGO[selectedItem].isEquipped;
-
-                            GOdec.SetActive(true);
-
-                            decisions.text += "1. Anvil";
-                            AddAnotherOption("Upgrade");
-
-                            decisionMade = false;
-                            deciding = true;
+                                                       
+                            Popup.NewDecission(true, ("Anvil", "Upgrade", gameObject));
+                            Popup.Show();
 
                             DecisionTurn();
                         }                       
                     }
                     else
                     {
-                        itemOption1 = "";
-                        itemOption2 = "";
-                        itemOption3 = "";
-                        itemOption4 = "";
-                        itemOption5 = "";
-
-                        decisionsCount = 1;
                         equipState = playerStats.itemsInEqGO[selectedItem].isEquipped;
 
-                        GOdec.SetActive(true);
+                        //GOdec.SetActive(true);
 
-                        decisions.text = "1. Drop";
-                        AddAnotherOption("Drop");
+                        Popup.NewDecission();
+                        Popup.AddDecissionOption("Drop", "Drop", gameObject);
+                        //decisions.text = "1. Drop";
+                        //AddAnotherOption("Drop");
 
                         if (_selectedItem.iso.I_whereToPutIt != ItemScriptableObject.whereToPutIt.none)
                         {
                             if (equipState == true)
                             {
-                                decisions.text += "\n" + "2. Unequip";
-                                decisionsCount++;
-                                AddAnotherOption("UEquip");
+                                Popup.AddDecissionOption("Unequip", "UEquip", gameObject);
+                                //decisions.text += "\n" + "2. Unequip";
+                                //decisionsCount++;
+                                //AddAnotherOption("UEquip");
                             }
                             else
                             {
-                                decisions.text += "\n" + "2. Equip";
-                                decisionsCount++;
-                                AddAnotherOption("UEquip");
+                                Popup.AddDecissionOption("Equip", "UEquip", gameObject);
+                                //decisions.text += "\n" + "2. Equip";
+                                //decisionsCount++;
+                                //AddAnotherOption("UEquip");
                             }
                         }
                         if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Wand || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem || _selectedItem.iso is Bell bell)
                         {
-                            decisionsCount++;
-                            decisions.text += "\n" + decisionsCount + ". " + "Use";
-                            AddAnotherOption("Use");
+                            Popup.AddDecissionOption("Use", "Use", gameObject);
+                            //decisionsCount++;
+                            //decisions.text += "\n" + decisionsCount + ". " + "Use";
+                            //AddAnotherOption("Use");
                         }
                         else if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Potion)
                         {
-                            decisionsCount++;
-                            decisions.text += "\n" + decisionsCount + ". " + "Drink";
-                            AddAnotherOption("Use");
+                            Popup.AddDecissionOption("Drink", "Use", gameObject);
+                            //decisionsCount++;
+                            //decisions.text += "\n" + decisionsCount + ". " + "Drink";
+                            //AddAnotherOption("Use");
                         }
                         else if(_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Readable)
                         {
-                            decisionsCount++;
-                            decisions.text += "\n" + decisionsCount + ". " + "Read";
-                            AddAnotherOption("Use");
+                            Popup.AddDecissionOption("Read", "Use", gameObject);
+                            //decisionsCount++;
+                            //decisions.text += "\n" + decisionsCount + ". " + "Read";
+                            //AddAnotherOption("Use");
                         }
                         if (!equipState && ItemThrowHelper.CanBeThrown(_selectedItem))
                         {
-                            decisionsCount++;
-                            decisions.text += "\n" + decisionsCount + ". Throw";
-                            AddAnotherOption("ThrowItem");
+                            Popup.AddDecissionOption("Throw", "ThrowItem", gameObject);
+                            //decisionsCount++;
+                            //decisions.text += "\n" + decisionsCount + ". Throw";
+                            //AddAnotherOption("ThrowItem");
                         }
 
-                        decisionMade = false;
-                        deciding = true;
+                        //decisionMade = false;
+                        //deciding = true;
 
-                        DecisionTurn();
+                        //DecisionTurn();
+                        Popup.Show();
                     }                                     
                 }
                 /*else if(Controls.GetKeyDown(Controls.Inputs.Use) && choosingWeapon && playerStats.itemsInEqGO[selectedItem].iso is WeaponsSO) //ADD GEM TO THE SOCKET
@@ -554,7 +546,7 @@ public class GameManager : MonoBehaviour
                 MapManager.NeedRepaint = true;
             }
         }
-        
+
         /*if(decidingSpell)
         {
             if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice1))
@@ -567,6 +559,22 @@ public class GameManager : MonoBehaviour
             }
         }*/
 
+        if (Popup.Showing)
+        {
+            if (Popup.CheckDecission())
+            {
+                // the user clicked something
+                
+                // FinishPlayersTurn();
+            }
+            else
+            {
+                // the user didnt click anything
+            }
+        }
+
+
+        /*
         if (deciding && !choosingWeapon)
         {
             if (Controls.GetKeyDown(Controls.Inputs.InventoryChoice1)) //drop item
@@ -597,14 +605,17 @@ public class GameManager : MonoBehaviour
                 FinishPlayersTurn();
             }
         }
-        
+        */
+
+        /*
         if (decisionMade)   
         {
             deciding = false;
             decidingSpell = false;
             GOdec.SetActive(false);            
         }
-        
+        */
+
         if (playerStats.isDead)
         {
             dungeonGenerator.screen.text = playerStats.deadText;
@@ -677,29 +688,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddAnotherOption(string option)
-    {
-        if(itemOption1 == "")
-        {
-            itemOption1 = option;
-        }
-        else if(itemOption2 == "")
-        {
-            itemOption2 = option;
-        }
-        else if (itemOption3 == "")
-        {
-            itemOption3 = option;
-        }
-        else if (itemOption4 == "")
-        {
-            itemOption4 = option;
-        }
-        else if (itemOption5 == "")
-        {
-            itemOption5 = option;
-        }
-    }
 
     public IEnumerator DestroyTorchEffect(Vector2Int _pos)
     {
@@ -757,7 +745,6 @@ public class GameManager : MonoBehaviour
         if (_selectedItem.cursed && _selectedItem.equippedPreviously)
         {
             UpdateMessages("You can't drop this item because it is <color=red>cursed</color>!");
-            decisionMade = true;
             FinishPlayersTurn();
             return;
         }
@@ -780,7 +767,6 @@ public class GameManager : MonoBehaviour
         else
         {
             UpdateMessages("There is no space around you.");
-            decisionMade = true;
             FinishPlayersTurn();
             return;
         }
@@ -790,7 +776,6 @@ public class GameManager : MonoBehaviour
             if (GetComponent<RevivingMonster>().TestRevive(MapManager.playerPos, _selectedItem))
             {
                 UpdateInventoryText();
-                decisionMade = true;
                 FinishPlayersTurn();
                 ApplyChangesInInventory(_selectedItem.iso);
                 return;
@@ -893,7 +878,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        decisionMade = true;
         FinishPlayersTurn();
     }
 
@@ -1108,8 +1092,6 @@ public class GameManager : MonoBehaviour
                 }
                 UpdateInventoryText();
             }
-
-            decisionMade = true;
             FinishPlayersTurn();
         }
         else
@@ -1119,14 +1101,11 @@ public class GameManager : MonoBehaviour
                 gemToConnect = _selectedItem.iso;
                 UpdateMessages("Choose weapon. (ESC to cancel)");
                 choosingWeapon = true;
-                decisionMade = true;
             }
             else
             {
                 _selectedItem.iso.Use(playerStats, _selectedItem);
                 ApplyChangesInInventory(null);
-
-                decisionMade = true;
                 FinishPlayersTurn();
             }
         }
@@ -1139,7 +1118,6 @@ public class GameManager : MonoBehaviour
             gemToConnect = _selectedItem.iso;
             UpdateMessages("Choose weapon.");
             choosingWeapon = true;
-            decisionMade = true;
         }
         else
         {
@@ -1153,9 +1131,7 @@ public class GameManager : MonoBehaviour
             if (playerStats.isBlind && _selectedItem.iso is ScrollSO scr || _selectedItem.iso is SpellbookSO spl)
             {
                 ApplyChangesInInventory(null);
-
-                decisionMade = true;
-
+                
                 FinishPlayersTurn();
             }
             else
@@ -1165,9 +1141,7 @@ public class GameManager : MonoBehaviour
                 UpdateItemStats(_selectedItem);
 
                 ApplyChangesInInventory(null);
-
-                decisionMade = true;
-
+                
                 FinishPlayersTurn();
             }
         }
@@ -1194,7 +1168,6 @@ public class GameManager : MonoBehaviour
         CloseEQ();
         Targeting.IsTargeting = true;
         IsThrowingItem = true;
-        decisionMade = true;
         ItemThrowHelper.PrepareItem(playerStats,_selectedItem);
         UpdateMessages("Choose a target for the throw");
     }
@@ -1203,7 +1176,6 @@ public class GameManager : MonoBehaviour
     {
         itemToAnvil = _selectedItem.GetComponent<Item>();
         anvil.UseAnvil();
-        decisionMade = true;
     }
 
     bool CanItemBeDroppedHere(Vector2Int pos)

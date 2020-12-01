@@ -20,6 +20,7 @@ public class TriggerTextAI : BaseOmniAI
             for (int i = 0; i < Message.Count; i++)
             {            
                 GameManager.manager.UpdateMessages(Message[i]);
+                GameManager.manager.playerStats.__sanity -= 5;
             }
             GameManager.manager.enemies.Remove(t.gameObject);
             GameObject.Destroy(t.gameObject);

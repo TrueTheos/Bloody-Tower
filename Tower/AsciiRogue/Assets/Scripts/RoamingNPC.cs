@@ -236,11 +236,6 @@ public class RoamingNPC : MonoBehaviour,IUnit
     {
         enemySO.MyTestToWakeUp.Calculate(this);
         return;
-        int dist = Mathf.Max(Mathf.Abs(MapManager.playerPos.x - __position.x), Mathf.Abs(MapManager.playerPos.y - __position.y));
-        if((Random.Range(1,20) + lvl - playerStats.__dexterity - dist * 10) > 0)
-        {
-            WakeUp();
-        }
     }    
 
     public void DoTurn()
@@ -265,114 +260,17 @@ public class RoamingNPC : MonoBehaviour,IUnit
     {
         enemySO.MyTakeDamage.TakeDamage(this,amount, dmgType);
         return;
-        /*WakeUp();
-
-        __currentHp -= amount;
-
-        canvas.GetComponent<Animator>().SetTrigger("Shake");
-        if (__currentHp <= 0)
-        {
-            Kill();
-        }*/
     }
     //called when enemy dies
     private void Kill()
     {
         enemySO.MyKill.Calculate(this);
-        return;
-        if (enemySO.leavesCorpse)
-        {
-            MapManager.map[__position.x, __position.y].enemy = null;
-            MapManager.map[__position.x, __position.y].isWalkable = true;
-            Corps corpse = new Corps();
-
-            //ITEM IN CORPSE
-
-            bool droppedItem = false;
-
-
-            //CHANCE TO DROP CORPSE ITEM
-            if(Random.Range(1, 100) <= 100 && enemySO.E_possileDrops != null && enemySO.E_possileDrops.Count > 0)
-            {
-                corpse.itemInCorpse = enemySO.E_possileDrops[Random.Range(0, enemySO.E_possileDrops.Count)];
-                droppedItem = true;
-            }
-
-            if(MapManager.map[__position.x, __position.y].structure == null)
-            {
-                if (droppedItem)
-                {
-                    MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
-                    MapManager.map[__position.x, __position.y].letter = "";
-                    GameManager.manager.itemSpawner.SpawnAt(__position.x, __position.y, corpse.itemInCorpse);
-                }
-                else
-                { 
-                    MapManager.map[__position.x, __position.y].baseChar = EnemySymbol;
-                    MapManager.map[__position.x, __position.y].exploredColor = new Color(0.2784f, 0, 0);
-                    MapManager.map[__position.x, __position.y].letter = "";
-                }
-            }           
-        }
-        else
-        {
-            MapManager.map[__position.x, __position.y].enemy = null;
-            MapManager.map[__position.x, __position.y].letter = "";
-            MapManager.map[__position.x, __position.y].isWalkable = true;
-        }     
-
-        manager.UpdateMessages($"You have killed the <color={EnemyColor}>{EnemyName}</color>");
-        manager.playerStats.UpdateLevel(xpDrop);
-
-        GameObject e = null;
-
-        foreach (var enemy in manager.enemies)
-        {
-            if(enemy == this.gameObject)
-            {
-                e = enemy;
-            }
-        }
-
-        manager.StartPlayersTurn();
-       
-        manager.gameObject.GetComponent<Bestiary>().UpdateEnemyList(enemySO);
-
-        manager.enemies.RemoveAt(Array.IndexOf(manager.enemies.ToArray(), e));
-
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
-
-        Destroy(gameObject);
+        return;      
     }
     public void Bleed()
     {
         enemySO.MyBleed.Calculate(this);
-        return;
-        /*if (!isBleeding)
-        {
-            isBleeding = true;
-
-            EffectTasks += Bleed;
-
-            //bleedLength = Random.Range(manager.bleedDuration.x, manager.bleedDuration.y);
-
-            manager.UpdateMessages($"The <color={EnemyColor}>{EnemyName}</color> starts bleeding.");
-        }
-
-        if (bleedLength <= 0)
-        {
-            isBleeding = false;
-
-            EffectTasks -= Bleed;
-
-            return;
-        }
-
-        if (bleedLength > 0)
-        {
-            TakeDamage(1);
-            bleedLength--;
-        } */       
+        return;    
     }
 
     public bool CheckStun()
@@ -391,23 +289,7 @@ public class RoamingNPC : MonoBehaviour,IUnit
     public void Stun(int duration = 0)
     {
         enemySO.MyStun.StunFor(this,duration);
-        return;
-        /*if (isStuned)
-        {
-            stuneDuration--;
-        }
-
-        if (duration > 0 && duration > stuneDuration)
-        {
-            stuneDuration = duration;
-            isStuned = true;
-        }
-
-        if (stuneDuration <= 0)
-        {
-            stuneDuration = 0;
-            isStuned = false;
-        }*/
+        return; 
     }
     
     public void MakeInvisible()
@@ -427,43 +309,10 @@ public class RoamingNPC : MonoBehaviour,IUnit
     {
         enemySO.MyDOT.Calculate(this);
         return;
-        /*if(!damageOverTurn)
-        {
-            damageOverTurn = true;
-            EffectTasks += DamageOverTurn;
-            if (dotDuration != 0) { }
-            else dotDuration = 10;
-            WakeUp();
-        }
-        else
-        {
-            dotDuration--;
-            TakeDamage((20 + playerStats.__intelligence) / 10);
-        }
-
-        if(dotDuration <= 0)
-        {
-            damageOverTurn = false;
-            EffectTasks -= DamageOverTurn;
-        }*/
     }
     public void WakeUp()
     {
         enemySO.MyWakeUp.Calculate(this);
-        return;
-        if (sleeping) //wake up enemy
-        {
-            sleeping = false;
-
-            if (enemySO.E_realName != string.Empty)
-            {
-                MapManager.map[__position.x, __position.y].timeColor = EnemyColor;
-                MapManager.map[__position.x, __position.y].letter = EnemySymbol;
-            }
-            manager.UpdateMessages($"You woke up the <color={EnemyColor}>{EnemyName}</color>!");          
-        }
-
-        attacked = true;
-        _x = howLongWillFololwInvisiblepLayer;
+        return;       
     }
 }

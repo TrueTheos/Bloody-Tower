@@ -1017,8 +1017,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                 return true;
             default:
                 return true;
-        }
-        return true;
+        };
     }
 
     public bool AllowTargetingMove()
@@ -1058,15 +1057,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
             default:
                 return true;
         }
-        return true;
     }
-
-
-
-
-
-
-
 
     private static int CalculateRoll(int roll, int playerDexterity, int npcDex, int npcAC, bool enemySleepig, int additionalChange = 0)
     {

@@ -61,6 +61,8 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
             MapManager.map[t.__position.x, t.__position.y].isWalkable = true;
         }
 
+        t.manager.playerStats.__sanity += 10;
+
         t.manager.UpdateMessages($"You have killed the <color={t.EnemyColor}>{t.EnemyName}</color>");
         t.manager.playerStats.UpdateLevel(t.xpDrop);
         /*

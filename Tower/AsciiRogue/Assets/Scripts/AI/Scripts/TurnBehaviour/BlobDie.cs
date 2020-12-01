@@ -95,7 +95,9 @@ public class BlobDie : BasicDie
 
             corpse.enemyBody = t.enemySO;
             MapManager.map[t.__position.x, t.__position.y - 1].structure = corpse;
-        }     
+        }
+
+        t.manager.playerStats.__sanity += 15;
 
         t.manager.UpdateMessages($"You have killed the <color={t.EnemyColor}>{t.EnemyName}</color>");
         t.manager.playerStats.UpdateLevel(t.xpDrop);

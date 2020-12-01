@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviour
     [Header("Decisions")]
     public Text decisions;
     public GameObject GOdec;
-    //private ItemScriptableObject _iso;
     private Item _selectedItem;
     private bool equipState;
     private int decisionsCount;
@@ -153,11 +152,12 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator GenerateThings()
     {
+        messages.gameObject.SetActive(false);
         dungeonGenerator.InitializeDungeon();
         yield return new WaitForEndOfFrame();
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
-        for (int i = 1; i <= 20; i++)
+        for (int i = 1; i <= 2; i++)
         {
             dungeonGenerator.GenerateDungeon(i);
             yield return new WaitForEndOfFrame();
@@ -166,6 +166,7 @@ public class GameManager : MonoBehaviour
         dungeonGenerator.GenerateDungeon(0);
         yield return new WaitForEndOfFrame();
         dungeonGenerator.DrawMap(true, MapManager.map);
+        messages.gameObject.SetActive(true);
 
         m_Messages.Clear();
         messagesText = "";
@@ -1688,7 +1689,7 @@ public class GameManager : MonoBehaviour
         if(playerStats.skillpoints <= 0)
         {
             playerStats._strengthButton.SetActive(false);
-            playerStats._intelligenceButton.SetActive(false);
+            //playerStats._intelligenceButton.SetActive(false);
             playerStats._dexterityButton.SetActive(false);
             playerStats._enduranceButton.SetActive(false);
             return;
@@ -1700,12 +1701,12 @@ public class GameManager : MonoBehaviour
             playerStats.UpdateText(PlayerStats.statType.strength);
             playerStats.skillpoints--;
         }
-        else if(stat == "int")
+        /*else if(stat == "int")
         {
             playerStats.__intelligence++;
             playerStats.UpdateText(PlayerStats.statType.intelligence);
             playerStats.skillpoints--;
-        }
+        }*/
         else if(stat == "dex")
         {
             playerStats.__dexterity++;
@@ -1722,7 +1723,7 @@ public class GameManager : MonoBehaviour
         if(playerStats.skillpoints <= 0)
         {
             playerStats._strengthButton.SetActive(false);
-            playerStats._intelligenceButton.SetActive(false);
+            //playerStats._intelligenceButton.SetActive(false);
             playerStats._dexterityButton.SetActive(false);
             playerStats._enduranceButton.SetActive(false);
             return;

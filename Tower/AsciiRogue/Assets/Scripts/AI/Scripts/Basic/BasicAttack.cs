@@ -50,7 +50,7 @@ public class BasicAttack : BaseAIBehaviour<(RoamingNPC source,IUnit target)>
             GameManager.manager.StopCoroutine(GameManager.manager.waitingCoroutine);
             GameManager.manager.waitingCoroutine = null;
             GameManager.manager.waiting = false;
-            GameManager.manager.readingBook = null;
+            //GameManager.manager.readingBook = null;
         }
         catch { }
 

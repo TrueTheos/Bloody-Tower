@@ -116,7 +116,7 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                         {
                             if (nt == null)
                             {
-                                GameManager.manager.UpdateMessages($"<b>{Random.Range(0, GameManager.manager.monsterDetectPlayer.Count)}</b> "+ "said <color={t.enemySO.E_color}>{t.name}</color> in a terrifying voice");
+                                GameManager.manager.UpdateMessages($"<b>{GameManager.manager.monsterDetectPlayer[Random.Range(0, GameManager.manager.monsterDetectPlayer.Count)]}</b> "+ $"said <color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> in a terrifying voice.");
 
                                 nt = t.playerStats;
                                 t.LastKnownTargetPos = nt.pos;

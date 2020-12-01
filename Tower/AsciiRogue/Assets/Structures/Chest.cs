@@ -16,18 +16,43 @@ public class Chest : Structure
         {
             if (itemInChest == null) 
             {
-                GameManager.manager.UpdateMessages("Nothing here.");
+                manager.UpdateMessages("Nothing here.");
                 return;
             }
             else
             {
+                if(manager.playerStats.__sanity <= 75)
+                {
+                    if(manager.playerStats.__sanity <= 20)
+                    {
+                        manager.UpdateMessages("Your hands start shaking, you are too afraid to open this chest...");
+                        return;
+                    }
+                    else if (manager.playerStats.__sanity <= 50)
+                    {
+                        if (UnityEngine.Random.Range(1, 100) <= 10)
+                        {
+                            manager.UpdateMessages("Your hands start shaking, you are too afraid to open this chest...");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (UnityEngine.Random.Range(1, 100) <= 5)
+                        {
+                            manager.UpdateMessages("Your hands start shaking, you are too afraid to open this chest...");
+                            return;
+                        }
+                    }
+                }
+
                 if (itemInChest.normalIdentifState)
                 {
-                    GameManager.manager.UpdateMessages($"You opened the chest. It contains <color={itemInChest.I_color}>{itemInChest.I_name}</color>.");
+                    manager.UpdateMessages($"You opened the chest. It contains <color={itemInChest.I_color}>{itemInChest.I_name}</color>.");
                 }
                 else
                 {
-                    GameManager.manager.UpdateMessages($"You opened the chest. It contains <color=purple>{itemInChest.I_unInName}</color>.");
+                    manager.UpdateMessages($"You opened the chest. It contains <color=purple>{itemInChest.I_unInName}</color>.");
                 }
                 opened = true;
             }
@@ -36,7 +61,7 @@ public class Chest : Structure
         {
             if(itemInChest == null)
             {
-                GameManager.manager.UpdateMessages("The chest is empty.");
+                manager.UpdateMessages("The chest is empty.");
                 return;
             }
 

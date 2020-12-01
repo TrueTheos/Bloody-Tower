@@ -875,9 +875,6 @@ public static class CleanerTemple
         public bool Bot;
         public bool Right;
         public bool Left;
-        
-
-
     }
 
 

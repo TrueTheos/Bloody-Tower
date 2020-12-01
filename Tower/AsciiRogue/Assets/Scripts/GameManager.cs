@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     public GameObject GOdec;
     private Item _selectedItem;
     private bool equipState;
-    private int decisionsCount;
 
     [Header("Pathfinding")]
     public List<GameObject> enemies = new List<GameObject>();
@@ -99,13 +98,7 @@ public class GameManager : MonoBehaviour
 
 
     [HideInInspector] public FOVNEW fv;
-
-    private string itemOption1;
-    private string itemOption2;
-    private string itemOption3;
-    private string itemOption4;
-    private string itemOption5;
-
+    
     [HideInInspector] public Item itemToAnvil;
     [HideInInspector] public bool anvilMenuOpened;
     [HideInInspector] public Anvil anvil;

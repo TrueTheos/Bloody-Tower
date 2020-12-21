@@ -1142,7 +1142,14 @@ public class DungeonGenerator : MonoBehaviour
                             }
                             else
                             {
-                                asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].letter}</color>";                                
+                                if (map[x, y].previousMonsterLetter != "")
+                                {
+                                    asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].previousMonsterLetter}</color>";
+                                }
+                                else
+                                {
+                                    asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].letter}</color>";
+                                }
                             }
                         }
                         else
@@ -1207,7 +1214,19 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
         else
-            return ColorUtility.ToHtmlStringRGBA(new Color(R / 9, G / 9, B / 9));
+        {
+            if(MapManager.map[x,y].previousMonsterLetter != "")
+            {
+                float _R = MapManager.map[x, y].previousMonsterColor.r;
+                float _G = MapManager.map[x, y].previousMonsterColor.g;
+                float _B = MapManager.map[x, y].previousMonsterColor.b;
+                return ColorUtility.ToHtmlStringRGBA(new Color(_R / 9, _G / 9, _B / 9));
+            }
+            else
+            {
+                return ColorUtility.ToHtmlStringRGBA(new Color(R / 9, G / 9, B / 9));
+            }
+        }           
     }
 
     //-----------------------------------------------------------------------------------
@@ -1557,8 +1576,8 @@ public class DungeonGenerator : MonoBehaviour
                 // carve a central room, then attach stuff to it
                 Structure centralRoom;
 
-                int x = Map.WIDTH / 2 + Rand.range(-5, 6);
-                int y = Map.HEIGHT / 2 + Rand.range(-5, 6);
+                int x = Map.WIDTH / 2; //+ Rand.range(-5, 6);
+                int y = Map.HEIGHT / 2; //+ Rand.range(-5, 6);
 
                 int w = 0;
                 int h = 0;
@@ -1582,9 +1601,9 @@ public class DungeonGenerator : MonoBehaviour
                 m.carve(centralRoom, '.');
 
                 List<Structure> structs = new List<Structure>
-            {
-                centralRoom
-            };
+                {
+                    centralRoom
+                };
 
 
                 for (int i = 0; i < 10; i++)

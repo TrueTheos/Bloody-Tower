@@ -117,7 +117,10 @@ public class Tile
 
 
     public bool requiresKey = false;
-    
+
+    public string previousMonsterLetter = "";
+    public Color previousMonsterColor;
+
     
     public string baseChar;
     public string letter = "";

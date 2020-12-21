@@ -33,6 +33,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1
+  canSpeak: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

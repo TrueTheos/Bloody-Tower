@@ -27,10 +27,7 @@ MonoBehaviour:
   endurance: 6
   _Behaviour: 0
   attacks: 00000000
-  attackText:
-  - bites at your ankles.
-  - jumps and scratches at your face.
-  - scurries up your leg, biting at your leg as it does.
+  attackText: []
   E_possileDrops: []
   enemyInfo: 'Kar - 9 HP / 5 STR / 3 DEX/ 3 INT / 6 END
 
@@ -39,6 +36,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
+  canSpeak: 1
   W_light: 1
   W_magic: 0
   finishedDialogue: 0

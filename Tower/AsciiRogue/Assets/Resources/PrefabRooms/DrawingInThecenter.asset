@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a7051858aabc4b4492cdf166d654afb, type: 3}
-  m_Name: RoomWithAnnoying
+  m_Name: DrawingInThecenter
   m_EditorClassIdentifier: 
-  room: ....7....
-  height: 3
-  width: 3
+  room: ..........2.2.2.2...........2.....2...........2.....2...........2.2.2.2..........
+  height: 9
+  width: 9
   OmniAIs:
-    m_keys: []
-    m_values: []
-  enemyNames:
-  - {fileID: 11400000, guid: 438167bf9ee75454f8a4cfc010807261, type: 2}
-  enemySleeping: 00
+    m_keys:
+    - {x: 0, y: 0}
+    m_values:
+    - {fileID: 11400000, guid: 1497258d6d39f40449c67ea6bb545def, type: 2}
+  enemyNames: []
+  enemySleeping: 
   itemsToSpawn: []
+  Tags: []
+  ExcludeTags: []

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73a21d7d7e95c5b41bef1d7c4eca7095, type: 3}
-  m_Name: Hamp
+  m_Name: Dhole
   m_EditorClassIdentifier: 
-  E_name: Hamp
-  E_symbol: h
+  E_name: Dhole
+  E_symbol: d
   E_color: {r: 0.5585571, g: 0.5754717, b: 0.22530259, a: 0}
   E_lvlMin: 0
   E_lvlMax: 50
@@ -36,6 +36,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
+  canSpeak: 0
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

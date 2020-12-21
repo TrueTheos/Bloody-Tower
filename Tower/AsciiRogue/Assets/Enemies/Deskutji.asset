@@ -27,12 +27,11 @@ MonoBehaviour:
   endurance: 9
   _Behaviour: 3
   attacks: 00000000
-  attackText:
-  - claws at you with its bony fingertips.
-  - ' punches you with an uncomfortable fist.'
-  - backhands you, unhinging its wrist. It quickly snaps the wrist back into place.
+  attackText: []
   E_possileDrops:
   - {fileID: 11400000, guid: 15e51088fc9d371479b85ff5ca7f28cc, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   enemyInfo: 'Deskutji - 16 HP / 7 STR / 7 DEX/ 3 INT / 9 END
 
     Can''t open doors.
@@ -40,6 +39,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
+  canSpeak: 1
   W_light: 1
   W_magic: 0
   finishedDialogue: 0

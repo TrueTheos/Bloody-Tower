@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 25631523}
   - component: {fileID: 25631525}
   - component: {fileID: 25631524}
+  - component: {fileID: 25631526}
   m_Layer: 5
   m_Name: Console
   m_TagString: Untagged
@@ -265,6 +266,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25631522}
   m_CullTransparentMesh: 0
+--- !u!111 &25631526
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25631522}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 6620d761ef7bbf842883f436f40eec9e, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 6620d761ef7bbf842883f436f40eec9e, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &27060433
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,7 +415,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: -11}
+  m_AnchoredPosition: {x: 1.95, y: -29}
   m_SizeDelta: {x: 206.04, y: 52.06}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &55483623
@@ -1127,7 +1144,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: -125}
+  m_AnchoredPosition: {x: 1.95, y: -157}
   m_SizeDelta: {x: 206.04, y: 44.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &188196054
@@ -2702,7 +2719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: 65}
+  m_AnchoredPosition: {x: 1.95, y: 59}
   m_SizeDelta: {x: 206.04, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &552136140
@@ -2972,7 +2989,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Helm:'
+  m_Text: 'Helm:
+
+'
 --- !u!222 &716334945
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4705,7 +4724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1038671855
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4722,7 +4741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: -156.97}
+  m_AnchoredPosition: {x: 148, y: -157}
   m_SizeDelta: {x: 206.04, y: 44.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1038671856
@@ -6647,7 +6666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: 27}
+  m_AnchoredPosition: {x: 1.95, y: 15}
   m_SizeDelta: {x: 206.04, y: 52.06}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1636763936
@@ -7011,8 +7030,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -162.78998, y: -216}
-  m_SizeDelta: {x: 141.48, y: 22.97296}
+  m_AnchoredPosition: {x: -128.75, y: -216.29}
+  m_SizeDelta: {x: 209.56444, y: 23.54751}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1795586158
 MonoBehaviour:
@@ -7324,7 +7343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: -87}
+  m_AnchoredPosition: {x: 1.95, y: -117}
   m_SizeDelta: {x: 206.04, y: 44.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1848916420
@@ -7869,7 +7888,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.95, y: -49}
+  m_AnchoredPosition: {x: 1.95, y: -73}
   m_SizeDelta: {x: 206.04, y: 52.575}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1899097917
@@ -8063,8 +8082,14 @@ MonoBehaviour:
     To the sky they point, but in a crescent they\u2019re shaped. Their sharpened
     jaded tips refracting the red glow of the eclipse. When the sun meets the moon,
     they grow."
+  - 'A tall, lean man of dead black colouration but without the slightest sign of
+    negroid features: wholly devoid of either hair or beard, and wearing as his only
+    garment a shapeless robe of some heavy black fabric. His feet were indistinguishable
+    because of the table and bench. The man did not speak, and bore no trace of expression
+    on his small, regular features. He merely pointed to a book of prodigious size
+    which lay open on the table...'
   _prefabRooms:
-  - {fileID: 11400000, guid: d0e8b321ac9e1a041bf80074a20318dd, type: 2}
+  - {fileID: 11400000, guid: 24455d2e2d739094f982c268f65696c3, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8191,9 +8216,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f178d7d56efd5c94682dd51f992d98c5, type: 2}
   - {fileID: 11400000, guid: f3720cd781456f346b7704570a9e5812, type: 2}
   - {fileID: 11400000, guid: b2ee8dd915bd7a44786cae91e5dc1b66, type: 2}
-  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
   - {fileID: 11400000, guid: b8a53231f8bc21d43879db9aa4a4ad2d, type: 2}
   - {fileID: 11400000, guid: d95775dd3913dec4b99c8954cfc7cfac, type: 2}
+  - {fileID: 11400000, guid: 93c82b750c9547a479465a655060a2de, type: 2}
+  - {fileID: 11400000, guid: ac1e80008ba0fce49b7e058d8f34b92d, type: 2}
   armors:
   - {fileID: 11400000, guid: 55eda9861085f504d847215a975acf80, type: 2}
   - {fileID: 11400000, guid: b3f193a927150d84ea166b03654c265e, type: 2}
@@ -9069,7 +9095,8 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: b0b5d81b707dca4499283a8b1b7b3ec7,
+        type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}
       propertyPath: _ac

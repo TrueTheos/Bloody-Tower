@@ -34,7 +34,7 @@ public class PoisonBite : BasicAttack
             t.target.TakeDamage(totalDamage,ItemScriptableObject.damageType.normal);
 
             t.source.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.source.EnemyColor)}>{t.source.enemySO.name}</color> used <color=green>Poison Bite</color>!");
-            t.source.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.source.EnemyColor)}>{t.source.enemySO.name}</color> attacked "+ (t.target is PlayerStats?"you": t.target.noun) +" for <color=red>{totalDamage}</color>!");
+            t.source.manager.UpdateMessages($"<color=#{ColorUtility.ToHtmlStringRGB(t.source.EnemyColor)}>{t.source.enemySO.name}</color> attacked "+ (t.target is PlayerStats?"you": t.target.noun) +$" for <color=red>{totalDamage}</color>!");
         }
         else
         {

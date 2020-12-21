@@ -19,7 +19,7 @@ public static class ItemThrowHelper
         Info = new ThrowInfo();
         Info.CurrentItem = item;
 
-        Info.MaxRange = player.__strength / 10 + 1;
+        Info.MaxRange = player.__strength / 10 + 4;
         switch (item.iso)
         {
             case WeaponsSO weapon:
@@ -235,9 +235,5 @@ public static class ItemThrowHelper
         public Numbercheck GetDamage;
 
         public int MaxRange;
-
-        
-
     }
-
 }

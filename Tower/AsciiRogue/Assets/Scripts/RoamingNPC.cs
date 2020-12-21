@@ -84,6 +84,7 @@ public class RoamingNPC : MonoBehaviour,IUnit
     //Variables for Recover enemies
     public int hpRegenCooldown = 10;
 
+    public bool isDead;
 
     public Vector2Int __position;
     public Vector2Int pos => __position;
@@ -174,6 +175,8 @@ public class RoamingNPC : MonoBehaviour,IUnit
                                 MapManager.map[__position.x, __position.y].enemy = null;
                                 MapManager.map[__position.x, __position.y].exploredColor = new Color(0.54f, 0.01f, 0.01f);
                                 MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+
+                                MapManager.map[__position.x, __position.y].previousMonsterLetter = "";
                             }
                             else
                             {
@@ -181,6 +184,8 @@ public class RoamingNPC : MonoBehaviour,IUnit
                                 MapManager.map[__position.x, __position.y].isWalkable = true;
                                 MapManager.map[__position.x, __position.y].enemy = null;
                                 MapManager.map[__position.x, __position.y].timeColor = new Color(0, 0, 0);
+
+                                MapManager.map[__position.x, __position.y].previousMonsterLetter = "";
                             }
 
                             __position = new Vector2Int(x, y);
@@ -189,6 +194,9 @@ public class RoamingNPC : MonoBehaviour,IUnit
                             MapManager.map[x, y].isWalkable = false;
                             MapManager.map[x, y].enemy = this.gameObject;
                             MapManager.map[x, y].timeColor = EnemyColor;
+
+                            MapManager.map[__position.x, __position.y].previousMonsterLetter = EnemySymbol;
+                            MapManager.map[__position.x, __position.y].previousMonsterColor = EnemyColor;
 
                             return;
                         }

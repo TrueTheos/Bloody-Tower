@@ -24,10 +24,13 @@ MonoBehaviour:
   I_rareness: 0
   I_itemType: 10
   I_whereToPutIt: 3
+  I_damageType: 0
+  lightFactor: 0
   normalIdentifState: 1
   pickupableByMonsters: 0
-  effect: <color=red>d4</color> damage on hit.
+  effect: <color=red>d7</color> damage on hit.
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
   bonusToStrength: 0
   bonusToIntelligence: 0
@@ -37,5 +40,7 @@ MonoBehaviour:
   attacks:
   - {x: 1, y: 7}
   effectsOnHit: 
+  MaximumProjection: 0
+  BowDamage: 0
   _weaponType: 1
   bloodSwordCounter: 0

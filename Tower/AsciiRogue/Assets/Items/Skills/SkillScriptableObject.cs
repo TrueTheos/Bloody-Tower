@@ -315,6 +315,8 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         {
             MissEnemyWakeUp(npc);
         }
+
+
     }
 
     private void ActivatePoisionCleanse(PlayerStats player)
@@ -1178,6 +1180,4 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         }
         return false;
     }
-
-
 }

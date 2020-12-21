@@ -21,7 +21,7 @@ public class Help : MonoBehaviour
             manager.UpdateMessages("<color=yellow>Right Click - Examine creature, '.' - Wait turn</color>");
             manager.UpdateMessages("<color=yellow>I - Inventory, G - Grimoire, T - Skills, ESC - Close Window</color>");
             manager.UpdateMessages("<color=yellow>8 & 2 - Select Item in the inventory</color>");
-            manager.UpdateMessages("<color=yellow>Space/Numpad Enter - Use item</color>");
+            manager.UpdateMessages("<color=yellow>Space - Use item</color>");
             manager.UpdateMessages("<color=yellow>If you level up press</color> <color=purple>+</color> <color=yellow>next to the statistic that you want to level up</color>");
         }
     }

@@ -128,7 +128,7 @@ public static class MapUtility
         int n = target.Length;
         while (n > 1)
         {
-            int k = Random.Range(0,n--);
+            int k = RNG.Range(0,n--);
             T temp = target[n];
             target[n] = target[k];
             target[k] = temp;

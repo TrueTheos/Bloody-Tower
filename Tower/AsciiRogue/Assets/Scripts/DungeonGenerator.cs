@@ -16,30 +16,12 @@ public class DungeonGenerator : MonoBehaviour
     public List<FixedLevels> floor10BossRooms;
     public FixedLevels necromancerLevel;
 
-    public string[] enemiesList;
-    public string[] splitted;
-    public string enemies;
-
-    public string str;
-
-    public List<string> enemyNames = new List<string>();
-    public List<Vector2Int> enemyPositions = new List<Vector2Int>();
-    public List<(Vector2Int pos, string type)> specialEnemy = new List<(Vector2Int pos, string type)>();
-    public List<bool> enemySleeping = new List<bool>();
-
-    private List<ItemScriptableObject> Prefab_itemsToSpawn = new List<ItemScriptableObject>();
-    private List<Vector2Int> Prefab_itemsPositions = new List<Vector2Int>();
-
-    public List<EnemiesScriptableObject> Prefab_enemyNames = new List<EnemiesScriptableObject>();
-    public List<Vector2Int> Prefab_enemyPositions = new List<Vector2Int>();
-    public List<bool> Prefab_enemySleeping = new List<bool>();
-
     public List<Vector2Int> mimicPositions = new List<Vector2Int>();
 
     private List<Vector2Int> torchPositions = new List<Vector2Int>();
 
     public static DungeonGenerator dungeonGenerator;
-    [HideInInspector] public FloorManager floorManager;
+    //[HideInInspector] public FloorManager floorManager;
     private GameManager manager;
 
     public int mapWidth;
@@ -54,7 +36,7 @@ public class DungeonGenerator : MonoBehaviour
     public int maxCorridorLength;
     public int maxFeatures;
 
-    public int currentFloor = 0;
+    //public int currentFloor = 0;
 
     public bool isASCII;
 
@@ -63,12 +45,9 @@ public class DungeonGenerator : MonoBehaviour
 
     public GameObject playerPrefab;
 
-    private int dX; //door position x
-    private int dY; //door position y
-
     private bool playerExists;
 
-    public GameObject floorObject = null;
+    //public GameObject floorObject = null;
 
     public Text screen;
     public float lightFactor = 1f;
@@ -92,77 +71,45 @@ public class DungeonGenerator : MonoBehaviour
     public void Start()
     {
         dungeonGenerator = this;
-        floorManager = GetComponent<FloorManager>();
         manager = GetComponent<GameManager>();
         prefabRooms = new List<PrefabRoom>(_prefabRooms);
     }
 
     public void InitializeDungeon()
     {
-        MapManager.map = new Tile[mapWidth, mapHeight];
+
     }
 
-    public void GenerateDungeon(int floorNumber)
+    public async Task GenerateDungeon(Floor toFill,int floorNumber)
     {
         try { PlayerMovement.playerMovement.StopCoroutine(PlayerMovement.playerMovement.cor); }
         catch { }
+        // TODO: The string generation should be running in async --> only do the rest in the main thread
 
-        if(floorNumber == 10 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        if(floorNumber == 10 )
         {            
-            GenerateFixedLevel(floor10BossRooms[UnityEngine.Random.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
+            GenerateFixedLevel(toFill, floor10BossRooms[RNG.Range(0, floor10BossRooms.Count)].fixedLevel, 10, true, false);            
         }
-        else if(floorNumber == 5 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber == 5 )
         {
-            GenerateFixedLevel(MapGenerator.createSewerMap().print(), floorNumber, false, false, 2);
+            Map map = await Task.Run(() => MapGenerator.createSewerMap());
+            GenerateFixedLevel(toFill, map, floorNumber, false, false, 2);
         }
-        else if (floorNumber == 13 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if (floorNumber == 13 )
         {
-            GenerateFixedLevel(necromancerLevel.fixedLevel, 13, true, false);
+            GenerateFixedLevel(toFill, necromancerLevel.fixedLevel, 13, true, false);
         }
-        else if(floorNumber>10 && floorNumber<20 && floorManager.floorsGO.Where(obj => obj.name == $"Floor {floorNumber}").FirstOrDefault() == null)
+        else if(floorNumber>10 && floorNumber<20 )
         {
-            GenerateFixedLevel(CleanerTemple.GetSimpleTemple(), floorNumber, false, false);
-        }
-        else if (floorManager.floors.Count <= floorNumber)
-        {
-            GenerateFixedLevel(MapGenerator.createSewerMap().print(), floorNumber, false);
+            string map = await Task.Run(() => CleanerTemple.GetSimpleTemple());
+            GenerateFixedLevel(toFill, map, floorNumber, false, false);
         }
         else
         {
-            bool comingFromUp = floorNumber > currentFloor ? false : true;
-            
-            currentFloor = floorNumber;
-
-            MapManager.map = null;
-            MapManager.map = floorManager.floors[currentFloor];
-
-            floorObject = floorManager.floorsGO.Where(obj => obj.name == $"Floor {currentFloor}").SingleOrDefault();
-
-            foreach (GameObject floorGO in floorManager.floorsGO)
-            {
-                floorGO.SetActive(false);
-            }
-            floorObject.SetActive(true);
-
-            if (comingFromUp)
-            {
-                MovePlayerToUpperStairs(); //comming from the lower floor
-            }
-            else
-            {
-                MovePlayerToLowerStairs(); //comming from the higher floor
-            }
-
-            if(floorObject.GetComponent<FloorInfo>().viewRange != 666)
-            {
-                manager.playerStats.viewRange = 0;
-            }
-
-            manager.mapName.text = "Floor " + currentFloor;
-            manager.UpdateMessages($"You entered Floor {currentFloor}");
-
-            DrawMap(true, floorManager.floors[currentFloor]);
+            Map map = await Task.Run(() => MapGenerator.createSewerMap());
+            GenerateFixedLevel(toFill, map, floorNumber, false);
         }
+        toFill.Valid = true;
     }
 
     //GENERATES LEVEL FROM STRING
@@ -188,49 +135,75 @@ public class DungeonGenerator : MonoBehaviour
     //} - Statue
     //! - Torch
 
-    public void GenerateFixedLevel(string fixedLevel, int floor, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
-    {
-        torchPositions = new List<Vector2Int>();
+    // Allows the usage of Map objects for generating the level. the only difference is that it allows for omni AI to be placed
+    private void GenerateFixedLevel(Floor fill, Map map, int floorNum, bool spawnEnemiesFromString,bool generateWater = true, int _viewRange = 666)
+    {        
+        GenerateFixedLevel(fill, map.print(), floorNum, spawnEnemiesFromString, generateWater, _viewRange);
 
-        mimicPositions = new List<Vector2Int>();
+        for (int i = 0; i < map.Prefab_enemyNames.Count; i++)
+        {
+            manager.enemySpawner.SpawnAt(fill, map.Prefab_enemyPositions[i].x, map.Prefab_enemyPositions[i].y,
+                                         map.Prefab_enemyNames[i], map.Prefab_enemySleeping[i] ? "true" : "false");
+        }
+
+        for (int i = 0; i < map.Prefab_itemsToSpawn.Count; i++)
+        {
+            manager.itemSpawner.SpawnAt(fill, map.Prefab_itemsPositions[i].x, map.Prefab_itemsPositions[i].y,
+                                        map.Prefab_itemsToSpawn[i]);
+        }
+
+        foreach (var omni in map.OmniAIs)
+        {
+            GameObject go = new GameObject(omni.AI.name, typeof(OmniBehaviour));
+            var b = go.GetComponent<OmniBehaviour>();
+            go.transform.SetParent(fill.GO.transform);
+            b.AI = omni.AI;
+            b.Position = omni.Position;
+            GameManager.manager.enemies.Add(go);
+        }                
+    }
+
+
+
+    public void GenerateFixedLevel(Floor fill,string fixedLevel, int floorNum, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
+    {
+        List<Vector2Int> torchPositions = new List<Vector2Int>();
+
+        List<Vector2Int> mimicPositions = new List<Vector2Int>();
 
         List<Vector2Int> itemPositions = new List<Vector2Int>();
         List<Vector2Int> cobwebPositions = new List<Vector2Int>();
 
-        currentFloor = floor;
+        List<string> enemyNames = new List<string>();
+        List<Vector2Int> enemyPositions = new List<Vector2Int>();
+        List<bool> enemySleeping = new List<bool>();
 
-        if (!GameObject.Find($"Floor {currentFloor}"))
-        {
-            floorObject = new GameObject($"Floor {currentFloor}");
-            floorObject.AddComponent<FloorInfo>();
-        }
+        List<(Vector2Int pos, string type)> specialEnemy = new List<(Vector2Int pos, string type)>();
+
+        GameObject floorObject = new GameObject($"Floor {floorNum}");
+        floorObject.AddComponent<FloorInfo>();
+
+        fill.GO = floorObject;
 
         if (_viewRange != 666)
         {
             floorObject.GetComponent<FloorInfo>().viewRange = _viewRange;
         }
 
-        MapManager.map = new Tile[mapWidth, mapHeight];
+        fill.Tiles = new Tile[mapWidth, mapHeight];
 
-        foreach (GameObject floorGO in floorManager.floorsGO)
-        {
-            floorGO.SetActive(false);
-        }
-        floorObject.SetActive(true);
+        //rooms.Clear();
+        //allFeatures.Clear();
 
-        rooms.Clear();
-        allFeatures.Clear();
-        dX = 0;
-        dY = 0;
 
         if(spawnEnemiesFromString)
         {
-            string[] enemiesArray = fixedLevel.Split(new char[] { '|' });
-            enemies = enemiesArray[1];
+            string[] enemiesArray = fixedLevel.Split('|');
+            string enemies = enemiesArray[1];
 
-            enemiesList = enemies.Split(new string[] {";"}, StringSplitOptions.None);
-            str = String.Join("/", enemiesList);
-            splitted = str.Split(new string[] {"/"}, StringSplitOptions.None);
+            string[] enemiesList = enemies.Split(';');
+            string str = String.Join("/", enemiesList);
+            string[] splitted = str.Split('/');
 
             List<string> splitted2 = new List<string>();
             splitted2 = splitted.ToList();
@@ -271,7 +244,7 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     case "#": //WALL
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -280,21 +253,21 @@ public class DungeonGenerator : MonoBehaviour
                                 isOpaque = true,
                                 type = "Wall"
                             };
-                            if (currentFloor >= 11)
+                            if (floorNum >= 11)
                             {
-                                MapManager.map[x, y].exploredColor = fleshWallColors[UnityEngine.Random.Range(0, fleshWallColors.Count)];
-                                MapManager.map[x, y].specialNameOfTheCell = "Flesh Wall";
+                                fill.Tiles[x, y].exploredColor = fleshWallColors[RNG.Range(0, fleshWallColors.Count)];
+                                fill.Tiles[x, y].specialNameOfTheCell = "Flesh Wall";
                             }
-                            else if (currentFloor < 11 && UnityEngine.Random.Range(0, 100) > currentFloor * 1.5f)
+                            else if (floorNum < 11 && RNG.Range(0, 100) > floorNum * 1.5f)
                             {
-                                MapManager.map[x, y].exploredColor = mouldWallColors[UnityEngine.Random.Range(0, mouldWallColors.Count)];
-                                MapManager.map[x, y].specialNameOfTheCell = "Mould Wall";
+                                fill.Tiles[x, y].exploredColor = mouldWallColors[RNG.Range(0, mouldWallColors.Count)];
+                                fill.Tiles[x, y].specialNameOfTheCell = "Mould Wall";
                             }
                         }
                         break;
                     case ".": //FLOOR
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -307,46 +280,44 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "<": //STAIRS UP
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 structure = new Stairs(),
                                 specialNameOfTheCell = "Stairs"
                             };
-                            if (MapManager.map[x, y].structure is Stairs stairsDown)
+                            if (fill.Tiles[x, y].structure is Stairs stairsUp)
                             {
-                                stairsDown.dungeonLevelId = currentFloor + 1;
-                                stairsDown.spawnPosition = new Vector2Int(x, y);
-                                MapManager.map[x, y].baseChar = "<";
-                                MapManager.map[x, y].isOpaque = false;
-                                MapManager.map[x, y].isWalkable = true;
-                                MapManager.lowerStairsPos = new Vector2Int(x, y);
-                                floorManager.stairsUp.Add(new Vector2Int(x, y));
+                                stairsUp.dungeonLevelId = floorNum + 1;
+                                stairsUp.spawnPosition = new Vector2Int(x, y);
+                                fill.Tiles[x, y].baseChar = "<";
+                                fill.Tiles[x, y].isOpaque = false;
+                                fill.Tiles[x, y].isWalkable = true;
+                                fill.StairsUp = new Vector2Int(x, y);
                             }
                         }
                         break;
                     case ">": //STAIRS DOWN\
                         {
-                            if (currentFloor != 0)
+                            if (floorNum != 0)
                             {
-                                MapManager.map[x, y] = new Tile
+                                fill.Tiles[x, y] = new Tile
                                 {
                                     structure = new Stairs(),
                                     specialNameOfTheCell = "Stairs"
                                 };
-                                if (MapManager.map[x, y].structure is Stairs stairsUp)
+                                if (fill.Tiles[x, y].structure is Stairs stairsDown)
                                 {
-                                    stairsUp.dungeonLevelId = currentFloor - 1;
-                                    stairsUp.spawnPosition = new Vector2Int(x, y);
-                                    MapManager.map[x, y].baseChar = ">";
-                                    MapManager.map[x, y].isOpaque = false;
-                                    MapManager.map[x, y].isWalkable = true;
-                                    MapManager.upperStairsPos = new Vector2Int(x, y);
-                                    floorManager.stairsDown.Add(new Vector2Int(x, y));
+                                    stairsDown.dungeonLevelId = floorNum - 1;
+                                    stairsDown.spawnPosition = new Vector2Int(x, y);
+                                    fill.Tiles[x, y].baseChar = ">";
+                                    fill.Tiles[x, y].isOpaque = false;
+                                    fill.Tiles[x, y].isWalkable = true;
+                                    fill.StairsDown = new Vector2Int(x, y);
                                 }
                             }
                             else
                             {
-                                MapManager.map[x, y] = new Tile
+                                fill.Tiles[x, y] = new Tile
                                 {
                                     xPosition = x,
                                     yPosition = y,
@@ -360,7 +331,7 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "+": //DOOR
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 type = "Door",
                                 baseChar = "+",
@@ -370,12 +341,12 @@ public class DungeonGenerator : MonoBehaviour
                             };
                             Door door = new Door();
                             door.position = new Vector2Int(x, y);
-                            MapManager.map[x, y].structure = door;
+                            fill.Tiles[x, y].structure = door;
                         }
                         break;
                     case "1": //BLOOD DOOR
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 type = "Door",
                                 baseChar = "+",
@@ -389,15 +360,15 @@ public class DungeonGenerator : MonoBehaviour
                                 position = new Vector2Int(x, y)
                             };
 
-                            int multiplier = Mathf.RoundToInt(currentFloor / 5);
+                            int multiplier = Mathf.RoundToInt(floorNum / 5);
                             if (multiplier < 1) multiplier = 1;
                             bloodDoor.bloodCost = 5 * multiplier;
-                            MapManager.map[x, y].structure = bloodDoor;
+                            fill.Tiles[x, y].structure = bloodDoor;
                         }
                         break;
                     case "_": //DOOR REQUIRING KEY
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 type = "Door",
                                 baseChar = "+",
@@ -410,7 +381,7 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "h": //FLESH OR MOULD WALL
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -419,15 +390,15 @@ public class DungeonGenerator : MonoBehaviour
                                 isOpaque = true,
                                 type = "Wall"
                             };
-                            if (currentFloor >= 11)
+                            if (floorNum >= 11)
                             {
-                                MapManager.map[x, y].exploredColor = fleshWallColors[UnityEngine.Random.Range(0, fleshWallColors.Count)];
-                                MapManager.map[x, y].specialNameOfTheCell = "Flesh Wall";
+                                fill.Tiles[x, y].exploredColor = fleshWallColors[RNG.Range(0, fleshWallColors.Count)];
+                                fill.Tiles[x, y].specialNameOfTheCell = "Flesh Wall";
                             }
-                            else if (currentFloor < 11 && UnityEngine.Random.Range(0, 100) > currentFloor * 1.5f)
+                            else if (floorNum < 11 && RNG.Range(0, 100) > floorNum * 1.5f)
                             {
-                                MapManager.map[x, y].exploredColor = mouldWallColors[UnityEngine.Random.Range(0, mouldWallColors.Count)];
-                                MapManager.map[x, y].specialNameOfTheCell = "Mould Wall";
+                                fill.Tiles[x, y].exploredColor = mouldWallColors[RNG.Range(0, mouldWallColors.Count)];
+                                fill.Tiles[x, y].specialNameOfTheCell = "Mould Wall";
                             }
                             // now add something to spawning
                             specialEnemy.Add((new Vector2Int(x, y), "h"));
@@ -435,7 +406,7 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "0": //ITEM
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -450,9 +421,9 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "=": //CHEST OR MIMIC
                         {
-                            if (UnityEngine.Random.Range(0, 100) < 10)
+                            if (RNG.Range(0, 100) < 10)
                             {
-                                MapManager.map[x, y] = new Tile
+                                fill.Tiles[x, y] = new Tile
                                 {
                                     xPosition = x,
                                     yPosition = y,
@@ -464,9 +435,9 @@ public class DungeonGenerator : MonoBehaviour
                                 };
                                 mimicPositions.Add(new Vector2Int(x, y));
                             }
-                            else if (UnityEngine.Random.Range(1, 100) < 7)
+                            else if (RNG.Range(1, 100) < 7)
                             {
-                                MapManager.map[x, y] = new Tile
+                                fill.Tiles[x, y] = new Tile
                                 {
                                     type = "Blood Anvil",
                                     baseChar = "π",
@@ -476,19 +447,19 @@ public class DungeonGenerator : MonoBehaviour
                                 };
 
                                 Anvil anvil = new Anvil();
-                                MapManager.map[x, y].structure = anvil;
+                                fill.Tiles[x, y].structure = anvil;
                             }
                             else
                             {
-                                MapManager.map[x, y] = new Tile();
+                                fill.Tiles[x, y] = new Tile();
 
-                                CreateChest(x, y);
+                                CreateChest(fill, x, y);
                             }
                         }
                         break;
                     case "\"": //MUSHROOM
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -497,16 +468,16 @@ public class DungeonGenerator : MonoBehaviour
                                 isOpaque = false,
                                 type = "Floor",
                                 specialNameOfTheCell = "Mushroom",
-                                exploredColor = mushroomColors[UnityEngine.Random.Range(0, mushroomColors.Count)]
+                                exploredColor = mushroomColors[RNG.Range(0, mushroomColors.Count)]
                             };
                             Mushroom mushroom = new Mushroom();
                             mushroom.pos = new Vector2Int(x, y);
-                            MapManager.map[x, y].structure = mushroom;
+                            fill.Tiles[x, y].structure = mushroom;
                         }
                         break;
                     case "&": //COBWEB
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -520,7 +491,7 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "2": //PILLAR
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -531,9 +502,9 @@ public class DungeonGenerator : MonoBehaviour
                             };
                         }
                         break;
-                    case "7": //PREFAB ENEMY
+                    case "7": //PREFAB ENEMY PlaceHolder spawned later
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -541,13 +512,12 @@ public class DungeonGenerator : MonoBehaviour
                                 isWalkable = true,
                                 isOpaque = false,
                                 type = "Floor"
-                            };
-                            Prefab_enemyPositions.Add(new Vector2Int(x, y));
+                            };                            
                         }
                         break;
-                    case "9": //PREFAB ITEM
+                    case "9": //PREFAB ITEM PlaceHolder spawned later
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -555,13 +525,12 @@ public class DungeonGenerator : MonoBehaviour
                                 isWalkable = true,
                                 isOpaque = false,
                                 type = "Floor"
-                            };
-                            Prefab_itemsPositions.Add(new Vector2Int(x, y));
+                            };                            
                         }
                         break;
                     case "g": //ENEMY
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -578,14 +547,14 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "~": //BLOOD
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
                                 isWalkable = true,
                                 isOpaque = false,
                                 baseChar = "~",
-                                exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)],
+                                exploredColor = waterColors[RNG.Range(0, waterColors.Count)],
                                 type = "Water",
                                 specialNameOfTheCell = "Blood"
                             };
@@ -593,7 +562,7 @@ public class DungeonGenerator : MonoBehaviour
                         break;
                     case "3": //BLOOD TORCH
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -605,12 +574,12 @@ public class DungeonGenerator : MonoBehaviour
                             };
                             BloodTorch torch = new BloodTorch();
                             torch.position = new Vector2Int(x, y);
-                            MapManager.map[x, y].structure = torch;
+                            fill.Tiles[x, y].structure = torch;
                         }
                         break;
                     case "{": //FOUNTAIN
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 type = "Fountain",
                                 baseChar = "{",
@@ -622,12 +591,12 @@ public class DungeonGenerator : MonoBehaviour
                             {
                                 position = new Vector2Int(x, y)
                             };
-                            MapManager.map[x, y].structure = fountain;
+                            fill.Tiles[x, y].structure = fountain;
                         }
                         break;
                     case "}": //STATUE
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 type = "Floor",
                                 baseChar = ".",
@@ -640,16 +609,16 @@ public class DungeonGenerator : MonoBehaviour
                                 position = new Vector2Int(x, y)        
                             };
   
-                            statue.statueName = statueNames[UnityEngine.Random.Range(0, statueNames.Count)];
-                            statue.statueColor = statueColors[UnityEngine.Random.Range(0, statueColors.Count)];
-                            MapManager.map[x, y].specialNameOfTheCell = statue.statueName;
-                            MapManager.map[x, y].timeColor = statue.statueColor;
-                            MapManager.map[x, y].structure = statue;
+                            statue.statueName = statueNames[RNG.Range(0, statueNames.Count)];
+                            statue.statueColor = statueColors[RNG.Range(0, statueColors.Count)];
+                            fill.Tiles[x, y].specialNameOfTheCell = statue.statueName;
+                            fill.Tiles[x, y].timeColor = statue.statueColor;
+                            fill.Tiles[x, y].structure = statue;
                         }
                         break;
                     case "5": //PAINTING
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -660,16 +629,16 @@ public class DungeonGenerator : MonoBehaviour
                             };
                             Painting painting = new Painting
                             {
-                                paintingText = paintingTexts[UnityEngine.Random.Range(0, paintingTexts.Count)]
+                                paintingText = paintingTexts[RNG.Range(0, paintingTexts.Count)]
                             };
-                            MapManager.map[x, y].specialNameOfTheCell = "Painting";
-                            MapManager.map[x, y].structure = painting;
-                            MapManager.map[x, y].exploredColor = new Color(1, 0.85f, 0);
+                            fill.Tiles[x, y].specialNameOfTheCell = "Painting";
+                            fill.Tiles[x, y].structure = painting;
+                            fill.Tiles[x, y].exploredColor = new Color(1, 0.85f, 0);
                             break;
                         }
                     case "!":
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -678,14 +647,14 @@ public class DungeonGenerator : MonoBehaviour
                                 isOpaque = true,
                                 type = "Torch"
                             };
-                            MapManager.map[x, y].specialNameOfTheCell = "Torch";
-                            MapManager.map[x, y].exploredColor = new Color(1, 1, 0);                          
+                            fill.Tiles[x, y].specialNameOfTheCell = "Torch";
+                            fill.Tiles[x, y].exploredColor = new Color(1, 1, 0);                          
                             torchPositions.Add(new Vector2Int(x, y));
                             break;
                         }
                     default:
                         {
-                            MapManager.map[x, y] = new Tile
+                            fill.Tiles[x, y] = new Tile
                             {
                                 xPosition = x,
                                 yPosition = y,
@@ -723,33 +692,32 @@ public class DungeonGenerator : MonoBehaviour
 
         if(generateWater)
         {
-            if (UnityEngine.Random.Range(1, 100) <= 30)
+            if (RNG.Range(1, 100) <= 30)
             {
-                GenerateWaterPool();
+                GenerateWaterPool(fill);
             }
         }
 
         foreach (var pos in cobwebPositions)
         {
-            if(MapManager.map[pos.x,pos.y].type != "Water") MapManager.map[pos.x,pos.y].type = "Cobweb";
+            if(fill.Tiles[pos.x,pos.y].type != "Water") fill.Tiles[pos.x,pos.y].type = "Cobweb";
         }
         
-        floorManager.floors.Add(MapManager.map);
-        floorManager.floorsGO.Add(floorObject);
+        
 
         foreach(var mimic in mimicPositions)
         {     
-            manager.enemySpawner.SpawnAt(mimic.x, mimic.y, manager.enemySpawner.Mimic, "true");
+            manager.enemySpawner.SpawnAt(fill,mimic.x, mimic.y, manager.enemySpawner.Mimic, "true");
         }
 
         if(spawnEnemiesFromString)
         {
             for(int i = 0; i < enemyNames.Count; i++)
             {
-                manager.enemySpawner.SpawnAt(enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).FirstOrDefault(), enemySleeping[i].ToString());
+                manager.enemySpawner.SpawnAt(fill, enemyPositions[i].x, mapHeight - enemyPositions[i].y - 1, manager.enemySpawner.allEnemies.Where(obj => obj.name == enemyNames[i]).FirstOrDefault(), enemySleeping[i].ToString());
             }
         }
-        else if(enemyPositions.Count > 0)
+        else if(enemyPositions.Count > 0) // TODO: look at this
         {
             for (int i = 0; i < enemyPositions.Count; i++)
             {
@@ -758,33 +726,19 @@ public class DungeonGenerator : MonoBehaviour
                 if(y == 0) y++;
                 if(y == 21) y--;
 
-                manager.enemySpawner.SpawnAt(enemyPositions[i].x, y);
+                manager.enemySpawner.SpawnAt(fill, enemyPositions[i].x, y);
             }
             for (int i = 0; i < specialEnemy.Count; i++)
             {
                 (Vector2Int pos, string type) = specialEnemy[i];
-                manager.enemySpawner.SpawnSpecial(pos.x, pos.y, type);
+                manager.enemySpawner.SpawnSpecial(fill, pos.x, pos.y, type);
 
             }
         }
 
-        int l = 0;
-        foreach (var enemy in Prefab_enemyPositions)
-        {
-            manager.enemySpawner.SpawnAt(enemy.x, enemy.y, Prefab_enemyNames[l], Prefab_enemySleeping[l].ToString());
-            l++;
-        }
-
         foreach (var item in itemPositions)
         {
-            manager.itemSpawner.SpawnAt(item.x, item.y);
-        }
-
-        int k = 0;
-        foreach (var Prefab_item in Prefab_itemsPositions)
-        {
-            manager.itemSpawner.SpawnAt(Prefab_item.x, Prefab_item.y, Prefab_itemsToSpawn[k]);
-            k++;
+            manager.itemSpawner.SpawnAt(fill,item.x, item.y);
         }
 
         bool spawnedRandomTextEvent = false;
@@ -794,15 +748,15 @@ public class DungeonGenerator : MonoBehaviour
             while (!spawnedRandomTextEvent)
             {
                 if (breakI > 200) break;
-                int rX = UnityEngine.Random.Range(0, mapWidth);
-                int rY = UnityEngine.Random.Range(0, mapHeight);
+                int rX = RNG.Range(0, mapWidth);
+                int rY = RNG.Range(0, mapHeight);
 
                 try
                 {
-                    if (MapManager.map[rX, rY].type == "Floor" && MapManager.map[rX, rY].structure == null && MapManager.map[rX, rY].isWalkable)
+                    if (fill.Tiles[rX, rY].type == "Floor" && fill.Tiles[rX, rY].structure == null && fill.Tiles[rX, rY].isWalkable)
                     {
-                        int randomEventIndex = UnityEngine.Random.Range(0, manager.enemySpawner.textEvents.Count);
-                        manager.enemySpawner.SpawnTextEvent(rX, rY, manager.enemySpawner.textEvents[randomEventIndex]);
+                        int randomEventIndex = RNG.Range(0, manager.enemySpawner.textEvents.Count);
+                        manager.enemySpawner.SpawnTextEvent(fill, rX, rY, manager.enemySpawner.textEvents[randomEventIndex]);
                         manager.enemySpawner.textEvents.RemoveAt(randomEventIndex);
                     }
                 }
@@ -814,27 +768,16 @@ public class DungeonGenerator : MonoBehaviour
 
         //if (currentFloor != 0) MovePlayerToLowerStairs();
 
-        manager.mapName.text = "Floor " + currentFloor;
-        manager.UpdateMessages($"You entered Floor {currentFloor}");
+        //manager.mapName.text = "Floor " + floorNum;
+        //manager.UpdateMessages($"You entered Floor {floorNum}");
 
         foreach(var torch in torchPositions)
         {
-            manager.fv.ComputeTorch(new Vector2Int(torch.x, torch.y), 6);
+            manager.fv.ComputeTorch(fill,new Vector2Int(torch.x, torch.y), 6);
         }
-
-        enemyNames = new List<string>();
-        enemyPositions = new List<Vector2Int>();
-        enemySleeping = new List<bool>();
-
-        Prefab_enemyNames = new List<EnemiesScriptableObject>();
-        Prefab_enemyPositions = new List<Vector2Int>();
-        Prefab_enemySleeping = new List<bool>();
-
-        Prefab_itemsPositions = new List<Vector2Int>();
-        Prefab_itemsToSpawn = new List<ItemScriptableObject>();
     }
 
-    private void GenerateWaterPool()
+    private void GenerateWaterPool(Floor fill)
     {
         List<Vector2Int> waterTilesToGrow = new List<Vector2Int>();
 
@@ -847,12 +790,12 @@ public class DungeonGenerator : MonoBehaviour
         {
             if(loopBr) break;
 
-            int x = UnityEngine.Random.Range(1, mapWidth);
-            int y = UnityEngine.Random.Range(1, mapHeight);
+            int x = RNG.Range(1, mapWidth);
+            int y = RNG.Range(1, mapHeight);
 
             try
             {
-                if (MapManager.map[x, y].type == "Floor")
+                if (fill.Tiles[x, y].type == "Floor")
                 {
                     startPos = new Vector2Int(x, y);
                     loopBr = true;
@@ -870,9 +813,9 @@ public class DungeonGenerator : MonoBehaviour
             {
                 try
                 {
-                    if (UnityEngine.Random.Range(0, 100) > i * 8)
+                    if (RNG.Range(0, 100) > i * 8)
                     {
-                        if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type == "Wall")
+                        if (fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type == "Wall")
                         {
                             waterTilesToGrow.RemoveAt(0);
                             /*if (UnityEngine.Random.Range(1, 100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
@@ -887,30 +830,30 @@ public class DungeonGenerator : MonoBehaviour
                         }
                         else
                         {
-                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
-                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
-                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
-                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].specialNameOfTheCell = "Blood";
-                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
-                            MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
+                            fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
+                            fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[RNG.Range(0, waterColors.Count)];
+                            fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
+                            fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].specialNameOfTheCell = "Blood";
+                            fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
+                            fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
                         }
 
-                        if (MapManager.map[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Wall" || MapManager.map[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Door")
+                        if (fill.Tiles[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Floor" || fill.Tiles[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Wall" || fill.Tiles[waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y].type == "Door")
                         {
                             waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x + 1, waterTilesToGrow[0].y));
                         }
 
-                        if (MapManager.map[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Floor" || MapManager.map[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Wall" || MapManager.map[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Door")
+                        if (fill.Tiles[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Floor" || fill.Tiles[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Wall" || fill.Tiles[waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y].type == "Door")
                         {
                             waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x - 1, waterTilesToGrow[0].y));
                         }
 
-                        if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Wall" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Door")
+                        if (fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Floor" || fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Wall" || fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1].type == "Door")
                         {
                             waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x, waterTilesToGrow[0].y + 1));
                         }
 
-                        if (MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Floor" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Wall" || MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Door")
+                        if (fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Floor" || fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Wall" || fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1].type == "Door")
                         {
                             waterTilesToGrow.Add(new Vector2Int(waterTilesToGrow[0].x, waterTilesToGrow[0].y - 1));
                         }
@@ -924,78 +867,61 @@ public class DungeonGenerator : MonoBehaviour
                 catch{waterTilesToGrow.RemoveAt(0);}
             }
         }
-    }   
-
-    public void MovePlayerToLowerStairs()
-    {
-        FloorManager.floorManager.floors[currentFloor - 1][MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
-        FloorManager.floorManager.floors[currentFloor - 1][MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
-
-        MapManager.map[floorManager.stairsDown[currentFloor - 1].x, floorManager.stairsDown[currentFloor - 1].y].hasPlayer = true;
-        MapManager.map[floorManager.stairsDown[currentFloor - 1].x, floorManager.stairsDown[currentFloor - 1].y].letter = "<color=green>@</color>";
-
-        MapManager.playerPos = new Vector2Int(floorManager.stairsDown[currentFloor - 1].x, floorManager.stairsDown[currentFloor - 1].y);
-        manager.player.position = new Vector2Int(floorManager.stairsDown[currentFloor - 1].x, floorManager.stairsDown[currentFloor - 1].y);
-
-        floorManager.floors[currentFloor] = MapManager.map;
-
-        manager.playerStats.fullLevelVision = false;
-
-        DrawMap(true, floorManager.floors[currentFloor]);
     }
-
-    public void MovePlayerToUpperStairs()
+    public void MovePlayerToFloor(int floorIndex)
     {
-        FloorManager.floorManager.floors[currentFloor + 1][MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
-        FloorManager.floorManager.floors[currentFloor + 1][MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
+        bool StairsLeadingDown = floorIndex > MapManager.CurrentFloorIndex;
 
-        MapManager.map[floorManager.stairsUp[currentFloor].x, floorManager.stairsUp[currentFloor].y].hasPlayer = true;
-        MapManager.map[floorManager.stairsUp[currentFloor].x, floorManager.stairsUp[currentFloor].y].letter = "<color=green>@</color>";
+        MapManager.CurrentFloor[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
+        MapManager.CurrentFloor[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
 
-        MapManager.playerPos = new Vector2Int(floorManager.stairsUp[currentFloor].x, floorManager.stairsUp[currentFloor].y);
+        MapManager.ChangeFloor(floorIndex);
 
-        manager.player.position = new Vector2Int(floorManager.stairsUp[currentFloor].x, floorManager.stairsUp[currentFloor].y);
-
-        floorManager.floors[currentFloor] = MapManager.map;
-
-        manager.playerStats.fullLevelVision = false;
-
-        DrawMap(true, floorManager.floors[currentFloor]);
-    }
-    
-    private void SpawnChests()
-    {
-        var room = rooms[UnityEngine.Random.Range(0, rooms.Count)];
-
-        List<Vector2Int> corners = GetCornersPositions(room);
-
-        try
+        if (StairsLeadingDown)
         {
-            Vector2Int chestPos = corners[UnityEngine.Random.Range(0, corners.Count)];
-            if (UnityEngine.Random.Range(0, 10) < 8) //TODO: Make this dependant on something
-            {
-                manager.enemySpawner.SpawnAt(chestPos.x, chestPos.y, manager.enemySpawner.Mimic, "true");
-            }
-            else
-            {
-                CreateChest(chestPos.x, chestPos.y);
-            }
-        }
-        catch{ SpawnChests(); }
-    }
+            // we arrive at StairsDown
 
-    public void CreateChest(int x, int y)
+            MapManager.map[MapManager.CurrentFloor.StairsDown.x, MapManager.CurrentFloor.StairsDown.y].hasPlayer = true;
+            MapManager.map[MapManager.CurrentFloor.StairsDown.x, MapManager.CurrentFloor.StairsDown.y].letter = "<color=green>@</color>";
+
+            MapManager.playerPos = new Vector2Int(MapManager.CurrentFloor.StairsDown.x, MapManager.CurrentFloor.StairsDown.y);
+            manager.player.position = new Vector2Int(MapManager.CurrentFloor.StairsDown.x, MapManager.CurrentFloor.StairsDown.y);
+        }
+        else
+        {
+            // we arrive at StairsUp
+            MapManager.map[MapManager.CurrentFloor.StairsUp.x, MapManager.CurrentFloor.StairsUp.y].hasPlayer = true;
+            MapManager.map[MapManager.CurrentFloor.StairsUp.x, MapManager.CurrentFloor.StairsUp.y].letter = "<color=green>@</color>";
+
+            MapManager.playerPos = new Vector2Int(MapManager.CurrentFloor.StairsUp.x, MapManager.CurrentFloor.StairsUp.y);
+            manager.player.position = new Vector2Int(MapManager.CurrentFloor.StairsUp.x, MapManager.CurrentFloor.StairsUp.y);
+        }
+
+        manager.playerStats.fullLevelVision = false;
+
+        if (MapManager.CurrentFloor.GO.GetComponent<FloorInfo>().viewRange != 666)
+        {
+            manager.playerStats.viewRange = 0;
+        }
+
+        manager.mapName.text = "Floor " + MapManager.CurrentFloorIndex;
+        manager.UpdateMessages($"You entered Floor {MapManager.CurrentFloorIndex}");
+
+        DrawMap(true, MapManager.map);
+    }    
+    
+    public void CreateChest(Floor floor, int x, int y)
     {
-        MapManager.map[x, y].baseChar = "=";
-        MapManager.map[x, y].exploredColor = new Color(.4f, .2f, 0);
-        MapManager.map[x, y].isWalkable = false;
-        MapManager.map[x, y].type = "Chest";
+        floor.Tiles[x, y].baseChar = "=";
+        floor.Tiles[x, y].exploredColor = new Color(.4f, .2f, 0);
+        floor.Tiles[x, y].isWalkable = false;
+        floor.Tiles[x, y].type = "Chest";
 
         Chest chest = new Chest();
 
-        MapManager.map[x, y].structure = chest;
+        floor.Tiles[x, y].structure = chest;
 
-        int itemRarirty = UnityEngine.Random.Range(1, 100);
+        int itemRarirty = RNG.Range(1, 100);
 
         string rarity;
 
@@ -1014,9 +940,9 @@ public class DungeonGenerator : MonoBehaviour
 
         bool loopBreaker = false;
 
-        MapManager.map[x, y].structure = chest;
+        floor.Tiles[x, y].structure = chest;
 
-        int emptyChest = UnityEngine.Random.Range(0, 100); //if < 40 then chest is empty
+        int emptyChest = RNG.Range(0, 100); //if < 40 then chest is empty
 
         for (int i = 0; i < manager.itemSpawner.allItems.Count; i++)
         {
@@ -1029,7 +955,7 @@ public class DungeonGenerator : MonoBehaviour
             }
             else
             {
-                int randomItem = UnityEngine.Random.Range(0, manager.itemSpawner.allItems.Count);
+                int randomItem = RNG.Range(0, manager.itemSpawner.allItems.Count);
 
                 if (manager.itemSpawner.allItems[randomItem].I_rareness.ToString() == rarity)
                 {
@@ -1042,24 +968,24 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    private void CreatePillars()
+    private void CreatePillars(Floor floor)
     {
         foreach (var room in rooms) //Generate Fillars
         {
-            if (UnityEngine.Random.Range(0, 50) < 10)
+            if (RNG.Range(0, 50) < 10)
             {
-                foreach (var corner in GetCornersPositions(room))
+                foreach (var corner in GetCornersPositions(room,floor))
                 {
-                    MapManager.map[corner.x, corner.y].type = "Pillar";
-                    MapManager.map[corner.x, corner.y].isWalkable = false;
-                    MapManager.map[corner.x, corner.y].baseChar = "\u01C1";
-                    MapManager.map[corner.x, corner.y].exploredColor = new Color(0.85f, 0.85f, 0.85f);
+                    floor.Tiles[corner.x, corner.y].type = "Pillar";
+                    floor.Tiles[corner.x, corner.y].isWalkable = false;
+                    floor.Tiles[corner.x, corner.y].baseChar = "\u01C1";
+                    floor.Tiles[corner.x, corner.y].exploredColor = new Color(0.85f, 0.85f, 0.85f);
                 }
             }
         }
     }
 
-    public List<Vector2Int> GetCornersPositions(Feature room)
+    public List<Vector2Int> GetCornersPositions(Feature room, Floor floor)
     {
         List<Vector2Int> cornerPositions = new List<Vector2Int>();
 
@@ -1067,7 +993,7 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach (Vector2Int position in room.positions)
         {
-            if (MapManager.map[position.x, position.y].type == "Floor" && !MapManager.map[position.x, position.y].hasPlayer && MapManager.map[position.x, position.y].structure == null)
+            if (floor.Tiles[position.x, position.y].type == "Floor" && !floor.Tiles[position.x, position.y].hasPlayer && floor.Tiles[position.x, position.y].structure == null)
             {
                 positions.Add(position);
             }
@@ -1077,19 +1003,19 @@ public class DungeonGenerator : MonoBehaviour
         {
             try
             {
-                if (MapManager.map[pos.x - 1, pos.y].type == "Wall" && MapManager.map[pos.x - 1, pos.y + 1].type == "Wall" && MapManager.map[pos.x, pos.y + 1].type == "Wall")
+                if (floor.Tiles[pos.x - 1, pos.y].type == "Wall" && floor.Tiles[pos.x - 1, pos.y + 1].type == "Wall" && floor.Tiles[pos.x, pos.y + 1].type == "Wall")
                 {
                     cornerPositions.Add(pos);
                 }
-                else if (MapManager.map[pos.x - 1, pos.y].type == "Wall" && MapManager.map[pos.x - 1, pos.y - 1].type == "Wall" && MapManager.map[pos.x, pos.y - 1].type == "Wall")
+                else if (floor.Tiles[pos.x - 1, pos.y].type == "Wall" && floor.Tiles[pos.x - 1, pos.y - 1].type == "Wall" && floor.Tiles[pos.x, pos.y - 1].type == "Wall")
                 {
                     cornerPositions.Add(pos);
                 }
-                else if (MapManager.map[pos.x + 1, pos.y].type == "Wall" && MapManager.map[pos.x + 1, pos.y - 1].type == "Wall" && MapManager.map[pos.x, pos.y - 1].type == "Wall")
+                else if (floor.Tiles[pos.x + 1, pos.y].type == "Wall" && floor.Tiles[pos.x + 1, pos.y - 1].type == "Wall" && floor.Tiles[pos.x, pos.y - 1].type == "Wall")
                 {
                     cornerPositions.Add(pos);
                 }
-                else if (MapManager.map[pos.x + 1, pos.y].type == "Wall" && MapManager.map[pos.x + 1, pos.y + 1].type == "Wall" && MapManager.map[pos.x, pos.y + 1].type == "Wall")
+                else if (floor.Tiles[pos.x + 1, pos.y].type == "Wall" && floor.Tiles[pos.x + 1, pos.y + 1].type == "Wall" && floor.Tiles[pos.x, pos.y + 1].type == "Wall")
                 {
                     cornerPositions.Add(pos);
                 }
@@ -1125,9 +1051,9 @@ public class DungeonGenerator : MonoBehaviour
                             if (map[x, y].isExplored)
                             {
                                 if(map[x,y].timeColor != new Color(0,0,0))
-                                    asciiMap += $"<color=#{CalculateFade(map[x,y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].baseChar}</color>";
+                                    asciiMap += $"<color=#{CalculateFade(map[x,y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].baseChar}</color>";
                                 else
-                                    asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].baseChar}</color>";
+                                    asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].baseChar}</color>";
                             }
                             else
                             {
@@ -1138,11 +1064,11 @@ public class DungeonGenerator : MonoBehaviour
                         {
                             if (map[x, y].timeColor != new Color(0, 0, 0))
                             {
-                                asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].letter}</color>";
+                                asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].letter}</color>";
                             }
                             else
                             {
-                                asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].letter}</color>";                                
+                                asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].letter}</color>";                                
                             }
                         }
                         else
@@ -1153,7 +1079,7 @@ public class DungeonGenerator : MonoBehaviour
                     else
                     {
                         asciiMap += " ";
-                        MapManager.map[x, y] = new Tile();
+                        map[x, y] = new Tile();
                     }
                     if (x == (mapWidth - 1))
                     {
@@ -1220,6 +1146,20 @@ public class DungeonGenerator : MonoBehaviour
         public static int WIDTH = 59;
         public static int HEIGHT = 22;
         private char[,] cells = new char[WIDTH, HEIGHT]; // x,y
+
+        public int FloorIndex;
+        // prefabs
+        // items
+        public List<ItemScriptableObject> Prefab_itemsToSpawn = new List<ItemScriptableObject>();
+        public List<Vector2Int> Prefab_itemsPositions = new List<Vector2Int>();
+        // enemies
+        public List<EnemiesScriptableObject> Prefab_enemyNames = new List<EnemiesScriptableObject>();
+        public List<Vector2Int> Prefab_enemyPositions = new List<Vector2Int>();
+        public List<bool> Prefab_enemySleeping = new List<bool>();
+        // any monsters
+        public List<Vector2Int> enemyPositionList = new List<Vector2Int>();
+        
+        public List<(BaseOmniAI AI, Vector2Int Position)> OmniAIs = new List<(BaseOmniAI AI, Vector2Int Position)>();
 
         public Map()
         {
@@ -1387,7 +1327,7 @@ public class DungeonGenerator : MonoBehaviour
 
         public Location getRandom()
         {
-            return new Location(Rand.range(x, x + width), Rand.range(y, y + height));
+            return new Location(RNG.Range(x, x + width), RNG.Range(y, y + height));
         }
 
         public Location[] getAllLocations()
@@ -1485,18 +1425,6 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    class Rand
-    {
-        private static int Seed = new System.Random().Next(0, 200000); // use a seed so we can recreate the level if we need to debug it
-        private static readonly System.Random _random = new System.Random(Seed);
-
-        public static int range(int min, int max) 
-        {
-            return _random.Next(min, max); // 
-        }
-
-    }
-
     public enum Direction : int
     {
         NORTH,
@@ -1557,14 +1485,14 @@ public class DungeonGenerator : MonoBehaviour
                 // carve a central room, then attach stuff to it
                 Structure centralRoom;
 
-                int x = Map.WIDTH / 2 + Rand.range(-5, 6);
-                int y = Map.HEIGHT / 2 + Rand.range(-5, 6);
+                int x = Map.WIDTH / 2 + RNG.Range(-5, 6);
+                int y = Map.HEIGHT / 2 + RNG.Range(-5, 6);
 
                 int w = 0;
                 int h = 0;
                 if (dungeonGenerator.prefabRooms.Count > 0)
                 {
-                    PrefabRoom prefab = dungeonGenerator.prefabRooms[UnityEngine.Random.Range(0, dungeonGenerator.prefabRooms.Count)];
+                    PrefabRoom prefab = dungeonGenerator.prefabRooms[RNG.Range(0, dungeonGenerator.prefabRooms.Count)];
                     w = prefab.height;
                     h = prefab.width;
                     centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
@@ -1574,8 +1502,8 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else
                 {
-                    w = Rand.range(3, 11);
-                    h = Rand.range(3, 11);
+                    w = RNG.Range(3, 11);
+                    h = RNG.Range(3, 11);
                     centralRoom = new Structure(x, y, w, h, Structure.Purpose.Room);
                 }
 
@@ -1601,7 +1529,7 @@ public class DungeonGenerator : MonoBehaviour
 
                     while (newStruct == null && attempts < maxAttempts)
                     {
-                        anchor = structs[Rand.range(0, structs.Count)];
+                        anchor = structs[RNG.Range(0, structs.Count)];
                         newStruct = GenerateNewStructure(m, structs, anchor);
                         attempts++;
                     }
@@ -1614,7 +1542,7 @@ public class DungeonGenerator : MonoBehaviour
 
                     // add doors
                     List<Location> candidates = anchor.findCommonBorder(newStruct);
-                    Location l = candidates[Rand.range(0, candidates.Count)];
+                    Location l = candidates[RNG.Range(0, candidates.Count)];
                     if (anchor.isRoom() || newStruct.isRoom())
                     {
                         newStruct.doors.Add(new Vector2Int(l.x, l.y));
@@ -1633,9 +1561,9 @@ public class DungeonGenerator : MonoBehaviour
                         candidates = other.findCommonBorder(newStruct);
                         if (candidates.Count == 0)
                             continue;
-                        if (Rand.range(0, 100) < 33)
+                        if (RNG.Range(0, 100) < 33)
                             continue;
-                        l = candidates[Rand.range(0, candidates.Count)];
+                        l = candidates[RNG.Range(0, candidates.Count)];
                         m.set(l.x, l.y, (other.isCorridor() && anchor.isCorridor()) ? '.' : '+');
                     }
 
@@ -1673,10 +1601,10 @@ public class DungeonGenerator : MonoBehaviour
 
                 }
                 Debug.Log("Furnish rooms complete: " + gen.PrefabRoomCount);
-                foreach (var placed in gen.PlacedRooms)
-                {
-                    Debug.Log(placed.name);
-                }
+                //foreach (var placed in gen.PlacedRooms)
+                //{
+                //    Debug.Log(placed.name);
+                //}
                 Debug.Log("------------");
 
                 // spawn the stairs
@@ -1684,9 +1612,11 @@ public class DungeonGenerator : MonoBehaviour
                 SpawnStairsPlaceHolder('>', m, structs, r);
                 return m;
             }
-            catch
+            catch(Exception e)
             {
-                return createSewerMap();
+                Debug.Log(e.Message);
+                throw e;
+                //return createSewerMap();
             }         
         }
 
@@ -1709,7 +1639,7 @@ public class DungeonGenerator : MonoBehaviour
 
         private static Structure getRandomRoomHelper(List<Structure> structs)
         {
-            int offset = Rand.range(0, structs.Count);
+            int offset = RNG.Range(0, structs.Count);
             for (int i = 0; i < structs.Count; i++)
             {
                 Structure s = structs[(i + offset) % structs.Count];
@@ -1727,12 +1657,12 @@ public class DungeonGenerator : MonoBehaviour
 
                 Location[] location = s.getAllLocations();
 
-                if (UnityEngine.Random.Range(0, 100) < 7)
+                if (RNG.Range(0, 100) < 7)
                 {
-                    float randomN = UnityEngine.Random.Range(0, 1f);
+                    float randomN = RNG.Range(0, 1f);
                     if (randomN > .75f)
                     {
-                        int randomTile = UnityEngine.Random.Range(0, s.width - 1);
+                        int randomTile = RNG.Range(0, s.width - 1);
                         if (m.get(location[randomTile].x, location[0].y - 1) != '+' && m.get(location[randomTile].x, location[0].y - 1) != '1')
                         {
                             m.set(location[randomTile].x, location[0].y - 1, '5');
@@ -1740,7 +1670,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                     else if(randomN > .5f)
                     {
-                        int randomTile = UnityEngine.Random.Range(0, s.height - 1);
+                        int randomTile = RNG.Range(0, s.height - 1);
                         if (m.get(location[0].x - 1, location[randomTile].y) != '+' && m.get(location[0].x - 1, location[randomTile].y) != '1')
                         {
                             m.set(location[0].x - 1, location[randomTile].y, '5');
@@ -1748,7 +1678,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                     else if (randomN > .25f)
                     {
-                        int randomTile = UnityEngine.Random.Range(0, s.height - 1);
+                        int randomTile = RNG.Range(0, s.height - 1);
                         if (m.get(location[s.width].x + 1, location[randomTile].y) != '+' && m.get(location[s.width].x + 1, location[randomTile].y) != '1')
                         {
                             m.set(location[s.width].x + 1, location[randomTile].y, '5');
@@ -1756,7 +1686,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                     else
                     {
-                        int randomTile = UnityEngine.Random.Range(0, s.width - 1);
+                        int randomTile = RNG.Range(0, s.width - 1);
                         if (m.get(location[randomTile].x, location[s.height].y + 1) != '+' && m.get(location[randomTile].x, location[s.height].y + 1) != '1')
                         {
                             m.set(location[randomTile].x, location[s.height].y + 1, '5');
@@ -1764,7 +1694,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                 }
 
-                if (UnityEngine.Random.Range(0, 100) < 15)
+                if (RNG.Range(0, 100) < 15)
                 {
                     foreach (var door in s.doors)
                     {
@@ -1773,20 +1703,20 @@ public class DungeonGenerator : MonoBehaviour
                 }
 
                 //GENERATE MUSHROOMS
-                if (UnityEngine.Random.Range(0, 100) < 50)
+                if (RNG.Range(0, 100) < 50)
                 {
                     foreach (var loc in location)
                     {
-                        if (UnityEngine.Random.Range(1, 15) < 3 && m.get(loc.x, loc.y) != '<' && m.get(loc.x, loc.y) != '>')
+                        if (RNG.Range(1, 15) < 3 && m.get(loc.x, loc.y) != '<' && m.get(loc.x, loc.y) != '>')
                         {
                             m.set(loc.x, loc.y, '"');
                         }
                     }
                 }
                 //GENERATE COBWEB
-                if (UnityEngine.Random.Range(0, 100) > 50 + dungeonGenerator.currentFloor)
+                if (RNG.Range(0, 100) > 50 + m.FloorIndex)
                 {
-                    for (int i = 0; i < UnityEngine.Random.Range(location.Length * 0.25f, location.Length * 0.75f); i++)
+                    for (int i = 0; i < RNG.Range(location.Length * 0.25f, location.Length * 0.75f); i++)
                     {
                         int x = s.getRandom().x;
                         int y = s.getRandom().y;
@@ -1798,7 +1728,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
 
                 //GENERATE STATUE
-                if(UnityEngine.Random.Range(0, 100) < 50)
+                if(RNG.Range(0, 100) < 50)
                 {
                     int x = s.getRandom().x;
                     int y = s.getRandom().y;
@@ -1809,7 +1739,7 @@ public class DungeonGenerator : MonoBehaviour
                     }
                 }
 
-                int randomRoomDesign = UnityEngine.Random.Range(0, 20);
+                int randomRoomDesign = RNG.Range(0, 20);
 
                 if (randomRoomDesign <= 2)
                 {
@@ -1843,14 +1773,16 @@ public class DungeonGenerator : MonoBehaviour
                     if (s.prefabValue.room[i] == '9')
                     {
                         m.set(loc.x, loc.y, '9');
-                        dungeonGenerator.Prefab_itemsToSpawn.Add(s.prefabValue.itemsToSpawn[itemsSpawned]);
+                        m.Prefab_itemsPositions.Add(new Vector2Int(loc.x, loc.y));
+                        m.Prefab_itemsToSpawn.Add(s.prefabValue.itemsToSpawn[itemsSpawned]);
                         itemsSpawned++;
                     }
                     else if(s.prefabValue.room[i] == '7')
                     {
                         m.set(loc.x, loc.y, '7');
-                        dungeonGenerator.Prefab_enemyNames.Add(s.prefabValue.enemyNames[enemiesSpawned]);
-                        dungeonGenerator.Prefab_enemySleeping.Add(s.prefabValue.enemySleeping[enemiesSpawned]);
+                        m.Prefab_enemyPositions.Add(new Vector2Int(loc.x, loc.y));
+                        m.Prefab_enemyNames.Add(s.prefabValue.enemyNames[enemiesSpawned]);
+                        m.Prefab_enemySleeping.Add(s.prefabValue.enemySleeping[enemiesSpawned]);
                         enemiesSpawned++;
                     }
                     else
@@ -1862,21 +1794,15 @@ public class DungeonGenerator : MonoBehaviour
 
                 foreach (var omni in s.prefabValue.OmniAIs)
                 {
-                    GameObject go = new GameObject(omni.Value.name, typeof(OmniBehaviour));
-                    var b = go.GetComponent<OmniBehaviour>();
-                    go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
-                    b.AI = omni.Value;
-                    b.Position = new Vector2Int(s.x + omni.Key.x,s.y+omni.Key.y);
-                    GameManager.manager.enemies.Add(go);
-                }
-             
+                    m.OmniAIs.Add((omni.Value, new Vector2Int(s.x + omni.Key.x, s.y + omni.Key.y)));
+                }             
             }
         }
 
 
         public static void furnishCorridor(Map m, Structure s)
         {
-            if (Rand.range(0, 100) < s.width * s.height * 3)
+            if (RNG.Range(0, 100) < s.width * s.height * 3)
                 spawnMonsterPlaceHolder(m, s.getRandom());
 
             // check top left and bottom right to see if this is a dead end
@@ -1891,7 +1817,7 @@ public class DungeonGenerator : MonoBehaviour
         public static void spawnMonsterPlaceHolder(Map m, Location l)
         {
             m.set(l.x, l.y, '.');
-            dungeonGenerator.enemyPositions.Add(new Vector2Int(l.x, l.y));
+            m.enemyPositionList.Add(new Vector2Int(l.x, l.y));
         }
 
         public static void spawnChestPlaceHolder(Map m, Location l)
@@ -1914,7 +1840,7 @@ public class DungeonGenerator : MonoBehaviour
 
 
             // try to attach a corridor along the NWSE boundaries of the anchor. 
-            if (connectHere.isRoom() && Rand.range(0, 100) < 50)
+            if (connectHere.isRoom() && RNG.Range(0, 100) < 50)
             {
                 foreach (Direction d in getRandomDirections())
                 {
@@ -1927,7 +1853,7 @@ public class DungeonGenerator : MonoBehaviour
                         Location cursord3 = new Location(n.x, n.y);
 
                         int minDist = 5;
-                        int maxDist = Rand.range(10, 16);
+                        int maxDist = RNG.Range(10, 16);
                         int dist = 1;
                         Structure sn = new Structure(n.x, n.y, 1, 1, Structure.Purpose.Corridor);
 
@@ -1972,7 +1898,7 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             // try to attach another room along the NSEW boundaries of the anchor
-            if (Rand.range(0, 100) < 50)
+            if (RNG.Range(0, 100) < 50)
             {
                 foreach (Direction d in getRandomDirections())
                 {
@@ -1982,10 +1908,10 @@ public class DungeonGenerator : MonoBehaviour
                         Structure ns = new Structure(n.x, n.y, 1, 1, Structure.Purpose.Room);
                         // grow the room in every direction possible until max dimension is reached or we can't grow any more
 
-                        Direction dr = (Direction)(Rand.range(0, 4) * 2);
+                        Direction dr = (Direction)(RNG.Range(0, 4) * 2);
                         int tryCount = 0;
 
-                        int maxDRand = Rand.range(1, 11);
+                        int maxDRand = RNG.Range(1, 11);
 
                         int maxDim = 9;
 
@@ -2045,7 +1971,7 @@ public class DungeonGenerator : MonoBehaviour
                     Structure ns = new Structure(n.x, n.y, 1, 1, Structure.Purpose.Corridor);
                     // grow the corridor in the same direction
 
-                    int maxDim = Rand.range(8,15);
+                    int maxDim = RNG.Range(8,15);
                     int minDim = 3;
 
                     bool blocked = false;
@@ -2096,7 +2022,7 @@ public class DungeonGenerator : MonoBehaviour
             List<Direction> l = new List<Direction>();
             Direction[] dirs = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
             foreach (Direction d in dirs)
-                l.Insert(Rand.range(0, l.Count), d);
+                l.Insert(RNG.Range(0, l.Count), d);
             return l;
         }
     }

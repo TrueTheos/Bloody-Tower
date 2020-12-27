@@ -297,11 +297,11 @@ public static class GenUtil
     }
     public static T GetRandom<T>(this T[] target)
     {
-        return target[Random.Range(0, target.Length)];
+        return target[RNG.Range(0, target.Length)];
     }
     public static T GetRandom<T>(this List<T> target)
     {
-        return target[Random.Range(0, target.Count)];
+        return target[RNG.Range(0, target.Count)];
     }
     public static List<T> GetRandom<T>(this T[] target, int count)
     {
@@ -313,7 +313,7 @@ public static class GenUtil
             {
                 break;
             }
-            T one = w[Random.Range(0, w.Count)];
+            T one = w[RNG.Range(0, w.Count)];
             w.Remove(one);
             result.Add(one);            
         }

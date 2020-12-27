@@ -47,14 +47,14 @@ public class Fountain : Structure
             }
 
             var hamp = GameManager.manager.enemySpawner.Hamp;
-            GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y - 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y + 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x, position.y + 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x, position.y - 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y - 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y + 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y - 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y + 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x, position.y + 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x, position.y - 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y - 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y + 1, hamp, "false");
         }
         else if(random <= 21)
         {

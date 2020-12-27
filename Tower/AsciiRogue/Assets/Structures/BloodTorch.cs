@@ -16,7 +16,7 @@ public class BloodTorch : Structure
             GameManager.manager.StartCoroutine(GameManager.manager.DestroyTorchEffect(position));
             for (int i = 0; i < 6; i++)
             {
-                GameManager.manager.enemySpawner.SpawnAt(Random.Range(position.x - 1, position.x + 2), Random.Range(position.y - 1, position.y + 2), GameManager.manager.enemySpawner.Zombie);
+                GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, Random.Range(position.x - 1, position.x + 2), Random.Range(position.y - 1, position.y + 2), GameManager.manager.enemySpawner.Zombie);
             }
             MapManager.map[position.x, position.y].isWalkable = true;
             MapManager.map[position.x, position.y].isOpaque = false;

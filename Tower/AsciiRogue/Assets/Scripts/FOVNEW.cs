@@ -37,10 +37,10 @@ public class FOVNEW : MonoBehaviour
         catch { }
     }
 
-    public void SetLightTorch(int x, int y, Vector2Int origin, int range)
+    public void SetLightTorch(Floor floor,int x, int y, Vector2Int origin, int range)
     {
         int I = TorchDistance(x, y, origin);
-        MapManager.map[x, y].tileLightFactor = ((range - I) / 10f) * 2;        
+        floor.Tiles[x, y].tileLightFactor = ((range - I) / 10f) * 2;        
     }
 
     public int Distance(int x, int y)
@@ -82,13 +82,13 @@ public class FOVNEW : MonoBehaviour
         for (int octant = 0; octant < 8; octant++) Compute(octant, origin, rangeLimit, 1, new Slope(1, 1), new Slope(0, 1));
     }
 
-    public void ComputeTorch(Vector2Int origin, int rangeLimit)
+    public void ComputeTorch(Floor floor,Vector2Int origin, int rangeLimit)
     {
-        SetLightTorch(origin.x, origin.y, origin, rangeLimit);
-        for (int octant = 0; octant < 8; octant++) ComputeTorch(octant, origin, rangeLimit, 1, new Slope(1, 1), new Slope(0, 1));
+        SetLightTorch(floor,origin.x, origin.y, origin, rangeLimit);
+        for (int octant = 0; octant < 8; octant++) ComputeTorch(floor,octant, origin, rangeLimit, 1, new Slope(1, 1), new Slope(0, 1));
     }
 
-    void ComputeTorch(int octant, Vector2Int origin, int rangeLimit, int x, Slope top, Slope bottom)
+    void ComputeTorch(Floor floor,int octant, Vector2Int origin, int rangeLimit, int x, Slope top, Slope bottom)
     {
         for (; (int)x <= (int)rangeLimit; x++) // rangeLimit < 0 || x <= rangeLimit
         {
@@ -134,7 +134,7 @@ public class FOVNEW : MonoBehaviour
                 //if (inRange) SetVisible(tx, ty);
                 if (inRange && (y != topY || top.GreaterOrEqual(y, x)) && (y != bottomY || bottom.LessOrEqual(y, x)))
                 {
-                    SetLightTorch(tx, ty, origin, rangeLimit);
+                    SetLightTorch(floor,tx, ty, origin, rangeLimit);
                 }
                 //else SetVisible(tx, ty, false);
 
@@ -156,7 +156,7 @@ public class FOVNEW : MonoBehaviour
                         {                  // adjust the bottom vector upwards and continue processing it in the next column.
                                            // (x*2-1, y*2+1) is a vector to the top-left corner of the opaque block
                             if (!inRange || y == bottomY) { bottom = new Slope(y * 2 + 1, x * 2); break; } // don't recurse unless necessary
-                            else ComputeTorch(octant, origin, rangeLimit, x + 1, top, new Slope(y * 2 + 1, x * 2));
+                            else ComputeTorch(floor,octant, origin, rangeLimit, x + 1, top, new Slope(y * 2 + 1, x * 2));
                         }
                         wasOpaque = 1;
                     }

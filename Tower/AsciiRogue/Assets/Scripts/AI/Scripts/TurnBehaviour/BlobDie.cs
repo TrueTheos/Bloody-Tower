@@ -23,7 +23,7 @@ public class BlobDie : BasicDie
 
             if (droppedItem)
             {
-                GameManager.manager.itemSpawner.SpawnAt(t.__position.x, t.__position.y, corpse.itemInCorpse);
+                GameManager.manager.itemSpawner.SpawnAt(MapManager.CurrentFloor, t.__position.x, t.__position.y, corpse.itemInCorpse);
             }
 
             MapManager.map[t.__position.x, t.__position.y].baseChar = t.EnemySymbol;

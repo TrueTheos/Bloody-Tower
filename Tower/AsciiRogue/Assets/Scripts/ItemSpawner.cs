@@ -37,7 +37,7 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    public void Spawn()
+    public void Spawn(Floor floor)
     {
         foreach (var room in DungeonGenerator.dungeonGenerator.rooms)
         {
@@ -45,7 +45,7 @@ public class ItemSpawner : MonoBehaviour
 
             foreach (Vector2Int position in room.positions)
             {
-                if (MapManager.map[position.x, position.y].type == "Floor" && !MapManager.map[position.x, position.y].hasPlayer && MapManager.map[position.x, position.y].structure == null)
+                if (floor.Tiles[position.x, position.y].type == "Floor" && !floor.Tiles[position.x, position.y].hasPlayer && floor.Tiles[position.x, position.y].structure == null)
                 {
                     positions.Add(position);
                 }
@@ -54,19 +54,19 @@ public class ItemSpawner : MonoBehaviour
             try
             {
                 Vector2Int pos = positions[UnityEngine.Random.Range(0, positions.Count - 1)];
-                SpawnAt(pos.x, pos.y);
+                SpawnAt(floor,pos.x, pos.y);
             }
             catch { }
         }
     }
 
-    public void SpawnAt(int x, int y, ItemScriptableObject _item = null)
+    public void SpawnAt(Floor floor,int x, int y, ItemScriptableObject _item = null)
     {
         ItemScriptableObject itemToSpawn = null;
 
         if (_item == null)
         {
-            if (MapManager.map[x, y].type != "Floor" || MapManager.map[x, y].structure != null) return;
+            if (floor.Tiles[x, y].type != "Floor" || floor.Tiles[x, y].structure != null) return;
 
             int itemRarirty = UnityEngine.Random.Range(1, 100);
 
@@ -88,11 +88,11 @@ public class ItemSpawner : MonoBehaviour
             {
                 case "Weapon":
                     validItems = weapons;
-                    itemToSpawn = ItemToSpawn(validItems);
+                    itemToSpawn = ItemToSpawn(floor,validItems);
                     break;
                 case "Armor":
                     validItems = armors;
-                    itemToSpawn = ItemToSpawn(validItems);
+                    itemToSpawn = ItemToSpawn(floor,validItems);
                     break;
                 case "Wand":
                     itemToSpawn = wands[UnityEngine.Random.Range(0, wands.Count)];
@@ -105,7 +105,7 @@ public class ItemSpawner : MonoBehaviour
                     break;
                 case "Potion":
                     validItems = potions;
-                    itemToSpawn = ItemToSpawn(validItems);
+                    itemToSpawn = ItemToSpawn(floor,validItems);
                     break;
                 case "Artifact":
                     itemToSpawn = artfiacts[UnityEngine.Random.Range(0, artfiacts.Count)];
@@ -124,17 +124,17 @@ public class ItemSpawner : MonoBehaviour
             {
                 __position = new Vector2Int(x, y);
 
-                MapManager.map[__position.x, __position.y].type = "Money Pouch";
-                MapManager.map[__position.x, __position.y].letter = "&";
-                MapManager.map[__position.x, __position.y].exploredColor = new Color(1, 1, 0);
-                MapManager.map[__position.x, __position.y].isWalkable = true;
+                floor.Tiles[__position.x, __position.y].type = "Money Pouch";
+                floor.Tiles[__position.x, __position.y].letter = "&";
+                floor.Tiles[__position.x, __position.y].exploredColor = new Color(1, 1, 0);
+                floor.Tiles[__position.x, __position.y].isWalkable = true;
 
                 MoneyPouch money = new MoneyPouch
                 {
                     pos = __position
                 };
 
-                MapManager.map[__position.x, __position.y].structure = money;
+                floor.Tiles[__position.x, __position.y].structure = money;
             }
         }
         else
@@ -148,13 +148,13 @@ public class ItemSpawner : MonoBehaviour
             {
                 __position = new Vector2Int(x, y);
 
-                MapManager.map[__position.x, __position.y].baseChar = itemToSpawn.I_symbol;
+                floor.Tiles[__position.x, __position.y].baseChar = itemToSpawn.I_symbol;
                 if (ColorUtility.TryParseHtmlString(itemToSpawn.I_color, out Color color))
                 {
-                    MapManager.map[__position.x, __position.y].exploredColor = color;
+                    floor.Tiles[__position.x, __position.y].exploredColor = color;
                 }
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                //DungeonGenerator.dungeonGenerator.DrawMap(true, floor.Tiles);
 
                 GameObject item = Instantiate(itemPrefab.gameObject, transform.position, Quaternion.identity);
 
@@ -207,9 +207,9 @@ public class ItemSpawner : MonoBehaviour
                     }
                 }
 
-                item.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                item.transform.SetParent(floor.GO.transform);
 
-                MapManager.map[__position.x, __position.y].item = item.gameObject;
+                floor.Tiles[__position.x, __position.y].item = item.gameObject;
 
                 return;
             }
@@ -217,22 +217,22 @@ public class ItemSpawner : MonoBehaviour
         catch { }
     }
 
-    ItemScriptableObject ItemToSpawn(List<ItemScriptableObject> validItemsList)
+    ItemScriptableObject ItemToSpawn(Floor floor, List<ItemScriptableObject> validItemsList)
     {
         float result = UnityEngine.Random.Range(0, 1f);
 
         float resultMultiplier = 0;
         foreach(var item in validItemsList)
         {
-            if (DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+            if (MapManager.GetIndexOfFloor(floor) <= 10)
             {
                 resultMultiplier += item.chanceOfSpawning1to10;
             }
-            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 20)
+            else if (MapManager.GetIndexOfFloor(floor) <= 20)
             {
                 resultMultiplier += item.chanceOfSpawning11to20;
             }
-            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 30)
+            else if (MapManager.GetIndexOfFloor(floor) <= 30)
             {
                 resultMultiplier += item.chanceOfSpawning21to30;
             }
@@ -247,15 +247,15 @@ public class ItemSpawner : MonoBehaviour
         float rolling_sum = 0;
         foreach (var item in validItemsList)
         {
-            if(DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+            if(MapManager.GetIndexOfFloor(floor) <= 10)
             {
                 rolling_sum += item.chanceOfSpawning1to10;
             }
-            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 10)
+            else if (MapManager.GetIndexOfFloor(floor) <= 10)
             {
                 rolling_sum += item.chanceOfSpawning11to20;
             }
-            else if (DungeonGenerator.dungeonGenerator.currentFloor <= 30)
+            else if (MapManager.GetIndexOfFloor(floor) <= 30)
             {
                 rolling_sum += item.chanceOfSpawning21to30;
             }

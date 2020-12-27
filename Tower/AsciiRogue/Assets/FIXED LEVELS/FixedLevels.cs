@@ -9,4 +9,6 @@ public class FixedLevels : ScriptableObject
     public string fixedLevel;
     [Header("Light factor")]
     public int ligtFactor = 0; 
+
+
 }

@@ -37,7 +37,7 @@ public static class CleanerTemple
         System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
         timer.Start();
 
-        GenData temple = new GenData(Random.Range(TempleWidth.start, TempleWidth.end), Random.Range(TempleHeight.start, TempleHeight.end));
+        GenData temple = new GenData(RNG.Range(TempleWidth.start, TempleWidth.end), RNG.Range(TempleHeight.start, TempleHeight.end));
 
         List<GenRoom> AutoFillRoom = new List<GenRoom>();
 
@@ -69,8 +69,8 @@ public static class CleanerTemple
         temple.EdgeWalls('#', outer);
 
 
-        int w = Random.Range(9, 12);
-        int h = Random.Range(10, 16);
+        int w = RNG.Range(9, 12);
+        int h = RNG.Range(10, 16);
 
         // EntryHall
         temple.TryGrowRect(1, outer.Outer.GetCenter().y, w, h, out GenRect EntrySize, false);
@@ -93,9 +93,9 @@ public static class CleanerTemple
 
 
         // hall to big thing
-        int whall = Random.Range(10, 22);
-        int hhall = Random.Range(5, 7);
-        int space = Random.Range(2, 4);
+        int whall = RNG.Range(10, 22);
+        int hhall = RNG.Range(5, 7);
+        int space = RNG.Range(2, 4);
 
         temple.TryGrowRect(EntrySize.MaxX + 1, EntrySize.GetCenter().y, whall, hhall, out GenRect HallSize);
         GenRoom PillarHall = GenRoom.Sized(HallSize.WidthT, HallSize.HeightT);
@@ -140,9 +140,9 @@ public static class CleanerTemple
 
         // holy water or something
 
-        int waterHeight = Random.Range(2, 4);
-        int waterWidth = Random.Range(2, 4);
-        int waterPillarWidth = Random.Range(2, 3);
+        int waterHeight = RNG.Range(2, 4);
+        int waterWidth = RNG.Range(2, 4);
+        int waterPillarWidth = RNG.Range(2, 3);
 
         int waterRoomHeight = waterHeight + 4 + waterPillarWidth * 2;
         int waterRoomWidth = waterWidth + 6 + waterPillarWidth * 2;
@@ -156,7 +156,7 @@ public static class CleanerTemple
         temple.EdgeWalls('#', waterRoom);
 
 
-        int BackDoorWater = Random.Range(1, waterRoom.Height / 2);
+        int BackDoorWater = RNG.Range(1, waterRoom.Height / 2);
         waterRoom.AddDetails(WaterSize.MaxX, WaterSize.MinY + BackDoorWater, GenTile.Copy(Door));
         waterRoom.AddDetails(WaterSize.MaxX, WaterSize.MaxY - BackDoorWater, GenTile.Copy(Door));
 
@@ -178,8 +178,8 @@ public static class CleanerTemple
 
 
         // pillar spam
-        int spamWidth = Random.Range(10, 20);
-        int spamHeight = WaterSize.HeightT + Random.Range(8, 15);
+        int spamWidth = RNG.Range(10, 20);
+        int spamHeight = WaterSize.HeightT + RNG.Range(8, 15);
 
         temple.TryGrowRect(WaterSize.MaxX + 1, WaterSize.GetCenter().y, spamWidth, spamHeight, out GenRect SpamSize, true, GenUtil.Direction4.Top);
         GenRoom Spam = GenRoom.Sized(SpamSize.WidthT, SpamSize.HeightT);
@@ -224,11 +224,11 @@ public static class CleanerTemple
 
         while (spawnAttemptsRemaining-- > 0)// lol the arrow
         {
-            int rWidth = Random.Range(RandomWidth.start, RandomWidth.end);
-            int rHeight = Random.Range(RandomHeight.start, RandomHeight.end);
+            int rWidth = RNG.Range(RandomWidth.start, RandomWidth.end);
+            int rHeight = RNG.Range(RandomHeight.start, RandomHeight.end);
 
-            int rX = Random.Range(2, temple.Width - 2);
-            int rY = Random.Range(2, temple.Height - 2);
+            int rX = RNG.Range(2, temple.Width - 2);
+            int rY = RNG.Range(2, temple.Height - 2);
             GenRect rHopeSize = new GenRect(rX, rX + rWidth + 1, rY, rY + rWidth - 1);
 
 
@@ -306,7 +306,7 @@ public static class CleanerTemple
 
         // 1 room --> 0,1,2,3
         // 2 room --> 4,5
-        int SecretCount = Mathf.Min(Mathf.FloorToInt(Mathf.Sqrt(Random.Range(1, 6))), PotentialSecret.Count); // this goes to 5 
+        int SecretCount = Mathf.Min(Mathf.FloorToInt(Mathf.Sqrt(RNG.Range(1, 6))), PotentialSecret.Count); // this goes to 5 
 
         Debug.Log(SecretCount + " Secret rooms chosen");
         foreach (var secret in PotentialSecret.GetRandom(SecretCount))
@@ -341,7 +341,7 @@ public static class CleanerTemple
             if (room.Height <= 7 && room.Height >= 5 && room.Width > 6)
             {
                 // potential horizontal hallway
-                if (Random.value < 0.4f)
+                if (RNG.Next() < 0.4f)
                 {
                     // hallway confirmed
                     // left to right
@@ -350,7 +350,7 @@ public static class CleanerTemple
                     {
                         {GenTile.Copy(pillar) }
                     };
-                    int spacing = Random.Range(2, 5);
+                    int spacing = RNG.Range(2, 5);
 
                     int tmpX = room.Outer.MinX + spacing;
                     int tmpY = room.Outer.MinY + 1;
@@ -364,17 +364,17 @@ public static class CleanerTemple
 
                         tmpX = tmpX + spacing;
                     }
-                    int enemyCount = Random.Range(0, 4);
+                    int enemyCount = RNG.Range(0, 4);
                     for (int i = 0; i < enemyCount; i++)
                     {
                         SpawnEnemy(temple, room);
                     }
-                    int itemCount = Random.Range(-1, 3);
+                    int itemCount = RNG.Range(-1, 3);
                     for (int i = 0; i < itemCount; i++)
                     {
                         SpawnItem(temple, room, true);
                     }
-                    int chestCount = Random.Range(-2, 2);
+                    int chestCount = RNG.Range(-2, 2);
                     for (int i = 0; i < chestCount; i++)
                     {
                         SpawnChest(temple, room, true);
@@ -385,7 +385,7 @@ public static class CleanerTemple
             if (room.Width <= 7 && room.Width >= 5 && room.Height > 6)
             {
                 // potential horizontal hallway
-                if (Random.value < 0.4f)
+                if (RNG.Next() < 0.4f)
                 {
                     // hallway confirmed
                     // left to right
@@ -394,7 +394,7 @@ public static class CleanerTemple
                     {
                         {GenTile.Copy(pillar) }
                     };
-                    int spacing = Random.Range(2, 5);
+                    int spacing = RNG.Range(2, 5);
 
                     int tmpX = room.Outer.MinX + 1;
                     int tmpY = room.Outer.MinY + spacing;
@@ -408,17 +408,17 @@ public static class CleanerTemple
 
                         tmpY = tmpY + spacing;
                     }
-                    int enemyCount = Random.Range(0, 4);
+                    int enemyCount = RNG.Range(0, 4);
                     for (int i = 0; i < enemyCount; i++)
                     {
                         SpawnEnemy(temple, room);
                     }
-                    int itemCount = Random.Range(-1, 3);
+                    int itemCount = RNG.Range(-1, 3);
                     for (int i = 0; i < itemCount; i++)
                     {
                         SpawnItem(temple, room, true);
                     }
-                    int chestCount = Random.Range(-2, 2);
+                    int chestCount = RNG.Range(-2, 2);
                     for (int i = 0; i < chestCount; i++)
                     {
                         SpawnChest(temple, room, true);
@@ -431,9 +431,9 @@ public static class CleanerTemple
             {
                 // can either be pillar spam or room in room
 
-                if (Random.value < 0.6f)
+                if (RNG.Next() < 0.6f)
                 {
-                    if (Random.value < 0.7f && room.Width % 2 == 1 && room.Height % 2 == 1)
+                    if (RNG.Next() < 0.7f && room.Width % 2 == 1 && room.Height % 2 == 1)
                     {
                         // pillar spam
 
@@ -444,17 +444,17 @@ public static class CleanerTemple
                                 room.AddDetails(room.PosX + x, room.PosY + y, GenTile.Copy(pillar));
                             }
                         }
-                        int enemyCount = Random.Range(0, 5);
+                        int enemyCount = RNG.Range(0, 5);
                         for (int i = 0; i < enemyCount; i++)
                         {
                             SpawnEnemy(temple, room);
                         }
-                        int itemCount = Random.Range(-1, 3);
+                        int itemCount = RNG.Range(-1, 3);
                         for (int i = 0; i < itemCount; i++)
                         {
                             SpawnItem(temple, room, true);
                         }
-                        int chestCount = Random.Range(-3, 3);
+                        int chestCount = RNG.Range(-3, 3);
                         for (int i = 0; i < chestCount; i++)
                         {
                             SpawnChest(temple, room, true);
@@ -516,19 +516,19 @@ public static class CleanerTemple
                                         }
                                         SpawnItem(temple, left);
                                         SpawnItem(temple, right);
-                                        if (Random.value < 0.4f)
+                                        if (RNG.Next() < 0.4f)
                                         {
                                             SpawnItem(temple, right);
                                         }
-                                        if (Random.value < 0.4f)
+                                        if (RNG.Next() < 0.4f)
                                         {
                                             SpawnItem(temple, left);
                                         }
-                                        if (Random.value < 0.2f)
+                                        if (RNG.Next() < 0.2f)
                                         {
                                             SpawnChest(temple, left, true);
                                         }
-                                        if (Random.value < 0.2f)
+                                        if (RNG.Next() < 0.2f)
                                         {
                                             SpawnChest(temple, left, true);
                                         }
@@ -575,11 +575,11 @@ public static class CleanerTemple
 
                                 SpawnItem(temple, single);
 
-                                if (Random.value < 0.2f)
+                                if (RNG.Next() < 0.2f)
                                 {
                                     SpawnChest(temple, single, true);
                                 }
-                                if (Random.value < 0.2f)
+                                if (RNG.Next() < 0.2f)
                                 {
                                     SpawnChest(temple, single, true);
                                 }
@@ -587,11 +587,11 @@ public static class CleanerTemple
                         }
 
                         SpawnEnemy(temple, room);
-                        if (Random.value < 0.5f)
+                        if (RNG.Next() < 0.5f)
                         {
                             SpawnEnemy(temple, room);
                         }
-                        if (Random.value < 0.2f)
+                        if (RNG.Next() < 0.2f)
                         {
                             SpawnEnemy(temple, room);
                         }
@@ -613,28 +613,28 @@ public static class CleanerTemple
             SpawnEnemy(temple, room);
             SpawnEnemy(temple, room);
 
-            if (Random.value < 0.5f)
+            if (RNG.Next() < 0.5f)
             {
                 SpawnEnemy(temple, room);
             }
-            if (Random.value < 0.2f)
+            if (RNG.Next() < 0.2f)
             {
                 SpawnEnemy(temple, room);
             }
             SpawnItem(temple, room);
-            if (Random.value < 0.3f)
+            if (RNG.Next() < 0.3f)
             {
                 SpawnItem(temple, room);
             }
-            if (Random.value < 0.3f)
+            if (RNG.Next() < 0.3f)
             {
                 SpawnItem(temple, room);
             }
-            if (Random.value < 0.4f)
+            if (RNG.Next() < 0.4f)
             {
                 SpawnChest(temple, room);
             }
-            if (Random.value < 0.1f)
+            if (RNG.Next() < 0.1f)
             {
                 SpawnChest(temple, room);
             }
@@ -727,7 +727,7 @@ public static class CleanerTemple
         }
         Debug.Log("Doors time: " + timer.ElapsedMilliseconds);
 
-        if (Random.value < 0.2f)
+        if (RNG.Next() < 0.2f)
         {
             Spam.AddDetail(
             SpamSize.MaxX - 1,

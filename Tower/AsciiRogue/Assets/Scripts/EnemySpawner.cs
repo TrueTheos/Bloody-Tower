@@ -25,8 +25,6 @@ public class EnemySpawner : MonoBehaviour
 
     public GameManager manager;
 
-    private bool loopBreaker;
-
     public void Spawn(Floor floor)
     {
         foreach(var room in DungeonGenerator.dungeonGenerator.rooms)
@@ -44,15 +42,13 @@ public class EnemySpawner : MonoBehaviour
     }
 
     public void SpawnAt(Floor floor,int x, int y, EnemiesScriptableObject enemySO = null, string sleep = "")
-    {        
-        
+    {
         try{if(floor.Tiles[x,y].type != "Floor" || floor.Tiles[x,y].structure != null || floor.Tiles[x,y].hasPlayer) return;}
         catch{};
 
         __position = new Vector2Int(x, y);
 
         if(enemySO == null) enemySO = GetRandomEnemy(floor);
-
         try
         {
             floor.Tiles[__position.x, __position.y].timeColor = enemySO.E_color;
@@ -119,11 +115,9 @@ public class EnemySpawner : MonoBehaviour
 
     private EnemiesScriptableObject GetRandomEnemy(Floor floor)
     {
-        loopBreaker = false;
-
         foreach (var enemy in allEnemies)
         {
-            int randomEnemy = UnityEngine.Random.Range(0, allEnemies.Length - 1);
+            int randomEnemy = RNG.Range(0, allEnemies.Length - 1);
             if (Enumerable.Range(allEnemies[randomEnemy].E_lvlMin, allEnemies[randomEnemy].E_lvlMax - allEnemies[randomEnemy].E_lvlMin).Contains(MapManager.GetIndexOfFloor(floor)))
             {
                 Debug.Log($"<color=red>{allEnemies[randomEnemy].E_name} {MapManager.GetIndexOfFloor(floor)}</color>");

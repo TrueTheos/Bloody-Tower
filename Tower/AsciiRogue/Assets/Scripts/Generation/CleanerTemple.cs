@@ -867,16 +867,6 @@ public static class CleanerTemple
     static GenDetail dWater = new GenDetail() { Char = '~', Type = GenDetail.DetailType.Background };
     static GenDetail dEmpty = new GenDetail() { Char = ' ', Type = GenDetail.DetailType.Nothing };
 
-    private struct DecoPos
-    {
-        public bool CanWall;
-        public bool CanFree;
-        public bool Top;
-        public bool Bot;
-        public bool Right;
-        public bool Left;
-    }
-
 
     public static List<GenTile[,]> RoomDecorations = new List<GenTile[,]>()
     {

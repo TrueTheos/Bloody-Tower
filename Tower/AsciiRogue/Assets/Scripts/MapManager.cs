@@ -115,6 +115,12 @@ public static class MapManager
         return possible;
     }
 
+    public static void Reset()
+    {
+        Floors.Clear();
+        ChangeFloor(0);
+    }
+
     public static Vector2Int FindFreeSpot()
     {
         for (int x = 0; x < map.GetLength(0); x++)
@@ -150,9 +156,15 @@ public static class MapManager
     
     public static void ChangeFloor(int newFloorIndex)
     {
-        CurrentFloor.Active = false;
+        if (CurrentFloor != null)
+        {
+            CurrentFloor.Active = false;
+        }        
         _currentFloorIndex = newFloorIndex;
-        CurrentFloor.Active = true;
+        if (CurrentFloor != null)
+        {
+            CurrentFloor.Active = true;
+        }
     }
     
     public static Floor GetFloor(int index)

@@ -77,7 +77,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public void InitializeDungeon()
     {
-
+        MapManager.Reset();
     }
 
     public async Task GenerateDungeon(Floor toFill,int floorNumber)
@@ -151,6 +151,10 @@ public class DungeonGenerator : MonoBehaviour
             manager.itemSpawner.SpawnAt(fill, map.Prefab_itemsPositions[i].x, map.Prefab_itemsPositions[i].y,
                                         map.Prefab_itemsToSpawn[i]);
         }
+        for (int i = 0; i < map.enemyPositionList.Count; i++)
+        {
+            manager.enemySpawner.SpawnAt(fill, map.enemyPositionList[i].x, map.enemyPositionList[i].y);
+        }
 
         foreach (var omni in map.OmniAIs)
         {
@@ -181,9 +185,11 @@ public class DungeonGenerator : MonoBehaviour
         List<(Vector2Int pos, string type)> specialEnemy = new List<(Vector2Int pos, string type)>();
 
         GameObject floorObject = new GameObject($"Floor {floorNum}");
+        floorObject.SetActive(false);
         floorObject.AddComponent<FloorInfo>();
 
         fill.GO = floorObject;
+
 
         if (_viewRange != 666)
         {
@@ -224,7 +230,7 @@ public class DungeonGenerator : MonoBehaviour
 
         bool forBreaker = false;
 
-        for(int y = mapHeight - 1; y >= 0; y--)
+        for(int y = 0 ; y < mapHeight; y++)
         {
             for(int x = 0; x < mapWidth; x++)
             {
@@ -1755,6 +1761,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 // minimum room size is currently 3x3 so this is at least 9
                 Location[] l = s.getRandom(loot.Length + monsterCount);
+
                 int j = 0;
                 char[] lootArray = loot.ToCharArray();
                 for (int i = 0; i < lootArray.Length; i++)
@@ -1816,7 +1823,7 @@ public class DungeonGenerator : MonoBehaviour
 
         public static void spawnMonsterPlaceHolder(Map m, Location l)
         {
-            m.set(l.x, l.y, '.');
+            m.set(l.x, l.y, '7');
             m.enemyPositionList.Add(new Vector2Int(l.x, l.y));
         }
 

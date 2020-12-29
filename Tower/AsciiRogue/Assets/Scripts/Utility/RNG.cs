@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class RNG
 {
-    public static int Seed = 1;
+    public static int Seed = 3;
 
     static System.Random random;
 
@@ -19,7 +19,7 @@ public static class RNG
             random = new System.Random(Seed);
         }
     }
-
+    // [min,max[
     public static int Range(int min, int max)
     {
         return random.Next(min, max);

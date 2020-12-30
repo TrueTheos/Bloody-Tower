@@ -10,32 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dea7da19f1277ae45b2651d8241aeaea, type: 3}
-  m_Name: Rusty Pipe
+  m_Name: Athame
   m_EditorClassIdentifier: 
-  I_name: Rusty Pipe
-  I_unInName: Rusty Pipe
+  I_name: Athame
+  I_unInName: Athame
   I_symbol: )
   I_color: '#ab6626'
-  chanceOfSpawning1to10: 0.8
-  chanceOfSpawning11to20: 0
+  chanceOfSpawning1to10: 0
+  chanceOfSpawning11to20: 0.05
   chanceOfSpawning21to30: 0
   chanceOfSpawning31to40: 0
-  I_weight: 7
-  I_rareness: 0
+  I_weight: 6
+  I_rareness: 1
   I_itemType: 10
   I_whereToPutIt: 3
+  I_damageType: 0
+  lightFactor: 0
   normalIdentifState: 1
   pickupableByMonsters: 0
-  effect: <color=red>d4</color> damage on hit.
+  effect: <color=red>3d4</color> damage on hit.
   worth: 0
+  SkillsToLearn: []
   bonusToHealth: 0
-  bonusToStrength: 0
+  bonusToStrength: 3
   bonusToIntelligence: 0
-  bonusToDexterity: 0
+  bonusToDexterity: 3
   bonusToEndurance: 0
   bonusToNoise: 0
   attacks:
   - {x: 1, y: 4}
+  - {x: 1, y: 4}
+  - {x: 1, y: 4}
   effectsOnHit: 
+  MaximumProjection: 0
+  BowDamage: 0
   _weaponType: 0
   bloodSwordCounter: 0

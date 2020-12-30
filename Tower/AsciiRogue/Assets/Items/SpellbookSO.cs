@@ -48,27 +48,16 @@ public class SpellbookSO : ItemScriptableObject, IRestrictTargeting
 
     public override void Use(MonoBehaviour foo, Item itemObject)
     {
-        GameManager.manager.readingBook = this;
-
         if(GameManager.manager.playerStats.isBlind)
         {
             GameManager.manager.UpdateMessages("You can't read because you are <color=green>blind</color>!");
             return;
         }
-
-        if (!itemObject.learned && itemObject.durationLeft > 0)
+        else
         {
             GameManager.manager.UpdateMessages("You start to page through the ornate tome...");
             itemObject.durationLeft--;
-            GameManager.manager.waitingCoroutine = GameManager.manager.WaitTurn(learnDuration);
-            GameManager.manager.StartCoroutine(GameManager.manager.waitingCoroutine);
-        }
-
-        if (itemObject.durationLeft <= 0)
-        {
-            GameManager.manager.UpdateMessages("<color=lightblue>Puff!</color> Book fades away...");
-            GameManager.manager.ApplyChangesInInventory(this);
-            return;
+            CastSpell(foo);
         }
     }
 

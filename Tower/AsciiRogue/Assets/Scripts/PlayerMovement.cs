@@ -459,7 +459,7 @@ public class PlayerMovement : MonoBehaviour
             //CRIT?
             if (Random.Range(1, 100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex - playerStats.__dexterity)
             {
-                if (playerStats._Lhand?.iso is WeaponsSO wep)
+                if (playerStats._Lhand?.iso is WeaponsSO)
                 {
                     damageLeftHand += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
                 }
@@ -471,7 +471,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Random.Range(1, 100) < 10 - roamingNpcScript.AC + roamingNpcScript.dex - playerStats.__dexterity)
             {
-                if ((playerStats._Lhand?.iso is WeaponsSO wep2))
+                if ((playerStats._Lhand?.iso is WeaponsSO))
                 {
                     damageRightHand += Mathf.FloorToInt((Random.Range(1, 4) + Mathf.FloorToInt(playerStats.__strength / 5)) * 1.5f);
                 }
@@ -486,19 +486,19 @@ public class PlayerMovement : MonoBehaviour
 
             if (roamingNpcScript.sleeping)
             {
-                WakeUpEnemy(roamingNpcScript);
-                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damageLeftHand * sleepingDamage), leftHandDamageType);
-                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damageRightHand * sleepingDamage), rightHandDamageType);
                 damage = Mathf.FloorToInt(damageLeftHand * sleepingDamage) + Mathf.FloorToInt(damageRightHand * sleepingDamage);
                 manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
+                WakeUpEnemy(roamingNpcScript);
+                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damageLeftHand * sleepingDamage), leftHandDamageType);
+                roamingNpcScript.TakeDamage(Mathf.FloorToInt(damageRightHand * sleepingDamage), rightHandDamageType);               
             }
             else
             {
-                roamingNpcScript._x = roamingNpcScript.howLongWillFololwInvisiblepLayer;
-                roamingNpcScript.TakeDamage(damageLeftHand, leftHandDamageType);
-                roamingNpcScript.TakeDamage(damageRightHand, rightHandDamageType);
                 damage = damageLeftHand + damageRightHand;
                 manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
+                roamingNpcScript._x = roamingNpcScript.howLongWillFololwInvisiblepLayer;
+                roamingNpcScript.TakeDamage(damageLeftHand, leftHandDamageType);
+                roamingNpcScript.TakeDamage(damageRightHand, rightHandDamageType);            
             }
         }
         else //WE MISSED BUT WE WAKE UP ENEMY

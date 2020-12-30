@@ -30,6 +30,12 @@ MonoBehaviour:
   attackText: []
   E_possileDrops:
   - {fileID: 11400000, guid: cc0f76b0586c2be44bbaa2bedb160dcd, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 93c82b750c9547a479465a655060a2de, type: 2}
+  - {fileID: 11400000, guid: 93c82b750c9547a479465a655060a2de, type: 2}
   enemyInfo: 'Blood Priest - 40 HP / 15 STR / 16 DEX/ 19 INT / 15 END
 
     Can open
@@ -37,6 +43,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1
+  canSpeak: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

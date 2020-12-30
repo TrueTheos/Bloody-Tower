@@ -114,12 +114,12 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                         }
                         if (MapManager.map[pos.x, pos.y].hasPlayer)
                         {
-                            if (nt == null)
+                            if (nt == null && !GameManager.manager.playerStats.isInvisible)
                             {
-                                GameManager.manager.UpdateMessages($"<b>{GameManager.manager.monsterDetectPlayer[Random.Range(0, GameManager.manager.monsterDetectPlayer.Count)]}</b> "+ $"said <color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> in a terrifying voice.");
+                                if(t.enemySO.canSpeak) GameManager.manager.UpdateMessages($"<b>{GameManager.manager.monsterDetectPlayer[Random.Range(0, GameManager.manager.monsterDetectPlayer.Count)]}</b> "+ $"said <color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> in a terrifying voice.");
 
                                 nt = t.playerStats;
-                                t.LastKnownTargetPos = nt.pos;
+                                try { t.LastKnownTargetPos = nt.pos; } catch { }
                             }
                             else
                             {

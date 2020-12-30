@@ -11,7 +11,18 @@ public class Fountain : Structure
 
     public override void Use()
     {
-        if(!canBeUsed)
+        var hamp = GameManager.manager.enemySpawner.Hamp;
+        GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y - 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y + 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x, position.y + 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x, position.y - 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y - 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y + 1, hamp, "false");
+        return;
+
+        if (!canBeUsed)
         {
             GameManager.manager.UpdateMessages("Fountain is empty.");
             GameManager.manager.FinishPlayersTurn();
@@ -43,10 +54,10 @@ public class Fountain : Structure
             }
             else
             {
-                GameManager.manager.UpdateMessages("An endless stream of snakes pour forth!");
+                GameManager.manager.UpdateMessages("An endless stream of disgusting worms pour forth!");
             }
 
-            var hamp = GameManager.manager.enemySpawner.Hamp;
+            // var hamp = GameManager.manager.enemySpawner.Hamp;
             GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y - 1, hamp, "false");
             GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y, hamp, "false");
             GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y + 1, hamp, "false");

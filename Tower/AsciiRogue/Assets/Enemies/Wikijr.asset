@@ -27,13 +27,11 @@ MonoBehaviour:
   endurance: 14
   _Behaviour: 0
   attacks: 00000000
-  attackText:
-  - slams it's shoulder into you.
-  - punches you in the face.
-  - wraps it's arms around you and squeezes.
+  attackText: []
   E_possileDrops:
   - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
-  - {fileID: 11400000, guid: 9869e016d9c8b3e4bb3ee2c0589cbc2b, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   enemyInfo: 'Wikijr - 18 HP / 13 STR / 8 DEX/ 7 INT / 14 END
 
     Can open doors.
@@ -41,6 +39,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1
+  canSpeak: 1
   W_light: 1
   W_magic: 0
   finishedDialogue: 0

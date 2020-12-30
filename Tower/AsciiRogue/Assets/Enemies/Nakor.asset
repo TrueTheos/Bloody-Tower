@@ -27,12 +27,8 @@ MonoBehaviour:
   endurance: 7
   _Behaviour: 1
   attacks: 00000000
-  attackText:
-  - kicks you in the shin.
-  - ' slaps your thigh and then your face. '
-  - slaps your stomach.
-  E_possileDrops:
-  - {fileID: 11400000, guid: 75f1d6e6b2ed7ec4985266a2e6596c01, type: 2}
+  attackText: []
+  E_possileDrops: []
   enemyInfo: 'Nakor - 15 HP / 9 STR / 5 DEX/ 4 INT / 7 END
 
     Can''t open doors.
@@ -40,6 +36,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1
+  canSpeak: 1
   W_light: 1
   W_magic: 0
   finishedDialogue: 0

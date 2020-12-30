@@ -27,10 +27,7 @@ MonoBehaviour:
   endurance: 11
   _Behaviour: 0
   attacks: 00000000
-  attackText:
-  - claws at you with bloody fingerbones underneath its decrepit flesh.
-  - bites into your shoulder.
-  - bites into your face.
+  attackText: []
   E_possileDrops: []
   enemyInfo: 'Wijij - 17 HP / 10 STR / 7 DEX/ 4 INT / 11 END
 
@@ -39,6 +36,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
+  canSpeak: 1
   W_light: 1
   W_magic: 0
   finishedDialogue: 0

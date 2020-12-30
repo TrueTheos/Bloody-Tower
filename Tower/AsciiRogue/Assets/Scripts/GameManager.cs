@@ -290,7 +290,7 @@ public class GameManager : MonoBehaviour
                                 //AddAnotherOption("UEquip");
                             }
                         }
-                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Wand || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem || _selectedItem.iso is Bell bell)
+                        if (_selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Scroll || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Spellbook || _selectedItem.iso.I_itemType == ItemScriptableObject.itemType.Gem || _selectedItem.iso is Bell bell)
                         {
                             Popup.AddDecissionOption("Use", "Use", gameObject);
                             //decisionsCount++;
@@ -1577,16 +1577,25 @@ public class GameManager : MonoBehaviour
 
             if (item.identified)
             {
-                itemEffects.text =
+                itemEffects.text = "";
+                if(item.iso.effect != "")
+                {
+                    itemEffects.text = item.iso.effect + "\n";                 
+                }
+                if (item.cursed == true && item.equippedPreviously)
+                {
+                    itemEffects.text += "<color=red>Cursed</color> \n";
+                }
+                /*itemEffects.text =
                     $"{item.iso.effect}" +
                     "\n" +
-                    (item.cursed == true && item.equippedPreviously ? "<color=red>Cursed</color> \n" : "\n");
+                    (item.cursed == true && item.equippedPreviously ? "<color=red>Cursed</color> \n" : "\n");*/
 
                 if (item.iso is PotionSO) { }
                 else
                 {
-                    if (item._BUC == Item.BUC.cursed) itemEffects.text += "\n" + "<color=red>Cursed</color> \n";
-                    else if (item._BUC == Item.BUC.blessed) itemEffects.text += "\n" + "<color=yellow>Blessed</color> \n";
+                    if (item._BUC == Item.BUC.cursed) itemEffects.text += "<color=red>Cursed</color> \n";
+                    else if (item._BUC == Item.BUC.blessed) itemEffects.text += "<color=yellow>Blessed</color> \n";
                 }
 
                 if (item.iso.bonusToHealth != 0) itemEffects.text += "<color=red>HP</color>: " + (item.iso.bonusToHealth + item.Anvil_bonusToHealth) + "\n";

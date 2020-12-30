@@ -28,7 +28,14 @@ MonoBehaviour:
   _Behaviour: 0
   attacks: 00000000
   attackText: []
-  E_possileDrops: []
+  E_possileDrops:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 93c82b750c9547a479465a655060a2de, type: 2}
   enemyInfo: 'Servant - 38 HP / 14 STR / 12 DEX/ 10 INT / 12 END
 
     Can''t open
@@ -36,6 +43,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1
+  canSpeak: 1
   W_light: 0
   W_magic: 0
   finishedDialogue: 0

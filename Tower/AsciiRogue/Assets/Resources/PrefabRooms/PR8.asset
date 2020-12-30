@@ -21,7 +21,5 @@ MonoBehaviour:
   enemyNames: []
   enemySleeping: 
   itemsToSpawn: []
-  Tags:
-  - All
-  - All
+  Tags: []
   ExcludeTags: []

@@ -24,6 +24,5 @@ MonoBehaviour:
   enemySleeping: 0000
   itemsToSpawn:
   - {fileID: 11400000, guid: 7cc588d54cd743b4a8b10ab98bd165f3, type: 2}
-  Tags:
-  - Room
+  Tags: []
   ExcludeTags: []

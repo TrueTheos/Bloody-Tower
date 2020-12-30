@@ -27,10 +27,7 @@ MonoBehaviour:
   endurance: 7
   _Behaviour: 0
   attacks: 00000000
-  attackText:
-  - lunges for your throat.The dog digs its canines into your leg.
-  - bites into your forearm.
-  - digs its canines into your leg.
+  attackText: []
   E_possileDrops: []
   enemyInfo: 'Zwull - 10 HP / 9 STR / 5 DEX/ 6 INT / 7 END
 
@@ -39,6 +36,7 @@ MonoBehaviour:
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0
+  canSpeak: 1
   W_light: 1
   W_magic: 0
   finishedDialogue: 0

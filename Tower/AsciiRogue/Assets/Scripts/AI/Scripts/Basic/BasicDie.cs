@@ -8,6 +8,9 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
 
     public override void Calculate(RoamingNPC t)
     {
+        if (!t.isDead) t.isDead = true;
+        else return;
+
         if (t.enemySO.leavesCorpse)
         {
             MapManager.map[t.__position.x, t.__position.y].enemy = null;
@@ -20,10 +23,13 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
 
 
             //CHANCE TO DROP CORPSE ITEM
-            if (Random.Range(1, 100) <= 100 && t.enemySO.E_possileDrops != null && t.enemySO.E_possileDrops.Count > 0)
+            if (t.enemySO.E_possileDrops != null && t.enemySO.E_possileDrops.Count > 0)
             {
                 corpse.itemInCorpse = t.enemySO.E_possileDrops[Random.Range(0, t.enemySO.E_possileDrops.Count)];
-                droppedItem = true;
+                if(corpse.itemInCorpse != null)
+                {
+                    droppedItem = true;
+                }
             }
 
             if (MapManager.map[t.__position.x, t.__position.y].structure == null)
@@ -63,7 +69,7 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
 
         t.manager.playerStats.__sanity += 10;
 
-        t.manager.UpdateMessages($"You have killed the <color={t.EnemyColor}>{t.EnemyName}</color>");
+        t.manager.UpdateMessages($"You have killed the <color=#{t.EnemyColor}>{t.EnemyName}</color>");
         t.manager.playerStats.UpdateLevel(t.xpDrop);
         /*
         GameObject e = null;

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8274568063289460322}
   - component: {fileID: 8274568063289460323}
-  - component: {fileID: 3936388640161400043}
   m_Layer: 0
   m_Name: EnemyPref
   m_TagString: Untagged
@@ -44,19 +43,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66574f5f71e99c48962093db15a3178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  __currentHp: 0
   enemySO: {fileID: 0}
---- !u!114 &3936388640161400043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8274568063289460321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8fb8b9612246d04aaba233d9b92fafb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartPosition: {x: 0, y: 0}
-  TargetPosition: {x: 0, y: 0}
+  runCounter: 5
+  runDirection: {x: 0, y: 0}
+  hpRegenCooldown: 10
+  __position: {x: 0, y: 0}
+  sleeping: 0
+  sleepDecided: 0
+  attacked: 0
+  rooted: 0
+  rootDuration: 0
+  isStuned: 0
+  stuneDuration: 0
+  isInvisible: 0
+  bleedLength: 0
+  isBleeding: 0
+  totalDamage: 0
+  playerStats: {fileID: 0}
+  manager: {fileID: 0}
+  canvas: {fileID: 0}
+  path: []
+  howLongWillFololwInvisiblepLayer: 8
+  _x: 0
+  nextAttack: {fileID: 0}
+  attackCharged: 0
+  damageOverTurn: 0
+  dotDuration: 0

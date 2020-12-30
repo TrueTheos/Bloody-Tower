@@ -3,10 +3,38 @@ using System; // So the script can use the serialization commands
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapManager
+public static class MapManager
 {
-    public static bool IsValid = false;
-    public static Tile[,] map; // the 2-dimensional map with the information for all the tiles
+    public static bool IsValid
+    {
+        get
+        {
+            if (Floors.Count>CurrentFloorIndex)
+            {
+                return Floors[CurrentFloorIndex].Valid;
+            }
+            return false;
+        }
+    }
+    public static Tile[,] map // the 2-dimensional map with the information for all the tiles
+    {
+        get
+        {
+            if (IsValid)
+            {
+                return CurrentFloor.Tiles;
+            }
+            return basic;
+        }
+    }
+
+
+    private static Tile[,] basic => new Tile[,]
+    {
+        { new Tile(),new Tile() },
+        { new Tile(),new Tile() },
+    };
+    
     public static Vector2Int playerPos;
     public static Vector2Int upperStairsPos, lowerStairsPos;
     public static bool NeedRepaint;
@@ -14,8 +42,8 @@ public class MapManager
     /// Searches for the closest Position towards a goal position (excluding the target)
     /// </summary>
     /// <param name="origin">From</param>
-    /// <param name="target">Tp</param>
-    /// <returns></returns>
+    /// <param name="target">To</param>
+    /// <returns>found position</returns>
     public static bool TryFindClosestPositionTowards(Vector2Int origin, Vector2Int target, out Vector2Int endPosition)
     {
         List<Vector2Int> possible = GetValidNeighbours(target);
@@ -87,6 +115,12 @@ public class MapManager
         return possible;
     }
 
+    public static void Reset()
+    {
+        Floors.Clear();
+        ChangeFloor(0);
+    }
+
     public static Vector2Int FindFreeSpot()
     {
         for (int x = 0; x < map.GetLength(0); x++)
@@ -102,6 +136,64 @@ public class MapManager
         return new Vector2Int(0, 00);
     }
 
+    public static Floor CurrentFloor
+    {
+        get
+        {
+            if (IsValid)
+            {
+                return Floors[CurrentFloorIndex];
+            }
+            return null;
+        }
+    }
+
+    private static int _currentFloorIndex = 0;
+    public static int CurrentFloorIndex { get => _currentFloorIndex; set => ChangeFloor(value); }
+
+    private static List<Floor> Floors;
+    public static int MaxFloorIndex => Floors.Count - 1;
+    
+    public static void ChangeFloor(int newFloorIndex)
+    {
+        if (CurrentFloor != null)
+        {
+            CurrentFloor.Active = false;
+        }        
+        _currentFloorIndex = newFloorIndex;
+        if (CurrentFloor != null)
+        {
+            CurrentFloor.Active = true;
+        }
+    }
+    
+    public static Floor GetFloor(int index)
+    {
+        return Floors[Mathf.Max(CurrentFloorIndex, MaxFloorIndex)];
+    }
+    public static int GetIndexOfFloor(Floor floor)
+    {
+        return Floors.IndexOf(floor);
+    }
+
+    public static Floor AppendNewFloor()
+    {
+        Floor f = new Floor();
+        f.Valid = false;
+
+        Floors.Add(f);
+        return f;
+    }
+    public static Floor AppendNewFloor(Floor f)
+    {
+        Floors.Add(f);
+        return f;
+    }
+
+    static MapManager()
+    {
+        Floors = new List<Floor>();
+    }
 }
 
 [Serializable] // Makes the class serializable so it can be saved out to a file

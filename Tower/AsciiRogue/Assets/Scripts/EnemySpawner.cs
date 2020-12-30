@@ -25,9 +25,7 @@ public class EnemySpawner : MonoBehaviour
 
     public GameManager manager;
 
-    private bool loopBreaker;
-
-    public void Spawn()
+    public void Spawn(Floor floor)
     {
         foreach(var room in DungeonGenerator.dungeonGenerator.rooms)
         {
@@ -37,33 +35,32 @@ public class EnemySpawner : MonoBehaviour
             {
                 for (int i = 1; i < howManyMobs; i++)
                 {
-                    GetRandomEnemy();
+                    GetRandomEnemy(floor);
                 }
             }           
         }  
     }
 
-    public void SpawnAt(int x, int y, EnemiesScriptableObject enemySO = null, string sleep = "")
-    {        
-        try{if(MapManager.map[x,y].type != "Floor" || MapManager.map[x,y].structure != null || MapManager.map[x,y].hasPlayer) return;}
+    public void SpawnAt(Floor floor,int x, int y, EnemiesScriptableObject enemySO = null, string sleep = "")
+    {
+        try{if(floor.Tiles[x,y].type != "Floor" || floor.Tiles[x,y].structure != null || floor.Tiles[x,y].hasPlayer) return;}
         catch{};
 
         __position = new Vector2Int(x, y);
 
-        if(enemySO == null) enemySO = GetRandomEnemy();
-
+        if(enemySO == null) enemySO = GetRandomEnemy(floor);
         try
         {
-            MapManager.map[__position.x, __position.y].timeColor = enemySO.E_color;
+            floor.Tiles[__position.x, __position.y].timeColor = enemySO.E_color;
         }
         catch
         {
             return;
         }
-        MapManager.map[__position.x, __position.y].letter = enemySO.E_symbol;
-        MapManager.map[__position.x, __position.y].isWalkable = false;
+        floor.Tiles[__position.x, __position.y].letter = enemySO.E_symbol;
+        floor.Tiles[__position.x, __position.y].isWalkable = false;
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        //DungeonGenerator.dungeonGenerator.DrawMap(true, floor.Tiles);
 
         GameObject enemy;
 
@@ -94,6 +91,10 @@ public class EnemySpawner : MonoBehaviour
                 so.sleeping = false;
             }
         }
+        else
+        {
+            so.SpawnSleep(MapManager.GetIndexOfFloor(floor));
+        }
 
         so.__currentHp = enemySO.maxHealth;
         so.str = enemySO.strength;
@@ -106,22 +107,20 @@ public class EnemySpawner : MonoBehaviour
         so.xpDrop = Mathf.RoundToInt((so.str + so.dex + so.intell + so.end) / 3);
 
         manager.enemies.Add(enemy.gameObject);
-        enemy.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
-        MapManager.map[__position.x, __position.y].enemy = enemy.gameObject;
+        enemy.transform.SetParent(floor.GO.transform);
+        floor.Tiles[__position.x, __position.y].enemy = enemy.gameObject;
 
         spawnedEnemies.Add(enemy.gameObject);
     }
 
-    private EnemiesScriptableObject GetRandomEnemy()
+    private EnemiesScriptableObject GetRandomEnemy(Floor floor)
     {
-        loopBreaker = false;
-
         foreach (var enemy in allEnemies)
         {
-            int randomEnemy = UnityEngine.Random.Range(0, allEnemies.Length - 1);
-            if (Enumerable.Range(allEnemies[randomEnemy].E_lvlMin, allEnemies[randomEnemy].E_lvlMax - allEnemies[randomEnemy].E_lvlMin).Contains(DungeonGenerator.dungeonGenerator.currentFloor))
+            int randomEnemy = RNG.Range(0, allEnemies.Length - 1);
+            if (Enumerable.Range(allEnemies[randomEnemy].E_lvlMin, allEnemies[randomEnemy].E_lvlMax - allEnemies[randomEnemy].E_lvlMin).Contains(MapManager.GetIndexOfFloor(floor)))
             {
-                Debug.Log($"<color=red>{allEnemies[randomEnemy].E_name} {DungeonGenerator.dungeonGenerator.currentFloor}</color>");
+                Debug.Log($"<color=red>{allEnemies[randomEnemy].E_name} {MapManager.GetIndexOfFloor(floor)}</color>");
                 return allEnemies[randomEnemy];
             }
         }
@@ -129,7 +128,7 @@ public class EnemySpawner : MonoBehaviour
         return null;
     }
 
-    internal void SpawnSpecial(int x, int y, string type)
+    internal void SpawnSpecial(Floor floor,int x, int y, string type)
     {
         switch (type)
         {
@@ -137,10 +136,10 @@ public class EnemySpawner : MonoBehaviour
                 // hidden Door:
                 GameObject go = new GameObject("Hidden door",typeof(OmniBehaviour));
                 var b = go.GetComponent<OmniBehaviour>();
-                go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                go.transform.SetParent(floor.GO.transform);
                 b.AI = SecretDoorAI;
                 b.Position = new Vector2Int(x, y);
-
+                
                 manager.enemies.Add(go);
                 spawnedEnemies.Add(go);
                 break;
@@ -149,11 +148,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void SpawnTextEvent(int x, int y, TriggerTextAI eve)
+    public void SpawnTextEvent(Floor floor,int x, int y, TriggerTextAI eve)
     {
         GameObject go = new GameObject("Random Text Event" , typeof(OmniBehaviour));
         var b = go.GetComponent<OmniBehaviour>();
-        go.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+        go.transform.SetParent(floor.GO.transform);
         b.AI = eve; // what AI you want to use has to be the SO
         b.Position = new Vector2Int(x,y); // the position of the SO if relevant for what it should do
         GameManager.manager.enemies.Add(go);

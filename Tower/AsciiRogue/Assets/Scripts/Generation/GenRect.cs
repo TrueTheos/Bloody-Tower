@@ -86,8 +86,8 @@ public struct GenRect
         float xC = (MinX + MaxX) / 2f;
         float yC = (MinY + MaxY) / 2f;
 
-        int xA = Random.Range(0, 2) == 0 ? Mathf.FloorToInt(xC) : Mathf.CeilToInt(xC);
-        int yA = Random.Range(0, 2) == 0 ? Mathf.FloorToInt(yC) : Mathf.CeilToInt(yC);
+        int xA = RNG.Range(0, 2) == 0 ? Mathf.FloorToInt(xC) : Mathf.CeilToInt(xC);
+        int yA = RNG.Range(0, 2) == 0 ? Mathf.FloorToInt(yC) : Mathf.CeilToInt(yC);
 
         return new Vector2Int(xA, yA);
     }

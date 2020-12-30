@@ -12,14 +12,14 @@ public class Fountain : Structure
     public override void Use()
     {
         var hamp = GameManager.manager.enemySpawner.Hamp;
-        GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y - 1, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y + 1, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x, position.y + 1, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x, position.y - 1, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y - 1, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y, hamp, "false");
-        GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y + 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y - 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y + 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x, position.y + 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x, position.y - 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y - 1, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y, hamp, "false");
+        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y + 1, hamp, "false");
         return;
 
         if (!canBeUsed)
@@ -57,15 +57,15 @@ public class Fountain : Structure
                 GameManager.manager.UpdateMessages("An endless stream of disgusting worms pour forth!");
             }
 
-           // var hamp = GameManager.manager.enemySpawner.Hamp;
-            GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y - 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x - 1, position.y + 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x, position.y + 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x, position.y - 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y - 1, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y, hamp, "false");
-            GameManager.manager.enemySpawner.SpawnAt(position.x + 1, position.y + 1, hamp, "false");
+            // var hamp = GameManager.manager.enemySpawner.Hamp;
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y - 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x - 1, position.y + 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x, position.y + 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x, position.y - 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y - 1, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y, hamp, "false");
+            GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, position.x + 1, position.y + 1, hamp, "false");
         }
         else if(random <= 21)
         {

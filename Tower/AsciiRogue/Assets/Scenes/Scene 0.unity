@@ -7980,18 +7980,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 541d34abbb63551408daf9ade481cc0b, type: 2}
   - {fileID: 11400000, guid: e3b03e62a1319374a8532e52c91a5c60, type: 2}
   necromancerLevel: {fileID: 11400000, guid: c728acb842546aa4c9eec4d5d7baf8ba, type: 2}
-  enemiesList: []
-  splitted: []
-  enemies: 
-  str: 
-  enemyNames: []
-  enemyPositions: []
-  enemySleeping: 
-  Prefab_enemyNames: []
-  Prefab_enemyPositions: []
-  Prefab_enemySleeping: 
   mimicPositions: []
-  floorManager: {fileID: 0}
   mapWidth: 59
   mapHeight: 22
   widthMinRoom: 5
@@ -8001,13 +7990,11 @@ MonoBehaviour:
   minCorridorLength: 2
   maxCorridorLength: 10
   maxFeatures: 40
-  currentFloor: 0
   isASCII: 1
   allFeatures: []
   rooms: []
   playerPrefab: {fileID: 217120817462417562, guid: 4eabca731634a0a48b42c10cf57d7f97,
     type: 3}
-  floorObject: {fileID: 0}
   screen: {fileID: 25631524}
   lightFactor: 1
   waterColors:
@@ -8345,9 +8332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db595ed99652f674bbe6f008eef6eb0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorsGO: []
-  stairsDown: []
-  stairsUp: []
 --- !u!114 &1911366301
 MonoBehaviour:
   m_ObjectHideFlags: 0

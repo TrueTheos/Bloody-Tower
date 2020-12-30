@@ -14,7 +14,8 @@ public class Stairs : Structure
         MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
         MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
 
-        DungeonGenerator.dungeonGenerator.GenerateDungeon(dungeonLevelId);
+        DungeonGenerator.dungeonGenerator.MovePlayerToFloor(dungeonLevelId);
+        // MapManager.MoveToFloor(dungeonLevelId);
     }
 
     public override void WalkIntoTrigger()

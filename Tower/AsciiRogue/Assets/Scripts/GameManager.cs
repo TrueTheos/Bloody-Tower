@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -128,7 +129,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(GenerateThings());
+        if (PrefabProvider.Rooms.Loaded== false)
+        {
+
+        }
+        GenerateThings();
 
         //Clear "Messages" Box
         m_Messages.Clear();
@@ -143,29 +148,32 @@ public class GameManager : MonoBehaviour
             LearnedSkills.Add(skill);
         }
     }
-    public IEnumerator GenerateThings()
+    public async Task GenerateThings()
     {
         messages.gameObject.SetActive(false);
         dungeonGenerator.InitializeDungeon();
-        yield return new WaitForEndOfFrame();
-        dungeonGenerator.GenerateDungeon(0);
-        yield return new WaitForEndOfFrame();
-        for (int i = 1; i <= 2; i++)
-        {
-            dungeonGenerator.GenerateDungeon(i);
-            yield return new WaitForEndOfFrame();
-            dungeonGenerator.DrawMap(true, MapManager.map);
-        }
-        dungeonGenerator.GenerateDungeon(0);
-        yield return new WaitForEndOfFrame();
-        dungeonGenerator.DrawMap(true, MapManager.map);
+        await Task.Delay(1);
+        await dungeonGenerator.GenerateDungeon(MapManager.AppendNewFloor(), 0);
+        dungeonGenerator.MovePlayerToFloor(0);
         messages.gameObject.SetActive(true);
 
         m_Messages.Clear();
         messagesText = "";
         messages.text = messagesText;
-        MapManager.IsValid = true;
+        
+        MapManager.CurrentFloor.Valid = true;
+
+        dungeonGenerator.DrawMap(true, MapManager.map);
         FirstTurn();
+        await Task.Delay(1);
+        for (int i = 1; i <= 20; i++)
+        {
+            await dungeonGenerator.GenerateDungeon(MapManager.AppendNewFloor(), i);
+            await Task.Delay(1);
+            //dungeonGenerator.DrawMap(true, MapManager.map);
+        }
+               
+        
     }
 
     [Obsolete]
@@ -637,16 +645,16 @@ public class GameManager : MonoBehaviour
                     MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
                     MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
 
-                    DungeonGenerator.dungeonGenerator.GenerateDungeon(_floor);
+                    MapManager.ChangeFloor(_floor);
                 }
                 else if (cheatString.Substring(0, 2) == "st")
                 {
-                    if(dungeonGenerator.currentFloor != 0)
+                    if(MapManager.CurrentFloorIndex != 0)
                     {
-                        UpdateMessages(dungeonGenerator.floorManager.stairsDown[dungeonGenerator.currentFloor - 1].x + " " + dungeonGenerator.floorManager.stairsDown[dungeonGenerator.currentFloor - 1].y);                
+                        UpdateMessages(MapManager.GetFloor(MapManager.CurrentFloorIndex-1).StairsDown.x + " " + MapManager.GetFloor(MapManager.CurrentFloorIndex - 1).StairsDown.y);                
                     }
 
-                    UpdateMessages(dungeonGenerator.floorManager.stairsUp[dungeonGenerator.currentFloor].x + " " + dungeonGenerator.floorManager.stairsUp[dungeonGenerator.currentFloor].y);
+                    UpdateMessages(MapManager.GetFloor(MapManager.CurrentFloorIndex ).StairsUp.x + " " + MapManager.GetFloor(MapManager.CurrentFloorIndex).StairsUp.y);
 
                     dungeonGenerator.DrawMap(true, MapManager.map);
                 }
@@ -657,7 +665,7 @@ public class GameManager : MonoBehaviour
                 else if(cheatString.Substring(0, 5) == "spawn")
                 {
                     string[] enemy = cheatString.Split(new string[] {"/"}, StringSplitOptions.None);
-                    enemySpawner.SpawnAt(MapManager.playerPos.x, MapManager.playerPos.y - 1, enemySpawner.allEnemies.Where(obj => obj.name == enemy[1]).SingleOrDefault());
+                    enemySpawner.SpawnAt(MapManager.CurrentFloor, MapManager.playerPos.x, MapManager.playerPos.y - 1, enemySpawner.allEnemies.Where(obj => obj.name == enemy[1]).SingleOrDefault());
                 }
                 else if(cheatString.Substring(0, 5) == "level")
                 {
@@ -785,7 +793,7 @@ public class GameManager : MonoBehaviour
                 // TODO: there might be gameobject beein left behind here
                 GameObject item = Instantiate(_selectedItem.gameObject, transform.position, Quaternion.identity);
                 item.GetComponent<Item>().iso = _selectedItem.iso;
-                item.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                item.transform.SetParent(MapManager.CurrentFloor.GO.transform);
                 item.GetComponent<Item>().isEquipped = false;
                 MapManager.map[posToDrop.x, posToDrop.y].item = item.gameObject;
             }

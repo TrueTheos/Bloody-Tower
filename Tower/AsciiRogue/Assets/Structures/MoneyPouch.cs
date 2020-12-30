@@ -14,7 +14,7 @@ public class MoneyPouch : Structure
 
     public override void WalkIntoTrigger()
     {
-        int cash = DungeonGenerator.dungeonGenerator.currentFloor + Random.Range(1,6);
+        int cash = MapManager.CurrentFloorIndex + Random.Range(1,6);
         GameManager.manager.playerStats.__coins += cash;
 
         GameManager.manager.UpdateMessages($"You picked up <color=yellow>{cash}</color> coins!");

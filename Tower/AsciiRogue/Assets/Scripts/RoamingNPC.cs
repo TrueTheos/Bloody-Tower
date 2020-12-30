@@ -131,12 +131,7 @@ public class RoamingNPC : MonoBehaviour,IUnit
         playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         canvas = GameObject.Find("MainCanvas").gameObject;
-
-        if(!sleepDecided)
-        {
-            sleeping = Random.Range(0, 101) <= 5 * DungeonGenerator.dungeonGenerator.currentFloor ? false : true;
-        }
-
+        
         //IF ENEMY IS BOSS MAKE HIM NOT SLEEPING
         if (enemySO.isBoss) sleeping = false;
 
@@ -145,6 +140,14 @@ public class RoamingNPC : MonoBehaviour,IUnit
         if(enemySO.finishedDialogue) enemySO.finishedDialogue = false;
         maxHp = __currentHp;
     }   
+
+    public void SpawnSleep(int floorNum)
+    {
+        if (!sleepDecided)
+        {
+            sleeping = Random.Range(0, 101) <= 5 * floorNum ? false : true;
+        }
+    }
 
     public void MoveTo(int x, int y) 
     {

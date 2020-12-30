@@ -708,7 +708,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
                 rewardObject.GetComponent<Item>().iso = npcDialogue.enemySO.rewardItem;
 
-                rewardObject.transform.SetParent(FloorManager.floorManager.floorsGO[DungeonGenerator.dungeonGenerator.currentFloor].transform);
+                rewardObject.transform.SetParent(MapManager.CurrentFloor.GO.transform);
 
                 Pickup(rewardObject, rewardObject.GetComponent<Item>().iso, new Vector2Int(100,100));
 
@@ -740,9 +740,9 @@ public class PlayerStats : MonoBehaviour, IUnit
         int _vr = 0;
 
         _vr = startingViewRange;
-        if (DungeonGenerator.dungeonGenerator.floorObject.GetComponent<FloorInfo>().viewRange != 666)
+        if (MapManager.CurrentFloor.GO.GetComponent<FloorInfo>().viewRange != 666)
         {
-            _vr = DungeonGenerator.dungeonGenerator.floorObject.GetComponent<FloorInfo>().viewRange;
+            _vr = MapManager.CurrentFloor.GO.GetComponent<FloorInfo>().viewRange;
         }
 
         if(_Lhand != null)

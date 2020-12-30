@@ -21,7 +21,7 @@ public class RevivingMonster : MonoBehaviour
                 {
                     if (MapManager.map[pos.x, pos.y].structure is Corps corpse)
                     {
-                        GameManager.manager.enemySpawner.SpawnAt(pos.x, pos.y + 1, corpse.enemyBody, "false");
+                        GameManager.manager.enemySpawner.SpawnAt(MapManager.CurrentFloor, pos.x, pos.y + 1, corpse.enemyBody, "false");
                         StartCoroutine(SummonMonster());
                         return true;
                     }

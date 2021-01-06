@@ -14,6 +14,12 @@ public class Stairs : Structure
         MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].hasPlayer = false;
         MapManager.map[MapManager.playerPos.x, MapManager.playerPos.y].letter = "";
 
+        if (!MapManager.Floors[dungeonLevelId].EnteredBefore && MapManager.Floors[dungeonLevelId].randomEvent != null)
+        {
+            MapManager.Floors[dungeonLevelId].EnteredBefore = true;
+            RandomFloorEventsManager.instance.SendMessage(MapManager.Floors[dungeonLevelId].randomEvent.eventVoidName);
+            //MapManager.Floors[dungeonLevelId].randomEvent.;
+        }
         DungeonGenerator.dungeonGenerator.MovePlayerToFloor(dungeonLevelId);
         // MapManager.MoveToFloor(dungeonLevelId);
     }

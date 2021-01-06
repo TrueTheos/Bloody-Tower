@@ -7942,6 +7942,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1911366295}
   - component: {fileID: 1911366294}
+  - component: {fileID: 1911366300}
   - component: {fileID: 1911366293}
   - component: {fileID: 1911366297}
   - component: {fileID: 1911366298}
@@ -7949,7 +7950,6 @@ GameObject:
   - component: {fileID: 1911366307}
   - component: {fileID: 1911366302}
   - component: {fileID: 1911366296}
-  - component: {fileID: 1911366300}
   - component: {fileID: 1911366299}
   - component: {fileID: 1911366301}
   - component: {fileID: 1911366303}
@@ -7976,11 +7976,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bbc4f8d2f4fae24295761208eae2c84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floor10BossRooms:
-  - {fileID: 11400000, guid: 541d34abbb63551408daf9ade481cc0b, type: 2}
-  - {fileID: 11400000, guid: e3b03e62a1319374a8532e52c91a5c60, type: 2}
-  necromancerLevel: {fileID: 11400000, guid: c728acb842546aa4c9eec4d5d7baf8ba, type: 2}
-  mimicPositions: []
   mapWidth: 59
   mapHeight: 22
   widthMinRoom: 5
@@ -7990,8 +7985,13 @@ MonoBehaviour:
   minCorridorLength: 2
   maxCorridorLength: 10
   maxFeatures: 40
-  isASCII: 1
-  allFeatures: []
+  floor10BossRooms:
+  - {fileID: 11400000, guid: 541d34abbb63551408daf9ade481cc0b, type: 2}
+  - {fileID: 11400000, guid: e3b03e62a1319374a8532e52c91a5c60, type: 2}
+  necromancerLevel: {fileID: 11400000, guid: c728acb842546aa4c9eec4d5d7baf8ba, type: 2}
+  randomFloorEvents:
+  - {fileID: 11400000, guid: 82f7e46644244914e94bb21273b990d4, type: 2}
+  mimicPositions: []
   rooms: []
   playerPrefab: {fileID: 217120817462417562, guid: 4eabca731634a0a48b42c10cf57d7f97,
     type: 3}
@@ -8076,7 +8076,31 @@ MonoBehaviour:
     on his small, regular features. He merely pointed to a book of prodigious size
     which lay open on the table...'
   _prefabRooms:
+  - {fileID: 11400000, guid: cef9830c4c79b8743a3ab5cdf911c4af, type: 2}
+  - {fileID: 11400000, guid: 06073dc4c0132bc4f9d12d247732f0ce, type: 2}
+  - {fileID: 11400000, guid: d0e8b321ac9e1a041bf80074a20318dd, type: 2}
+  - {fileID: 11400000, guid: 5a1c6ae616990cc448fac8a975bf504f, type: 2}
   - {fileID: 11400000, guid: 24455d2e2d739094f982c268f65696c3, type: 2}
+  - {fileID: 11400000, guid: 4a89f9f2973a7714ba9b35cb017adf34, type: 2}
+  - {fileID: 11400000, guid: bcae96d260b817446883439a5f8bc57d, type: 2}
+  - {fileID: 11400000, guid: 4903119a6527d3144927421a4b67b6a6, type: 2}
+  - {fileID: 11400000, guid: dd18092a4e6086a4691edc9c23f43890, type: 2}
+  - {fileID: 11400000, guid: 9cfeca81940038249950186e951cea55, type: 2}
+  - {fileID: 11400000, guid: e9f0c98faaf859349b45de4371826856, type: 2}
+  - {fileID: 11400000, guid: 1a8eb97806289314baec3ef54418a9ac, type: 2}
+  - {fileID: 11400000, guid: 4f3a39350370d834b819cf80b80cda07, type: 2}
+  - {fileID: 11400000, guid: a61dde49ef4997e429bc17e1ed262e63, type: 2}
+  - {fileID: 11400000, guid: a3119d29421f2ea43a5f9df2b02f491a, type: 2}
+  - {fileID: 11400000, guid: 7d28ecc10ab512741a3577e5a523eb54, type: 2}
+  - {fileID: 11400000, guid: c1aba9dc3def109419bb402b9b6e1932, type: 2}
+  - {fileID: 11400000, guid: 13f101848cd22c24a940f258bc5d9dd9, type: 2}
+  - {fileID: 11400000, guid: 23d0d6e82f73ed043805363fc310aeec, type: 2}
+  - {fileID: 11400000, guid: 3b91836285c432740a44d4dd66428feb, type: 2}
+  - {fileID: 11400000, guid: e1118230d1bf6d44eb2587eb28dc0129, type: 2}
+  - {fileID: 11400000, guid: ba47535b597e3c04fae9a753cc0450ed, type: 2}
+  - {fileID: 11400000, guid: b80af3384b6ac4d47bfabd2797417397, type: 2}
+  - {fileID: 11400000, guid: ecd8a0eb4b8c63c41a5c85c980bf939e, type: 2}
+  - {fileID: 11400000, guid: 61350fec123f8e04b9a7cbd587dcb0ae, type: 2}
 --- !u!114 &1911366294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8329,7 +8353,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1911366292}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db595ed99652f674bbe6f008eef6eb0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4be2703dbc1b5fe4dbb2ecff6fd9a976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1911366301

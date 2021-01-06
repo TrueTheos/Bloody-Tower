@@ -32,7 +32,7 @@ public class MousePointer : MonoBehaviour
             if (value != selected)
             {
                 selected = value;
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
             }
         }
     }
@@ -74,7 +74,7 @@ public class MousePointer : MonoBehaviour
                         MapManager.map[pathTile.x, pathTile.y].decoy = $"<color=#2B3659>\u205C</color>";
                     }
 
-                    DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                    DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
                 }
                 else
                 {

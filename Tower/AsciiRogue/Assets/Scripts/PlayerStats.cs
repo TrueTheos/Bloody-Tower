@@ -620,7 +620,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                     Debug.Log("not the right target");
                 }
             }
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
 
         if (usingSpellScroll)
@@ -648,7 +648,7 @@ public class PlayerStats : MonoBehaviour, IUnit
             }
 
             
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
             if (Controls.GetKeyDown(Controls.Inputs.Use))
             {
@@ -671,7 +671,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                         gameManager.ApplyChangesInInventory(null);
                     }
                 }
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
             }
             if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
             {
@@ -679,7 +679,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                 Targeting.IsTargeting = false;
                 usingSpellScroll = false;
                 usedScrollOrBook = null;
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
             }
         }
     
@@ -769,7 +769,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
         if (_vr > startingViewRange) _vr = startingViewRange;
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
         return _vr;
     }
@@ -1027,7 +1027,7 @@ public class PlayerStats : MonoBehaviour, IUnit
                 x--;
             }
             yield return new WaitForSeconds(0.001f);
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
 
         yield return null;
@@ -1283,7 +1283,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         viewRange = viewRangeInBlindMode;
 
         gameManager.fv.Compute(MapManager.playerPos, viewRange);
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
 
     public void CureBlindness()
@@ -1322,7 +1322,7 @@ public class PlayerStats : MonoBehaviour, IUnit
 
         }
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
 
     public void BloodRestore()

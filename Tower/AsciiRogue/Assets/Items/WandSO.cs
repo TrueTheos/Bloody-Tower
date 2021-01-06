@@ -79,7 +79,7 @@ public class WandSO : ItemScriptableObject, IRestrictTargeting
                         }
 
                         GameManager.manager.FinishPlayersTurn();
-                        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
                     }
                 }
                 break;

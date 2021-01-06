@@ -49,7 +49,7 @@ public class Door : Structure
             MapManager.map[position.x, position.y].isWalkable = true;
             MapManager.map[position.x, position.y].isOpaque = false;
             MapManager.map[position.x, position.y].baseChar = "/";
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
     }
 

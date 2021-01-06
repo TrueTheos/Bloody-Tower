@@ -227,13 +227,13 @@ public class BlobTurnBehaviour : BasicTurnBehaviour
                     MapManager.map[x, y + 1].timeColor = t.EnemyColor;
                 }
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
                 return;
             }
         }
         catch { }
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
 }

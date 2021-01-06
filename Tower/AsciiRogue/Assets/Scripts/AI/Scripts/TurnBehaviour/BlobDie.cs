@@ -108,7 +108,7 @@ public class BlobDie : BasicDie
 
         t.manager.enemies.Remove(t.gameObject);
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
 
         Destroy(t.gameObject);

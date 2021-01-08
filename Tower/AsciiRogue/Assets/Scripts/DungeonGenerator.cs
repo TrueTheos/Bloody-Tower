@@ -32,8 +32,7 @@ public class DungeonGenerator : MonoBehaviour
     [Header("Random floor events")]
     public List<RandomFloorEventsSO> randomFloorEvents = new List<RandomFloorEventsSO>();
 
-    [HideInInspector] public List<Vector2Int> mimicPositions = new List<Vector2Int>();
-    private List<Vector2Int> torchPositions = new List<Vector2Int>();
+    //private List<Vector2Int> torchPositions = new List<Vector2Int>();
     
     [HideInInspector] public static DungeonGenerator dungeonGenerator;
     private GameManager manager;

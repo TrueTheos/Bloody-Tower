@@ -151,7 +151,7 @@ public static class MapManager
     private static int _currentFloorIndex = 0;
     public static int CurrentFloorIndex { get => _currentFloorIndex; set => ChangeFloor(value); }
 
-    private static List<Floor> Floors;
+    public static List<Floor> Floors;
     public static int MaxFloorIndex => Floors.Count - 1;
     
     public static void ChangeFloor(int newFloorIndex)

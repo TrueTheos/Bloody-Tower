@@ -164,17 +164,14 @@ public class GameManager : MonoBehaviour
         
         MapManager.CurrentFloor.Valid = true;
 
-        dungeonGenerator.DrawMap(true, MapManager.map);
+        dungeonGenerator.DrawMap(MapManager.map);
         FirstTurn();
         await Task.Delay(1);
         for (int i = 1; i <= 20; i++)
         {
             await dungeonGenerator.GenerateDungeon(MapManager.AppendNewFloor(), i);
             await Task.Delay(1);
-            //dungeonGenerator.DrawMap(true, MapManager.map);
-        }
-               
-        
+        }  
     }
 
     [Obsolete]
@@ -492,14 +489,14 @@ public class GameManager : MonoBehaviour
                             playerStats.__blood -= LastSkill.BloodCost;
                             LastSkill.Activate(playerStats);
                             CloseEQ();                            
-                            dungeonGenerator.DrawMap(true, MapManager.map);
+                            dungeonGenerator.DrawMap(MapManager.map);
                         }
                     }
                     if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
                     {
                         SkillCasting = false;
                         CloseEQ();
-                        dungeonGenerator.DrawMap(true, MapManager.map);
+                        dungeonGenerator.DrawMap(MapManager.map);
                     }
                     MapManager.NeedRepaint = true;
                 }
@@ -534,8 +531,8 @@ public class GameManager : MonoBehaviour
                     {
                         ItemThrowHelper.Activate(playerStats);
                         CloseEQ();
-                        dungeonGenerator.DrawMap(true, MapManager.map);
-                        dungeonGenerator.DrawMap(true, MapManager.map);
+                        dungeonGenerator.DrawMap(MapManager.map);
+                        dungeonGenerator.DrawMap(MapManager.map);
                         IsThrowingItem = false;
                     }
                 }
@@ -543,7 +540,7 @@ public class GameManager : MonoBehaviour
                 {
                     IsThrowingItem = false;
                     CloseEQ();
-                    dungeonGenerator.DrawMap(true, MapManager.map);
+                    dungeonGenerator.DrawMap(MapManager.map);
                 }
                 MapManager.NeedRepaint = true;
             }
@@ -678,7 +675,7 @@ public class GameManager : MonoBehaviour
 
                     UpdateMessages(MapManager.GetFloor(MapManager.CurrentFloorIndex ).StairsUp.x + " " + MapManager.GetFloor(MapManager.CurrentFloorIndex).StairsUp.y);
 
-                    dungeonGenerator.DrawMap(true, MapManager.map);
+                    dungeonGenerator.DrawMap(MapManager.map);
                 }
                 else if (cheatString.Substring(0, 2) == "fv")
                 {
@@ -707,7 +704,7 @@ public class GameManager : MonoBehaviour
         if (MapManager.NeedRepaint)
         {
             MapManager.NeedRepaint = false;
-            dungeonGenerator.DrawMap(true, MapManager.map);
+            dungeonGenerator.DrawMap(MapManager.map);
         }
     }
 
@@ -755,7 +752,7 @@ public class GameManager : MonoBehaviour
                 x--;
             }
             yield return new WaitForSeconds(0.001f);
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
 
         yield return null;
@@ -1271,7 +1268,7 @@ public class GameManager : MonoBehaviour
 
                             loopBreaker = true;
 
-                            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
                         }
                     }
                 }
@@ -1340,7 +1337,7 @@ public class GameManager : MonoBehaviour
 
         GetComponent<Tasks>().EventsOnStartOfTheGame();
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
         UpdateMessages("<i><b><color=purpe>You awaken in unfamiliar territory. Your head hurts and it stinks. You have no idea what has happened to you or what is going on.</color></b></i>");
 
@@ -1385,7 +1382,7 @@ public class GameManager : MonoBehaviour
 
         fv.Compute(MapManager.playerPos, playerStats.viewRange);
 
-        dungeonGenerator.DrawMap(true, MapManager.map);
+        dungeonGenerator.DrawMap(MapManager.map);
         
         turns++;
 
@@ -1403,7 +1400,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        dungeonGenerator.DrawMap(true, MapManager.map);
+        dungeonGenerator.DrawMap(MapManager.map);
 
         StartPlayersTurn();
     }

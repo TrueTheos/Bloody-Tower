@@ -12,18 +12,7 @@ using System.Threading;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    [Header("Fixed Levels")]
-    public List<FixedLevels> floor10BossRooms;
-    public FixedLevels necromancerLevel;
-
-    public List<Vector2Int> mimicPositions = new List<Vector2Int>();
-
-    private List<Vector2Int> torchPositions = new List<Vector2Int>();
-
-    public static DungeonGenerator dungeonGenerator;
-    //[HideInInspector] public FloorManager floorManager;
-    private GameManager manager;
-
+    [Header("Generation Settings")]
     public int mapWidth;
     public int mapHeight;
 
@@ -36,22 +25,25 @@ public class DungeonGenerator : MonoBehaviour
     public int maxCorridorLength;
     public int maxFeatures;
 
-    //public int currentFloor = 0;
+    [Header("Fixed Levels")]
+    public List<FixedLevels> floor10BossRooms;
+    public FixedLevels necromancerLevel;
 
-    public bool isASCII;
+    [Header("Random floor events")]
+    public List<RandomFloorEventsSO> randomFloorEvents = new List<RandomFloorEventsSO>();
 
-    [SerializeField] public List<Feature> allFeatures;
-    [SerializeField] public List<Feature> rooms;
+    [HideInInspector] public List<Vector2Int> mimicPositions = new List<Vector2Int>();
+    private List<Vector2Int> torchPositions = new List<Vector2Int>();
+    
+    [HideInInspector] public static DungeonGenerator dungeonGenerator;
+    private GameManager manager;
+
+    [HideInInspector] public List<Feature> rooms;
 
     public GameObject playerPrefab;
 
-    private bool playerExists;
-
-    //public GameObject floorObject = null;
-
     public Text screen;
     public float lightFactor = 1f;
-
 
     [Header("Water Colors")]
     public List<Color> waterColors;
@@ -167,8 +159,6 @@ public class DungeonGenerator : MonoBehaviour
         }                
     }
 
-
-
     public void GenerateFixedLevel(Floor fill,string fixedLevel, int floorNum, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
     {
         List<Vector2Int> torchPositions = new List<Vector2Int>();
@@ -197,10 +187,6 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         fill.Tiles = new Tile[mapWidth, mapHeight];
-
-        //rooms.Clear();
-        //allFeatures.Clear();
-
 
         if(spawnEnemiesFromString)
         {
@@ -302,7 +288,7 @@ public class DungeonGenerator : MonoBehaviour
                             }
                         }
                         break;
-                    case ">": //STAIRS DOWN\
+                    case ">": //STAIRS DOWN
                         {
                             if (floorNum != 0)
                             {
@@ -683,7 +669,7 @@ public class DungeonGenerator : MonoBehaviour
             MapManager.map[x, y].exploredColor = color;
         }
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
         GameObject item = Instantiate(manager.itemSpawner.itemPrefab.gameObject, transform.position, Quaternion.identity);
 
@@ -707,9 +693,7 @@ public class DungeonGenerator : MonoBehaviour
         foreach (var pos in cobwebPositions)
         {
             if(fill.Tiles[pos.x,pos.y].type != "Water") fill.Tiles[pos.x,pos.y].type = "Cobweb";
-        }
-        
-        
+        }            
 
         foreach(var mimic in mimicPositions)
         {     
@@ -772,10 +756,12 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        //if (currentFloor != 0) MovePlayerToLowerStairs();
-
-        //manager.mapName.text = "Floor " + floorNum;
-        //manager.UpdateMessages($"You entered Floor {floorNum}");
+        if(randomFloorEvents.Count > 0 && floorNum != 0)
+        {
+            int randomEventIndex = UnityEngine.Random.Range(0, randomFloorEvents.Count);
+            MapManager.Floors[floorNum].randomEvent = randomFloorEvents[randomEventIndex];
+            randomFloorEvents.RemoveAt(randomEventIndex);
+        }
 
         foreach(var torch in torchPositions)
         {
@@ -824,15 +810,6 @@ public class DungeonGenerator : MonoBehaviour
                         if (fill.Tiles[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type == "Wall")
                         {
                             waterTilesToGrow.RemoveAt(0);
-                            /*if (UnityEngine.Random.Range(1, 100) < 30 && waterTilesToGrow[0].x > 1 && waterTilesToGrow[0].x < mapWidth && waterTilesToGrow[0].y > 1 && waterTilesToGrow[0].y < mapHeight - 1)
-                            {
-                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isWalkable = true;
-                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].isOpaque = false;
-                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].baseChar = "~";
-                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].exploredColor = waterColors[UnityEngine.Random.Range(0, waterColors.Count)];
-                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].type = "Water";
-                                MapManager.map[waterTilesToGrow[0].x, waterTilesToGrow[0].y].specialNameOfTheCell = "Blood";
-                            }*/
                         }
                         else
                         {
@@ -913,7 +890,7 @@ public class DungeonGenerator : MonoBehaviour
         manager.mapName.text = "Floor " + MapManager.CurrentFloorIndex;
         manager.UpdateMessages($"You entered Floor {MapManager.CurrentFloorIndex}");
 
-        DrawMap(true, MapManager.map);
+        DrawMap(MapManager.map);
     }    
     
     public void CreateChest(Floor floor, int x, int y)
@@ -1034,75 +1011,72 @@ public class DungeonGenerator : MonoBehaviour
         return cornerPositions;
     }
 
-    public void DrawMap(bool isASCII, Tile[,] map)
+    public void DrawMap(Tile[,] map)
     {
-        if (isASCII)
-        {
-            string asciiMap = "";
+        string asciiMap = "";
 
-            for (int y = (mapHeight - 1); y >= 0; y--)
+        for (int y = (mapHeight - 1); y >= 0; y--)
+        {
+            for (int x = 0; x < mapWidth; x++)
             {
-                for (int x = 0; x < mapWidth; x++)
+                if (map[x, y] != null)
                 {
-                    if (map[x, y] != null)
+                    if (map[x, y].decoy != "")
                     {
-                        if(map[x,y].decoy != "")
-                        {
-                            asciiMap += map[x, y].decoy;
-                            map[x, y].decoy = "";
-                        }
-                        else if (map[x, y].letter == "")
-                        {
-                            //TIME COLOR;
-                            if (map[x, y].isExplored)
-                            {
-                                if(map[x,y].timeColor != new Color(0,0,0))
-                                    asciiMap += $"<color=#{CalculateFade(map[x,y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].baseChar}</color>";
-                                else
-                                    asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].baseChar}</color>";
-                            }
-                            else
-                            {
-                                asciiMap += " ";
-                            }
-                        }
-                        else if (map[x, y].isExplored)
+                        asciiMap += map[x, y].decoy;
+                        map[x, y].decoy = "";
+                    }
+                    else if (map[x, y].letter == "")
+                    {
+                        //TIME COLOR;
+                        if (map[x, y].isExplored)
                         {
                             if (map[x, y].timeColor != new Color(0, 0, 0))
-                            {
-                                asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].letter}</color>";
-                            }
+                                asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].baseChar}</color>";
                             else
-                            {
-                                if (map[x, y].previousMonsterLetter != "")
-                                {
-                                    asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].previousMonsterLetter}</color>";
-                                }
-                                else
-                                {
-                                    asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].letter}</color>";
-                                }
-                            }
+                                asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].baseChar}</color>";
                         }
                         else
                         {
                             asciiMap += " ";
                         }
                     }
+                    else if (map[x, y].isExplored)
+                    {
+                        if (map[x, y].timeColor != new Color(0, 0, 0))
+                        {
+                            asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{map[x, y].letter}</color>";
+                        }
+                        else
+                        {
+                            if (map[x, y].previousMonsterLetter != "")
+                            {
+                                asciiMap += $"<color=#{CalculateFade(map[x, y].timeColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].previousMonsterLetter}</color>";
+                            }
+                            else
+                            {
+                                asciiMap += $"<color=#{CalculateFade(map[x, y].exploredColor, x, y, MapManager.playerPos, lightFactor)}>{MapManager.map[x, y].letter}</color>";
+                            }
+                        }
+                    }
                     else
                     {
                         asciiMap += " ";
-                        map[x, y] = new Tile();
-                    }
-                    if (x == (mapWidth - 1))
-                    {
-                        asciiMap += "\n";
                     }
                 }
+                else
+                {
+                    asciiMap += " ";
+                    map[x, y] = new Tile();
+                }
+                if (x == (mapWidth - 1))
+                {
+                    asciiMap += "\n";
+                }
             }
-
-            screen.text = asciiMap;
         }
+
+        screen.text = asciiMap;
     }
 
     string CalculateFade(Color rgb_value, int x, int y, Vector2Int playerPos, float refadeFactor = 1)

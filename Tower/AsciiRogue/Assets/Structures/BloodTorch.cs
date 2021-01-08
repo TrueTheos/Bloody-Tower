@@ -22,7 +22,7 @@ public class BloodTorch : Structure
             MapManager.map[position.x, position.y].isOpaque = false;
             MapManager.map[position.x, position.y].baseChar = ".";
             MapManager.map[position.x, position.y].structure = null;
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
             GameObject.Find("MainCanvas").gameObject.GetComponent<Animator>().SetTrigger("Shake");
         }
 

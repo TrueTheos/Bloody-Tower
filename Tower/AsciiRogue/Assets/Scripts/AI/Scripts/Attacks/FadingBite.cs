@@ -43,7 +43,7 @@ public class FadingBite : BasicAttack
             t.MoveTo(t.path[0].x, t.path[0].y);
         }
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
 
 }

@@ -166,7 +166,7 @@ public class EnemySpawner : MonoBehaviour
         MapManager.map[__position.x, __position.y].isWalkable = false;
         MapManager.map[__position.x, __position.y].exploredColor = enemiesToSpawn[enemiesToSpawn.Length - 1].E_color;
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
         GameObject enemy = Instantiate(enemyPrefab.gameObject, transform.position, Quaternion.identity);
         enemy.GetComponent<RoamingNPC>().__position = __position;

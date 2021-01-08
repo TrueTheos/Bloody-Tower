@@ -15,6 +15,6 @@ MonoBehaviour:
   Width: 11
   Height: 13
   Message:
-  - You enter a room that is surprisingly clean compared to the others. You are faced
-    with a fresco on the ceiling. It is a spine-chilling, octopus-like creature.
-    It has lots of eyes all over its body and shiny black skin dripping with mucus.
+  - <b>You enter a room that is surprisingly clean compared to the others. You are
+    faced with a fresco on the ceiling. It is a spine-chilling, octopus-like creature.
+    It has lots of eyes all over its body and shiny black skin dripping with mucus.</b>

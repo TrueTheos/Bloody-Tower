@@ -39,7 +39,7 @@ public class Mushroom : Structure
         MapManager.map[pos.x, pos.y].structure = null;
         MapManager.map[pos.x, pos.y].exploredColor = new Color(1, 1, 1);
         MapManager.map[pos.x, pos.y].type = "Floor";
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
 
     public override void WalkIntoTrigger()

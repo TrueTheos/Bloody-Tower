@@ -66,7 +66,7 @@ public class AnnoyingTurnBehaviour : BasicTurnBehaviour
 
                 t.runDirection = t.__position - MapManager.playerPos;
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
                 return;
             }
@@ -82,13 +82,13 @@ public class AnnoyingTurnBehaviour : BasicTurnBehaviour
                 MapManager.map[x, y].enemy = t.gameObject;
                 MapManager.map[x, y].timeColor = t.EnemyColor;            
 
-                DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+                DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
 
                 return;
             }
         }
         catch { }
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
 }

@@ -88,7 +88,7 @@ public class RevivingMonster : MonoBehaviour
                 x--;
             }
             yield return new WaitForSeconds(0.001f);
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
 
         yield return null;

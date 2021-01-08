@@ -95,7 +95,7 @@ public class ResolutionManager : MonoBehaviour
             SetUiSmall();
             MousePointer.mousePointer.UpdateMapRect();
 
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
 
         if(Input.GetKeyDown(KeyCode.O))
@@ -105,7 +105,7 @@ public class ResolutionManager : MonoBehaviour
             SetBigUi();
             MousePointer.mousePointer.UpdateMapRect();
 
-            DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
         }
     }
 

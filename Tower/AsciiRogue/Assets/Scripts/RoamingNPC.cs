@@ -241,7 +241,7 @@ public class RoamingNPC : MonoBehaviour,IUnit
         } 
         catch{}
 
-        DungeonGenerator.dungeonGenerator.DrawMap(true, MapManager.map);
+        DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
     }
     public void TestToWakeUp()
     {

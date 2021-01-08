@@ -403,6 +403,7 @@ public class PlayerStats : MonoBehaviour, IUnit
     public TextMeshProUGUI effectsText;
 
     public bool isDead;
+    public int ResultStatus = 0;
 
     /** SPELLS **/
     [HideInInspector] public bool HasBloodRestore;
@@ -917,6 +918,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         if (__experienceNeededToLvlUp <= __experience) //level up
         {          
             __lvl++;
+            RunManager.CurrentRun.Set(RunManager.Names.CharLevel, __lvl);
             skillpoints++;          
             gameManager.UpdateMessages
                 (
@@ -979,6 +981,7 @@ public class PlayerStats : MonoBehaviour, IUnit
         {
             PlayerMovement.playerMovement.canMove = false;
             isDead = true;
+            ResultStatus = 0;
         }
     }
 

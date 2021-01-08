@@ -70,6 +70,8 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
         t.manager.playerStats.__sanity += 10;
 
         t.manager.UpdateMessages($"You have killed the <color=#{t.EnemyColor}>{t.EnemyName}</color>");
+        RunManager.CurrentRun.Set(RunManager.Names.EnemiesKilled,
+            RunManager.CurrentRun.Get<int>(RunManager.Names.EnemiesKilled)+1);
         t.manager.playerStats.UpdateLevel(t.xpDrop);
         /*
         GameObject e = null;

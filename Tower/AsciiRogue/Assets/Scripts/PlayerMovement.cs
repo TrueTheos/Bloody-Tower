@@ -305,6 +305,7 @@ public class PlayerMovement : MonoBehaviour
             MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
             MapManager.map[position.x, position.y].letter = "@";
             MapManager.playerPos = new Vector2Int(position.x, position.y);
+            RunManager.CurrentRun.Set(RunManager.Names.TilesMoved, RunManager.CurrentRun.Get<int>(RunManager.Names.TilesMoved) + 1);
         }
         else if(MapManager.map[target.x, target.y].structure != null && !MapManager.map[target.x, target.y].isWalkable)
         {
@@ -337,8 +338,10 @@ public class PlayerMovement : MonoBehaviour
                         MapManager.map[position.x, position.y].letter = "@";
                         MapManager.playerPos = new Vector2Int(position.x, position.y);
 
+                        RunManager.CurrentRun.Set(RunManager.Names.DoorsOpen, RunManager.CurrentRun.Get<int>(RunManager.Names.DoorsOpen)+1);
+                        RunManager.CurrentRun.Set(RunManager.Names.DoorsUnlocked, RunManager.CurrentRun.Get<int>(RunManager.Names.DoorsUnlocked) + 1);
+                        RunManager.CurrentRun.Set(RunManager.Names.TilesMoved, RunManager.CurrentRun.Get<int>(RunManager.Names.TilesMoved ) + 1);
                         manager.FinishPlayersTurn();
-
                         return;
                     }                   
                 }
@@ -355,6 +358,7 @@ public class PlayerMovement : MonoBehaviour
                 MapManager.map[position.x, position.y].timeColor = new Color(0.5f, 1, 0);
                 MapManager.map[position.x, position.y].letter = "@";
                 MapManager.playerPos = new Vector2Int(position.x, position.y);
+                RunManager.CurrentRun.Set(RunManager.Names.TilesMoved, RunManager.CurrentRun.Get<int>(RunManager.Names.TilesMoved) + 1);
             }
         }   
 
@@ -500,6 +504,7 @@ public class PlayerMovement : MonoBehaviour
                 roamingNpcScript.TakeDamage(damageLeftHand, leftHandDamageType);
                 roamingNpcScript.TakeDamage(damageRightHand, rightHandDamageType);            
             }
+            RunManager.CurrentRun.Set(RunManager.Names.EnemiesAttacked, RunManager.CurrentRun.Get<int>(RunManager.Names.EnemiesAttacked) + 1);
         }
         else //WE MISSED BUT WE WAKE UP ENEMY
         {

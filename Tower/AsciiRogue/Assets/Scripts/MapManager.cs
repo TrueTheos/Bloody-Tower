@@ -161,6 +161,9 @@ public static class MapManager
             CurrentFloor.Active = false;
         }        
         _currentFloorIndex = newFloorIndex;
+        RunManager.CurrentRun.Set(RunManager.Names.FloorReached, 
+            Mathf.Max(RunManager.CurrentRun.Get<int>(RunManager.Names.FloorReached),newFloorIndex));
+        
         if (CurrentFloor != null)
         {
             CurrentFloor.Active = true;

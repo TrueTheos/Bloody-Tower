@@ -185,6 +185,19 @@ public class MenuInfo : IPrintable
         {
             Focus = !Focus;
         }
+        if (opt is NumberOption num)
+        {
+            if (Focus)
+            {
+                Focus = false;
+
+            }
+            else
+            {
+                Focus = true;
+
+            }
+        }
 
         return false;
     }
@@ -235,6 +248,10 @@ public class MenuInfo : IPrintable
         if (Controls.GetKeyDown(Controls.Inputs.CancelButton))
         {
             return Cancel();
+        }
+        if (Focus && GetCurrentOption() is NumberOption num)
+        {
+            
         }
         return false;
     }

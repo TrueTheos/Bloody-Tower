@@ -81,6 +81,7 @@ public class MainMenuManager : MonoBehaviour
     {
         NewGameSettings = NewGame.Options;
         Settings = options.Options;
+
         SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
         return true;
     }

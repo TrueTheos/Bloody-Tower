@@ -100,6 +100,8 @@ public class BlobDie : BasicDie
         t.manager.playerStats.__sanity += 15;
 
         t.manager.UpdateMessages($"You have killed the <color={t.EnemyColor}>{t.EnemyName}</color>");
+        RunManager.CurrentRun.Set(RunManager.Names.EnemiesKilled,
+            RunManager.CurrentRun.Get<int>(RunManager.Names.EnemiesKilled)+1);
         t.manager.playerStats.UpdateLevel(t.xpDrop);
 
         t.manager.StartPlayersTurn();

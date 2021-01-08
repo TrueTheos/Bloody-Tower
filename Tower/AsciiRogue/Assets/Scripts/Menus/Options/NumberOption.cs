@@ -2,17 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NumberOption : MonoBehaviour
+public class NumberOption : IOptionType
 {
-    // Start is called before the first frame update
-    void Start()
+    public int Number;
+    public string Name;
+
+
+    public NumberOption(string name, int number)
     {
-        
+        Number = number;
+        Name = name;
     }
 
-    // Update is called once per frame
-    void Update()
+    public List<string> GetAll()
     {
-        
+        return new List<string>() { GetCurrent() };
+    }
+
+    public int GetCount()
+    {
+        return 1;
+    }
+
+    public string GetCurrent()
+    {
+        return Number.ToString();
+    }
+
+    public int GetCurrentIndex()
+    {
+        return 1;
+    }
+
+    public void Next()
+    {
+
+    }
+
+    public void Previous()
+    {
+
     }
 }

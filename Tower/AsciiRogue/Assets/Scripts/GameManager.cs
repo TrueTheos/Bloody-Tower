@@ -133,6 +133,7 @@ public class GameManager : MonoBehaviour
         {
 
         }
+        RunManager.StartNewRun();
         GenerateThings();
 
         //Clear "Messages" Box
@@ -616,11 +617,32 @@ public class GameManager : MonoBehaviour
 
         if (playerStats.isDead)
         {
-            dungeonGenerator.screen.text = playerStats.deadText;
+            if (playerStats.ResultStatus == 0)
+            {
+                playerStats.ResultStatus = 1;
+            }
 
+            if (playerStats.ResultStatus == 0 || playerStats.ResultStatus == 1)
+            {
+                dungeonGenerator.screen.text = playerStats.deadText;
+            }
+            
             if (Controls.GetKeyDown(Controls.Inputs.Use))
             {
-                Application.LoadLevel(0);
+                if (playerStats.ResultStatus == 1)
+                {
+                    // show the result screen
+                    playerStats.ResultStatus = 2;
+
+                    dungeonGenerator.screen.text = RunManager.GetResultScreen();
+                }
+                else if(playerStats.ResultStatus == 2)
+                {
+                    playerStats.ResultStatus = -1;
+                    // we have shown them the result screen and therefor load the main menu
+                    Application.LoadLevel(0);
+                }
+                
             }
         }   
         

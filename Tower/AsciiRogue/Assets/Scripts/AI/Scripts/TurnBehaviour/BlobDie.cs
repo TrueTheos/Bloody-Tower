@@ -104,7 +104,7 @@ public class BlobDie : BasicDie
 
         t.manager.StartPlayersTurn();
 
-        t.manager.gameObject.GetComponent<Bestiary>().UpdateEnemyList(t.enemySO);
+        //t.manager.gameObject.GetComponent<Bestiary>().UpdateEnemyList(t.enemySO);
 
         t.manager.enemies.Remove(t.gameObject);
 

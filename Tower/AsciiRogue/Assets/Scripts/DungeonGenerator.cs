@@ -1738,6 +1738,33 @@ public class DungeonGenerator : MonoBehaviour
                     }
                 }
 
+                if(RNG.Range(0, 100) < 23)
+                {
+                    Debug.Log("Torch");
+                    int randomTorchSpawn = RNG.Range(0, 3);
+                    if(randomTorchSpawn == 0)
+                    {
+                        if(m.get(location[0].x, location[0].y) != '<' && m.get(location[0].x, location[0].y) != '>')
+                        {
+                            m.set(location[0].x, location[0].y, '!');
+                        }
+                    }
+                    else if (randomTorchSpawn == 1)
+                    {
+                        if (m.get(location[location.Length - 1].x, location[location.Length - 1].y) != '<' && m.get(location[location.Length - 1].x, location[location.Length - 1].y) != '>')
+                        {
+                            m.set(location[location.Length - 1].x, location[location.Length - 1].y, '!');
+                        }
+                    }
+                    else if (randomTorchSpawn == 2)
+                    {
+                        if (m.get(location[location.Length / 2].x, location[location.Length / 2].y) != '<' && m.get(location[location.Length / 2].x, location[location.Length / 2].y) != '>')
+                        {
+                            m.set(location[location.Length / 2].x, location[location.Length / 2].y, '!');
+                        }
+                    }
+                }
+
                 int randomRoomDesign = RNG.Range(0, 20);
 
                 if (randomRoomDesign <= 2)

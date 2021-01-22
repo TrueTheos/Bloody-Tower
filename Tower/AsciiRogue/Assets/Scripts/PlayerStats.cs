@@ -914,6 +914,7 @@ public class PlayerStats : MonoBehaviour, IUnit
     public void UpdateLevel(int xp)
     {
         __experience += xp;
+        RunManager.CurrentRun.Set(RunManager.Names.XPEarned, RunManager.CurrentRun.Get<int>(RunManager.Names.XPEarned) + xp);
 
         if (__experienceNeededToLvlUp <= __experience) //level up
         {          

@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        RNG.Reset();
+
         if (!Controls.IsInitialized)
         {
             Debug.Log("whoops");

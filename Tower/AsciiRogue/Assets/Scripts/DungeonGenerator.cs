@@ -1088,7 +1088,6 @@ public class DungeonGenerator : MonoBehaviour
         Color color;
 
         float tileLight = MapManager.map[x, y].tileLightFactor;
-        if (tileLight != 0) Debug.Log(tileLight);
        
         if (MapManager.map[x, y].isVisible)
         {

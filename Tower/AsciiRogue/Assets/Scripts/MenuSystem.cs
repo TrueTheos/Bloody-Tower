@@ -1,13 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class MenuSystem : MonoBehaviour
 {
     public GameObject settingsCanvas, mainCanvas;
+    public AudioMixer mixer;
 
-    
+    private void Start()
+    {
+        Debug.Log(PlayerPrefs.GetFloat("musicVolume"));
+        mixer.SetFloat("MusicVol", Mathf.Log10(PlayerPrefs.GetFloat("musicVolume")) * 20);
+    }
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.N))

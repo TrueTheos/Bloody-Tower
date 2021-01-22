@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class RNG
 {
-    public static int Seed = 3;
+    public static int Seed; //no value to make it random
 
     static System.Random random;
 

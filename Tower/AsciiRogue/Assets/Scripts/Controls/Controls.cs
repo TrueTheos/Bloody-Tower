@@ -57,6 +57,7 @@ public static class Controls
 
         WhatCanISee,
 
+        CloseDoors
     }
 
     private static Dictionary<string, KeyCode> defaultControls = new Dictionary<string, KeyCode>()
@@ -99,6 +100,8 @@ public static class Controls
         { Inputs.Wait.ToString(),KeyCode.Period},
 
         { Inputs.WhatCanISee.ToString(),KeyCode.Keypad0},
+
+        { Inputs.CloseDoors.ToString(),KeyCode.Backslash }
     };
 
 

@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        RNG.Seed = UnityEngine.Random.Range(1, 100000);
         RNG.Reset();
 
         if (!Controls.IsInitialized)

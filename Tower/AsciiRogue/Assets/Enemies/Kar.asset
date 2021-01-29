@@ -31,7 +31,7 @@ MonoBehaviour:
   E_possileDrops: []
   enemyInfo: 'Kar - 9 HP / 5 STR / 3 DEX/ 3 INT / 6 END
 
-    Can''t open doors. Wurnerable
+    Can''t open doors. Vurnerable
     to light.'
   leavesCorpse: 1
   isBoss: 0

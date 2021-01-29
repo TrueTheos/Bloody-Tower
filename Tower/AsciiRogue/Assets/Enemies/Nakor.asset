@@ -32,7 +32,7 @@ MonoBehaviour:
   enemyInfo: 'Nakor - 15 HP / 9 STR / 5 DEX/ 4 INT / 7 END
 
     Can''t open doors.
-    Wurnerable to light.'
+    Vurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1

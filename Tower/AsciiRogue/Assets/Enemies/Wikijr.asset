@@ -35,7 +35,7 @@ MonoBehaviour:
   enemyInfo: 'Wikijr - 18 HP / 13 STR / 8 DEX/ 7 INT / 14 END
 
     Can open doors.
-    Wurnerable to light.'
+    Vurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 1

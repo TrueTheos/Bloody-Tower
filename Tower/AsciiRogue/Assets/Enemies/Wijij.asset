@@ -32,7 +32,7 @@ MonoBehaviour:
   enemyInfo: 'Wijij - 17 HP / 10 STR / 7 DEX/ 4 INT / 11 END
 
     Can''t open doors.
-    Wurnerable to light.'
+    Vurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

@@ -32,7 +32,7 @@ MonoBehaviour:
   enemyInfo: 'Zirr - 10 HP / 6 STR / 3 DEX/ 3 INT / 6 END
 
     Can''t open doors.
-    Wurnerable to light.'
+    Vurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

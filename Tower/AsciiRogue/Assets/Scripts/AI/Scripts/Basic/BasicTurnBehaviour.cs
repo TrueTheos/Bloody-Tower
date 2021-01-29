@@ -116,7 +116,22 @@ public class BasicTurnBehaviour : BaseAIBehaviour<RoamingNPC>
                         {
                             if (nt == null && !GameManager.manager.playerStats.isInvisible)
                             {
-                                if(t.enemySO.canSpeak) GameManager.manager.UpdateMessages($"<b>{GameManager.manager.monsterDetectPlayer[Random.Range(0, GameManager.manager.monsterDetectPlayer.Count)]}</b> "+ $"said <color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> in a terrifying voice.");
+                                if (t.enemySO.canSpeak)
+                                {
+                                    int r = Random.Range(1, 4);
+                                    if(r == 1)
+                                    {
+                                        GameManager.manager.UpdateMessages($"<b>{GameManager.manager.monsterDetectPlayer[Random.Range(0, GameManager.manager.monsterDetectPlayer.Count)]}</b> " + $"said <color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> in a terrifying voice.");
+                                    }
+                                    else if(r == 2)
+                                    {
+                                        GameManager.manager.UpdateMessages($"<color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> makes incomprehensible sounds.");
+                                    }
+                                    else if(r == 3)
+                                    {
+                                        GameManager.manager.UpdateMessages($"When <color=#{t.enemySO.E_color}>{t.enemySO.E_name}</color> noticed you it started screaming and moaning terribly.");   
+                                    }
+                                }
 
                                 nt = t.playerStats;
                                 try { t.LastKnownTargetPos = nt.pos; } catch { }

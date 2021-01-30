@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour
     public string SkillText;
     public List<SkillScriptableObject> AutoLearnSkills;
 
+    public GameObject deadScreenAnimation;
+
     // Throw Item
     public bool IsThrowingItem;
 
@@ -199,28 +201,6 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            /*if(Controls.GetKeyDown(Controls.Inputs.GrimoirOpen) && !inventoryOpen && !SkillsOpen && !IsThrowingItem)
-            {
-                if(!openGrimoire)
-                {
-                    UpdateGrimoireText();
-                    selectedItem = 0;
-                    selector.GetComponent<Text>().enabled = true;
-                    player.canMove = false;
-                    openGrimoire = true;
-                    invBorder.SetActive(true);
-                    mapText.SetActive(false);
-                    mainUItext.enabled = false;
-                    selector.GetComponent<Text>().enabled = true;
-                    if (playerStats.rememberedSpells.Count < 1) UpdateItemStats();
-                    try { UpdateSpellStats(playerStats.rememberedSpells[0]); }
-                    catch { }
-                }
-                else
-                {
-                    CloseEQ();
-                }
-            }*/
             if (Controls.GetKeyDown(Controls.Inputs.InventoryOpen) && !choosingWeapon && !openGrimoire && !SkillsOpen && !IsThrowingItem)
             {
                 if (!inventoryOpen)
@@ -620,32 +600,17 @@ public class GameManager : MonoBehaviour
 
         if (playerStats.isDead)
         {
-            if (playerStats.ResultStatus == 0)
-            {
-                playerStats.ResultStatus = 1;
-            }
-
-            if (playerStats.ResultStatus == 0 || playerStats.ResultStatus == 1)
-            {
-                dungeonGenerator.screen.text = playerStats.deadText;
-            }
+            string _new = playerStats.deadText.Replace("12345", System.DateTime.Now.Hour.ToString() + ":" + System.DateTime.Now.Minute.ToString());
+            dungeonGenerator.screen.text = _new;
             
+
+            dungeonGenerator.deathScreen.text = "<color=white>" + RunManager.GetResultScreen() + "</color>";
+
             if (Controls.GetKeyDown(Controls.Inputs.Use))
             {
-                if (playerStats.ResultStatus == 1)
-                {
-                    // show the result screen
-                    playerStats.ResultStatus = 2;
-
-                    dungeonGenerator.screen.text = RunManager.GetResultScreen();
-                }
-                else if(playerStats.ResultStatus == 2)
-                {
-                    playerStats.ResultStatus = -1;
-                    // we have shown them the result screen and therefor load the main menu
-                    Application.LoadLevel(0);
-                }
-                
+                playerStats.ResultStatus = -1;
+                // we have shown them the result screen and therefor load the main menu
+                Application.LoadLevel(0);
             }
         }   
         
@@ -1796,5 +1761,10 @@ public class GameManager : MonoBehaviour
 
         playerStats.UpdateCapacity();
         UpdateInventoryText();
+    }
+
+    public void SetDeadScreen()
+    {
+
     }
 }

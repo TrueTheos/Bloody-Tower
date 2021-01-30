@@ -528,28 +528,6 @@ public class PlayerStats : MonoBehaviour, IUnit
 
     public void Update()
     {
-        /*
-        if (Int)
-        {
-            Int = false;
-            __intelligence++;
-        }
-        if (Str)
-        {
-            Str = false;
-            __strength++;
-        }
-        if (Dex)
-        {
-            Dex = false;
-            __dexterity++;
-        }
-        if (End)
-        {
-            End = false;
-            __endurance++;
-        }*/
-
         Targeting.UpdateTargeting();
 
         if (usingWand)
@@ -735,7 +713,6 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
     }
 
-
     public int RecalculateViewRange()
     {
         int _vr = 0;
@@ -789,7 +766,6 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
         else return false;
     }
-
 
     public void UpdateArmorClass()
     {
@@ -979,6 +955,8 @@ public class PlayerStats : MonoBehaviour, IUnit
         }
         else
         {
+            gameManager.deadScreenAnimation.SetActive(true);
+            gameManager.deadScreenAnimation.GetComponentInChildren<Animation>().Play();
             PlayerMovement.playerMovement.canMove = false;
             isDead = true;
             ResultStatus = 0;

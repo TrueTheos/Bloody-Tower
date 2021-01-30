@@ -42,6 +42,7 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject playerPrefab;
 
     public Text screen;
+    public Text deathScreen;
     public float lightFactor = 1f;
 
     [Header("Water Colors")]

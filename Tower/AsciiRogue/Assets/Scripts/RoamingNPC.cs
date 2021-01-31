@@ -169,7 +169,7 @@ public class RoamingNPC : MonoBehaviour,IUnit
                 {
                     if (MapManager.map[x, y].type == "Door" && MapManager.map[x, y].structure is Door door)
                     {
-                        if(door.opened)
+                        if(door.openState)
                         {
                             if (isBleeding)
                             {

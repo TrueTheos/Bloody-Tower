@@ -57,6 +57,7 @@ public static class Controls
 
         WhatCanISee,
 
+        CloseDoors
     }
 
     private static Dictionary<string, KeyCode> defaultControls = new Dictionary<string, KeyCode>()
@@ -72,10 +73,6 @@ public static class Controls
 
         { Inputs.CheatOpen.ToString(),KeyCode.C},
         { Inputs.CheatActivate.ToString(),KeyCode.Return},
-        
-        { Inputs.GrimoirOpen.ToString(),KeyCode.G},
-        { Inputs.GrimoirDown.ToString(),KeyCode.Keypad2},
-        { Inputs.GrimoirUp.ToString(),KeyCode.Keypad8},
 
         { Inputs.TechnicOpen.ToString(),KeyCode.T},
         { Inputs.TechnicDown.ToString(),KeyCode.Keypad2},
@@ -104,8 +101,7 @@ public static class Controls
 
         { Inputs.WhatCanISee.ToString(),KeyCode.Keypad0},
 
-
-               
+        { Inputs.CloseDoors.ToString(),KeyCode.Backslash }
     };
 
 

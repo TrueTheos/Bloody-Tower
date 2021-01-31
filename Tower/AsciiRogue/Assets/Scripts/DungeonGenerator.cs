@@ -42,6 +42,7 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject playerPrefab;
 
     public Text screen;
+    public Text deathScreen;
     public float lightFactor = 1f;
 
     [Header("Water Colors")]
@@ -1088,7 +1089,6 @@ public class DungeonGenerator : MonoBehaviour
         Color color;
 
         float tileLight = MapManager.map[x, y].tileLightFactor;
-        if (tileLight != 0) Debug.Log(tileLight);
        
         if (MapManager.map[x, y].isVisible)
         {
@@ -1734,6 +1734,33 @@ public class DungeonGenerator : MonoBehaviour
                     if (m.get(x, y) != '<' && m.get(x, y) != '>')
                     {
                         m.set(x, y, '}');
+                    }
+                }
+
+                if(RNG.Range(0, 100) < 23)
+                {
+                    Debug.Log("Torch");
+                    int randomTorchSpawn = RNG.Range(0, 3);
+                    if(randomTorchSpawn == 0)
+                    {
+                        if(m.get(location[0].x, location[0].y) != '<' && m.get(location[0].x, location[0].y) != '>')
+                        {
+                            m.set(location[0].x, location[0].y, '!');
+                        }
+                    }
+                    else if (randomTorchSpawn == 1)
+                    {
+                        if (m.get(location[location.Length - 1].x, location[location.Length - 1].y) != '<' && m.get(location[location.Length - 1].x, location[location.Length - 1].y) != '>')
+                        {
+                            m.set(location[location.Length - 1].x, location[location.Length - 1].y, '!');
+                        }
+                    }
+                    else if (randomTorchSpawn == 2)
+                    {
+                        if (m.get(location[location.Length / 2].x, location[location.Length / 2].y) != '<' && m.get(location[location.Length / 2].x, location[location.Length / 2].y) != '>')
+                        {
+                            m.set(location[location.Length / 2].x, location[location.Length / 2].y, '!');
+                        }
                     }
                 }
 

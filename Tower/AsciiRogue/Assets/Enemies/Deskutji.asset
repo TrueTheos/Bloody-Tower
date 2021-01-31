@@ -35,7 +35,7 @@ MonoBehaviour:
   enemyInfo: 'Deskutji - 16 HP / 7 STR / 7 DEX/ 3 INT / 9 END
 
     Can''t open doors.
-    Wurnerable to light.'
+    Vurnerable to light.'
   leavesCorpse: 1
   isBoss: 0
   canOpenDoor: 0

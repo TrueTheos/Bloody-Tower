@@ -69,10 +69,10 @@ public class Selector : MonoBehaviour
                 SelectedTile(currentPos.x, currentPos.y);
             }
 
-            if(Controls.GetKeyUp(Controls.Inputs.Use) && MapManager.map[currentPos.x, currentPos.y].enemy)
+            /*if(Controls.GetKeyUp(Controls.Inputs.Use) && MapManager.map[currentPos.x, currentPos.y].enemy)
             {
                 GameManager.manager.gameObject.GetComponent<Bestiary>().UpdateText(MapManager.map[currentPos.x, currentPos.y].enemy.GetComponent<RoamingNPC>().enemySO);
-            }
+            }*/
         }
         if (Controls.GetKeyUp(Controls.Inputs.LookKey))
         {

@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class Door : Structure
 {
-    public bool opened = false;
+    public bool openState = false;
     public Vector2Int position;
 
 
     public override void Use()
-    {
-        if (opened)
-        {
-
-        }
-
-        if (!opened)
+    {   
+        if (!openState)
         {
             if (GameManager.manager.playerStats.__sanity <= 75)
             {
@@ -45,18 +40,31 @@ public class Door : Structure
                 }
             }
 
-            opened = true;
+            openState = true;
             MapManager.map[position.x, position.y].isWalkable = true;
             MapManager.map[position.x, position.y].isOpaque = false;
             MapManager.map[position.x, position.y].baseChar = "/";
             DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
             RunManager.CurrentRun.Set(RunManager.Names.DoorsOpen, RunManager.CurrentRun.Get<int>(RunManager.Names.DoorsOpen) + 1);
-
         }
     }
 
     public override void WalkIntoTrigger()
     {
 
+    }
+
+    public void CloseDoor()
+    {
+        if (openState)
+        {
+            if (MapManager.map[position.x, position.y].enemy != null) return;
+            Debug.Log("<color=red>doorclose</color>");
+            openState = false;
+            MapManager.map[position.x, position.y].isWalkable = false;
+            MapManager.map[position.x, position.y].isOpaque = true;
+            MapManager.map[position.x, position.y].baseChar = "+";
+            DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
+        }
     }
 }

@@ -81,6 +81,43 @@ public class PlayerMovement : MonoBehaviour
                     move.y = -1;
                 }
 
+                if(Controls.GetKeyDown(Controls.Inputs.CloseDoors) || Controls.GetKey(Controls.Inputs.CloseDoors))
+                {
+                    if(MapManager.map[position.x - 1, position.y + 1]?.structure is Door door)
+                    {
+                        door.CloseDoor();
+                    }
+                    if (MapManager.map[position.x, position.y + 1]?.structure is Door door1)
+                    {
+                        door1.CloseDoor();
+                    }
+                    if (MapManager.map[position.x + 1, position.y + 1]?.structure is Door door2)
+                    {
+                        door2.CloseDoor();
+                    }
+                    if (MapManager.map[position.x + 1, position.y]?.structure is Door door4)
+                    {
+                        door4.CloseDoor();
+                    }
+                    if (MapManager.map[position.x + 1, position.y - 1]?.structure is Door door5)
+                    {
+                        door5.CloseDoor();
+                    }
+                    if (MapManager.map[position.x, position.y - 1]?.structure is Door door6)
+                    {
+                        door6.CloseDoor();
+                    }
+                    if (MapManager.map[position.x - 1, position.y - 1]?.structure is Door door7)
+                    {
+                        door7.CloseDoor();
+                    }
+                    if (MapManager.map[position.x - 1, position.y]?.structure is Door door8)
+                    {
+                        door8.CloseDoor();
+                    }
+                    manager.FinishPlayersTurn();
+                }
+
                 if (move.sqrMagnitude > 0)
                 {
                     Move(InputToVector(move.x,move.y));
@@ -312,6 +349,69 @@ public class PlayerMovement : MonoBehaviour
             MapManager.map[target.x, target.y].structure.Use();
             target = position;
         }
+        /*else if(MapManager.map[target.x, target.y].type == "Wall")
+        {
+            if(inputX == 1 && inputY == 1) //move top right
+            {
+                
+            }
+            else if (inputX == 1 && inputY == 0) //move right
+            {
+                if(MapManager.map[target.x, target.y + 1]?.structure is Door door)
+                {
+                    door.Use();
+                }
+                if (MapManager.map[target.x, target.y - 1]?.structure is Door door1)
+                {
+                    door1.Use();
+                }
+            }
+            else if (inputX == 1 && inputY == -1) //move bottom right
+            {
+
+            }
+            else if (inputX == 0 && inputY == -1) //move bottom
+            {
+                if (MapManager.map[target.x - 1, target.y]?.structure is Door door)
+                {
+                    door.Use();
+                }
+                if (MapManager.map[target.x + 1, target.y]?.structure is Door door1)
+                {
+                    door1.Use();
+                }
+            }
+            else if (inputX == -1 && inputY == -1) //move bottom left
+            {
+
+            }
+            else if (inputX == -1 && inputY == 0) //move left
+            {
+                if (MapManager.map[target.x, target.y + 1]?.structure is Door door)
+                {
+                    door.Use();
+                }
+                if (MapManager.map[target.x, target.y - 1]?.structure is Door door1)
+                {
+                    door1.Use();
+                }
+            }
+            else if (inputX == -1 && inputY == 1) //move left top
+            {
+
+            }
+            else if (inputX == 0 && inputY == 1) //move top
+            {
+                if (MapManager.map[target.x - 1, target.y]?.structure is Door door)
+                {
+                    door.Use();
+                }
+                if (MapManager.map[target.x + 1, target.y]?.structure is Door door1)
+                {
+                    door1.Use();
+                }
+            }
+        }*/
         else if (MapManager.map[target.x, target.y].type == "Door") //if in the direction we want to go is door
         {
             /*targetDoor = target;

@@ -66,12 +66,7 @@ public static class RunManager
         // InitEntry(Names.GoldEarned, 0, RunData.EntryType.Scoreboard);
         InitEntry(Names.XPEarned, 0, RunData.EntryType.Scoreboard);
 
-
-        InitEntry(Names.DoorsOpen, 0, RunData.EntryType.Fluff, (o) => ((int)o) > 0 ? 10 : 0);
-        InitEntry(Names.DoorsUnlocked, 0, RunData.EntryType.Fluff, (o) => ((int)o) > 0 ? 10 : 0);
-        InitEntry(Names.TilesMoved, 0, RunData.EntryType.Fluff,(o)=>((int)o)>0 ? 10:0 );
-        InitEntry(Names.EnemiesAttacked, 0, RunData.EntryType.Fluff, (o) => ((int)o) > 0 ? 10 : 0);
-        InitEntry(Names.ItemsThrown, 0, RunData.EntryType.Fluff,(o)=>((int)o)>0?10:0);
+        InitEntry(Names.TilesMoved, 0, RunData.EntryType.Scoreboard);
     }
 
     public static string GetResultScreen()
@@ -83,20 +78,20 @@ public static class RunManager
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             sb.AppendLine();
         }
 
-        sb.AppendLine("Run Results".PadLeft(35));
+        sb.AppendLine();
         for (int i = 0; i < 5; i++)
         {
             sb.AppendLine();
         }
 
         int count = 0;
-        int entryWidth = 25;
-        int space = 4;
+        int entryWidth = 20;
+        int space = 2;
 
 
         List<KeyValuePair<string, ScoreBoardInfo>> scoreboard = new List<KeyValuePair<string, ScoreBoardInfo>>();
@@ -137,19 +132,11 @@ public static class RunManager
 
         // Scoreboard
         foreach (KeyValuePair<string, ScoreBoardInfo> item in scoreboard)
-        {            
-            if (count%2 == 0)
-            {
-                sb.Append("".PadLeft(LEFT_PAD));
-                sb.Append(item.Key.PadRight(entryWidth - item.Value.Formatter(CurrentRun.Get(item.Key)).Length) + item.Value.Formatter(CurrentRun.Get(item.Key)));
-                sb.Append("".PadRight(space));
-            }
-            else
-            {
-                sb.Append(item.Key.PadRight(entryWidth - item.Value.Formatter(CurrentRun.Get(item.Key)).Length) + item.Value.Formatter(CurrentRun.Get(item.Key)));
-                sb.AppendLine();
-            }
-            count++;
+        {
+            sb.Append(item.Key.PadRight(entryWidth - item.Value.Formatter(CurrentRun.Get(item.Key)).Length) + item.Value.Formatter(CurrentRun.Get(item.Key)));
+            sb.Append("".PadRight(space));
+            sb.AppendLine();
+            sb.AppendLine();
         }
         if (count % 2 == 1)
         {

@@ -64,7 +64,7 @@ public static class RunManager
         InitEntry(Names.EnemiesKilled, 0, RunData.EntryType.Scoreboard);
         InitEntry(Names.CharLevel, 0, RunData.EntryType.Scoreboard);
         // InitEntry(Names.GoldEarned, 0, RunData.EntryType.Scoreboard);
-        InitEntry(Names.XPEarned, 0, RunData.EntryType.Scoreboard);
+        //InitEntry(Names.XPEarned, 0, RunData.EntryType.Scoreboard);
 
         InitEntry(Names.TilesMoved, 0, RunData.EntryType.Scoreboard);
     }

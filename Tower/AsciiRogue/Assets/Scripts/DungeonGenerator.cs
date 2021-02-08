@@ -1540,6 +1540,12 @@ public class DungeonGenerator : MonoBehaviour
 
                     // add doors
                     List<Location> candidates = anchor.findCommonBorder(newStruct);
+                    if (candidates.Count == 0)
+                    {
+                        Debug.LogWarning("We dont have canditates");
+                        // TODO: Handle this another way
+                        break;
+                    }
                     Location l = candidates[RNG.Range(0, candidates.Count)];
                     if (anchor.isRoom() || newStruct.isRoom())
                     {

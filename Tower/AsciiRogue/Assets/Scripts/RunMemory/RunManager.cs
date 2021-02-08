@@ -18,8 +18,12 @@ public static class RunManager
         public const string EnemiesKilled = "Enemies Killed";
         public const string GoldEarned = "Gold Earned";
         public const string CharLevel = "Character Level";
+        public const string XPEarned = "XP Earned";
+
 
         // optional
+
+
 
         // fluff
         public const string DoorsOpen = "Doors Opened";
@@ -59,6 +63,8 @@ public static class RunManager
         InitEntry(Names.FloorReached, 0, RunData.EntryType.Scoreboard);
         InitEntry(Names.EnemiesKilled, 0, RunData.EntryType.Scoreboard);
         InitEntry(Names.CharLevel, 0, RunData.EntryType.Scoreboard);
+        // InitEntry(Names.GoldEarned, 0, RunData.EntryType.Scoreboard);
+        //InitEntry(Names.XPEarned, 0, RunData.EntryType.Scoreboard);
 
         InitEntry(Names.TilesMoved, 0, RunData.EntryType.Scoreboard);
     }

@@ -160,14 +160,20 @@ public class GameManager : MonoBehaviour
         dungeonGenerator.InitializeDungeon();
         await Task.Delay(1);
         await dungeonGenerator.GenerateDungeon(MapManager.AppendNewFloor(), 0);
+        MapManager.CurrentFloor.Valid = true;
         dungeonGenerator.MovePlayerToFloor(0);
         messages.gameObject.SetActive(true);
+
+        if (!MapManager.CurrentFloor.GO.activeSelf)
+        {
+            Debug.Log("Something broke in generation");
+        }
 
         m_Messages.Clear();
         messagesText = "";
         messages.text = messagesText;
         
-        MapManager.CurrentFloor.Valid = true;
+        
 
         dungeonGenerator.DrawMap(MapManager.map);
         FirstTurn();

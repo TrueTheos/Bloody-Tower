@@ -190,6 +190,8 @@ public class PlayerMovement : MonoBehaviour
                     FoV.Initialize();
                     //manager.UpdateVisibility();
                     manager.StartPlayersTurn();
+                    manager.fv.Compute(position, playerStats.viewRange);
+                    DungeonGenerator.dungeonGenerator.DrawMap(MapManager.map);
                 }
             }
         }

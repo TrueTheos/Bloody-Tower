@@ -161,8 +161,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }catch(Exception e)
         {
-            Debug.LogError(e.Message);
-
+            Debug.LogWarning(e.Message);
         }
     }
 

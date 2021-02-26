@@ -34,6 +34,20 @@ public static class RunManager
 
         public const string ItemsThrown = "Items Thrown";
     }
+    public static class Stats
+    {
+        public const string CurrentAttackInfoRight = "CurrentAttackInfoRight";
+        public const string CurrentAttackInfoLeft = "CurrentAttackInfoLeft";
+
+        public const string SpearKills = "SpearKills";
+        public const string SwordKills = "SwordKills";
+        public const string DaggerKills = "DaggerKills";
+        //public const string ClubKills = "ClubKills";
+        public const string HammerKills = "HammerKills";
+        //public const string SythKills = "SythKills";
+        public const string GreatAxeKills = "GreatAxeKills";
+
+    }
 
 
 
@@ -241,6 +255,82 @@ public static class RunManager
             count++;
         }
         return sb.ToString();
+    }
+    public static void UnitKilledWithAttack()
+    {
+        if (RunManager.CurrentRun.Has(RunManager.Stats.CurrentAttackInfoLeft))
+        {
+            switch (RunManager.CurrentRun.Get<WeaponsSO.weaponType>(RunManager.Stats.CurrentAttackInfoLeft))
+            {
+                case WeaponsSO.weaponType.sword:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.SwordKills, 1);
+                    break;
+                case WeaponsSO.weaponType.axe:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.GreatAxeKills, 1);
+                    break;
+                case WeaponsSO.weaponType.dagger:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.DaggerKills, 1);
+                    break;
+                case WeaponsSO.weaponType.katana:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.SwordKills, 1);
+                    break;
+                case WeaponsSO.weaponType.mace:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.HammerKills, 1);
+                    break;
+                case WeaponsSO.weaponType.spear:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.SpearKills, 1);
+
+                    break;
+                case WeaponsSO.weaponType.melee:
+                    // no stats for that
+                    break;
+                case WeaponsSO.weaponType.bow:
+                    // no stats for that
+                    break;
+                case WeaponsSO.weaponType.slingshot:
+                    // no stats for that
+                    break;
+            }
+        }
+        // check if right hand exists, only execute if different from left hand
+        if (RunManager.CurrentRun.Has(RunManager.Stats.CurrentAttackInfoRight) &&
+            ((RunManager.CurrentRun.Has(RunManager.Stats.CurrentAttackInfoLeft) &&
+            RunManager.CurrentRun.Get<WeaponsSO.weaponType>(RunManager.Stats.CurrentAttackInfoLeft) !=
+            RunManager.CurrentRun.Get<WeaponsSO.weaponType>(RunManager.Stats.CurrentAttackInfoRight)) ||
+            !RunManager.CurrentRun.Has(RunManager.Stats.CurrentAttackInfoLeft)
+            ))
+        {
+            switch (RunManager.CurrentRun.Get<WeaponsSO.weaponType>(RunManager.Stats.CurrentAttackInfoRight))
+            {
+                case WeaponsSO.weaponType.sword:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.SwordKills, 1);
+                    break;
+                case WeaponsSO.weaponType.axe:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.GreatAxeKills, 1);
+                    break;
+                case WeaponsSO.weaponType.dagger:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.DaggerKills, 1);
+                    break;
+                case WeaponsSO.weaponType.katana:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.SwordKills, 1);
+                    break;
+                case WeaponsSO.weaponType.mace:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.HammerKills, 1);
+                    break;
+                case WeaponsSO.weaponType.spear:
+                    RunManager.CurrentRun.AddNumber(RunManager.Stats.SpearKills, 1);
+                    break;
+                case WeaponsSO.weaponType.melee:
+                    // no stats for that
+                    break;
+                case WeaponsSO.weaponType.bow:
+                    // no stats for that
+                    break;
+                case WeaponsSO.weaponType.slingshot:
+                    // no stats for that
+                    break;
+            }
+        }
     }
 
 }

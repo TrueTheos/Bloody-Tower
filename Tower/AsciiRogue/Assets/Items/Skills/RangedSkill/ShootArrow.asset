@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Shoot Arrow
   Description: Shoot an Arrow with your bow
+  LearnMessage: Technique learned, Shoot Arrow
   ValidWeapons: 07000000
   DisplayColor: 
   Range: 0

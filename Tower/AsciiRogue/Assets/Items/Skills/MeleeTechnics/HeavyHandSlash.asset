@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: HeavyHandSlash
   Description: A heavy slash, done with your hands
+  LearnMessage: Technique learned, Heavy Hand Slash
   ValidWeapons: 06000000
   DisplayColor: yellow
   Range: 1

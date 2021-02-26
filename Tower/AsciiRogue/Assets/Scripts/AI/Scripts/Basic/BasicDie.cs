@@ -72,6 +72,10 @@ public class BasicDie : BaseAIBehaviour<RoamingNPC>
         t.manager.UpdateMessages($"You have killed the <color=#{t.EnemyColor}>{t.EnemyName}</color>");
         RunManager.CurrentRun.Set(RunManager.Names.EnemiesKilled,
             RunManager.CurrentRun.Get<int>(RunManager.Names.EnemiesKilled)+1);
+
+        RunManager.UnitKilledWithAttack();
+        // handle xp and stuff like that
+        
         t.manager.playerStats.UpdateLevel(t.xpDrop);
         /*
         GameObject e = null;

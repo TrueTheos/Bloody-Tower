@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Divide
   Description: Try to chop enemy in half
-  ValidWeapons: 0000000006000000
+  LearnMessage: Technique learned, Divide.
+  ValidWeapons: 0100000000000000
   DisplayColor: white
   Range: 1
   BloodCost: 15

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Poison Cleanse
   Description: heals poison at a cost
-  ValidWeapons: 00000000010000000200000003000000040000000500000006000000
+  LearnMessage: Technique learned, Poison Cleanse
+  ValidWeapons: 
   DisplayColor: green
   Range: 0
   BloodCost: 5

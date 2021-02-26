@@ -10,6 +10,8 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
     public string Name;
 
     public string Description;
+    [TextArea(1,4)]
+    public string LearnMessage;
 
     public List<WeaponsSO.weaponType> ValidWeapons;
 
@@ -58,36 +60,35 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
         switch (Effect)
         {
             case SkillEffect.HeavySwing:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.GreatAxeKills,2),(RunManager.Stats.HammerKills,4),(RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom+0) % 9) + 2;
             case SkillEffect.Thrust:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.SpearKills,3), (RunManager.Stats.DaggerKills,2), (RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 1) % 9) + 2;
             case SkillEffect.Divide:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.GreatAxeKills,2), (RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 2) % 9) + 2;
             case SkillEffect.Sweep:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.GreatAxeKills,2), (RunManager.Stats.SpearKills,3),( RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 3) % 9) + 2;
             case SkillEffect.JumpSmash:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.GreatAxeKills,1), (RunManager.Stats.HammerKills,2)) > 5 * ((RNG.InstanceRandom + 0) % 6) + 2;
             case SkillEffect.FlatBash:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.GreatAxeKills,2), (RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 4) % 9) + 2;
             case SkillEffect.Sever:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.DaggerKills,2), (RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 5) % 9) + 2;
             case SkillEffect.DashSlash:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.DaggerKills,2), (RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 6) % 9) + 2;
             case SkillEffect.ArcEdge:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.SwordKills)) > 5 * ((RNG.InstanceRandom + 7) % 9) + 2;
             case SkillEffect.ShadowFang:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.DaggerKills,2), (RunManager.Stats.SwordKills,1)) > 5 * ((RNG.InstanceRandom + 8) % 9) + 2;
             case SkillEffect.VampireBite:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.DaggerKills),( RunManager.Stats.SpearKills)) > 5 * ((RNG.InstanceRandom + 0) % 4) + 2;
             case SkillEffect.NutCracker:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.HammerKills)) > 4 * ((RNG.InstanceRandom + 0) % 3) + 2;
             case SkillEffect.HookSwitch:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.GreatAxeKills)) > 5 * ((RNG.InstanceRandom + 0) % 6) + 2;
             case SkillEffect.BackingJavelin:
-                break;
+                return RunManager.CurrentRun.GetSumInt((RunManager.Stats.SpearKills)) > 5 * ((RNG.InstanceRandom + 0) % 4) + 2;
             case SkillEffect.PoisonCleanse:
                 break;
-
                 //------------
             case SkillEffect.ShootArrow:
                 return GameManager.manager.playerStats.itemsInEqGO.Any(i => i.iso.SkillsToLearn.Contains(this));
@@ -130,9 +131,22 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                         {
                             return true;
                         }
-                        if (player._Lhand == null || player._Rhand == null)
+                    }
+                    else
+                    {
+                        if(player._Lhand.iso is WeaponsSO wl)
                         {
-                            return true;
+                            if(wl._weaponType == item)
+                            {
+                                return true;
+                            }
+                        }
+                        if (player._Rhand.iso is WeaponsSO wr)
+                        {
+                            if (wr._weaponType == item)
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -149,7 +163,7 @@ public class SkillScriptableObject : ScriptableObject,IRestrictTargeting
                 break;
         }
 
-        return true;
+        return false;
     }
     // when selected by the player
     public void Prepare(PlayerStats player)

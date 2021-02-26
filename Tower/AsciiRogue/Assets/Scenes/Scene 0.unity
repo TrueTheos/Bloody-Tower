@@ -8526,8 +8526,6 @@ MonoBehaviour:
   SkillsOpen: 0
   SkillCasting: 0
   LastSkill: {fileID: 0}
-  LearnedSkills: []
-  VisibleSkills: []
   SelectedSkillIndex: 0
   TopVisibleSkillIndex: 0
   SkillText: 
@@ -9453,7 +9451,8 @@ PrefabInstance:
         type: 3}
       propertyPath: startingWeapon
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: b8a53231f8bc21d43879db9aa4a4ad2d,
+        type: 2}
     - target: {fileID: 2938880777816347186, guid: 4eabca731634a0a48b42c10cf57d7f97,
         type: 3}
       propertyPath: _ac

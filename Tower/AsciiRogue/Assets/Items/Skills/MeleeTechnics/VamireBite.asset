@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Vampire's Bite
   Description: Sever the artery of an enemy who doesnt see you
-  ValidWeapons: 0000000006000000
+  LearnMessage: Technique learned, Vampire's Bite
+  ValidWeapons: 0500000002000000
   DisplayColor: red
   Range: 1
   BloodCost: 10

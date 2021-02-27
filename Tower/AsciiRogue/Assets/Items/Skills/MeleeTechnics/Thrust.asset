@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Thrus
   Description: Attack the Enemy, ignore 1 AC 25% less damage
-  ValidWeapons: 0000000006000000
+  LearnMessage: Technique learned, Thrust
+  ValidWeapons: 000000000200000005000000
   DisplayColor: white
   Range: 1
   BloodCost: 5

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Dash Slash
   Description: You Dash towards a position and damage enemies  in your way
-  ValidWeapons: 0600000000000000
+  LearnMessage: Technique learned, Dash Slash
+  ValidWeapons: 000000000300000002000000
   DisplayColor: white
   Range: 2
   BloodCost: 5

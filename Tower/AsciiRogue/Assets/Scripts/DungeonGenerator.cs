@@ -129,34 +129,40 @@ public class DungeonGenerator : MonoBehaviour
 
     // Allows the usage of Map objects for generating the level. the only difference is that it allows for omni AI to be placed
     private void GenerateFixedLevel(Floor fill, Map map, int floorNum, bool spawnEnemiesFromString,bool generateWater = true, int _viewRange = 666)
-    {        
-        GenerateFixedLevel(fill, map.print(), floorNum, spawnEnemiesFromString, generateWater, _viewRange);
+    {
+        try
+        {
+            GenerateFixedLevel(fill, map.print(), floorNum, spawnEnemiesFromString, generateWater, _viewRange);
 
-        for (int i = 0; i < map.Prefab_enemyNames.Count; i++)
-        {
-            manager.enemySpawner.SpawnAt(fill, map.Prefab_enemyPositions[i].x, map.Prefab_enemyPositions[i].y,
-                                         map.Prefab_enemyNames[i], map.Prefab_enemySleeping[i] ? "true" : "false");
-        }
+            for (int i = 0; i < map.Prefab_enemyNames.Count; i++)
+            {
+                manager.enemySpawner.SpawnAt(fill, map.Prefab_enemyPositions[i].x, map.Prefab_enemyPositions[i].y,
+                                             map.Prefab_enemyNames[i], map.Prefab_enemySleeping[i] ? "true" : "false");
+            }
 
-        for (int i = 0; i < map.Prefab_itemsToSpawn.Count; i++)
-        {
-            manager.itemSpawner.SpawnAt(fill, map.Prefab_itemsPositions[i].x, map.Prefab_itemsPositions[i].y,
-                                        map.Prefab_itemsToSpawn[i]);
-        }
-        for (int i = 0; i < map.enemyPositionList.Count; i++)
-        {
-            manager.enemySpawner.SpawnAt(fill, map.enemyPositionList[i].x, map.enemyPositionList[i].y);
-        }
+            for (int i = 0; i < map.Prefab_itemsToSpawn.Count; i++)
+            {
+                manager.itemSpawner.SpawnAt(fill, map.Prefab_itemsPositions[i].x, map.Prefab_itemsPositions[i].y,
+                                            map.Prefab_itemsToSpawn[i]);
+            }
+            for (int i = 0; i < map.enemyPositionList.Count; i++)
+            {
+                manager.enemySpawner.SpawnAt(fill, map.enemyPositionList[i].x, map.enemyPositionList[i].y);
+            }
 
-        foreach (var omni in map.OmniAIs)
+            foreach (var omni in map.OmniAIs)
+            {
+                GameObject go = new GameObject(omni.AI.name, typeof(OmniBehaviour));
+                var b = go.GetComponent<OmniBehaviour>();
+                go.transform.SetParent(fill.GO.transform);
+                b.AI = omni.AI;
+                b.Position = omni.Position;
+                GameManager.manager.enemies.Add(go);
+            }
+        }catch(Exception e)
         {
-            GameObject go = new GameObject(omni.AI.name, typeof(OmniBehaviour));
-            var b = go.GetComponent<OmniBehaviour>();
-            go.transform.SetParent(fill.GO.transform);
-            b.AI = omni.AI;
-            b.Position = omni.Position;
-            GameManager.manager.enemies.Add(go);
-        }                
+            Debug.LogWarning(e.Message);
+        }
     }
 
     public void GenerateFixedLevel(Floor fill,string fixedLevel, int floorNum, bool spawnEnemiesFromString, bool generateWater = true, int _viewRange = 666)
@@ -1619,8 +1625,9 @@ public class DungeonGenerator : MonoBehaviour
             catch(Exception e)
             {
                 Debug.Log(e.Message);
-                throw e;
-                //return createSewerMap();
+
+                //throw e;
+                return createSewerMap();
             }         
         }
 

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Nut Cracker
   Description: Hit him on the head
-  ValidWeapons: 000000000600000004000000
+  LearnMessage: Technique learned, Nut Cracker
+  ValidWeapons: 04000000
   DisplayColor: white
   Range: 1
   BloodCost: 10

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Sweep
   Description: Swing weapon at enemy legs try to slow (not there yet)
-  ValidWeapons: 0000000006000000
+  LearnMessage: Technique learned, Sweep
+  ValidWeapons: 010000000500000000000000
   DisplayColor: white
   Range: 1
   BloodCost: 10

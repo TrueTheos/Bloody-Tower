@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Backing Javelin
   Description: Hit and jump back
-  ValidWeapons: 0000000006000000
+  LearnMessage: You've realized you can do something more with this weapon. Technique
+    learned, Backing Javelin.
+  ValidWeapons: 05000000
   DisplayColor: white
   Range: 1
   BloodCost: 5

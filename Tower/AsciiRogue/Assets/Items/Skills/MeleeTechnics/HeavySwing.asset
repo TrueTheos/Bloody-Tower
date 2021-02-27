@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1de1ef704c0043141a3fe3030d8b6043, type: 3}
-  m_Name: HeavySlash
+  m_Name: HeavySwing
   m_EditorClassIdentifier: 
   Name: Heavy Swing
   Description: Heavyly swinging things
-  ValidWeapons: 00000000
+  LearnMessage: Technique learned, Heavy Slash
+  ValidWeapons: 040000000100000000000000
   DisplayColor: red
   Range: 1
   BloodCost: 3

@@ -7,17 +7,19 @@ public static class RNG
     public static int Seed; //no value to make it random
 
     static System.Random random;
+    static int instanceRandom;
 
     public static void Reset(int Seed = -1)
     {
         if (Seed == -1)
         {
-            random = new System.Random();
+            random = new System.Random();            
         }
         else
         {
             random = new System.Random(Seed);
         }
+        instanceRandom = random.Next();
     }
     // [min,max[
     public static int Range(int min, int max)
@@ -32,7 +34,7 @@ public static class RNG
     {
         return (float)random.NextDouble();
     }
-
+    public static int InstanceRandom =>instanceRandom;
     static RNG()
     {
         random = new System.Random(Seed);

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Jump Smash
   Description: Jump up and hit the enemy
-  ValidWeapons: 0000000006000000
+  LearnMessage: Technique learned, Jump Smash
+  ValidWeapons: 0400000001000000
   DisplayColor: white
   Range: 1
   BloodCost: 15

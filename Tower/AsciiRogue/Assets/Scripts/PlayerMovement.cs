@@ -603,8 +603,28 @@ public class PlayerMovement : MonoBehaviour
                 damage = damageLeftHand + damageRightHand;
                 manager.UpdateMessages($"You dealt <color=red>{damage}</color> damage to <color=#{ColorUtility.ToHtmlStringRGB(roamingNpcScript.EnemyColor)}>{roamingNpcScript.EnemyName}</color>");
                 roamingNpcScript._x = roamingNpcScript.howLongWillFololwInvisiblepLayer;
-                roamingNpcScript.TakeDamage(damageLeftHand, leftHandDamageType);
-                roamingNpcScript.TakeDamage(damageRightHand, rightHandDamageType);            
+                if (playerStats._Lhand != null)
+                {
+                    RunManager.CurrentRun.Set(RunManager.Stats.CurrentAttackInfoLeft, ((WeaponsSO)playerStats._Lhand.iso)._weaponType);
+                }                
+                if (playerStats._Rhand != null)
+                {
+                    RunManager.CurrentRun.Set(RunManager.Stats.CurrentAttackInfoRight, ((WeaponsSO)playerStats._Rhand.iso)._weaponType);
+                }
+
+                roamingNpcScript.TakeDamage(damageLeftHand, leftHandDamageType);                                
+                roamingNpcScript.TakeDamage(damageRightHand, rightHandDamageType);
+
+                if (playerStats._Lhand != null)
+                {
+                    RunManager.CurrentRun.Set(RunManager.Stats.CurrentAttackInfoRight, null);
+                } 
+                if(playerStats._Rhand != null)
+                {
+                    RunManager.CurrentRun.Set(RunManager.Stats.CurrentAttackInfoLeft, null);
+                }
+                
+
             }
             RunManager.CurrentRun.Set(RunManager.Names.EnemiesAttacked, RunManager.CurrentRun.Get<int>(RunManager.Names.EnemiesAttacked) + 1);
         }

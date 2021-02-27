@@ -87,8 +87,9 @@ public class GameManager : MonoBehaviour
     public bool SkillsOpen;
     public bool SkillCasting;
     public SkillScriptableObject LastSkill;
-    public List<SkillScriptableObject> LearnedSkills;
-    public List<SkillScriptableObject> VisibleSkills;
+    [NonSerialized]public List<SkillScriptableObject> ExistingSkills;
+    [NonSerialized]public List<SkillScriptableObject> LearnedSkills;
+    [NonSerialized]public List<SkillScriptableObject> VisibleSkills;
     public int SelectedSkillIndex;
     public int TopVisibleSkillIndex; // the top most skill in the window
     public string SkillText;
@@ -149,9 +150,19 @@ public class GameManager : MonoBehaviour
         fv.Initialize(fv.CanLightPass, fv.SetToVisible, fv.Distance);
 
         invBorder.SetActive(false);
+        VisibleSkills = new List<SkillScriptableObject>();
+        ExistingSkills = new List<SkillScriptableObject>();
         foreach (var skill in AutoLearnSkills)
         {
-            LearnedSkills.Add(skill);
+            ExistingSkills.Add(skill);
+        }
+        if (LearnedSkills != null)
+        {
+            LearnedSkills.Clear();
+        }
+        else
+        {
+            LearnedSkills = new List<SkillScriptableObject>();
         }
     }
     public async Task GenerateThings()
@@ -192,6 +203,7 @@ public class GameManager : MonoBehaviour
 
         if (isPlayerTurn)
         {
+            CheckSkillLearning();
             if (Controls.GetKeyDown(Controls.Inputs.TechnicOpen) && !inventoryOpen && !openGrimoire && !IsThrowingItem)
             {
                 if (!SkillsOpen)
@@ -1143,14 +1155,14 @@ public class GameManager : MonoBehaviour
 
     public void LearnSkill(SkillScriptableObject skill)
     {
-        if (!LearnedSkills.Contains(skill))
+        if (!ExistingSkills.Contains(skill))
         {
-            LearnedSkills.Add(skill);
+            ExistingSkills.Add(skill);
         }
     }
     public void UnlearnSkill(SkillScriptableObject skill)
     {
-        LearnedSkills.Remove(skill);
+        ExistingSkills.Remove(skill);
         if (LastSkill==skill)
         {
             LastSkill = null;
@@ -1429,12 +1441,28 @@ public class GameManager : MonoBehaviour
         //selector.GetComponent<Text>().enabled = true;
     }
 
+    public void CheckSkillLearning()
+    {
+        foreach (var skill in ExistingSkills)
+        {
+            if (skill.IsShown(playerStats))
+            {
+                if (!LearnedSkills.Contains(skill))
+                {
+                    // the skill has not been learned before so we have inform the player that they learned a new skill
+                    LearnedSkills.Add(skill);
+                    UpdateMessages(skill.LearnMessage);
+                }
+            }
+        }
+    }
+
     public void UpdateSkillText()
     {
         SkillText = "";
 
         VisibleSkills.Clear();
-        foreach (var skill in LearnedSkills)
+        foreach (var skill in ExistingSkills)
         {
             if (skill.IsShown(playerStats))
             {

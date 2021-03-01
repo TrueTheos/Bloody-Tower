@@ -98,10 +98,14 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
+            Debug.Log("Sewer Gen Start");
             Map map = await Task.Run(() => MapGenerator.createSewerMap());
+            Debug.Log("Sewer Gen Done; Start Map Creation");
             GenerateFixedLevel(toFill, map, floorNumber, false);
+            Debug.Log("Map Creation Done");
         }
         toFill.Valid = true;
+        Debug.Log("Set to Valid --");
     }
 
     //GENERATES LEVEL FROM STRING
@@ -162,6 +166,7 @@ public class DungeonGenerator : MonoBehaviour
         }catch(Exception e)
         {
             Debug.LogWarning(e.Message);
+            Debug.LogWarning(e.StackTrace);
         }
     }
 
@@ -769,10 +774,12 @@ public class DungeonGenerator : MonoBehaviour
             randomFloorEvents.RemoveAt(randomEventIndex);
         }
 
-        foreach(var torch in torchPositions)
+
+        foreach (var torch in torchPositions)
         {
-            manager.fv.ComputeTorch(fill,new Vector2Int(torch.x, torch.y), 6);
+            manager.fv.ComputeTorch(fill, new Vector2Int(torch.x, torch.y), 6);
         }
+        
     }
 
     private void GenerateWaterPool(Floor fill)
@@ -1615,16 +1622,18 @@ public class DungeonGenerator : MonoBehaviour
                 //{
                 //    Debug.Log(placed.name);
                 //}
-                Debug.Log("------------");
-
+                Debug.Log("Room count: " + structs.Count);
                 // spawn the stairs
                 Structure r = SpawnStairsPlaceHolder('<', m, structs, null);
+                //Debug.Log("------------");
                 SpawnStairsPlaceHolder('>', m, structs, r);
+                //Debug.Log("------------");
                 return m;
             }
             catch(Exception e)
             {
-                Debug.Log(e.Message);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
 
                 //throw e;
                 return createSewerMap();
@@ -1636,15 +1645,19 @@ public class DungeonGenerator : MonoBehaviour
             int attempts = 0; // there might only be one room, avoid infinite loops
             while (true)
             {
+                if (attempts++ > 100)
+                {
+                    throw new Exception("Could not find Place to spawn stairs (likely only 1 room)");
+                }
                 Structure r = getRandomRoomHelper(structs);
-                if (r == notHere && attempts++ < 100)
+                if (r == notHere && attempts < 100)
                     continue;
                 Location l = r.getRandom();
                 if (m.get(l.x, l.y) == '.')
                 {
                     m.set(l.x, l.y, c);
                     return r;
-                }
+                }                
             }
         }
 

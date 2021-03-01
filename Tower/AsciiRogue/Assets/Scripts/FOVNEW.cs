@@ -39,8 +39,11 @@ public class FOVNEW : MonoBehaviour
 
     public void SetLightTorch(Floor floor,int x, int y, Vector2Int origin, int range)
     {
-        int I = TorchDistance(x, y, origin);
-        floor.Tiles[x, y].tileLightFactor = ((range - I) / 10f) * 2;        
+        if (x >= 0 && y >= 0 && x < floor.Tiles.GetLength(0) && y < floor.Tiles.GetLength(1))
+        {
+            int I = TorchDistance(x, y, origin);
+            floor.Tiles[x, y].tileLightFactor = ((range - I) / 10f) * 2;
+        }             
     }
 
     public int Distance(int x, int y)
